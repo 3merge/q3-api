@@ -7,17 +7,7 @@
   "author": "Mike <mibberson@3merge.ca>",
   "license": "MIT",
   "scripts": {
-    "build": "babel src -d dist --copy-files",
-    "lint": "eslint --fix  \"**/*.js\"",
-    "start": "nodemon demo --exec babel-node",
-    "test": "jest src --collectCoverage --runInBand --detectOpenHandles"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "preset": "./testing",
-    "transform": {
-      "^.+\\.jsx?$": "babel-jest"
-    }
+    "start": "nodemon demo --exec babel-node"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
