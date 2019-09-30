@@ -7,20 +7,21 @@
     "node": "^12.9.0"
   },
   "scripts": {
+    "test": "jest",
     "bootstrap": "lerna bootstrap --use-workspaces",
-    "build": "lerna exec --parallel -- babel --root-mode upward src -d dist --copy-files",
+    "build": "lerna exec --parallel -- babel --root-mode upward src -d dist --ignore **/__mocks__,**/*.test.js",
     "lint": "eslint . --ext .js --ext .jsx --ignore-pattern dist --ignore-pattern node_modules",
     "lerna-publish": "lerna publish"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "example"
   ],
   "devDependencies": {
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
     "@babel/node": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
-    "@shelf/jest-mongodb": "^1.1.1",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
     "babel-plugin-rewire": "^1.2.0",
@@ -32,9 +33,18 @@
     "eslint-plugin-jest": "^22.17.0",
     "eslint-plugin-prettier": "^3.1.0",
     "jest": "^24.9.0",
+    "jest-haste-map": "^24.9.0",
+    "jest-resolve": "^24.9.0",
+    "jest-watch-yarn-workspaces": "^1.1.0",
     "lerna": "^3.16.4",
     "nodemon": "^1.19.1",
     "prettier": "^1.18.2",
-    "rewire": "^4.0.1"
+    "rewire": "^4.0.1",
+    "supertest": "^4.0.2"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-validator": "^6.2.0",
+    "mongoose": "^5.7.1"
   }
 }

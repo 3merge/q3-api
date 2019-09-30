@@ -1,4 +1,22 @@
 {
   "name": "q3-api-plugin-users",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "express-validator": "^6.2.0",
+    "generate-password": "^1.4.2",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.24.0",
+    "mongoose-unique-validator": "^2.0.3"
+  },
+  "peerDependencies": {
+    "express": "^4.17.1",
+    "express-validator": "^6.2.0",
+    "mongoose": "^5.7.1",
+    "q3-api": "^1.0.0"
+  },
+  "devDependencies": {
+    "supertest": "^4.0.2"
+  }
 }

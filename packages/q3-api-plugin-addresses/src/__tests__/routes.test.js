@@ -1,4 +1,4 @@
-import E3, { app } from 'starter-e3';
+import E3, { app } from 'q3-api';
 import supertest from 'supertest';
 import mongoose from 'mongoose';
 import routes from '../routes';

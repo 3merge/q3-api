@@ -50,6 +50,8 @@ class DirectoryWalker {
         throw new Error('Controller must be a function');
       }
 
+      // eslint-disable-next-line
+      console.log(`Registering ${this.name} in ${this.dir}`);
       return controller;
     } catch (err) {
       return null;

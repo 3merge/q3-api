@@ -14,7 +14,7 @@ import decorators, {
 } from './helpers/middleware';
 import * as Errors from './helpers/errors';
 
-export { app, mongoose, compose, Errors };
+export { app, i18, mongoose, compose, Errors };
 
 export default {
   connect() {
@@ -22,6 +22,7 @@ export default {
       const { CONNECTION, PORT } = process.env;
       mongoose.connect(CONNECTION, (err) => {
         if (err) resolve(err);
+        app.use(handleUncaughtErrors);
         app.listen(PORT);
         resolve(null);
       });
@@ -47,7 +48,6 @@ export default {
     app.use(
       parser(dir ? path.join(workingDir, dir) : workingDir),
     );
-    app.use(handleUncaughtErrors);
   },
 
   notify(cmd, opts) {

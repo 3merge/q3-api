@@ -2,7 +2,6 @@ import i18 from 'i18next';
 import request from 'supertest';
 import mongoose from 'mongoose';
 import dot from 'dotenv';
-import MongoMemoryServer from 'mongodb-memory-server';
 import deco from '../helpers/middleware';
 import events from '../helpers/events';
 import { compose } from '../helpers/utils';

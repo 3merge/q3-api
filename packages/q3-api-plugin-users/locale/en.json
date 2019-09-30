@@ -1,0 +1,9 @@
+{
+  "unknownAccountOrIncorrectState": "Account not found or not in the appropriate state to make changes.",
+  "login": "",
+  "email": "Email address required and expected to match account",
+  "password": "Password required and expected to match account",
+  "notPermitted": "",
+  "id": "",
+  "verificationCode": ""
+}

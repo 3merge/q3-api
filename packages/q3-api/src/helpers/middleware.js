@@ -15,8 +15,6 @@ const decorateResponse = (req, res, next) => {
 
 // eslint-disable-next-line
 const handleUncaughtErrors = (err, req, res, next) => {
-  // eslint-disable-next-line
-  if (process.env.NODE_ENV !== 'production') console.log(err);
   res.status(customErrorMatcher(err.name)).json(err);
 };
 
