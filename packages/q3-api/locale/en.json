@@ -1,8 +1,0 @@
-{
-  "conflict": "Modifying this resource causes a conflict",
-  "error": "Something unexpected happened",
-  "insert": "New record created",
-  "invalidate": "Changes sent to the server are invalid",
-  "send": "Resource(s) found",
-  "update": "Resource successfully updated"
-}

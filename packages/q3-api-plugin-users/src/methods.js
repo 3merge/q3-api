@@ -44,7 +44,7 @@ export default class UserAuthDecorator {
   static async $findOneStrictly(args) {
     const doc = await this.findOne(args);
     if (!doc)
-      throw new Errors.ResourceNotFoundError(
+      throw new Errors.AuthenticationError(
         Q3.translate(
           'validations:unknownAccountOrIncorrectState',
         ),

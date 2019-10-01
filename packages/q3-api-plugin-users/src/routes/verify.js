@@ -3,12 +3,14 @@ import { check } from 'express-validator';
 import {
   MODEL_NAME,
   matchWithConfirmation,
-  Events,
 } from '../constants';
 
 const { ConflictError, ValidationError } = Errors;
 
-const Verify = async ({ body }, res) => {
+const Verify = async (
+  { body, translate, message },
+  res,
+) => {
   const { id, password, verificationCode } = body;
   const User = Q3.model(MODEL_NAME);
   const doc = await User.findUserBySecret(
@@ -18,34 +20,36 @@ const Verify = async ({ body }, res) => {
 
   if (doc.hasExpired)
     throw new ConflictError(
-      Q3.translate('validations:verificationCode'),
+      translate('validations:verificationCode'),
     );
 
   if (!password)
     throw new ValidationError(
-      Q3.translate('validations:password'),
+      translate('validations:password'),
     );
 
   await doc.setPassword(password);
-  Events.emit('verify', {
-    email: doc.email,
-  });
-
+  message(doc.email, translate('messages:verified'));
   res.acknowledge();
 };
 
 Verify.validation = [
-  check('id', Q3.translate('validations:id')).isMongoId(),
-  check(
-    'verificationCode',
-    Q3.translate('validations:verificationCode'),
-  ).isString(),
-  check(
-    'password',
-    Q3.translate('validations:confirmationPassword'),
-  )
+  check('id')
+    .isMongoId()
+    .withMessage((v, { req }) =>
+      req.translate('validations:id'),
+    ),
+  check('verificationCode')
     .isString()
-    .custom(matchWithConfirmation),
+    .withMessage((v, { req }) =>
+      req.translate('validations:verificationCode'),
+    ),
+  check('password')
+    .isString()
+    .custom(matchWithConfirmation)
+    .withMessage((v, { req }) =>
+      req.translate('validations:confirmationPassword'),
+    ),
 ];
 
 export default Q3.define(Verify);

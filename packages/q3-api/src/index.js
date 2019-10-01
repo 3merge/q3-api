@@ -2,7 +2,7 @@ import aa from 'express-async-handler';
 import path from 'path';
 import dotenv from 'dotenv';
 import { get } from 'lodash';
-import i18 from './lib/i18next';
+import i18, { translate } from './lib/i18next';
 import val from './lib/validator';
 import app from './lib/express';
 import mongoose from './lib/mongoose';
@@ -17,6 +17,8 @@ import * as Errors from './helpers/errors';
 export { app, i18, mongoose, compose, Errors };
 
 export default {
+  translate,
+
   connect() {
     return new Promise((resolve) => {
       const { CONNECTION, PORT } = process.env;
@@ -58,8 +60,8 @@ export default {
     return events;
   },
 
-  translate(msg) {
-    return i18.t(msg);
+  loadTranslation(lang, ns, json) {
+    i18.addResources(lang, ns, json);
   },
 
   model(name) {

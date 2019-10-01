@@ -3,10 +3,12 @@ import { check } from 'express-validator';
 import {
   MODEL_NAME,
   matchWithConfirmation,
-  Events,
 } from '../constants';
 
-const UpdatePassword = async ({ body, user }, res) => {
+const UpdatePassword = async (
+  { body, user, message, translate },
+  res,
+) => {
   const { previousPassword, newPassword } = body;
   const User = Q3.model(MODEL_NAME);
 
@@ -14,24 +16,22 @@ const UpdatePassword = async ({ body, user }, res) => {
   await doc.verifyPassword(previousPassword, true);
   await doc.setPassword(newPassword);
 
-  Events.emit('password-update', {
-    email: doc.email,
-  });
-
+  message(doc.email, translate('messages:passwordUpdated'));
   res.acknowledge();
 };
 
 UpdatePassword.validation = [
-  check(
-    'previousPassword',
-    Q3.translate('validations:password'),
-  ).isString(),
-  check(
-    'newPassword',
-    Q3.translate('validations:confirmationPassword'),
-  )
+  check('previousPassword')
     .isString()
-    .custom(matchWithConfirmation),
+    .withMessage((v, { req }) =>
+      req.translate('validations:password'),
+    ),
+  check('newPassword')
+    .isString()
+    .custom(matchWithConfirmation)
+    .withMessage((v, { req }) =>
+      req.translate('validations:confirmationPassword'),
+    ),
 ];
 
 export default Q3.define(UpdatePassword);

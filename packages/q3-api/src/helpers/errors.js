@@ -34,11 +34,10 @@ export class AuthorizationError extends Error {
 }
 
 export class ValidationError extends Error {
-  constructor(message, errors) {
+  constructor(errors) {
     super();
     this.name = this.constructor.name;
     this.errors = errors;
-    this.message = message;
   }
 }
 

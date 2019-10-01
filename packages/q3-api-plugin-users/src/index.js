@@ -1,13 +1,16 @@
-import Q3, { i18 } from 'q3-api';
+import Q3 from 'q3-api';
 import Schema from './schema';
 import routes from './routes';
 import { MODEL_NAME, Events } from './constants';
-import en from '../locale/en.json';
-import fr from '../locale/fr.json';
+import messagesEN from '../locale/en/messages.json';
+import validationsEN from '../locale/en/validations.json';
+import messagesFR from '../locale/fr/messages.json';
+import validationsFR from '../locale/fr/validations.json';
 
-const ns = 'validations';
-i18.addResourceBundle('en', ns, en);
-i18.addResourceBundle('fr', ns, fr);
+Q3.loadTranslation('en', 'messages', messagesEN);
+Q3.loadTranslation('fr', 'messages', messagesFR);
+Q3.loadTranslation('en', 'validations', validationsEN);
+Q3.loadTranslation('fr', 'validations', validationsFR);
 
 const Q3UsersPlugin = (api, db) => {
   db.model(MODEL_NAME, Schema);
@@ -18,13 +21,12 @@ export default Q3UsersPlugin;
 export { Schema, Events };
 
 export const seedSuperUser = async ({
-  password,
   firstName,
   lastName,
   email,
 }) => {
   const Model = Q3.model(MODEL_NAME);
-  if (await Model.countDocuments({ email })) return;
+  if (await Model.countDocuments({ email })) return null;
 
   const doc = new Model({
     role: 'Super',
@@ -34,5 +36,5 @@ export const seedSuperUser = async ({
   });
 
   await doc.setSecret();
-  await doc.setPassword(password);
+  return doc.setPassword();
 };

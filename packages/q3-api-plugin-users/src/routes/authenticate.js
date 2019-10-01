@@ -5,36 +5,43 @@ import { MODEL_NAME } from '../constants';
 
 const { AuthenticationError, AuthorizationError } = Errors;
 
-const Authenticate = async (req, res) => {
-  const origin = req.get('host');
-  const { email, password } = req.body;
+const Authenticate = async (
+  {
+    body: { email, password },
+    headers: { host },
+    translate,
+  },
+  res,
+) => {
   const User = Q3.model(MODEL_NAME);
   const userResult = await User.findVerifiedByEmail(email);
 
   if (!userResult.isPermitted)
     throw new AuthorizationError(
-      Q3.translate('validations:notPermitted'),
+      translate('validations:notPermitted'),
     );
 
   if (!(await userResult.verifyPassword(password)))
     throw new AuthenticationError(
-      Q3.translate('validations:password'),
+      translate('validations:password'),
     );
 
   const { _id: id, secret } = userResult;
-  const tokens = await generateIDToken(id, secret, origin);
+  const tokens = await generateIDToken(id, secret, host);
   res.create(tokens);
 };
 
 Authenticate.validation = [
-  check(
-    'email',
-    Q3.translate('validations:email'),
-  ).isEmail(),
-  check(
-    'password',
-    Q3.translate('validations:password'),
-  ).isString(),
+  check('email')
+    .isEmail()
+    .withMessage((v, { req }) =>
+      req.translate('validations:email'),
+    ),
+  check('password')
+    .isString()
+    .withMessage((v, { req }) =>
+      req.translate('validations:password'),
+    ),
 ];
 
 export default Q3.define(Authenticate);

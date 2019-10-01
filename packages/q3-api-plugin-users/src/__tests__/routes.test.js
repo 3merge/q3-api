@@ -138,7 +138,7 @@ describe('verify', () => {
       .expect(409);
   });
 
-  it('should return 404', async () => {
+  it('should return 401', async () => {
     const psw = 'Hey!';
     await agent
       .post('/verify')
@@ -148,7 +148,7 @@ describe('verify', () => {
         password: psw,
         confirmNewPassword: psw,
       })
-      .expect(404);
+      .expect(401);
   });
 
   it('should return 204', async () => {
@@ -177,13 +177,13 @@ describe('verify', () => {
 });
 
 describe('reverify', () => {
-  it('should return 404', (done) => {
+  it('should return 401', (done) => {
     agent
       .post('/reverify')
       .send({
         email: 'vdomino2@telegraph.co.uk',
       })
-      .expect(404)
+      .expect(401)
       .end(done);
   });
 
@@ -214,13 +214,13 @@ describe('reverify', () => {
 });
 
 describe('reset password', () => {
-  it('should return 404', (done) => {
+  it('should return 401', (done) => {
     agent
       .post('/reset-password')
       .send({
         email: 'unknownemail@gmail.com',
       })
-      .expect(404)
+      .expect(401)
       .end(done);
   });
 
