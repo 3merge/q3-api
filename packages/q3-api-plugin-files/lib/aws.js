@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 
-const AWSInterface = () => {
+module.exports = () => {
   const {
     S3_ACCESS_KEY_ID: accessKeyId,
     S3_SECRET: secretAccessKey,
@@ -17,8 +17,7 @@ const AWSInterface = () => {
     signatureVersion: 'v4',
   });
 
-  const appendCDN = (name, skip) =>
-    skip ? name : `${process.env.CDN}/${name}`;
+  const appendCDN = (name) => `${process.env.CDN}/${name}`;
 
   const putAsPromise = (name, params) =>
     new Promise((resolve, reject) =>
@@ -98,5 +97,3 @@ const AWSInterface = () => {
     },
   };
 };
-
-module.exports = AWSInterface;

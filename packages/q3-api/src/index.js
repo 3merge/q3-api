@@ -71,6 +71,6 @@ export default {
   },
 
   setModel(name, Schema) {
-    mongoose.model(name, Schema);
+    return mongoose.model(name, Schema);
   },
 };
