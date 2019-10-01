@@ -1,4 +1,8 @@
 const AWSInterface = require('./aws');
+const {
+  PRIVATE_FILES,
+  PUBLIC_FILES,
+} = require('./constants');
 
 const promiseInBulk = (files = [], cb) =>
   Promise.all(files.map(cb));
@@ -54,10 +58,10 @@ class FileUploadAdapter {
 module.exports = (schema) => {
   schema.add({
     featuredPhoto: String,
-    publicFiles: {
+    [PUBLIC_FILES]: {
       type: [String],
     },
-    privateFiles: {
+    [PRIVATE_FILES]: {
       type: [String],
       select: false,
     },

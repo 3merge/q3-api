@@ -1,3 +1,8 @@
+const {
+  PRIVATE_FILES,
+  PUBLIC_FILES,
+} = require('./constants');
+
 const middlware = (field) => (req, res, next) => {
   Object.assign(req.body, {
     [field]: req.files,
@@ -7,9 +12,9 @@ const middlware = (field) => (req, res, next) => {
 };
 
 module.exports.assignFilesToPublic = middlware(
-  'publicFiles',
+  PUBLIC_FILES,
 );
 
 module.exports.assignFilesToPrivate = middlware(
-  'privateFiles',
+  PRIVATE_FILES,
 );

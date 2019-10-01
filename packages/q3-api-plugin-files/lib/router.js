@@ -6,6 +6,10 @@ const {
   assignFilesToPublic,
   assignFilesToPrivate,
 } = require('./middleware');
+const {
+  PRIVATE_FILES,
+  PUBLIC_FILES,
+} = require('./constants');
 
 module.exports = (name, inject) => {
   const Model = Q3.model(name);
@@ -53,8 +57,8 @@ module.exports = (name, inject) => {
     res.create(await doc.handlePublicFiles(privateFiles));
   };
 
-  PushToPublic.validation = validation('publicFiles');
-  PushToPrivate.validation = validation('privateFiles');
+  PushToPublic.validation = validation(PUBLIC_FILES);
+  PushToPrivate.validation = validation(PRIVATE_FILES);
 
   // Likely for RBAC or similar auth middleware
   // Must load after re-assigning req.body
