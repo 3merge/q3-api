@@ -1,5 +1,6 @@
 module.exports = {
   verbose: true,
+  preset: './packages/q3-api-test-utils',
   testEnvironment: 'node',
   watchPlugins: ['jest-watch-yarn-workspaces'],
   cacheDirectory: '.jest-cache',
@@ -8,7 +9,6 @@ module.exports = {
   coveragePathIgnorePatterns: [
     '<rootDir>/packages/(?:.+?)/dist/',
   ],
-  preset: './packages/q3-api-test-utils',
   testPathIgnorePatterns: [
     '<rootDir>/packages/(?:.+?)/dist/',
   ],

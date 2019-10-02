@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
+    "jest-environment-node": "^24.9.0",
     "mongodb-memory-server": "^5.2.5"
+  },
+  "jest": {
+    "preset": "./index.js"
   }
 }

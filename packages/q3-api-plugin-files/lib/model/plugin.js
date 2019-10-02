@@ -5,18 +5,17 @@ module.exports = (schema) => {
     featuredPhoto: String,
   });
 
-  // hooks
-  // const uploader = AWSInterface();
-  schema.pre('save');
-  schema.pre('find');
+  // eslint-disable-next-line
+  schema.methods.setFeaturedPhoto = async function uploadToAWS(
+    v,
+  ) {
+    if (!v) return null;
+    const aws = AWSInterface();
+    const key = `${this.collection.collectionName}/${this.id}/${v.name}`;
+    await aws.addToBucket(false)([key, v]);
 
-  /**
-    async handleFeaturedPhoto(file) {
-    if (!file) return null;
-    this.featuredPhoto = await AWSInterface().putPublic(
-      file,
-    );
-    return this.save();
-  }
-   */
+    this.set('featuredPhone', key);
+    await this.save();
+    return aws.getPublic(key);
+  };
 };

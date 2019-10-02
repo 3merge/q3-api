@@ -20,31 +20,31 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">13.33% </span>
+        <span class="strong">73.33% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>2/15</span>
+        <span class='fraction'>11/15</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">75% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/4</span>
+        <span class='fraction'>3/4</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">25% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/4</span>
+        <span class='fraction'>1/4</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">13.33% </span>
+        <span class="strong">73.33% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>2/15</span>
+        <span class='fraction'>11/15</span>
       </div>
     </div>
     <p class="quiet">
       Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
     </p>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line medium'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -114,26 +114,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -165,30 +165,30 @@ import {
 &nbsp;
 const { ConflictError, ValidationError } = Errors;
 &nbsp;
-const Verify = <span class="fstat-no" title="function not covered" >as</span>ync (
+const Verify = async (
   { body, translate, message },
   res,
 ) =&gt; {
-  const { id, password, verificationCode } = <span class="cstat-no" title="statement not covered" >body;</span>
-  const User = <span class="cstat-no" title="statement not covered" >Q3.model(MODEL_NAME);</span>
-  const doc = <span class="cstat-no" title="statement not covered" >await User.findUserBySecret(</span>
+  const { id, password, verificationCode } = body;
+  const User = Q3.model(MODEL_NAME);
+  const doc = await User.findUserBySecret(
     id,
     verificationCode,
   );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (doc.hasExpired)</span>
-<span class="cstat-no" title="statement not covered" >    throw new ConflictError(</span>
+  if (doc.hasExpired)
+    throw new ConflictError(
       translate('validations:verificationCode'),
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (!password)</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (!password)
 <span class="cstat-no" title="statement not covered" >    throw new ValidationError(</span>
       translate('validations:password'),
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  await doc.setPassword(password);</span>
-<span class="cstat-no" title="statement not covered" >  message(doc.email, translate('messages:verified'));</span>
-<span class="cstat-no" title="statement not covered" >  res.acknowledge();</span>
+  await doc.setPassword(password);
+  message(doc.email, translate('messages:verified'));
+  res.acknowledge();
 };
 &nbsp;
 Verify.validation = [
@@ -217,7 +217,7 @@ export default Q3.define(Verify);
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Tue Oct 01 2019 16:30:50 GMT-0400 (Eastern Daylight Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Oct 02 2019 08:17:05 GMT-0400 (Eastern Daylight Time)
 </div>
 </div>
 <script src="..\..\..\prettify.js"></script>

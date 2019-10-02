@@ -1,4 +1,5 @@
 import { mongoose } from 'q3-api';
+import withFeaturedPhoto from 'q3-api-plugin-files/lib/model/plugin';
 import { Schema } from 'mongoose';
 
 const Product = new Schema({
@@ -7,4 +8,5 @@ const Product = new Schema({
   description: String,
 });
 
+Product.plugin(withFeaturedPhoto);
 mongoose.model('demo-products', Product);

@@ -1,0 +1,17 @@
+{
+  "name": "q3-api-plugin-notes",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "peerDependencies": {
+    "express": "^4.17.1",
+    "express-validator": "^6.2.0",
+    "mongoose": "^5.7.1",
+    "q3-api": "^1.0.0"
+  },
+  "devDependencies": {
+    "supertest": "^4.0.2"
+  }
+}

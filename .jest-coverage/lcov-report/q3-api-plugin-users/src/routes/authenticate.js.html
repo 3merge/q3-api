@@ -20,31 +20,31 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">15.38% </span>
+        <span class="strong">92.31% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>2/13</span>
+        <span class='fraction'>12/13</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/4</span>
+        <span class='fraction'>4/4</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">66.67% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/3</span>
+        <span class='fraction'>2/3</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">15.38% </span>
+        <span class="strong">92.31% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>2/13</span>
+        <span class='fraction'>12/13</span>
       </div>
     </div>
     <p class="quiet">
       Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
     </p>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line high'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -108,22 +108,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -135,7 +135,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -147,7 +147,7 @@ import { MODEL_NAME } from '../constants';
 &nbsp;
 const { AuthenticationError, AuthorizationError } = Errors;
 &nbsp;
-const Authenticate = <span class="fstat-no" title="function not covered" >as</span>ync (
+const Authenticate = async (
   {
     body: { email, password },
     headers: { host },
@@ -155,22 +155,22 @@ const Authenticate = <span class="fstat-no" title="function not covered" >as</sp
   },
   res,
 ) =&gt; {
-  const User = <span class="cstat-no" title="statement not covered" >Q3.model(MODEL_NAME);</span>
-  const userResult = <span class="cstat-no" title="statement not covered" >await User.findVerifiedByEmail(email);</span>
+  const User = Q3.model(MODEL_NAME);
+  const userResult = await User.findVerifiedByEmail(email);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (!userResult.isPermitted)</span>
-<span class="cstat-no" title="statement not covered" >    throw new AuthorizationError(</span>
+  if (!userResult.isPermitted)
+    throw new AuthorizationError(
       translate('validations:notPermitted'),
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (!(await userResult.verifyPassword(password)))</span>
-<span class="cstat-no" title="statement not covered" >    throw new AuthenticationError(</span>
+  if (!(await userResult.verifyPassword(password)))
+    throw new AuthenticationError(
       translate('validations:password'),
     );
 &nbsp;
-  const { _id: id, secret } = <span class="cstat-no" title="statement not covered" >userResult;</span>
-  const tokens = <span class="cstat-no" title="statement not covered" >await generateIDToken(id, secret, host);</span>
-<span class="cstat-no" title="statement not covered" >  res.create(tokens);</span>
+  const { _id: id, secret } = userResult;
+  const tokens = await generateIDToken(id, secret, host);
+  res.create(tokens);
 };
 &nbsp;
 Authenticate.validation = [
@@ -181,8 +181,8 @@ Authenticate.validation = [
     ),
   check('password')
     .isString()
-    .withMessage(<span class="fstat-no" title="function not covered" >(v</span>, { req }) =&gt;
-<span class="cstat-no" title="statement not covered" >      req.translate('validations:password'),</span>
+    .withMessage((v, { req }) =&gt;
+      req.translate('validations:password'),
     ),
 ];
 &nbsp;
@@ -193,7 +193,7 @@ export default Q3.define(Authenticate);
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Tue Oct 01 2019 16:30:50 GMT-0400 (Eastern Daylight Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Oct 02 2019 08:17:05 GMT-0400 (Eastern Daylight Time)
 </div>
 </div>
 <script src="..\..\..\prettify.js"></script>

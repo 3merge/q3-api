@@ -40,12 +40,12 @@ module.exports = () => {
             Bucket: PublicBucket,
           };
 
-      return ([Key, { data, name }]) => {
-        return new Promise((resolve, reject) =>
+      return ([Key, { data, name }]) =>
+        new Promise((resolve, reject) =>
           s3.putObject(
             {
               ...meta,
-              Body: data,
+              Body: Buffer.from(data),
               Key,
             },
             (err) => {
@@ -54,7 +54,6 @@ module.exports = () => {
             },
           ),
         );
-      };
     },
 
     deleteByKey(Key, p = false) {

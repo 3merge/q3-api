@@ -1,4 +1,3 @@
-// eslint-disable-next-line
 const NodeEnvironment = require('jest-environment-node');
 const path = require('path');
 const fs = require('fs');

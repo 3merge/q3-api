@@ -16,8 +16,7 @@ server.use(bodyParser.json());
 
 server.use(
   fileUpload({
-    useTempFiles: true,
-    tempFileDir: '/tmp/',
+    limits: { fileSize: 50 * 1024 * 1024 },
   }),
 );
 
