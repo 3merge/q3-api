@@ -6,7 +6,7 @@ import i18, { translate } from './lib/i18next';
 import val from './lib/validator';
 import app from './lib/express';
 import mongoose from './lib/mongoose';
-import { compose } from './helpers/utils';
+import { compose, cond } from './helpers/utils';
 import events from './helpers/events';
 import parser from './helpers/parser';
 import decorators, {
@@ -38,7 +38,11 @@ export default {
   },
 
   define(ctr) {
-    return compose([val(ctr.validation), aa(ctr)]);
+    return compose([
+      val(ctr.validation),
+      cond(ctr.authorization),
+      aa(ctr),
+    ]);
   },
 
   register(plugin, opts) {

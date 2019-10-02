@@ -2,6 +2,8 @@
 
 export default (name) => {
   switch (name) {
+    case 'BadRequestError':
+      return 400;
     case 'AuthenticationError':
       return 401;
     case 'AuthorizationError':
@@ -16,6 +18,14 @@ export default (name) => {
       return 500;
   }
 };
+
+export class BadRequestError extends Error {
+  constructor(message) {
+    super();
+    this.name = this.constructor.name;
+    this.message = message;
+  }
+}
 
 export class AuthenticationError extends Error {
   constructor(message) {

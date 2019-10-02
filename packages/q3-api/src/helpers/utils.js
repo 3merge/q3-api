@@ -1,9 +1,9 @@
 import connect from 'connect';
 
-export default null;
+export const cond = (a) => (Array.isArray() ? a : []);
 
-export const compose = (a) => {
+export const compose = (a = []) => {
   const chain = connect();
-  a.forEach(chain.use.bind(chain));
+  a.flat().forEach(chain.use.bind(chain));
   return chain;
 };
