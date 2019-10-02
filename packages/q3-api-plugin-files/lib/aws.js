@@ -17,83 +17,59 @@ module.exports = () => {
     signatureVersion: 'v4',
   });
 
-  const appendCDN = (name) => `${process.env.CDN}/${name}`;
-
-  const putAsPromise = (name, params) =>
-    new Promise((resolve, reject) =>
-      s3.putObject(params, (err) => {
-        if (err) reject(err);
-        resolve(name);
-      }),
-    );
-
-  const getAsPromise = (params) =>
-    new Promise((resolve, reject) =>
-      s3.listObjects(params, (err, data = {}) => {
-        if (err) reject(err);
-        resolve(data.Contents.map(({ Key }) => Key));
-      }),
-    );
-
-  const deleteAsPromise = (params) =>
-    new Promise((resolve, reject) =>
-      s3.deleteObject(params, (err) => {
-        if (err) reject(err);
-        resolve();
-      }),
-    );
-
   return {
-    getPrivate(id, fileName) {
+    getPublic(Key) {
+      return `${process.env.CDN}/${Key}`;
+    },
+
+    getPrivate(Key) {
       return s3.getSignedUrl('getObject', {
-        Key: `${id}/${fileName}`,
         Bucket: PrivateBucket,
-      });
-    },
-
-    listPrivate(id) {
-      return getAsPromise({
-        Prefix: id,
-        Bucket: PrivateBucket,
-      });
-    },
-
-    listPublic() {
-      return getAsPromise({
-        Bucket: PublicBucket,
-      }).then((resp) => resp.map(appendCDN));
-    },
-
-    putPrivate(id, { data, name }) {
-      return putAsPromise(name, {
-        ServerSideEncryption: 'AES256',
-        Key: `${id}/${name}`,
-        Body: data,
-        Bucket: PrivateBucket,
-      });
-    },
-
-    putPublic({ name, data }) {
-      return putAsPromise(name, {
-        ACL: 'public-read',
-        Key: name,
-        Body: data,
-        Bucket: PublicBucket,
-      }).then(appendCDN);
-    },
-
-    deletePrivate(id, Key) {
-      return deleteAsPromise({
-        Bucket: PrivateBucket,
-        Key: `${id}/${Key}`,
-      });
-    },
-
-    deletePublic(Key) {
-      return deleteAsPromise({
-        Bucket: PublicBucket,
         Key,
       });
+    },
+
+    addToBucket(p) {
+      const meta = p
+        ? {
+            ServerSideEncryption: 'AES256',
+            Bucket: PrivateBucket,
+          }
+        : {
+            ACL: 'public-read',
+            Bucket: PublicBucket,
+          };
+
+      return ([Key, { data, name }]) => {
+        return new Promise((resolve, reject) =>
+          s3.putObject(
+            {
+              ...meta,
+              Body: data,
+              Key,
+            },
+            (err) => {
+              if (err) reject(err);
+              resolve(name);
+            },
+          ),
+        );
+      };
+    },
+
+    deleteByKey(Key, p = false) {
+      return new Promise((resolve, reject) =>
+        s3.deleteObject(
+          {
+            Bucket: p ? PrivateBucket : PublicBucket,
+            Key,
+          },
+          (err) => {
+            if (err) reject(err);
+            resolve();
+          },
+        ),
+      );
     },
   };
 };

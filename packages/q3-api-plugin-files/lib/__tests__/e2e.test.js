@@ -1,60 +1,66 @@
 // eslint-disable-next-line
 require('dotenv').config();
+const { Types } = require('mongoose');
 const Q3 = require('q3-api').default;
+const fs = require('fs');
 const path = require('path');
-const { Schema } = require('mongoose');
 const supertest = require('supertest');
-const schema = require('../schema');
-const routes = require('../router');
+const plugin = require('..');
+
+const topic = Types.ObjectId().toString();
+const file = fs.createReadStream(
+  path.resolve(__dirname, '../__fixtures__/astronaut.png'),
+);
 
 let agent;
 let id;
 
 beforeAll(async () => {
-  const app = Q3.init();
-  const name = 'Demo';
-  const base = new Schema({
-    name: String,
-  });
-
-  base.plugin(schema, {
-    featured: true,
-  });
-
-  const Model = Q3.setModel(name, base);
-
-  app.get('/demo', (req, res) => res.ok());
-  app.use('/demo', routes(name));
-
-  agent = supertest(app);
-
+  agent = supertest(Q3.init());
+  Q3.register(plugin);
   await Q3.connect();
-  ({ _id: id } = await Model.create({
-    name: 'Foo',
-  }));
-});
-
-describe('GET', () => {
-  it('should return 200 at root', (done) => {
-    agent
-      .get('/demo')
-      .expect(200)
-      .end(done);
-  });
 });
 
 describe('POST to upload public files', () => {
   it('should return 201', async () => {
     const { status, body } = await agent
-      .post(`/demo/${id}/public`)
-      .attach(
-        'photo',
-        path.resolve(
-          __dirname,
-          '../__fixtures__/astronaut.png',
-        ),
-      );
+      .post('/files')
+      .field('topic', topic)
+      .field('model', 'Company')
+      .field('sensitive', true)
+      .attach('photo', file);
+
     expect(status).toBe(201);
-    expect(body.publicFiles).toHaveLength(1);
+    expect(body.files).toHaveLength(1);
+    [{ id }] = body.files;
+  });
+});
+
+describe('GET to upload public files', () => {
+  it('should return 200', async () => {
+    const { status, body } = await agent.get(
+      `/files/${id}`,
+    );
+
+    expect(status).toBe(200);
+    expect(body.url).toEqual(expect.any(String));
+  });
+});
+
+describe('GET to upload public files', () => {
+  it('should return 200', async () => {
+    const { status, body } = await agent.get(
+      `/files?topic=${topic}&sensitive=false`,
+    );
+    expect(status).toBe(200);
+    expect(body.files).toHaveLength(0);
+  });
+});
+
+describe('DELETE to remove file', () => {
+  it('should return 204', async () => {
+    const { status } = await agent.delete(`/files/${id}`);
+
+    expect(status).toBe(204);
   });
 });
