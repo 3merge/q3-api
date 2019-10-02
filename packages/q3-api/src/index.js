@@ -38,6 +38,7 @@ export default {
   },
 
   define(ctr) {
+    console.log(cond(ctr.authorization));
     return compose([
       val(ctr.validation),
       cond(ctr.authorization),

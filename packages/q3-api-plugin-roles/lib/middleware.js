@@ -23,14 +23,24 @@ const convertHTTPtoOp = (method) => {
 const permit = (coll) => async (req, res, next) => {
   const { method, user } = req;
   const role = get(user, 'role');
-  if (role === 'Super') return next();
+  let doc;
 
-  const doc = await Q3.model(MODEL_NAME).can(
-    convertHTTPtoOp(method),
-    coll,
-  );
+  if (role === 'Super') {
+    req.redact = (v) => v;
+    doc = {
+      ownership: 'Any',
+      fields: '*',
+    };
+  } else {
+    doc = await Q3.model(MODEL_NAME).can(
+      convertHTTPtoOp(method),
+      coll,
+      role,
+    );
 
-  req.redact = doc.pickFrom.bind(doc);
+    req.redact = doc.pickFrom.bind(doc);
+  }
+
   ctx.set('q3-session:user', user);
   ctx.set('q3-session:grants', doc);
   return next();
@@ -42,12 +52,11 @@ const redactRequest = (req, res, next) => {
 };
 
 const redactResponse = (field) =>
-  mung.json((body, req) => {
+  mung.json((body, req) =>
     Object.assign(body, {
       [field]: req.redact(body[field]),
-    });
-    return body;
-  });
+    }),
+  );
 
 const redact = (location, field) => {
   if (location === 'request') return redactRequest;

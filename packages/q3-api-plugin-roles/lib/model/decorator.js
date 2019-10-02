@@ -6,7 +6,7 @@ const micromatch = require('micromatch');
 
 module.exports = class AccessDecorator {
   static async can(op, coll, role = { $exists: false }) {
-    const grants = this.findOne({
+    const grants = await this.findOne({
       op,
       coll,
       role,

@@ -1,6 +1,6 @@
 import connect from 'connect';
 
-export const cond = (a) => (Array.isArray() ? a : []);
+export const cond = (a) => (Array.isArray(a) ? a : []);
 
 export const compose = (a = []) => {
   const chain = connect();

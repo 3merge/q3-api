@@ -1,7 +1,7 @@
 const Q3 = require('q3-api').default;
 const {
-  setSession,
-  pickFromRequest,
+  redact: redactMiddleware,
+  permit,
 } = require('../middleware');
 
 const next = jest.fn();
@@ -10,12 +10,10 @@ const mockUser = {
   role: 'dev',
 };
 
-const canDo = jest.fn().mockReturnValue({
-  pickFrom: jest.fn(),
-});
-
 const mockAccess = {
-  can: jest.fn().mockReturnValue(canDo),
+  can: jest.fn().mockResolvedValue({
+    pickFrom: jest.fn(),
+  }),
 };
 
 jest.mock('request-context');
@@ -24,15 +22,16 @@ afterEach(() => {
   next.mockReset();
 });
 
-describe('setSession middleware', () => {
+describe('permit middleware', () => {
   let sess;
 
   beforeAll(() => {
-    sess = setSession('foo');
+    sess = permit('foo');
   });
 
-  it('should throw an error without user context', () => {
-    expect(sess({})).rejects.toThrowError();
+  it('should bypass super users', async () => {
+    await sess({ user: { role: 'Super' } }, {}, next);
+    expect(next).toHaveBeenCalled();
   });
 
   it('should integrate with roles model', async () => {
@@ -41,12 +40,12 @@ describe('setSession middleware', () => {
     await sess(req, {}, next);
 
     expect(next).toHaveBeenCalled();
-    expect(mockAccess.can).toHaveBeenCalledWith('Update');
-    expect(canDo).toHaveBeenCalledWith('dev', 'foo');
-    expect(req.grants).toHaveProperty(
-      'pickFrom',
-      expect.any(Function),
+    expect(mockAccess.can).toHaveBeenCalledWith(
+      'Update',
+      'foo',
+      'dev',
     );
+    expect(req.redact).toEqual(expect.any(Function));
   });
 });
 
@@ -54,14 +53,12 @@ test('pickFromRequest middleware  should overwrite the body request', () => {
   const body = {
     foo: 'bar',
   };
-  const grants = {
-    pickFrom: jest.fn().mockReturnValue({
-      foo: 'baz',
-    }),
-  };
+  const redact = jest.fn().mockReturnValue({
+    foo: 'baz',
+  });
 
-  pickFromRequest({ body, grants }, {}, next);
-  expect(grants.pickFrom).toHaveBeenCalled();
+  redactMiddleware('request')({ body, redact }, {}, next);
+  expect(redact).toHaveBeenCalled();
   expect(body).toMatchObject({ foo: 'baz' });
   expect(next).toHaveBeenCalled();
 });

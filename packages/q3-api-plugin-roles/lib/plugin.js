@@ -8,7 +8,7 @@ module.exports = (schema) => {
   const pluginSchema = {};
 
   const getID = () =>
-    get(ctx.get('q3-session'), 'id', null);
+    get(ctx.get('q3-session:user'), 'id', null);
 
   const getGroupID = () =>
     get(
@@ -28,13 +28,18 @@ module.exports = (schema) => {
     return this;
   }
 
-  function queryWithOwnership() {
-    return {
-      $or: [
-        { createdBy: getID() },
-        { ownedBy: getGroupID() },
-      ],
-    };
+  async function compareOwnership() {
+    const { ownership } = ctx.get('q3-session:grants');
+
+    if (ownership === 'Shared')
+      this.where({
+        ownedBy: getGroupID(),
+      });
+
+    if (ownership === 'Own')
+      this.where({
+        createdBy: getID(),
+      });
   }
 
   function hasSufficientOwnership() {
@@ -57,6 +62,8 @@ module.exports = (schema) => {
 
   if (schema.options.ownership) {
     schema.pre('save', appendSessionData);
+    schema.pre('find', compareOwnership);
+
     pluginSchema.createdBy = {
       type: Schema.Types.ObjectId,
       ref: 'q3-users',
@@ -64,10 +71,6 @@ module.exports = (schema) => {
 
     Object.assign(schema.methods, {
       hasSufficientOwnership,
-    });
-
-    Object.assign(schema.statics, {
-      queryWithOwnership,
     });
   }
 

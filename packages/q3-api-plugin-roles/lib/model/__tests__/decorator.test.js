@@ -90,24 +90,13 @@ describe.each([
 });
 
 describe('static can', () => {
-  it('should throw', () => {
-    expect(() => Decorator.can('INSERT')).toThrowError();
-  });
-
-  it('should throw without global mongoose methods', () => {
-    const findOne = jest.fn().mockResolvedValue({});
-    const canDo = Decorator.can.call({ findOne }, 'Read');
-    expect(canDo('Foo')).rejects.toThrow();
-  });
-
   it('should use default role argument', async () => {
     const findOne = jest.fn().mockResolvedValue({
       hasSufficientOwnership: jest
         .fn()
         .mockReturnValue(true),
     });
-    const canDo = Decorator.can.call({ findOne }, 'Update');
-    await canDo('Foo');
+    await Decorator.can.call({ findOne }, 'Update', 'Foo');
     expect(findOne).toHaveBeenCalledWith(
       expect.objectContaining({
         role: { $exists: false },
@@ -117,10 +106,10 @@ describe('static can', () => {
     );
   });
 
-  it('should return full permissoins', () => {
-    const canDo = Decorator.can.call({}, 'Create');
-    expect(canDo('Foo', 'Super')).resolves.toMatchObject({
-      fields: '*',
-    });
+  it('should throw', () => {
+    const findOne = jest.fn().mockResolvedValue(null);
+    expect(
+      Decorator.can.call({ findOne }),
+    ).rejects.toThrowError();
   });
 });
