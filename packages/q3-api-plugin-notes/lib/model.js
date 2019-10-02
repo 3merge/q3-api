@@ -13,11 +13,16 @@ class ModelDecorator {
     return doc;
   }
 
-  async findThreadStrictly(id) {
+  findThreadStrictly(id, user) {
     const subdoc = this.thread.id(id);
     if (!subdoc)
       throw new Errors.ResourceNotFoundError(
         Q3.translate('messages:threadNotFound'),
+      );
+
+    if (!subdoc.author.equals(user.id))
+      throw new Errors.AuthorizationError(
+        Q3.translate('messages:mustOwnThread'),
       );
 
     return subdoc;
@@ -29,6 +34,11 @@ class ModelDecorator {
     return this.toJSON({
       virtuals: true,
     });
+  }
+
+  async removeFromThread(id) {
+    this.thread.remove(id);
+    return this.save();
   }
 }
 

@@ -1,5 +1,4 @@
 const Q3 = require('q3-api').default;
-const { Errors } = require('q3-api');
 const { MODEL_NAME } = require('../constants');
 const {
   checkThreadID,
@@ -17,19 +16,8 @@ const UpdateInThread = async (
   res,
 ) => {
   const doc = await Q3.model(MODEL_NAME).findById(noteID);
-  const subdoc = doc.thread.id(threadID);
-
-  if (!subdoc)
-    throw new Errors.ResourceNotFoundError(
-      translate('messages:unknownThread'),
-    );
-
-  if (!subdoc.author.equals(user.id))
-    throw new Errors.AuthorizationError(
-      translate('messages:mustOwnThread'),
-    );
-
-  doc.thread.message = message;
+  const subdoc = doc.findThreadStrictly(threadID, user);
+  subdoc.message = message;
   await doc.save();
 
   res.ok({
