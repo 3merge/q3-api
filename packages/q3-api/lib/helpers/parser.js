@@ -1,7 +1,7 @@
-import { Router } from 'express';
-import { readdirSync } from 'fs';
-import { invoke } from 'lodash';
-import { resolve, relative, join } from 'path';
+const { Router } = require('express');
+const { readdirSync } = require('fs');
+const { invoke } = require('lodash');
+const { resolve, relative, join } = require('path');
 
 const appendID = (str) => `:${str}ID`;
 
@@ -45,7 +45,7 @@ class DirectoryWalker {
   getController() {
     try {
       // eslint-disable-next-line
-      const controller = require(resolve(this.dir, this.name)).default;
+      const controller = require(resolve(this.dir, this.name));
       if (typeof controller !== 'function') {
         throw new Error('Controller must be a function');
       }
@@ -76,7 +76,7 @@ class DirectoryWalker {
   }
 }
 
-export default (root) => {
+module.exports = (root) => {
   const app = new Router();
   const opts = { withFileTypes: true };
 

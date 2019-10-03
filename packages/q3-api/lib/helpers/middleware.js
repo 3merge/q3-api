@@ -1,5 +1,5 @@
-import customErrorMatcher from './errors';
-import { translate } from '../lib/i18next';
+const customErrorMatcher = require('./errors');
+const { translate } = require('../config/i18next');
 
 const statusCodeHelper = (res) => (code) => (body = {}) => {
   res.status(code).json(body);
@@ -19,7 +19,7 @@ const decorateResponse = (req, res, next) => {
 };
 
 // eslint-disable-next-line
-const handleUncaughtErrors = (err, req, res, next) => {
+decorateResponse.handleUncaughtErrors = (err, req, res, next) => {
   const status = customErrorMatcher(err.name);
   res.status(status);
   if (status !== 500) {
@@ -32,5 +32,4 @@ const handleUncaughtErrors = (err, req, res, next) => {
   }
 };
 
-export default decorateResponse;
-export { handleUncaughtErrors };
+module.exports = decorateResponse;

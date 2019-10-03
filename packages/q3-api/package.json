@@ -8,6 +8,9 @@
   "scripts": {
     "start": "nodemon demo --exec babel-node"
   },
+  "jest": {
+    "testEnvironment": "node"
+  },
   "dependencies": {
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",

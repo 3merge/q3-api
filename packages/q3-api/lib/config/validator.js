@@ -1,11 +1,12 @@
-import { pickBy } from 'lodash';
-import {
+const { pickBy } = require('lodash');
+const {
   matchedData,
   validationResult,
-} from 'express-validator';
-import { compose } from '../helpers/utils';
-import { ValidationError } from '../helpers/errors';
+} = require('express-validator');
+const { compose } = require('../helpers/utils');
+const { errors } = require('../helpers/errors');
 
+const { ValidationError } = errors;
 const isTruthy = (a) => a !== null && a !== undefined;
 
 const validate = (req, res, next) => {
@@ -20,5 +21,5 @@ const validate = (req, res, next) => {
   }
 };
 
-export default (middleware = []) =>
+module.exports = (middleware = []) =>
   compose([...middleware, validate]);

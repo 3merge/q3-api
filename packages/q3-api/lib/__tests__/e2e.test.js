@@ -1,17 +1,17 @@
-import i18 from 'i18next';
-import request from 'supertest';
-import mongoose from 'mongoose';
-import dot from 'dotenv';
-import deco from '../helpers/middleware';
-import events from '../helpers/events';
-import { compose } from '../helpers/utils';
-import parser from '../helpers/parser';
-import val from '../lib/validator';
-import Exp from '..';
+// eslint-disable-next-line
+const request = require('supertest');
+const i18 = require('i18next');
+const mongoose = require('mongoose');
+const dot = require('dotenv');
+const deco = require('../helpers/middleware');
+const { compose } = require('../helpers/utils');
+const parser = require('../helpers/parser');
+const val = require('../config/validator');
+const Exp = require('..');
 
 jest.mock('dotenv');
 jest.mock('i18next');
-jest.mock('../lib/validator');
+jest.mock('../config/validator');
 jest.mock('../helpers/middleware');
 jest.mock('../helpers/parser');
 jest.mock('../helpers/utils');
@@ -39,18 +39,17 @@ test('register should pass instance arguments into a callback fn', (done) => {
   }, options);
 });
 
-test('notify should dispatch event', (done) => {
-  Exp.subscribe().on('foo', done);
-  Exp.notify('foo');
-});
-
-test('subscribe should return event emitter', () => {
-  expect(Exp.subscribe()).toMatchObject(events);
-});
-
-test('translate should execture i18::t method', () => {
+test('translate should execute i18::t method', () => {
   Exp.translate('foo');
-  expect(i18.t).toHaveBeenCalledWith('foo');
+  expect(i18.t).toHaveBeenCalledWith('foo', null);
+});
+
+test('translate should execute i18::t method with sprintf', () => {
+  Exp.translate('foo', [1]);
+  expect(i18.t).toHaveBeenCalledWith('foo', {
+    postProcess: expect.any(String),
+    sprintf: expect.any(Array),
+  });
 });
 
 describe('model', () => {
@@ -77,15 +76,6 @@ test('walk should call parser with dirname', () => {
 });
 
 describe('start', () => {
-  /*  it('should exit on failed connection', (done) => {
-    process.env.CONNECTION = 'uri';
-    process.env.PORT = '800';
-    Exp.connect().then((err) => {
-      expect(err).toBeDefined();
-      done();
-    });
-  });
-*/
   it('should listen to port on success', async (done) => {
     Exp.connect().then((err) => {
       expect(err).toBeNull();

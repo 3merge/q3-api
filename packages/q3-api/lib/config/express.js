@@ -1,10 +1,10 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import helmet from 'helmet';
-import cors from 'cors';
-import compression from 'compression';
-import limit from 'express-rate-limit';
-import fileUpload from 'express-fileupload';
+const express = require('express');
+const bodyParser = require('body-parser');
+const helmet = require('helmet');
+const cors = require('cors');
+const compression = require('compression');
+const limit = require('express-rate-limit');
+const fileUpload = require('express-fileupload');
 
 const server = express();
 
@@ -33,4 +33,4 @@ server.use(
   }),
 );
 
-export default server;
+module.exports = server;

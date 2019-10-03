@@ -1,24 +1,20 @@
-import aa from 'express-async-handler';
-import path from 'path';
-import dotenv from 'dotenv';
-import { get } from 'lodash';
-import i18, { translate } from './lib/i18next';
-import val from './lib/validator';
-import app from './lib/express';
-import mongoose from './lib/mongoose';
-import { compose, cond } from './helpers/utils';
-import events from './helpers/events';
-import parser from './helpers/parser';
-import decorators, {
-  handleUncaughtErrors,
-} from './helpers/middleware';
-import * as Errors from './helpers/errors';
+const aa = require('express-async-handler');
+const path = require('path');
+const dotenv = require('dotenv');
+const { get } = require('lodash');
+const i18 = require('./config/i18next');
+const val = require('./config/validator');
+const app = require('./config/express');
+const mongoose = require('./config/mongoose');
+const { compose, cond } = require('./helpers/utils');
+const parser = require('./helpers/parser');
+const decorators = require('./helpers/middleware');
+const { errors } = require('./helpers/errors');
 
-export { app, i18, mongoose, compose, Errors };
+const { handleUncaughtErrors } = decorators;
 
-export default {
-  translate,
-
+const Q3Api = {
+  ...i18,
   connect() {
     return new Promise((resolve) => {
       const { CONNECTION, PORT } = process.env;
@@ -38,7 +34,6 @@ export default {
   },
 
   define(ctr) {
-    console.log(cond(ctr.authorization));
     return compose([
       val(ctr.validation),
       cond(ctr.authorization),
@@ -57,18 +52,6 @@ export default {
     );
   },
 
-  notify(cmd, opts) {
-    events.emit(cmd, opts);
-  },
-
-  subscribe() {
-    return events;
-  },
-
-  loadTranslation(lang, ns, json) {
-    i18.addResources(lang, ns, json);
-  },
-
   model(name) {
     if (!(name in mongoose.models))
       throw new Error('Model unknown to app');
@@ -79,3 +62,9 @@ export default {
     return mongoose.model(name, Schema);
   },
 };
+
+Q3Api.$app = app;
+Q3Api.$mongoose = mongoose;
+Q3Api.$errors = errors;
+
+module.exports = Q3Api;

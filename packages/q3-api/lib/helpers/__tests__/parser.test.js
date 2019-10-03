@@ -1,5 +1,4 @@
-import { resolve, join } from 'path';
-import parser from '../parser';
+const { resolve, join } = require('path');
 
 const testUtils = require('../parser');
 

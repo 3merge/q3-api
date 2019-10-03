@@ -1,6 +1,5 @@
-/* eslint max-classes-per-file: 0  */
-
-export default (name) => {
+/* eslint-disable max-classes-per-file */
+const detectErrorByName = (name) => {
   switch (name) {
     case 'BadRequestError':
       return 400;
@@ -19,7 +18,7 @@ export default (name) => {
   }
 };
 
-export class BadRequestError extends Error {
+class BadRequestError extends Error {
   constructor(message) {
     super();
     this.name = this.constructor.name;
@@ -27,7 +26,7 @@ export class BadRequestError extends Error {
   }
 }
 
-export class AuthenticationError extends Error {
+class AuthenticationError extends Error {
   constructor(message) {
     super();
     this.name = this.constructor.name;
@@ -35,7 +34,7 @@ export class AuthenticationError extends Error {
   }
 }
 
-export class AuthorizationError extends Error {
+class AuthorizationError extends Error {
   constructor(message) {
     super();
     this.name = this.constructor.name;
@@ -43,7 +42,7 @@ export class AuthorizationError extends Error {
   }
 }
 
-export class ValidationError extends Error {
+class ValidationError extends Error {
   constructor(errors) {
     super();
     this.name = this.constructor.name;
@@ -51,14 +50,14 @@ export class ValidationError extends Error {
   }
 }
 
-export class ResourceNotFoundError extends Error {
+class ResourceNotFoundError extends Error {
   constructor() {
     super();
     this.name = this.constructor.name;
   }
 }
 
-export class ConflictError extends Error {
+class ConflictError extends Error {
   constructor(message, err) {
     super();
     this.name = this.constructor.name;
@@ -66,3 +65,14 @@ export class ConflictError extends Error {
     this.error = err;
   }
 }
+
+detectErrorByName.errors = {
+  ConflictError,
+  ResourceNotFoundError,
+  ValidationError,
+  AuthorizationError,
+  AuthenticationError,
+  BadRequestError,
+};
+
+module.exports = detectErrorByName;

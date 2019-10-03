@@ -1,6 +1,8 @@
-import mongoose from 'mongoose';
-import i18 from './i18next';
-import { ResourceNotFoundError } from '../helpers/errors';
+const mongoose = require('mongoose');
+const i18 = require('./i18next');
+const {
+  ResourceNotFoundError,
+} = require('../helpers/errors');
 
 mongoose.set('useEnsureIndex', true);
 mongoose.set('useCreateIndex', true);
@@ -30,4 +32,4 @@ mongoose.plugin((schema) => {
   });
 });
 
-export default mongoose;
+module.exports = mongoose;
