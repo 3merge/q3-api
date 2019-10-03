@@ -4,20 +4,18 @@ const {
   MODEL_NAME,
   OWNERSHIP_ENUM,
 } = require('../constants');
+const { permit, redact } = require('../middleware');
 
 const PatchById = async (
   { params: { permissionID }, body, translate },
   res,
 ) => {
-  const doc = await Q3.model(MODEL_NAME).findStrictly(
-    permissionID,
-  );
-  doc.set(body);
-  await doc.save();
+  const permission = await Q3.model(
+    MODEL_NAME,
+  ).findStrictly(permissionID);
+  permission.set(body);
+  await permission.save();
 
-  const permission = doc.toJSON({
-    virtuals: true,
-  });
   res.update({
     message: translate('message:permissionUpdated'),
     permission,
@@ -32,15 +30,23 @@ PatchById.validation = [
     ),
   check('ownership')
     .isString()
+    .optional()
     .isIn(OWNERSHIP_ENUM)
     .withMessage((v, { req }) =>
       req.translate('validations:ownership'),
     ),
   check('fields')
     .isString()
+    .optional()
     .withMessage((v, { req }) =>
       req.translate('validations:commaDelineatedString'),
     ),
+];
+
+PatchById.authorization = [
+  permit(MODEL_NAME),
+  redact('request').in('body'),
+  redact('response').in('permission'),
 ];
 
 module.exports = Q3.define(PatchById);

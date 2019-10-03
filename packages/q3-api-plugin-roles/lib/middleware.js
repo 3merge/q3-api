@@ -21,47 +21,66 @@ const convertHTTPtoOp = (method) => {
 };
 
 const permit = (coll) => async (req, res, next) => {
-  const { method, user } = req;
-  const role = get(user, 'role');
-  let doc;
+  try {
+    const { method, user } = req;
+    const role = get(user, 'role');
+    let doc;
 
-  if (role === 'Super') {
-    req.redact = (v) => v;
-    doc = {
-      ownership: 'Any',
-      fields: '*',
-    };
-  } else {
-    doc = await Q3.model(MODEL_NAME).can(
-      convertHTTPtoOp(method),
-      coll,
-      role,
-    );
+    if (role === 'Super') {
+      req.redact = (v) => v;
+      doc = {
+        ownership: 'Any',
+        fields: '*',
+      };
+    } else {
+      doc = await Q3.model(MODEL_NAME).can(
+        convertHTTPtoOp(method),
+        coll,
+        role,
+      );
 
-    req.redact = doc.pickFrom.bind(doc);
+      req.redact = doc.pickFrom.bind(doc);
+    }
+
+    ctx.set('q3-session:user', user);
+    ctx.set('q3-session:grants', doc);
+
+    next();
+  } catch (err) {
+    next(err);
   }
-
-  ctx.set('q3-session:user', user);
-  ctx.set('q3-session:grants', doc);
-  return next();
 };
 
-const redactRequest = (req, res, next) => {
-  Object.assign(req.body, req.redact(req.body));
-  next();
+const redactRequest = {
+  in: (field) => (req, res, next) => {
+    req[field] = req.redact(req[field]);
+    next();
+  },
 };
 
-const redactResponse = (field) =>
-  mung.json((body, req) =>
-    Object.assign(body, {
-      [field]: req.redact(body[field]),
-    }),
-  );
+const redactResponse = {
+  inArray: (field) =>
+    mung.json((body, req) =>
+      Object.assign(body, {
+        [field]: body[field].map((item) =>
+          req.redact(item),
+        ),
+      }),
+    ),
+  in: (field) =>
+    mung.json((body, req) =>
+      Object.assign(body, {
+        [field]: req.redact(body[field]),
+      }),
+    ),
+};
 
-const redact = (location, field) => {
+const redact = (location) => {
   if (location === 'request') return redactRequest;
-  if (location === 'response') return redactResponse(field);
-  return (req, res, next) => next();
+  if (location === 'response') return redactResponse;
+  throw new Error(
+    'Location must be "request" or "response"',
+  );
 };
 
 module.exports = {

@@ -1,5 +1,6 @@
 const Q3 = require('q3-api').default;
 const { check } = require('express-validator');
+const { permit } = require('../middleware');
 const { MODEL_NAME } = require('../constants');
 
 const DeleteById = async (
@@ -9,7 +10,7 @@ const DeleteById = async (
   await Q3.model(MODEL_NAME).findByIdAndDelete(
     permissionID,
   );
-  res.acknownledge({
+  res.acknowledge({
     message: translate('messages:permissionRemoved'),
   });
 };
@@ -21,5 +22,7 @@ DeleteById.validation = [
       req.translate('validations:mongoId'),
     ),
 ];
+
+DeleteById.authorization = [permit(MODEL_NAME)];
 
 module.exports = Q3.define(DeleteById);

@@ -5,12 +5,12 @@ const {
   OWNERSHIP_ENUM,
   OP_ENUM,
 } = require('../constants');
+const { permit, redact } = require('../middleware');
 
 const Post = async ({ body, translate }, res) => {
-  const doc = await Q3.model(MODEL_NAME).create(body);
-  const permission = doc.toJSON({
-    virtuals: true,
-  });
+  const permission = await Q3.model(MODEL_NAME).create(
+    body,
+  );
   res.create({
     message: translate('messages:newPermission'),
     permission,
@@ -18,11 +18,10 @@ const Post = async ({ body, translate }, res) => {
 };
 
 Post.validation = [
-  check('collection')
+  check('coll')
     .isString()
-    .isIn(OWNERSHIP_ENUM)
     .withMessage((v, { req }) =>
-      req.translate('validations:collection'),
+      req.translate('validations:coll'),
     ),
   check('op')
     .isString()
@@ -43,9 +42,16 @@ Post.validation = [
     ),
   check('fields')
     .isString()
+    .optional()
     .withMessage((v, { req }) =>
       req.translate('validations:commaDelineatedString'),
     ),
+];
+
+Post.authorization = [
+  permit(MODEL_NAME),
+  redact('request').in('body'),
+  redact('response').in('permission'),
 ];
 
 module.exports = Q3.define(Post);

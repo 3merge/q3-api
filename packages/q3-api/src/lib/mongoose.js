@@ -11,7 +11,7 @@ mongoose.set('useUnifiedTopology', true);
 mongoose.plugin((schema) => {
   // eslint-disable-next-line
   schema.statics.findStrictly = async function(id) {
-    const doc = await this.findById(id);
+    const doc = await this.findById(id).exec();
     if (!doc)
       throw new ResourceNotFoundError(
         i18.t('messages:missingResource'),
@@ -19,6 +19,15 @@ mongoose.plugin((schema) => {
 
     return doc;
   };
+
+  Object.assign(schema.options, {
+    toObject: {
+      virtuals: true,
+    },
+    toJSON: {
+      virtuals: true,
+    },
+  });
 });
 
 export default mongoose;

@@ -1,17 +1,16 @@
 const contextService = require('request-context');
-const { permit, redact } = require('./middleware');
-const plugin = require('./plugin');
 const { MODEL_NAME } = require('./constants');
 const schema = require('./model');
+const routes = require('./routes');
 
-const preRouteRBAC = (app, db) => {
+const Q3Roles = (app, db) => {
   db.model(MODEL_NAME, schema);
   app.use(contextService.middleware('q3-session'));
+  app.use(routes);
 };
 
-module.exports = {
-  preRouteRBAC,
-  plugin,
-  permit,
-  redact,
-};
+// named exports
+Q3Roles.plugin = require('./plugin');
+Object.assign(Q3Roles, require('./middleware'));
+
+module.exports = Q3Roles;

@@ -24,7 +24,9 @@ module.exports = class AccessDecorator {
     const flat = flatten(obj);
     const match = micromatch(
       Object.keys(flat),
-      get(this, 'fields', '!*').split(', '),
+      get(this, 'fields', '!*')
+        .split(',')
+        .map((i) => i.trim()),
     ).reduce((acc, key) => {
       acc[key] = flat[key];
       return acc;

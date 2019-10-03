@@ -19,3 +19,4 @@ src/
 
 # Test results
 coverage/
+.jest-coverage/
