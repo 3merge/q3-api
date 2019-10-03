@@ -16,12 +16,6 @@ jest.mock('../helpers/middleware');
 jest.mock('../helpers/parser');
 jest.mock('../helpers/utils');
 
-test('init should configure environment', async () => {
-  await request(Exp.init()).get('/');
-  expect(dot.config).toHaveBeenCalled();
-  expect(deco).toHaveBeenCalled();
-});
-
 test('define should run composer', () => {
   const mockController = jest.fn();
   Exp.define(mockController);

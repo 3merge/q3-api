@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 require('dotenv').config();
 const { Types } = require('mongoose');
-const Q3 = require('q3-api').default;
+const Q3 = require('q3-api');
 const fs = require('fs');
 const path = require('path');
 const supertest = require('supertest');
@@ -16,7 +16,7 @@ let agent;
 let id;
 
 beforeAll(async () => {
-  agent = supertest(Q3.init());
+  agent = supertest(Q3.$app);
   Q3.register(plugin);
   await Q3.connect();
 });

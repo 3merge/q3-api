@@ -2,7 +2,7 @@
   "name": "q3-api",
   "version": "1.0.0",
   "description": "REST api configurations",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "author": "Mike <mibberson@3merge.ca>",
   "license": "MIT",
   "scripts": {

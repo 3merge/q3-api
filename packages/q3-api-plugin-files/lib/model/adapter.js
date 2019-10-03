@@ -1,13 +1,16 @@
-const Q3 = require('q3-api').default;
-const { Errors } = require('q3-api');
+const Q3 = require('q3-api');
 const AWSInterface = require('../aws');
+
+const {
+  $errors: { ResourceNotFoundError },
+} = Q3;
 
 const buildKey = ({ model, topic, name }) =>
   `${model}/${topic}/${name}`;
 
 const throwOnMissing = (doc) => {
   if (!doc)
-    throw new Errors.ResourceNotFoundError(
+    throw new ResourceNotFoundError(
       Q3.translate('validation:unknownFileId'),
     );
 };

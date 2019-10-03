@@ -1,4 +1,4 @@
-const Q3 = require('q3-api').default;
+const Q3 = require('q3-api');
 const { check } = require('express-validator');
 
 const Download = async ({ params: { fileID } }, res) => {

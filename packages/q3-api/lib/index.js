@@ -13,8 +13,12 @@ const { errors } = require('./helpers/errors');
 
 const { handleUncaughtErrors } = decorators;
 
+dotenv.config();
+app.use(decorators);
+
 const Q3Api = {
   ...i18,
+
   connect() {
     return new Promise((resolve) => {
       const { CONNECTION, PORT } = process.env;
@@ -25,12 +29,6 @@ const Q3Api = {
         resolve(null);
       });
     });
-  },
-
-  init() {
-    dotenv.config();
-    app.use(decorators);
-    return app;
   },
 
   define(ctr) {

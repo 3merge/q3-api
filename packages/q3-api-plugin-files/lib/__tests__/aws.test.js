@@ -1,6 +1,8 @@
 const AWS = require('aws-sdk-mock');
 const AWSInterface = require('../aws');
 
+const file = { name: 'Foo', data: 'flestuff' };
+
 beforeAll(() => {
   process.env.S3_ACCESS_KEY_ID = '123';
   process.env.S3_SECRET = 'Shh!';
@@ -27,33 +29,6 @@ describe('AWS inteface', () => {
     AWSInterface().getPrivate('foo');
   });
 
-  it('should reject file upload', async () => {
-    const err = true;
-    const file = { name: 'Foo' };
-    AWS.mock('S3', 'putObject', (method, callback) => {
-      callback({ err });
-    });
-
-    await expect(
-      AWSInterface().addToBucket(false)(['1', file]),
-    ).rejects.toMatchObject({
-      err,
-    });
-  });
-
-  it('should resolve private upload', async () => {
-    const file = { name: 'Foo' };
-    AWS.mock('S3', 'putObject', (method, callback) => {
-      expect(method).toHaveProperty('Key', '1');
-      expect(method).toHaveProperty('Bucket', 'Private');
-      callback();
-    });
-
-    await expect(
-      AWSInterface().addToBucket(true)(['1', file]),
-    ).resolves.toBe('Foo');
-  });
-
   it('should delete a public file', async () => {
     AWS.mock('S3', 'deleteObject', (params, callback) => {
       expect(params).toHaveProperty('Key', 'Foo');
@@ -64,5 +39,27 @@ describe('AWS inteface', () => {
     await expect(
       AWSInterface().deleteByKey('Foo'),
     ).resolves.toBe(undefined);
+  });
+
+  it('should reject file upload', () => {
+    AWS.mock('S3', 'putObject', (params, callback) => {
+      callback(new Error());
+    });
+
+    expect(
+      AWSInterface().addToBucket(false)(['1', file]),
+    ).rejects.toThrowError();
+  });
+
+  it('should resolve private upload', () => {
+    AWS.mock('S3', 'putObject', (params, callback) => {
+      expect(params).toHaveProperty('Key', '1');
+      expect(params).toHaveProperty('Bucket', 'Private');
+      callback();
+    });
+
+    expect(
+      AWSInterface().addToBucket(true)(['1', file]),
+    ).resolves.toBe('Foo');
   });
 });
