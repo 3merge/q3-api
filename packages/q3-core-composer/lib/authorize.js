@@ -71,9 +71,18 @@ const redact = (modelName) => {
   return chain;
 };
 
+const verify = () => ({ user }, res, next) => {
+  if (!user) {
+    res.status(401).send();
+  } else {
+    next();
+  }
+};
+
 module.exports = {
   redact,
   filterObject,
+  verify,
 
   authorizeResponse: mung.json((body, req) => {
     iterateRedactions(req, 'response', body);

@@ -1,32 +1,28 @@
 const { ERRORS } = require('./constants');
 
-class ErrorByName {
-  constructor(name) {
-    const [err] = Object.entries(ERRORS).filter(([key]) =>
-      key.includes(name),
-    );
-
-    this.$Err = err ? err[1] : Error;
-  }
-
-  exec(...args) {
-    return new this.$Err(...args);
-  }
-}
-
-const boomerang = (name, ...args) =>
-  new ErrorByName(name).exec(...args);
-
-const toss = (name, ...args) => {
-  throw new ErrorByName(name).exec(...args);
+const errorByName = (name, msg, ...args) => {
+  const [err] = Object.entries(ERRORS).filter(([key]) =>
+    key.includes(name),
+  );
+  const ErrorInstance = err ? err[1] : Error;
+  return new ErrorInstance(msg, ...args);
 };
 
-const log = (name, ...args) =>
+const boomerang = (name) => (msg) => (...args) =>
+  errorByName(name, msg, ...args);
+
+const toss = (name) => (msg) => (...args) => {
+  throw errorByName(name, msg, ...args);
+};
+
+const log = (name) => (msg) => (...args) =>
   // eslint-disable-next-line
-  console.log(new ErrorByName(name).exec(...args));
+  console.log(errorByName(name, msg, ...args));
 
 module.exports = (name) => ({
-  boomerang: boomerang(name),
-  throw: toss(name),
-  log: log(name),
+  msg: (msg) => ({
+    boomerang: boomerang(name)(msg),
+    throw: toss(name)(msg),
+    log: log(name)(msg),
+  }),
 });

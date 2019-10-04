@@ -33,10 +33,11 @@ const ERRORS = {
   },
 
   ValidationError: class extends Error {
-    constructor(errors) {
+    constructor(message, errors) {
       super();
       this.name = this.constructor.name;
       this.errors = errors;
+      this.message = message;
     }
   },
 

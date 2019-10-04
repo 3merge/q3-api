@@ -45,9 +45,9 @@ module.exports = class UserAuthDecorator {
   static async $findOneStrictly(args) {
     const doc = await this.findOne(args);
     if (!doc)
-      exception('AuthenticationError').throw(
-        t('validations:unknownAccountOrIncorrectState'),
-      );
+      exception('BadRequest')
+        .msg(t('validations:unknownAccount'))
+        .throw();
 
     return doc;
   }
@@ -98,7 +98,9 @@ module.exports = class UserAuthDecorator {
   async setPassword(s) {
     const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
     if (s && !re.test(s)) {
-      exception('ValidationError').throw(t('weakPassword'));
+      exception('ValidationError')
+        .msg(t('weakPassword'))
+        .throw();
     }
 
     const password =
@@ -133,9 +135,9 @@ module.exports = class UserAuthDecorator {
 
     await this.save();
     if (!matches && strict) {
-      exception('AuthenticationError').throw(
-        t('incorrectPassword'),
-      );
+      exception('AuthenticationError')
+        .msg(t('incorrectPassword'))
+        .throw();
     }
 
     return matches;

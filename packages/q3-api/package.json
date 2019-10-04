@@ -29,6 +29,11 @@
   },
   "peerDependencies": {
     "express": "^4.17.1",
-    "mongoose": "^5.7.1"
+    "mongoose": "^5.7.1",
+    "q3-core-composer": "^1.0.0",
+    "q3-core-walker": "^1.0.0"
+  },
+  "devDependencies": {
+    "supertest": "^4.0.2"
   }
 }

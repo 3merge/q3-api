@@ -1,0 +1,13 @@
+{
+  "name": "q3-api-plugin-rates",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "peerDependencies": {
+    "q3-api": "^1.0.0",
+    "q3-core-composer": "^1.0.0",
+    "q3-core-walker": "^1.0.0"
+  }
+}

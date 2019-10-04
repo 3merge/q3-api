@@ -11,7 +11,8 @@
     "bootstrap": "lerna bootstrap --use-workspaces",
     "build": "lerna exec --parallel -- babel --root-mode upward src -d dist --ignore **/__mocks__,**/*.test.js",
     "lint": "eslint . --ext .js --ext .jsx --ignore-pattern dist --ignore-pattern node_modules",
-    "lerna-publish": "lerna publish"
+    "lerna-publish": "lerna publish",
+    "develop": "nodemon example"
   },
   "workspaces": [
     "packages/*",

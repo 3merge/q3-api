@@ -1,5 +1,17 @@
 const mongoose = require('../config/mongoose');
 const { MODEL_NAMES } = require('../constants');
 
-mongoose.model(MODEL_NAMES.USERS, require('./user'));
-mongoose.model(MODEL_NAMES.USERS, require('./permission'));
+const Users = mongoose.model(
+  MODEL_NAMES.USERS,
+  require('./user'),
+);
+
+const Permissions = mongoose.model(
+  MODEL_NAMES.PERMISSIONS,
+  require('./permission'),
+);
+
+module.exports = {
+  Users,
+  Permissions,
+};

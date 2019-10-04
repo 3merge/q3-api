@@ -7,6 +7,7 @@ const validate = require('./lib/validate');
 
 const {
   redact,
+  verify,
   authorizeRequest,
   authorizeResponse,
 } = authorize;
@@ -34,15 +35,6 @@ const compose = (ctr) =>
 module.exports = {
   ...dep,
   redact,
+  verify,
   compose,
 };
-
-/*
-APpend to auth somehow?
-  if (!req.user)
-    err = next(
-      exception('AuthenticationError').boomerang(
-        translate('errors:login'),
-      ),
-    );
-*/
