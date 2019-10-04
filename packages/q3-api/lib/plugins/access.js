@@ -1,26 +1,21 @@
 const { get } = require('lodash');
 const ctx = require('request-context');
 const mongoose = require('../config/mongoose');
-const { translate: t } = require('../config/i18next');
+const { t } = require('../config/i18next');
 const exception = require('../errors');
+const { MODEL_NAMES } = require('../constants');
 
 const { Schema } = mongoose;
 
-mongoose.plugin((schema) => {
-  const pluginSchema = {};
+const getFromSessionByKey = (key) =>
+  get(ctx.get('q3-session:user'), key, null);
 
-  const getID = () =>
-    get(ctx.get('q3-session:user'), 'id', null);
+const groupName = (arg) =>
+  get(arg, 'schema._userProvidedOptions.group');
 
-  const getGroupID = () =>
-    get(
-      ctx.get('q3-session:user'),
-      schema.options.ownership,
-      null,
-    );
-
-  function appendSessionData() {
-    const id = getID();
+class AccessHooks {
+  static append() {
+    const id = getFromSessionByKey('id');
     if (!id)
       exception('AuthorizationError').throw(
         t('messages:sessionRequired'),
@@ -30,60 +25,43 @@ mongoose.plugin((schema) => {
     return this;
   }
 
-  async function compareOwnership() {
-    const { ownership } = ctx.get('q3-session:grants');
+  static identify() {
+    const grant = ctx.get('q3-session:grants');
+    const ownership = grant ? grant.ownership : 'Own';
 
     if (ownership === 'Shared')
       this.where({
-        ownedBy: getGroupID(),
+        ownedBy: getFromSessionByKey(groupName(this)),
       });
 
     if (ownership === 'Own')
       this.where({
-        createdBy: getID(),
+        createdBy: getFromSessionByKey('id'),
       });
   }
+}
 
-  function hasSufficientOwnership() {
-    if (
-      !(
-        (this.createdBy && 'equals' in this.createdBy
-          ? this.createdBy.equals(getID())
-          : false) ||
-        (this.ownedBy && Array.isArray(this.ownedBy)
-          ? this.ownedBy.some((id) =>
-              id.equals(getGroupID()),
-            )
-          : false)
-      )
-    )
-      exception('AuthorizationError').throw(
-        t('messages:insufficientOwnership'),
-      );
-  }
-
-  if (schema.options.ownership) {
-    schema.pre('save', appendSessionData);
-    schema.pre('find', compareOwnership);
-
-    pluginSchema.createdBy = {
-      type: Schema.Types.ObjectId,
-      ref: 'q3-users',
-    };
-
-    Object.assign(schema.methods, {
-      hasSufficientOwnership,
-    });
-  }
-
-  if (schema.options.groupOwnership)
-    pluginSchema.ownedBy = [
-      {
-        type: Schema.Types.ObjectId,
-        ref: schema.options.groupOwnership,
-      },
-    ];
-
-  schema.add(pluginSchema);
-  return schema;
+const PluginSchema = new Schema({
+  createdBy: {
+    type: Schema.Types.ObjectId,
+    ref: MODEL_NAMES.USERS,
+  },
 });
+
+const plugin = (schema) => {
+  const { ownership } = schema.options;
+
+  if (ownership) {
+    schema.pre('save', AccessHooks.append);
+    schema.pre('find', AccessHooks.identify);
+    schema.pre('findOne', AccessHooks.identify);
+  }
+
+  if (schema.options.group)
+    PluginSchema.ownedBy = [Schema.Types.ObjectId];
+
+  schema.add(PluginSchema);
+  return schema;
+};
+
+module.exports = plugin;

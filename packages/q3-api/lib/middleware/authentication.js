@@ -1,11 +1,10 @@
-const { model } = require('..');
 const { MODEL_NAMES } = require('../constants');
+const mongoose = require('../config/mongoose');
 const app = require('../config/express');
 const { verifyToken } = require('../models/user/helpers');
 
 const middleware = async (req, res, next) => {
-  const User = model(MODEL_NAMES.USERS);
-  let err;
+  const User = mongoose.model(MODEL_NAMES.USERS);
 
   req.user = await verifyToken(
     req.header('Authorization'),
@@ -20,7 +19,7 @@ const middleware = async (req, res, next) => {
     );
   }
 
-  next(err);
+  next();
 };
 
 app.use(middleware);

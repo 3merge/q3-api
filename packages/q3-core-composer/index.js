@@ -38,7 +38,7 @@ module.exports = {
 };
 
 /*
-
+APpend to auth somehow?
   if (!req.user)
     err = next(
       exception('AuthenticationError').boomerang(

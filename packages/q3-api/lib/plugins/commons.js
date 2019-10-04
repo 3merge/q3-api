@@ -1,8 +1,7 @@
-const mongoose = require('mongoose');
 const { translate } = require('../config/i18next');
 const expection = require('../errors');
 
-mongoose.plugin((schema) => {
+const plugin = (schema) => {
   // eslint-disable-next-line
   schema.statics.findStrictly = async function(id) {
     const doc = await this.findById(id).exec();
@@ -22,4 +21,6 @@ mongoose.plugin((schema) => {
       virtuals: true,
     },
   });
-});
+};
+
+module.exports = plugin;

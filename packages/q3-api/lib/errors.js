@@ -2,23 +2,24 @@ const { ERRORS } = require('./constants');
 
 class ErrorByName {
   constructor(name) {
-    const err = Object.entries(ERRORS).filter(([key]) =>
+    const [err] = Object.entries(ERRORS).filter(([key]) =>
       key.includes(name),
     );
 
-    this.Err = err ? err[1] : Error;
+    this.$Err = err ? err[1] : Error;
   }
 
   exec(...args) {
-    return this.Err(...args);
+    return new this.$Err(...args);
   }
 }
 
 const boomerang = (name, ...args) =>
   new ErrorByName(name).exec(...args);
 
-const toss = (name, ...args) =>
+const toss = (name, ...args) => {
   throw new ErrorByName(name).exec(...args);
+};
 
 const log = (name, ...args) =>
   // eslint-disable-next-line

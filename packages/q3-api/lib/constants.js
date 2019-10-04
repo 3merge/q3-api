@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+
 const MODEL_NAMES = {
   USERS: 'q3-api-users',
   PERMISSIONS: 'q3-api-permissions',

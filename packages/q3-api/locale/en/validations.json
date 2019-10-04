@@ -1,0 +1,9 @@
+{
+  "unknownAccountOrIncorrectState": "Account not found or not in the appropriate state to make changes.",
+  "email": "Email address required and expected to match account",
+  "password": "Password required and expected to match account",
+  "notPermitted": "User banned from authenticating",
+  "id": "Must be a recognized document ID",
+  "verificationCode": "Verification code must match account secret",
+  "confirmationPassword": "Password must match the confirmation field"
+}

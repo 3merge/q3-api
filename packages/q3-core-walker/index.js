@@ -2,14 +2,6 @@ const { Router } = require('express');
 const { readdirSync } = require('fs');
 const { resolve, relative, join } = require('path');
 
-/** 
-Q3Api.walk = (dir) => {
-  const workingDir = process.cwd();
-  app.use(
-    parser(dir ? path.join(workingDir, dir) : workingDir),
-  );
-}; */
-
 const appendID = (str) => `:${str}ID`;
 
 const appendIDToLast = (p, i, c) =>
@@ -24,6 +16,11 @@ const getNestedPath = (sub, name = '') => {
   return arr.join('/');
 };
 
+const getWorkingDirectory = (dir) => {
+  const workingDir = process.cwd();
+  return dir ? join(workingDir, dir) : workingDir;
+};
+
 const getVerb = (name) => {
   const [verb] = name.split('.');
   if (
@@ -36,6 +33,17 @@ const getVerb = (name) => {
 
   return verb;
 };
+
+const sortFiles = (arr = []) =>
+  arr.sort((a, b) => {
+    if (
+      b.isDirectory() ||
+      (a.name.includes('index') &&
+        !b.name.includes('index'))
+    )
+      return -1;
+    return 0;
+  });
 
 class DirectoryWalker {
   constructor(src) {
@@ -57,8 +65,6 @@ class DirectoryWalker {
         throw new Error('Controller must be a function');
       }
 
-      // eslint-disable-next-line
-      console.log(`Registering ${this.name} in ${this.dir}`);
       return controller;
     } catch (err) {
       return null;
@@ -75,19 +81,21 @@ class DirectoryWalker {
   exec(app) {
     const ctrl = this.getController();
     const verb = getVerb(this.name);
+
     if (ctrl && verb in app)
-      app[verb](...[this.getSlug(), ctrl]);
+      app[verb](this.getSlug(), ctrl);
   }
 }
 
 module.exports = (root) => {
   const app = new Router();
   const opts = { withFileTypes: true };
+  const workingDir = getWorkingDirectory(root);
 
   const recursive = (dir) =>
-    readdirSync(dir, opts).forEach((dirent) => {
+    sortFiles(readdirSync(dir, opts)).forEach((dirent) => {
       const { name } = dirent;
-      const builder = new DirectoryWalker(root);
+      const builder = new DirectoryWalker(workingDir);
       builder.setContext(dir, name);
       builder.exec(app);
 
@@ -97,7 +105,7 @@ module.exports = (root) => {
     });
 
   try {
-    recursive(root);
+    recursive(workingDir);
     return app;
   } catch (err) {
     return app;
