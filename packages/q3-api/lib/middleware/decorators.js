@@ -1,4 +1,3 @@
-const { translate } = require('../config/i18next');
 const mailer = require('../config/mailer');
 
 const statusCodeHelper = (res) => (code) => (body = {}) => {
@@ -26,9 +25,6 @@ const detectErrorByName = (name) => {
 
 const decorateResponse = (req, res, next) => {
   const dispatch = statusCodeHelper(res);
-  req.t = translate;
-  // @TODO MMS integration
-  // eslint-disable-next-line
   req.mail = mailer;
   res.acknowledge = dispatch(204);
   res.ok = dispatch(200);
@@ -40,18 +36,14 @@ const decorateResponse = (req, res, next) => {
 // eslint-disable-next-line
 decorateResponse.handleUncaughtErrors = (err, req, res, next) => {
   const status = detectErrorByName(err.name);
+  res.status(status);
 
-  if (err.errors) {
+  if (err.errors && status === 500) {
     res.status(422).json({
-      message: translate('messages:validationError'),
+      message: req.t('messages:validationError'),
       ...err,
     });
-
-    return;
-  }
-
-  res.status(status);
-  if (status !== 500) {
+  } else if (status !== 500) {
     res.json(err);
   } else {
     res.json({

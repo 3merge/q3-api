@@ -1,7 +1,6 @@
 const { get } = require('lodash');
 const ctx = require('request-context');
 const mongoose = require('../config/mongoose');
-const { t } = require('../config/i18next');
 const exception = require('../errors');
 const { MODEL_NAMES } = require('../constants');
 
@@ -17,9 +16,9 @@ class AccessHooks {
   static append() {
     const id = getFromSessionByKey('id');
     if (!id)
-      exception('AuthorizationError').throw(
-        t('messages:sessionRequired'),
-      );
+      exception('AuthorizationError')
+        .msg('login')
+        .throw();
 
     if (this.isNew) this.createdBy = id;
     return this;

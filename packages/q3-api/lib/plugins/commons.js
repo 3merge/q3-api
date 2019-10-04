@@ -1,4 +1,3 @@
-const { translate } = require('../config/i18next');
 const expection = require('../errors');
 
 const plugin = (schema) => {
@@ -6,9 +5,9 @@ const plugin = (schema) => {
   schema.statics.findStrictly = async function(id) {
     const doc = await this.findById(id).exec();
     if (!doc)
-      expection('ResourceNotFound').throw(
-        translate('messages:missingResource'),
-      );
+      expection('ResourceNotFound')
+        .msg('missing')
+        .throw();
 
     return doc;
   };

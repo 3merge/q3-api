@@ -1,5 +1,3 @@
-/* eslint-disable max-classes-per-file */
-
 const MODEL_NAMES = {
   USERS: 'q3-api-users',
   PERMISSIONS: 'q3-api-permissions',
@@ -8,57 +6,22 @@ const MODEL_NAMES = {
 };
 
 const ERRORS = {
-  BadRequestError: class extends Error {
-    constructor(message) {
-      super();
-      this.name = this.constructor.name;
-      this.message = message;
-    }
-  },
+  BadRequestError: 'BadRequestError',
+  AuthenticationError: 'AuthenticationError',
+  AuthorizationError: 'AuthorizationError',
+  ValidationError: 'ValidationError',
+  ResourceNotFoundError: 'ResourceNotFoundError',
+  ConflictError: 'ConflictError',
+};
 
-  AuthenticationError: class extends Error {
-    constructor(message) {
-      super();
-      this.name = this.constructor.name;
-      this.message = message;
-    }
-  },
-
-  AuthorizationError: class extends Error {
-    constructor(message) {
-      super();
-      this.name = this.constructor.name;
-      this.message = message;
-    }
-  },
-
-  ValidationError: class extends Error {
-    constructor(message, errors) {
-      super();
-      this.name = this.constructor.name;
-      this.errors = errors;
-      this.message = message;
-    }
-  },
-
-  ResourceNotFoundError: class extends Error {
-    constructor() {
-      super();
-      this.name = this.constructor.name;
-    }
-  },
-
-  ConflictError: class extends Error {
-    constructor(message, err) {
-      super();
-      this.name = this.constructor.name;
-      this.message = message;
-      this.error = err;
-    }
-  },
+const CONTEXT = {
+  LOCALE: 'q3-session:locale',
+  USER: 'q3-session:user',
+  PERMISSIONS: 'q3-session:grants',
 };
 
 module.exports = {
   ERRORS,
   MODEL_NAMES,
+  CONTEXT,
 };

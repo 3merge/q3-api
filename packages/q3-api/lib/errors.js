@@ -1,28 +1,50 @@
-const { ERRORS } = require('./constants');
+const ctx = require('request-context');
+const { ERRORS, CONTEXT } = require('./constants');
 
-const errorByName = (name, msg, ...args) => {
-  const [err] = Object.entries(ERRORS).filter(([key]) =>
-    key.includes(name),
-  );
-  const ErrorInstance = err ? err[1] : Error;
-  return new ErrorInstance(msg, ...args);
-};
+class ErrorDispatch {
+  constructor(name) {
+    this.dp = ctx.get(CONTEXT.LOCALE);
+    this.errors = {};
+    this.id = '';
 
-const boomerang = (name) => (msg) => (...args) =>
-  errorByName(name, msg, ...args);
+    this.name =
+      Object.values(ERRORS).find((key) =>
+        key.includes(name),
+      ) || 'InternalServerError';
+  }
 
-const toss = (name) => (msg) => (...args) => {
-  throw errorByName(name, msg, ...args);
-};
+  get $error() {
+    const e = new Error(this.id);
+    e.errors = this.errors;
+    e.name = this.name;
+    return e;
+  }
 
-const log = (name) => (msg) => (...args) =>
-  // eslint-disable-next-line
-  console.log(errorByName(name, msg, ...args));
+  field(fieldName) {
+    this.errors[fieldName] = this.dp.t(
+      `validations:${fieldName}`,
+    );
+    return this;
+  }
 
-module.exports = (name) => ({
-  msg: (msg) => ({
-    boomerang: boomerang(name)(msg),
-    throw: toss(name)(msg),
-    log: log(name)(msg),
-  }),
-});
+  msg(msg) {
+    this.id = this.dp.t(`errors:${msg}`);
+    return this;
+  }
+
+  boomerang() {
+    return this.$error;
+  }
+
+  log() {
+    // eslint-disable-next-line
+    console.log(this.$error)
+  }
+
+  throw() {
+    throw this.$error;
+  }
+}
+
+// keep a singleton for chaining
+module.exports = (name) => new ErrorDispatch(name);

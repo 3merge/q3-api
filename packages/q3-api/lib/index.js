@@ -6,22 +6,23 @@ const i18 = require('./config/i18next');
 const app = require('./config/express');
 const mongoose = require('./config/mongoose');
 const mailer = require('./config/mailer');
+const manageErrors = require('./errors');
 const {
   handleUncaughtErrors,
 } = require('./middleware/decorators');
-const manageErrors = require('./errors');
+const UserSchema = require('./models/user');
 
 require('./models');
 require('./middleware');
 require('./plugins');
 
-// workspace ... should fix this
-// app.use(walker('packages/q3-api/lib/routes'));
+app.use(walker('packages/q3-api/lib/routes'));
 
 const Q3 = {};
 
 Q3.$app = app;
 Q3.$mongoose = mongoose;
+Q3.$schema = UserSchema;
 Q3.exception = manageErrors;
 Q3.mail = mailer;
 

@@ -1,6 +1,5 @@
 const moment = require('moment');
 const generatePsw = require('generate-password');
-const { translate: t } = require('../../config/i18next');
 const exception = require('../../errors');
 const {
   compareWithHash,
@@ -46,7 +45,7 @@ module.exports = class UserAuthDecorator {
     const doc = await this.findOne(args);
     if (!doc)
       exception('BadRequest')
-        .msg(t('validations:unknownAccount'))
+        .msg('account')
         .throw();
 
     return doc;
@@ -98,8 +97,8 @@ module.exports = class UserAuthDecorator {
   async setPassword(s) {
     const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
     if (s && !re.test(s)) {
-      exception('ValidationError')
-        .msg(t('weakPassword'))
+      exception('Validation')
+        .field('password')
         .throw();
     }
 
@@ -135,8 +134,9 @@ module.exports = class UserAuthDecorator {
 
     await this.save();
     if (!matches && strict) {
-      exception('AuthenticationError')
-        .msg(t('incorrectPassword'))
+      exception('Authentication')
+        .msg('credentials')
+        .msg('password')
         .throw();
     }
 

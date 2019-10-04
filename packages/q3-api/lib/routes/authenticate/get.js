@@ -3,7 +3,7 @@ const { Users } = require('../../models');
 const exception = require('../../errors');
 
 const lookupAccountByEmail = async (
-  { t, query: { email } },
+  { query: { email } },
   res,
 ) => {
   const doc = await Users.findOne({ email })
@@ -12,7 +12,7 @@ const lookupAccountByEmail = async (
 
   if (!doc)
     exception('BadRequest')
-      .msg(t('errors:account'))
+      .msg('errors:account')
       .throw();
 
   res.acknowledge();

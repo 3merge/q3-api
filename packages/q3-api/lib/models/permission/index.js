@@ -48,9 +48,12 @@ PermissionModel.pre('save', async function() {
   });
 
   if (doc && isNew)
-    exception('ConflictError').throw(
-      t('messages:duplicatePermission'),
-    );
+    exception('ConflictError')
+      .msg('duplicate')
+      .field('coll')
+      .field('role')
+      .field('op')
+      .throw();
 });
 
 PermissionModel.constants = constants;
