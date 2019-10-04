@@ -5,6 +5,7 @@ const cors = require('cors');
 const compression = require('compression');
 const limit = require('express-rate-limit');
 const fileUpload = require('express-fileupload');
+const contextService = require('request-context');
 
 const server = express();
 
@@ -13,6 +14,7 @@ server.use(helmet());
 server.use(cors());
 server.use(compression());
 server.use(bodyParser.json());
+server.use(contextService.middleware('q3-session'));
 
 server.use(
   fileUpload({

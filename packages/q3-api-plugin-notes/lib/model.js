@@ -1,13 +1,12 @@
-const Q3 = require('q3-api').default;
-const { Errors } = require('q3-api');
+const { exception, translate } = require('q3-api');
 const { Schema } = require('mongoose');
 
 class ModelDecorator {
   static async findNoteStrictly(id) {
     const doc = await this.findById(id);
     if (!id)
-      throw new Errors.ResourceNotFoundError(
-        Q3.translate('messages:noteNotFound'),
+      exception('ResourceNotFound').throw(
+        translate('messages:noteNotFound'),
       );
 
     return doc;
@@ -16,13 +15,13 @@ class ModelDecorator {
   findThreadStrictly(id, user) {
     const subdoc = this.thread.id(id);
     if (!subdoc)
-      throw new Errors.ResourceNotFoundError(
-        Q3.translate('messages:threadNotFound'),
+      exception('ResourceNotFoundError').throw(
+        translate('messages:threadNotFound'),
       );
 
     if (!subdoc.author.equals(user.id))
-      throw new Errors.AuthorizationError(
-        Q3.translate('messages:mustOwnThread'),
+      exception('AuthorizationError').throw(
+        translate('messages:mustOwnThread'),
       );
 
     return subdoc;

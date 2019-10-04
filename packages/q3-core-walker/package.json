@@ -1,0 +1,11 @@
+{
+  "name": "q3-core-walker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "peerDependencies": {
+    "express": "^4.17.1"
+  }
+}

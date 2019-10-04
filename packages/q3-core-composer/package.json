@@ -1,0 +1,21 @@
+{
+  "name": "q3-core-composer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "dependencies": {
+    "connect": "^3.7.0",
+    "express-async-handler": "^1.1.4",
+    "express-mung": "^0.5.1",
+    "express-validator": "^6.2.0",
+    "flat": "^4.1.0",
+    "lodash": "^4.17.15",
+    "micromatch": "^4.0.2"
+  },
+  "devDependencies": {
+    "express": "^4.17.1",
+    "supertest": "^4.0.2"
+  }
+}

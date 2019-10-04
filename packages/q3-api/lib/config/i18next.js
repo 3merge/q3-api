@@ -10,19 +10,21 @@ i18next.use(sprintf).init({
   },
 });
 
+const translate = (msg, variables) => {
+  let args = null;
+  if (Array.isArray(variables))
+    args = {
+      postProcess: 'sprintf',
+      sprintf: variables,
+    };
+
+  return i18next.t(msg, args);
+};
+
 module.exports = {
+  translate,
+  t: translate,
   loadTranslation(lang, ns, json) {
     i18next.addResources(lang, ns, json);
-  },
-
-  translate(msg, variables) {
-    let args = null;
-    if (Array.isArray(variables))
-      args = {
-        postProcess: 'sprintf',
-        sprintf: variables,
-      };
-
-    return i18next.t(msg, args);
   },
 };

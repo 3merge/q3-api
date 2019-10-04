@@ -1,4 +1,4 @@
-const Q3 = require('q3-api').default;
+const Q3 = require('q3-api');
 const { Schema, Types } = require('mongoose');
 const supertest = require('supertest');
 const plugin = require('..');
@@ -10,7 +10,7 @@ let threadID;
 let noteID;
 
 beforeAll(async () => {
-  const app = Q3.init();
+  const app = Q3.$app;
   const userModelName = 'demo-users';
 
   agent = supertest(app);

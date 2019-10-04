@@ -3,32 +3,32 @@
   "version": "1.0.0",
   "description": "REST api configurations",
   "main": "lib/index.js",
-  "author": "Mike <mibberson@3merge.ca>",
   "license": "MIT",
-  "scripts": {
-    "start": "nodemon demo --exec babel-node"
-  },
   "jest": {
     "testEnvironment": "node"
   },
   "dependencies": {
+    "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "connect": "^3.7.0",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "dotenv": "^8.1.0",
-    "express-async-handler": "^1.1.4",
     "express-fileupload": "^1.1.5",
     "express-rate-limit": "^5.0.0",
+    "generate-password": "^1.4.2",
     "helmet": "^3.20.0",
     "i18next": "^17.0.14",
     "i18next-sprintf-postprocessor": "^0.2.2",
-    "lodash": "^4.17.15"
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "mongoose-unique-validator": "^2.0.3",
+    "request-context": "^2.0.0"
   },
   "peerDependencies": {
     "express": "^4.17.1",
-    "express-validator": "^6.2.0",
     "mongoose": "^5.7.1"
   }
 }

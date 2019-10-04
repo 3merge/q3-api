@@ -1,5 +1,4 @@
-const Q3 = require('q3-api').default;
-const { Errors } = require('q3-api');
+const Q3 = require('q3-api');
 const { check } = require('express-validator');
 const { MODEL_NAME } = require('../constants');
 const { checkMessage } = require('./helpers');
@@ -10,7 +9,7 @@ const CreateNote = async (
 ) => {
   const Model = Q3.model(MODEL_NAME);
   if (await Model.countDocuments({ topic }))
-    throw new Errors.ConflictError(
+    Q3.exception('ConflictError').throw(
       translate('messages:topicExists'),
     );
 

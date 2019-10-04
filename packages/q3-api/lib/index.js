@@ -1,68 +1,46 @@
-const aa = require('express-async-handler');
-const path = require('path');
-const dotenv = require('dotenv');
+require('dotenv').config();
+
 const { get } = require('lodash');
 const i18 = require('./config/i18next');
-const val = require('./config/validator');
 const app = require('./config/express');
 const mongoose = require('./config/mongoose');
-const { compose, cond } = require('./helpers/utils');
-const parser = require('./helpers/parser');
-const decorators = require('./helpers/middleware');
-const { errors } = require('./helpers/errors');
+const {
+  handleUncaughtErrors,
+} = require('./middleware/decorators');
+const manageErrors = require('./errors');
 
-const { handleUncaughtErrors } = decorators;
+require('./middleware');
+require('./plugins');
 
-dotenv.config();
-app.use(decorators);
+const Q3 = {};
 
-const Q3Api = {
-  ...i18,
+Q3.$app = app;
+Q3.$mongoose = mongoose;
+Q3.exception = manageErrors;
 
-  connect() {
-    return new Promise((resolve) => {
-      const { CONNECTION, PORT } = process.env;
-      mongoose.connect(CONNECTION, (err) => {
-        if (err) resolve(err);
-        app.use(handleUncaughtErrors);
-        app.listen(PORT);
-        resolve(null);
-      });
-    });
-  },
-
-  define(ctr) {
-    return compose([
-      val(ctr.validation),
-      cond(ctr.authorization),
-      aa(ctr),
-    ]);
-  },
-
-  register(plugin, opts) {
-    plugin(app, mongoose, opts);
-  },
-
-  walk(dir) {
-    const workingDir = process.cwd();
-    app.use(
-      parser(dir ? path.join(workingDir, dir) : workingDir),
-    );
-  },
-
-  model(name) {
-    if (!(name in mongoose.models))
-      throw new Error('Model unknown to app');
-    return get(mongoose.models, name);
-  },
-
-  setModel(name, Schema) {
-    return mongoose.model(name, Schema);
-  },
+Q3.register = (plugin, opts) => {
+  plugin(app, mongoose, opts);
 };
 
-Q3Api.$app = app;
-Q3Api.$mongoose = mongoose;
-Q3Api.$errors = errors;
+Q3.model = (name) => {
+  if (!(name in mongoose.models))
+    throw new Error('Unknown model');
+  return get(mongoose.models, name);
+};
 
-module.exports = Q3Api;
+Q3.setModel = (name, Schema) =>
+  mongoose.model(name, Schema);
+
+Q3.connect = () =>
+  new Promise((resolve) => {
+    const { CONNECTION, PORT } = process.env;
+    mongoose.connect(CONNECTION, (err) => {
+      if (err) resolve(err);
+      app.use(handleUncaughtErrors);
+      app.listen(PORT);
+      resolve(null);
+    });
+  });
+
+Object.assign(Q3, i18);
+module.exports = Q3;

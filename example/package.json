@@ -5,11 +5,7 @@
     "start": "nodemon src --exec babel-node"
   },
   "dependencies": {
-    "express-validator": "^6.2.0",
     "mongoose": "^5.7.1",
-    "q3-api": "^1.0.0",
-    "q3-api-plugin-files": "^1.0.0",
-    "q3-api-plugin-roles": "^1.0.0",
-    "q3-api-plugin-users": "^1.0.0"
+    "q3-api": "^1.0.0"
   }
 }

@@ -1,4 +1,4 @@
-const Q3 = require('q3-api').default;
+const Q3 = require('q3-api');
 const { MODEL_NAME } = require('../constants');
 
 const ListByInvolvement = async ({ user }, res) => {

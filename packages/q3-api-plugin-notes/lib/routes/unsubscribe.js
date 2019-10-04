@@ -1,5 +1,4 @@
-const Q3 = require('q3-api').default;
-const { check } = require('express-validator');
+const Q3 = require('q3-api');
 const { MODEL_NAME } = require('../constants');
 const { checkNoteID } = require('./helpers');
 
