@@ -13,6 +13,8 @@ module.exports = async (strat, args) => {
         'Preview URL: %s',
         nodemailer.getTestMessageUrl(info),
       );
+
+    return info;
   } catch (err) {
     throw new Error('Unknown strategy');
   }

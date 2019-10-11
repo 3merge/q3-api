@@ -1,29 +1,62 @@
 const { compose } = require('q3-core-composer');
+const mailer = require('q3-core-mailer');
 const { Users } = require('../../models');
-const mailer = require('../../config/mailer');
 const { checkEmail } = require('../../helpers/validation');
 
 const resetPassword = async (
-  { body: { email }, evoke },
+  { body: { email }, evoke, hostname, t },
   res,
 ) => {
-  const doc = await Users.findVerifiedByEmail(email);
-  const password = await doc.setPassword();
+  try {
+    const doc = await Users.findVerifiedByEmail(email);
+    const password = await doc.setPassword();
+    evoke({
+      url: `https://${hostname}.com/login`,
+      name: doc.firstName,
+      to: email,
+      password,
+    });
+  } catch (err) {
+    // noop
+  } finally {
+    res.ok({
+      message: t('messages:ifEmailExists'),
+    });
+  }
+};
 
-  evoke({
-    to: email,
-    password,
+const emailTemporaryPassword = async (
+  { name, to, password, url },
+  { t },
+) => {
+  const subject = t('messages:passwordReset');
+  const body = t('messages:temporaryPassword');
+  const button = t('labels:login');
+  const title = t('messages:greetings', {
+    name,
   });
 
-  res.acknowledge();
+  const rows = [
+    {
+      label: t('labels:temporaryPassword'),
+      value: `"${password}"`,
+    },
+  ];
+
+  return mailer()
+    .to([to])
+    .subject(subject)
+    .props({
+      title,
+      body,
+      button,
+      url,
+      rows,
+    })
+    .send();
 };
 
 resetPassword.validation = [checkEmail];
-
-resetPassword.effect = [
-  ({ to, password }, { t }) => {
-    mailer(to, t.val('passwordReset', [password]));
-  },
-];
+resetPassword.effect = [emailTemporaryPassword];
 
 module.exports = compose(resetPassword);

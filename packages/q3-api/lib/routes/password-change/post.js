@@ -11,7 +11,11 @@ const updatePassword = async (
   const doc = await Users.findVerifiedById(user.id);
   await doc.verifyPassword(previousPassword, true);
   await doc.setPassword(newPassword);
-  evoke({ to: doc.email });
+  evoke({
+    to: doc.email,
+    name: doc.firstName,
+  });
+
   res.acknowledge();
 };
 
@@ -36,18 +40,24 @@ updatePassword.validation = [
     ),
 ];
 
-updatePassword.authorization = [verify()];
+const onPasswordUpdate = async ({ to, name }, { t }) => {
+  const subject = t('messages:passwordUpdate');
+  const body = t('messages:passwordUpdateNotification');
+  const title = t('messages:greetings', {
+    name,
+  });
 
-updatePassword.effect = [
-  async ({ to }, { t }) =>
-    mailer()
-      .setRecipients([to])
-      .setSubject(t.val('passwordUpdated'))
-      .setProps({
-        title: t.val('passwordUpdatedTitle'),
-        body: t.val('passwordUpdatedBody'),
-      })
-      .send(),
-];
+  return mailer()
+    .to([to])
+    .subject(subject)
+    .props({
+      title,
+      body,
+    })
+    .send();
+};
+
+updatePassword.authorization = [verify()];
+updatePassword.effect = [onPasswordUpdate];
 
 module.exports = compose(updatePassword);

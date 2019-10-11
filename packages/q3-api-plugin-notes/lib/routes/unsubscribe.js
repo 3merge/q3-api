@@ -1,12 +1,13 @@
-const Q3 = require('q3-api');
+const { model } = require('q3-api');
+const { compose } = require('q3-core-composer');
 const { MODEL_NAME } = require('../constants');
 const { checkNoteID } = require('./helpers');
 
 const Unsubscribe = async (
-  { params: { noteID }, translate, user },
+  { params: { noteID }, t, user },
   res,
 ) => {
-  await Q3.model(MODEL_NAME).updateOne(
+  await model(MODEL_NAME).updateOne(
     {
       _id: noteID,
     },
@@ -18,10 +19,10 @@ const Unsubscribe = async (
   );
 
   res.acknowledge({
-    message: translate('messages:unsubscribed'),
+    message: t('messages:unsubscribed'),
   });
 };
 
 Unsubscribe.validation = [checkNoteID];
 
-module.exports = Q3.define(Unsubscribe);
+module.exports = compose(Unsubscribe);

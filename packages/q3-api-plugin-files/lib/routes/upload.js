@@ -1,11 +1,12 @@
-const Q3 = require('q3-api');
+const { model } = require('q3-api');
 const {
   check,
   sanitizeBody,
-} = require('express-validator');
+  compose,
+} = require('q3-core-composer');
 
 const Upload = async ({ body, translate }, res) => {
-  const docs = await Q3.model('Q3Files').upload(body);
+  const docs = await model('Q3Files').upload(body);
   res.create({
     files: docs.map((obj) =>
       obj.toJSON({ virtuals: true }),
@@ -20,31 +21,29 @@ Upload.validation = [
   check('topic')
     .isMongoId()
     .withMessage((v, { req }) =>
-      req.translate('validations:mongoId'),
+      req.t('validations:mongoId'),
     ),
   check('model')
     .isString()
     .withMessage((v, { req }) =>
-      req.translate('validations:model'),
+      req.t('validations:model'),
     ),
   check('name')
     .isString()
     .optional()
-    .withMessage((v, { req }) =>
-      req.translate('validations:name'),
-    ),
+    .withMessage((v, { req }) => req.t('validations:name')),
   check('sensitive')
     .isBoolean()
     .withMessage((v, { req }) =>
-      req.translate('validations:sensitive'),
+      req.t('validations:sensitive'),
     ),
   sanitizeBody('sensitive').toBoolean(),
   check('files').custom((v, { req }) => {
     if (!v || !Object.keys(v).length)
-      throw new Error(req.translate('validations:files'));
+      throw new Error(req.t('validations:files'));
 
     return true;
   }),
 ];
 
-module.exports = Q3.define(Upload);
+module.exports = compose(Upload);

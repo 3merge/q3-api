@@ -1,4 +1,5 @@
-const Q3 = require('q3-api');
+const { model } = require('q3-api');
+const { compose } = require('q3-core-composer');
 const { MODEL_NAME } = require('../constants');
 const {
   checkThreadID,
@@ -10,18 +11,18 @@ const UpdateInThread = async (
   {
     params: { noteID },
     body: { message, threadID },
-    translate,
+    t,
     user,
   },
   res,
 ) => {
-  const doc = await Q3.model(MODEL_NAME).findById(noteID);
+  const doc = await model(MODEL_NAME).findById(noteID);
   const subdoc = doc.findThreadStrictly(threadID, user);
   subdoc.message = message;
   await doc.save();
 
   res.ok({
-    message: translate('messages:threadUpdated'),
+    message: t('messages:threadUpdated'),
     thread: subdoc.toJSON({
       virtuals: true,
     }),
@@ -34,4 +35,4 @@ UpdateInThread.validation = [
   checkNoteID,
 ];
 
-module.exports = Q3.define(UpdateInThread);
+module.exports = compose(UpdateInThread);

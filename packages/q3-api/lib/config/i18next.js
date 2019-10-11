@@ -15,7 +15,7 @@ i18next
     lng: 'en',
     fallbackLng: 'en',
     preload: ['en', 'fr'],
-    ns: ['messages', 'errors', 'validations'],
+    ns: ['messages', 'errors', 'validations', 'labels'],
     keySeparator: false,
     interpolation: {
       escapeValue: false,

@@ -17,33 +17,23 @@ module.exports = async (req, res, next) => {
   req.tChange = (lang) =>
     i18n.changeLanguage(queryLang(lang));
 
-  req.t = (msg, variables) => {
-    return i18n.t(
-      msg,
-      Array.isArray(variables)
-        ? {
-            postProcess: 'sprintf',
-            sprintf: variables,
-          }
-        : null,
-    );
-  };
+  req.t = (msg, variables) => i18n.t(msg, variables);
 
   req.dirty = (msg, variables) =>
-    req.t(`validations:${msg}`, variables);
+    i18n.t(`validations:${msg}`, variables);
 
   req.clean = (msg, variables) =>
-    req.t(`messages:${msg}`, variables);
+    i18n.t(`messages:${msg}`, variables);
 
   // the following methods are namespace aliases
   req.t.val = (msg, variables) =>
-    req.t(`validations:${msg}`, variables);
+    i18n.t(`validations:${msg}`, variables);
 
   req.t.msg = (msg, variables) =>
-    req.t(`messages:${msg}`, variables);
+    i18n.t(`messages:${msg}`, variables);
 
   req.t.err = (msg, variables) =>
-    req.t(`errors:${msg}`, variables);
+    i18n.t(`errors:${msg}`, variables);
 
   next();
 };

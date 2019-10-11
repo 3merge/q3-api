@@ -1,4 +1,5 @@
-const Q3 = require('q3-api');
+const { model } = require('q3-api');
+const { compose } = require('q3-core-composer');
 const { MODEL_NAME } = require('../constants');
 const { checkNoteID } = require('./helpers');
 
@@ -6,7 +7,7 @@ const Subscribe = async (
   { params: { noteID }, translate, user },
   res,
 ) => {
-  await Q3.model(MODEL_NAME).updateOne(
+  await model(MODEL_NAME).updateOne(
     {
       _id: noteID,
     },
@@ -24,4 +25,4 @@ const Subscribe = async (
 
 Subscribe.validation = [checkNoteID];
 
-module.exports = Q3.define(Subscribe);
+module.exports = compose(Subscribe);

@@ -1,16 +1,17 @@
-const Q3 = require('q3-api');
+const { model } = require('q3-api');
+const { compose } = require('q3-core-composer');
 const { MODEL_NAME } = require('../constants');
 const { checkNoteID } = require('./helpers');
 
 const DeleteNote = async (
-  { params: { noteID }, translate },
+  { params: { noteID }, t },
   res,
 ) => {
-  await Q3.model(MODEL_NAME).findByIdAndDelete(noteID);
+  await model(MODEL_NAME).findByIdAndDelete(noteID);
   res.acknowledge({
-    message: translate('messages:noteDelete'),
+    message: t('messages:noteDelete'),
   });
 };
 
 DeleteNote.validation = [checkNoteID];
-module.exports = Q3.define(DeleteNote);
+module.exports = compose(DeleteNote);

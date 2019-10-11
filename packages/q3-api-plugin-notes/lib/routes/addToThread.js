@@ -1,4 +1,5 @@
-const Q3 = require('q3-api');
+const { model } = require('q3-api');
+const { compose } = require('q3-core-composer');
 const { MODEL_NAME } = require('../constants');
 const { checkMessage, checkNoteID } = require('./helpers');
 
@@ -7,12 +8,12 @@ const AddToThread = async (
     params: { noteID },
     body: { message },
     message: sendMessage,
-    translate,
+    t,
     user,
   },
   res,
 ) => {
-  const doc = await Q3.model(MODEL_NAME).findNoteStrictly(
+  const doc = await model(MODEL_NAME).findNoteStrictly(
     noteID,
   );
 
@@ -27,17 +28,17 @@ const AddToThread = async (
 
   sendMessage(
     subscribers.map((people) => people.email).join(','),
-    translate('messages:threadNotification', [
+    t('messages:threadNotification', [
       user.firstName,
       doc.topic,
     ]),
   );
 
   res.create({
-    message: translate('messages:addedToThread'),
+    message: t('messages:addedToThread'),
     note,
   });
 };
 
 AddToThread.validation = [checkMessage, checkNoteID];
-module.exports = Q3.define(AddToThread);
+module.exports = compose(AddToThread);

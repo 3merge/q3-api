@@ -35,8 +35,7 @@ Handlebars.registerHelper('list', (items, options) => {
             ${options.fn(items[i])}
           </span>
         </td>
-      </tr>
-    </tr>`;
+      </tr>`;
   }
 
   return `${out}

@@ -1,4 +1,4 @@
-const { check } = require('express-validator');
+const { check } = require('q3-core-composer');
 
 module.exports = {
   checkMessage: check('message')

@@ -1,8 +1,9 @@
-const Q3 = require('q3-api');
+const { model } = require('q3-api');
+const { compose } = require('q3-core-composer');
 const { MODEL_NAME } = require('../constants');
 
 const ListByInvolvement = async ({ user }, res) => {
-  const docs = await Q3.model(MODEL_NAME)
+  const docs = await model(MODEL_NAME)
     .find({
       $or: [
         { subscribers: { $in: [user.id] } },
@@ -24,4 +25,4 @@ const ListByInvolvement = async ({ user }, res) => {
 
 ListByInvolvement.validation = [];
 
-module.exports = Q3.define(ListByInvolvement);
+module.exports = compose(ListByInvolvement);

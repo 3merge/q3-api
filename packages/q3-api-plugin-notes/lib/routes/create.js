@@ -1,17 +1,17 @@
-const Q3 = require('q3-api');
-const { check } = require('express-validator');
+const { model, exception } = require('q3-api');
+const { check, compose } = require('q3-core-composer');
 const { MODEL_NAME } = require('../constants');
 const { checkMessage } = require('./helpers');
 
 const CreateNote = async (
-  { body: { topic, message }, translate, user },
+  { body: { topic, message }, t, user },
   res,
 ) => {
-  const Model = Q3.model(MODEL_NAME);
+  const Model = model(MODEL_NAME);
   if (await Model.countDocuments({ topic }))
-    Q3.exception('ConflictError').throw(
-      translate('messages:topicExists'),
-    );
+    exception('ConflictError')
+      .msg('topicExists')
+      .throw();
 
   const doc = await Model.create({
     topic,
@@ -24,7 +24,7 @@ const CreateNote = async (
     ],
   });
   res.create({
-    message: translate('messages:newNoteStarted'),
+    message: t('messages:newNoteStarted'),
     note: doc.toJSON({
       virtuals: true,
     }),
@@ -36,8 +36,8 @@ CreateNote.validation = [
   check('topic')
     .isMongoId()
     .withMessage((v, { req }) =>
-      req.translate('validations:mongoID', [v]),
+      req.t('validations:mongoID', [v]),
     ),
 ];
 
-module.exports = Q3.define(CreateNote);
+module.exports = compose(CreateNote);

@@ -11,5 +11,7 @@
   "newPassword": "newPassword",
   "passwordUpdated": "passwordUpdated",
   "ownership": "ownership",
-  "coll": "coll"
+  "coll": "coll",
+  "mongoId": "mongoId",
+  "sensitive": "sensitive"
 }

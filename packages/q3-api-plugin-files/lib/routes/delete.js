@@ -1,22 +1,24 @@
-const Q3 = require('q3-api');
-const { check } = require('express-validator');
+const { model } = require('q3-api');
+const { compose, check } = require('q3-core-composer');
 
 const DeleteFile = async (
-  { params: { fileID }, translate },
+  { params: { fileID }, t },
   res,
 ) => {
-  await Q3.model('Q3Files').archive(fileID);
+  await model('Q3Files').archive(fileID);
   res.acknowledge({
-    message: translate('messages:fileArchived'),
+    message: t('messages:fileArchived'),
   });
 };
 
 DeleteFile.validation = [
   check('fileID')
     .isMongoId()
-    .withMessage((v, { req }) =>
-      req.translate('validations:mongoId'),
+    .withMessage((v, { req: { t } }) =>
+      t('validations:mongoId', {
+        id: v,
+      }),
     ),
 ];
 
-module.exports = Q3.define(DeleteFile);
+module.exports = compose(DeleteFile);
