@@ -1,6 +1,7 @@
-const { check, compose } = require('q3-core-composer');
+const { compose } = require('q3-core-composer');
 const { Users } = require('../../models');
 const mailer = require('../../config/mailer');
+const { checkEmail } = require('../../helpers/validation');
 
 const resetPassword = async (
   { body: { email }, evoke },
@@ -17,17 +18,11 @@ const resetPassword = async (
   res.acknowledge();
 };
 
-resetPassword.validation = [
-  check('email')
-    .isEmail()
-    .withMessage((v, { req }) =>
-      req.t('validations:email'),
-    ),
-];
+resetPassword.validation = [checkEmail];
 
 resetPassword.effect = [
   ({ to, password }, { t }) => {
-    mailer(to, t('messages:passwordReset', [password]));
+    mailer(to, t.val('passwordReset', [password]));
   },
 ];
 

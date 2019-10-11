@@ -1,6 +1,7 @@
 const { get } = require('lodash');
 const ctx = require('request-context');
 const { MODEL_NAMES } = require('../constants');
+const exception = require('../errors');
 const app = require('../config/express');
 const mongoose = require('../config/mongoose');
 
@@ -50,7 +51,13 @@ const middleware = (req, res, next) => {
 
     ctx.set('q3-session:user', user);
     ctx.set('q3-session:grant', result);
-    return result;
+
+    if (!result)
+      exception('Authorization')
+        .msg('grants')
+        .throw();
+
+    return result.fields;
   };
 
   next();

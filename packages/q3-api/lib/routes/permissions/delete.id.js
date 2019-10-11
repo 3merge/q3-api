@@ -2,30 +2,35 @@ const {
   compose,
   check,
   redact,
+  verify,
 } = require('q3-core-composer');
-const Q3 = require('q3-api');
-const { MODEL_NAME } = require('../constants');
+const { Permissions } = require('../../models');
+const { MODEL_NAMES } = require('../../constants');
+const {
+  reportMongoId,
+} = require('../../helpers/validation');
 
 const DeleteById = async (
   { params: { permissionID }, t },
   res,
 ) => {
-  await Q3.model(MODEL_NAME).findByIdAndDelete(
+  const { op, coll } = await Permissions.findByIdAndDelete(
     permissionID,
   );
   res.acknowledge({
-    message: t('messages:permissionRemoved'),
+    message: t.msg('permissions.removed', [op, coll]),
   });
 };
 
 DeleteById.validation = [
   check('permissionID')
     .isMongoId()
-    .withMessage((v, { req }) =>
-      req.t('validations:mongoId'),
-    ),
+    .withMessage(reportMongoId),
 ];
 
-DeleteById.authorization = [redact(MODEL_NAME)];
+DeleteById.authorization = [
+  verify(),
+  redact(MODEL_NAMES.PERMISSIONS),
+];
 
 module.exports = compose(DeleteById);

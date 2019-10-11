@@ -4,6 +4,7 @@
   "dependencies": {
     "mongoose": "^5.7.1",
     "q3-api": "^1.0.0",
-    "q3-api-plugin-rates": "^1.0.0"
+    "q3-api-plugin-rates": "^1.0.0",
+    "q3-core-mailer": "^1.0.0"
   }
 }

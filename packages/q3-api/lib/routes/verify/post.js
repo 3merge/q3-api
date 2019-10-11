@@ -1,39 +1,31 @@
-import Q3, { Errors } from 'q3-api';
-import { check } from 'express-validator';
-import {
-  MODEL_NAME,
-  matchWithConfirmation,
-} from '../constants';
+const { check, compose } = require('q3-core-composer');
+const {
+  checkNewPassword,
+} = require('../../helpers/validation');
+const exception = require('../../errors');
+const { Users } = require('../../models');
 
-const { ConflictError, ValidationError } = Errors;
-
-const Verify = async (
-  { body, translate, message },
+const verify = async (
+  { body: { id, password, verificationCode } },
   res,
 ) => {
-  const { id, password, verificationCode } = body;
-  const User = Q3.model(MODEL_NAME);
-  const doc = await User.findUserBySecret(
+  const doc = await Users.findUserBySecret(
     id,
     verificationCode,
   );
 
   if (doc.hasExpired)
-    throw new ConflictError(
-      translate('validations:verificationCode'),
-    );
-
-  if (!password)
-    throw new ValidationError(
-      translate('validations:password'),
-    );
+    exception('Conflict')
+      .msg('expired')
+      .field('verificationCode')
+      .throw();
 
   await doc.setPassword(password);
-  message(doc.email, translate('messages:verified'));
   res.acknowledge();
 };
 
-Verify.validation = [
+verify.validation = [
+  checkNewPassword,
   check('id')
     .isMongoId()
     .withMessage((v, { req }) =>
@@ -44,12 +36,6 @@ Verify.validation = [
     .withMessage((v, { req }) =>
       req.translate('validations:verificationCode'),
     ),
-  check('password')
-    .isString()
-    .custom(matchWithConfirmation)
-    .withMessage((v, { req }) =>
-      req.translate('validations:confirmationPassword'),
-    ),
 ];
 
-export default Q3.define(Verify);
+module.exports = compose(verify);

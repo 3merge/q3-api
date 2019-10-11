@@ -3,21 +3,27 @@ const sprintf = require('i18next-sprintf-postprocessor');
 const FsBackend = require('i18next-node-fs-backend');
 const path = require('path');
 
+const locales = path.join(
+  __dirname,
+  '../../locales/{{lng}}/{{ns}}.json',
+);
+
 i18next
   .use(sprintf)
   .use(FsBackend)
   .init({
     lng: 'en',
     fallbackLng: 'en',
+    preload: ['en', 'fr'],
+    ns: ['messages', 'errors', 'validations'],
     keySeparator: false,
     interpolation: {
       escapeValue: false,
     },
+    saveMissing: true,
     backend: {
-      loadPath: path.join(
-        __dirname,
-        '../../locales/{{lng}}/{{ns}}.json',
-      ),
+      loadPath: locales,
+      addPath: locales,
     },
   });
 

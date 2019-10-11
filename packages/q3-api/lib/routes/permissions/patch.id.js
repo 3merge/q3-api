@@ -2,25 +2,29 @@ const {
   compose,
   check,
   redact,
+  verify,
 } = require('q3-core-composer');
-const Q3 = require('q3-api');
 const {
-  MODEL_NAME,
+  MODEL_NAMES,
   OWNERSHIP_ENUM,
-} = require('../constants');
+} = require('../../constants');
+const {
+  reportMongoId,
+} = require('../../helpers/validation');
+const { Permissions } = require('../../models');
 
 const PatchById = async (
   { params: { permissionID }, body, t },
   res,
 ) => {
-  const permission = await Q3.model(
-    MODEL_NAME,
-  ).findStrictly(permissionID);
+  const permission = await Permissions.findStrictly(
+    permissionID,
+  );
   permission.set(body);
-  await permission.save();
+  const { role, coll } = await permission.save();
 
   res.update({
-    message: t('message:permissionUpdated'),
+    message: t.msg('permission.update', [role, coll]),
     permission,
   });
 };
@@ -28,9 +32,7 @@ const PatchById = async (
 PatchById.validation = [
   check('permissionID')
     .isMongoId()
-    .withMessage((v, { req }) =>
-      req.t('validations:mongoId'),
-    ),
+    .withMessage(reportMongoId),
   check('ownership')
     .isString()
     .optional()
@@ -47,7 +49,8 @@ PatchById.validation = [
 ];
 
 PatchById.authorization = [
-  redact(MODEL_NAME)
+  verify(),
+  redact(MODEL_NAMES.PERMISSION)
     .inRequest('body')
     .inResponse('permission'),
 ];

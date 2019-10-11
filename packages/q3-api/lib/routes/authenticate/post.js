@@ -4,39 +4,33 @@ const {
 } = require('../../models/user/helpers');
 const { Users } = require('../../models');
 const exception = require('../../errors');
+const { checkEmail } = require('../../helpers/validation');
 
-const loginIntoAccount = async (
-  { body: { email, password }, headers: { host }, t },
+const LoginIntoAccount = async (
+  { body: { email, password }, headers: { host } },
   res,
 ) => {
   const userResult = await Users.findVerifiedByEmail(email);
 
   if (!userResult.isPermitted)
     exception('Authorization')
-      .msg(t('validations:notPermitted'))
+      .msg('prohibited')
       .throw();
 
-  if (!(await userResult.verifyPassword(password)))
-    exception('Authentication')
-      .msg(t('validations:password'))
-      .throw();
+  await userResult.verifyPassword(password, true);
 
   const { _id: id, secret } = userResult;
   const tokens = await generateIDToken(id, secret, host);
   res.create(tokens);
 };
 
-loginIntoAccount.validation = [
-  check('email')
-    .isEmail()
-    .withMessage((v, { req }) =>
-      req.t('validations:email'),
-    ),
+LoginIntoAccount.validation = [
+  checkEmail,
   check('password')
     .isString()
     .withMessage((v, { req }) =>
-      req.t('validations:password'),
+      req.t.val('password', [v]),
     ),
 ];
 
-module.exports = compose(loginIntoAccount);
+module.exports = compose(LoginIntoAccount);

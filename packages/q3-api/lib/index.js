@@ -10,9 +10,8 @@ const manageErrors = require('./errors');
 const {
   handleUncaughtErrors,
 } = require('./middleware/decorators');
-const UserSchema = require('./models/user');
+const { Users } = require('./models');
 
-require('./models');
 require('./middleware');
 require('./plugins');
 
@@ -22,7 +21,7 @@ const Q3 = {};
 
 Q3.$app = app;
 Q3.$mongoose = mongoose;
-Q3.$schema = UserSchema;
+Q3.User = Users;
 Q3.exception = manageErrors;
 Q3.mail = mailer;
 

@@ -1,25 +1,20 @@
-const { compose, check } = require('q3-core-composer');
+const { compose } = require('q3-core-composer');
 const { Users } = require('../../models');
 const exception = require('../../errors');
+const { checkEmail } = require('../../helpers/validation');
 
-const lookupAccountByEmail = async (
-  { query: { email } },
-  res,
-) => {
+const LookupAccount = async ({ query: { email } }, res) => {
   const doc = await Users.findOne({ email })
     .lean()
     .exec();
 
   if (!doc)
     exception('BadRequest')
-      .msg('errors:account')
+      .msg('account')
       .throw();
 
   res.acknowledge();
 };
 
-lookupAccountByEmail.validation = [
-  check('email').isEmail(),
-];
-
-module.exports = compose(lookupAccountByEmail);
+LookupAccount.validation = [checkEmail];
+module.exports = compose(LookupAccount);

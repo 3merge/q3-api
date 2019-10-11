@@ -35,15 +35,17 @@ const getVerb = (name) => {
 };
 
 const sortFiles = (arr = []) =>
-  arr.sort((a, b) => {
-    if (
-      b.isDirectory() ||
-      (a.name.includes('index') &&
-        !b.name.includes('index'))
-    )
-      return -1;
-    return 0;
-  });
+  arr
+    .filter((item) => !item.name.includes('test'))
+    .sort((a, b) => {
+      if (
+        b.isDirectory() ||
+        (a.name.includes('index') &&
+          !b.name.includes('index'))
+      )
+        return -1;
+      return 0;
+    });
 
 class DirectoryWalker {
   constructor(src) {

@@ -133,12 +133,11 @@ module.exports = class UserAuthDecorator {
       : 0;
 
     await this.save();
-    if (!matches && strict) {
+    if (!matches && strict)
       exception('Authentication')
         .msg('credentials')
         .msg('password')
         .throw();
-    }
 
     return matches;
   }

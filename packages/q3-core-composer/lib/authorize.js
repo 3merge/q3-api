@@ -4,7 +4,7 @@ const micromatch = require('micromatch');
 const mung = require('express-mung');
 
 const splitDelineatedList = (doc) =>
-  String(doc && 'fields' in doc ? doc.fields : '!*')
+  String(doc || '!*')
     .split(',')
     .map((i) => i.trim());
 
@@ -45,17 +45,21 @@ const redact = (modelName) => {
   };
 
   const chain = async (req, res, next) => {
-    if (!req.authorization)
-      throw new Error('Authorization middleware missing');
+    try {
+      if (!req.authorization)
+        throw new Error('Authorization middleware missing');
 
-    const grant = await req.authorization(modelName);
+      const grant = await req.authorization(modelName);
 
-    set(req, `redactions.${modelName}`, {
-      fields: splitDelineatedList(grant),
-      locations,
-    });
+      set(req, `redactions.${modelName}`, {
+        fields: splitDelineatedList(grant),
+        locations,
+      });
 
-    next();
+      next();
+    } catch (err) {
+      next(err);
+    }
   };
 
   chain.inRequest = function setLocation(location) {

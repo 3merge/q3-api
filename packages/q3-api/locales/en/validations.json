@@ -5,5 +5,11 @@
   "notPermitted": "User banned from authenticating",
   "id": "Must be a recognized document ID",
   "verificationCode": "Verification code must match account secret",
-  "confirmationPassword": "Password must match the confirmation field"
+  "confirmationPassword": "Password must match the confirmation field",
+  "passwordReset": "passwordReset",
+  "previousPassword": "previousPassword",
+  "newPassword": "newPassword",
+  "passwordUpdated": "passwordUpdated",
+  "ownership": "ownership",
+  "coll": "coll"
 }

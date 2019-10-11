@@ -2,32 +2,36 @@ const {
   compose,
   check,
   redact,
+  verify,
 } = require('q3-core-composer');
-const Q3 = require('q3-api');
-const { MODEL_NAME } = require('../constants');
+const { Permissions } = require('../../models');
+const { MODEL_NAMES } = require('../../constants');
+const {
+  reportMongoId,
+} = require('../../helpers/validation');
 
 const GetById = async (
   { params: { permissionID } },
   res,
 ) => {
-  const permission = await Q3.model(
-    MODEL_NAME,
-  ).findStrictly(permissionID);
+  const permission = await Permissions.findStrictly(
+    permissionID,
+  );
   res.ok({
     permission,
   });
 };
 
 GetById.validation = [
+  verify(),
   check('permissionID')
     .isMongoId()
-    .withMessage((v, { req }) =>
-      req.t('validations:mongoId'),
-    ),
+    .withMessage(reportMongoId),
 ];
 
 GetById.authorization = [
-  redact(MODEL_NAME).inResponse('permission'),
+  verify(),
+  redact(MODEL_NAMES.PERMISSIONS).inResponse('permission'),
 ];
 
 module.exports = compose(GetById);

@@ -1,7 +1,7 @@
 import { compose, check, verify } from 'q3-core-composer';
+import mailer from 'q3-core-mailer';
 import { Users } from '../../models';
 import exception from '../../errors';
-import mail from '../../config/mailer';
 
 const updatePassword = async (
   { body, user, evoke },
@@ -19,29 +19,35 @@ updatePassword.validation = [
   check('previousPassword')
     .isString()
     .withMessage((v, { req }) =>
-      req.translate('validations:password'),
+      req.t.val('previousPassword'),
     ),
   check('newPassword')
     .isString()
     .custom((value, { req }) => {
       if (value !== req.body.confirmNewPassword)
         exception('Validation')
-          .msg(req.t('validations:confirmationPassword'))
+          .field('confirmNewPassword')
           .throw();
 
       return value;
     })
     .withMessage((v, { req }) =>
-      req.t('validations:confirmationPassword'),
+      req.t.val('newPassword', [v]),
     ),
 ];
 
 updatePassword.authorization = [verify()];
 
 updatePassword.effect = [
-  ({ to }, { t }) => {
-    mail(to, t('messages:passwordUpdated'));
-  },
+  async ({ to }, { t }) =>
+    mailer()
+      .setRecipients([to])
+      .setSubject(t.val('passwordUpdated'))
+      .setProps({
+        title: t.val('passwordUpdatedTitle'),
+        body: t.val('passwordUpdatedBody'),
+      })
+      .send(),
 ];
 
 module.exports = compose(updatePassword);

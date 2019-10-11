@@ -19,10 +19,8 @@ const middleware = async (req, res, next) => {
     );
   }
 
-  // set default user language
-  // see previous middleware
   if (req.user && req.user.lang && req.tChange) {
-    req.tChange(req.user.lang);
+    await req.tChange(req.user.lang);
   }
 
   next();

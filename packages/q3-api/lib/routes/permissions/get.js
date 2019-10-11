@@ -2,14 +2,13 @@ const {
   check,
   compose,
   redact,
+  verify,
 } = require('q3-core-composer');
-const Q3 = require('q3-api');
-const { MODEL_NAME } = require('../constants');
+const { Permissions } = require('../../models');
+const { MODEL_NAMES } = require('../../constants');
 
 const GetAll = async ({ query }, res) => {
-  const permissions = await Q3.model(MODEL_NAME)
-    .find(query)
-    .exec();
+  const permissions = await Permissions.find(query).exec();
   res.ok({
     permissions,
   });
@@ -31,7 +30,8 @@ GetAll.validation = [
 ];
 
 GetAll.authorization = [
-  redact(MODEL_NAME)
+  verify(),
+  redact(MODEL_NAMES.PERMISSIONS)
     .inRequest('body')
     .inResponse('permissions'),
 ];

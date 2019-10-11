@@ -1,30 +1,24 @@
-import Q3 from 'q3-api';
-import { check } from 'express-validator';
-import { MODEL_NAME } from '../constants';
+import { compose } from 'q3-core-composer';
+import { Users } from '../../models';
+import mailer from '../../config/mailer';
+import { checkEmail } from '../../helpers/validation';
 
-const Reverify = async (
-  { body, message, translate },
+const reverify = async (
+  { body: { email }, evoke },
   res,
 ) => {
-  const { email } = body;
-  const User = Q3.model(MODEL_NAME);
-  const doc = await User.findUnverifiedByEmail(email);
-  const { _id, secret } = await doc.setSecret();
-  const compose = translate('messages:reverify', [
-    _id.toString(),
-    secret,
-  ]);
-
-  message(email, compose);
+  const doc = await Users.findUnverifiedByEmail(email);
+  const { _id: id, secret } = await doc.setSecret();
+  evoke({ secret, id, email });
   res.acknowledge();
 };
 
-Reverify.validation = [
-  check('email')
-    .isEmail()
-    .withMessage((v, { req }) =>
-      req.translate('validations:email'),
-    ),
+reverify.validation = [checkEmail];
+
+reverify.effect = [
+  ({ email, id, secret }, { clean }) => {
+    mailer(email, clean('reverify', [id, secret]));
+  },
 ];
 
-export default Q3.define(Reverify);
+module.exports = compose(reverify);

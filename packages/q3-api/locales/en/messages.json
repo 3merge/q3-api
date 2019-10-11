@@ -1,0 +1,6 @@
+{
+  "passwordReset": "Looks like you require a new password. We've auto-generated the strong password, `%s`, for you to temporarily access your account.",
+  "validationError": "validationError",
+  "reverify": "reverify",
+  "permission.new": "permission.new"
+}

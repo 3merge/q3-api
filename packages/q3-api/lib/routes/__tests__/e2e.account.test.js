@@ -141,3 +141,23 @@ describe('profile /GET', () => {
       .set({ Authorization })
       .expect(200));
 });
+
+describe('reverify /POST', () => {
+  it('should return 400', async () =>
+    agent
+      .post('/reverify')
+      .send({ email: fixture.email })
+      .expect(400));
+
+  it('should return 204', async () => {
+    const doc = await Users.findById(id);
+    doc.verified = false;
+    doc.password = null;
+    await doc.save();
+    await agent
+      .post('/reverify')
+      .send({ email: fixture.email })
+      .expect(204);
+    expect(mailer).toHaveBeenCalled();
+  });
+});

@@ -1,12 +1,10 @@
 const { Schema } = require('mongoose');
 const { invoke } = require('lodash');
-const { translate: t } = require('../../config/i18next');
 const exception = require('../../errors');
 
 const constants = {
   OP_ENUM: ['Create', 'Read', 'Update', 'Delete'],
   OWNERSHIP_ENUM: ['Any', 'Own', 'Shared'],
-  MODEL_NAME: 'Q3Roles',
 };
 
 const PermissionModel = new Schema(

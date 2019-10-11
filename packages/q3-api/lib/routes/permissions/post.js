@@ -2,20 +2,17 @@ const {
   compose,
   check,
   redact,
+  verify,
 } = require('q3-core-composer');
-const Q3 = require('q3-api');
-const {
-  MODEL_NAME,
-  OWNERSHIP_ENUM,
-  OP_ENUM,
-} = require('../constants');
+const { MODEL_NAMES } = require('../../constants');
+const { Permissions } = require('../../models');
+const { constants } = require('../../models/permission');
+const { checkMsg } = require('../../helpers/validation');
 
 const Post = async ({ body, t }, res) => {
-  const permission = await Q3.model(MODEL_NAME).create(
-    body,
-  );
+  const permission = await Permissions.create(body);
   res.create({
-    message: t('messages:newPermission'),
+    message: t.msg('permission.new', [permission.coll]),
     permission,
   });
 };
@@ -23,30 +20,27 @@ const Post = async ({ body, t }, res) => {
 Post.validation = [
   check('coll')
     .isString()
-    .withMessage((v, { req }) => req.t('validations:coll')),
+    .withMessage(checkMsg),
   check('op')
     .isString()
-    .isIn(OP_ENUM)
-    .withMessage((v, { req }) => req.t('validations:op')),
+    .isIn(constants.OP_ENUM)
+    .withMessage(checkMsg),
   check('ownership')
     .isString()
-    .isIn(OWNERSHIP_ENUM)
-    .withMessage((v, { req }) =>
-      req.t('validations:ownership'),
-    ),
+    .isIn(constants.OWNERSHIP_ENUM)
+    .withMessage(checkMsg),
   check('role')
     .isString()
-    .withMessage((v, { req }) => req.t('validations:role')),
+    .withMessage(checkMsg),
   check('fields')
     .isString()
     .optional()
-    .withMessage((v, { req }) =>
-      req.t('validations:commaDelineatedString'),
-    ),
+    .withMessage(checkMsg),
 ];
 
 Post.authorization = [
-  redact(MODEL_NAME)
+  verify(),
+  redact(MODEL_NAMES.PERMISSIONS)
     .inRequest('body')
     .inResponse('permission'),
 ];
