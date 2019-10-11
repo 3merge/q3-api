@@ -1,7 +1,6 @@
 const { get } = require('lodash');
 const ctx = require('request-context');
 const mongoose = require('../config/mongoose');
-const exception = require('../errors');
 const { MODEL_NAMES } = require('../constants');
 
 const { Schema } = mongoose;
@@ -14,19 +13,15 @@ const groupName = (arg) =>
 
 class AccessHooks {
   static append() {
-    const id = getFromSessionByKey('id');
-    if (!id)
-      exception('AuthorizationError')
-        .msg('login')
-        .throw();
-
-    if (this.isNew) this.createdBy = id;
-    return this;
+    if (this.isNew)
+      this.createdBy = getFromSessionByKey('id');
   }
 
   static identify() {
     const grant = ctx.get('q3-session:grants');
     const ownership = grant ? grant.ownership : 'Own';
+
+    if (get(this, 'options.bypassAuthorization')) return;
 
     if (ownership === 'Shared')
       this.where({

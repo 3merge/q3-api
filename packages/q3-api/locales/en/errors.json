@@ -2,5 +2,7 @@
   "account": "account",
   "credentials": "credentials",
   "password": "password",
-  "prohibited": "prohibited"
+  "prohibited": "prohibited",
+  "grants": "grants",
+  "duplicate": "duplicate"
 }

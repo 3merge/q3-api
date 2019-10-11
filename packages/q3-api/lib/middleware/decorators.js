@@ -1,5 +1,3 @@
-const mailer = require('../config/mailer');
-
 const statusCodeHelper = (res) => (code) => (body = {}) => {
   res.status(code).json(body);
 };
@@ -25,7 +23,6 @@ const detectErrorByName = (name) => {
 
 const decorateResponse = (req, res, next) => {
   const dispatch = statusCodeHelper(res);
-  req.mail = mailer;
   res.acknowledge = dispatch(204);
   res.ok = dispatch(200);
   res.update = dispatch(200);

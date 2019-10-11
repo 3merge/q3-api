@@ -1,6 +1,6 @@
 import { compose } from 'q3-core-composer';
+import mailer from 'q3-core-mailer';
 import { Users } from '../../models';
-import mailer from '../../config/mailer';
 import { checkEmail } from '../../helpers/validation';
 
 const reverify = async (
@@ -16,9 +16,12 @@ const reverify = async (
 reverify.validation = [checkEmail];
 
 reverify.effect = [
-  ({ email, id, secret }, { clean }) => {
-    mailer(email, clean('reverify', [id, secret]));
-  },
+  async ({ email, id, secret }, { t }) =>
+    mailer()
+      .to([email])
+      .subject(t('reverify'))
+      .props({})
+      .send(),
 ];
 
 module.exports = compose(reverify);

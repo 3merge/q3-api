@@ -35,9 +35,7 @@ updatePassword.validation = [
 
       return value;
     })
-    .withMessage((v, { req }) =>
-      req.t.val('newPassword', [v]),
-    ),
+    .withMessage((v, { req }) => req.t.val('newPassword')),
 ];
 
 const onPasswordUpdate = async ({ to, name }, { t }) => {

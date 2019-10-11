@@ -28,7 +28,12 @@ class ErrorDispatch {
   }
 
   msg(msg) {
-    this.id = this.dp.t(`errors:${msg}`);
+    if (this.dp) {
+      this.id = this.dp.t(`errors:${msg}`);
+    } else {
+      this.id = msg;
+    }
+
     return this;
   }
 

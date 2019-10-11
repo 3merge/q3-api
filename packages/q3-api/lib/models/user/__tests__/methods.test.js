@@ -1,8 +1,13 @@
 const moment = require('moment');
 const Decorator = require('../methods');
-const { compareWithHash } = require('../tokens');
+const { compareWithHash } = require('../helpers');
 
-jest.mock('../tokens');
+jest.mock('../helpers', () => ({
+  generateAPIKey: () => 'shh!',
+  generateRandomSecret: () => 'shh!',
+  createHash: jest.fn().mockResolvedValue('hash!'),
+  compareWithHash: jest.fn(),
+}));
 
 const id = 'foo';
 const email = 'jon.doe@gmail.com';

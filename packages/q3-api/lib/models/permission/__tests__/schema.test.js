@@ -1,7 +1,9 @@
-const mongoose = require('mongoose');
+const mongoose = require('../../../config/mongoose');
 const Schema = require('..');
 
 let Model;
+
+jest.mock('../../../errors');
 
 beforeAll(async () => {
   Model = mongoose.model('test_access', Schema);
@@ -40,13 +42,11 @@ describe('pre-save integration', () => {
     op: 'Update',
   };
 
-  it('should return document', () => {
-    expect(Model.create(details)).resolves.toHaveProperty(
-      '_id',
-    );
-  });
-
-  it('should fail on duplicate', () => {
-    expect(Model.create(details)).rejects.toThrowError();
+  it('should return unique document', async () => {
+    const { _id: id } = await Model.create(details);
+    expect(id).toBeDefined();
+    return expect(
+      Model.create(details),
+    ).rejects.toThrowError();
   });
 });

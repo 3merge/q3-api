@@ -5,15 +5,15 @@ const walker = require('q3-core-walker');
 const i18 = require('./config/i18next');
 const app = require('./config/express');
 const mongoose = require('./config/mongoose');
-const mailer = require('./config/mailer');
 const manageErrors = require('./errors');
 const {
   handleUncaughtErrors,
 } = require('./middleware/decorators');
-const { Users } = require('./models');
 
 require('./middleware');
 require('./plugins');
+
+const { Users } = require('./models');
 
 app.use(walker('packages/q3-api/lib/routes'));
 
@@ -23,7 +23,6 @@ Q3.$app = app;
 Q3.$mongoose = mongoose;
 Q3.User = Users;
 Q3.exception = manageErrors;
-Q3.mail = mailer;
 
 Q3.register = (plugin, opts) => {
   plugin(app, mongoose, opts);
@@ -44,7 +43,7 @@ Q3.connect = () =>
     mongoose.connect(CONNECTION, (err) => {
       if (err) resolve(err);
       app.use(handleUncaughtErrors);
-      app.listen(PORT);
+      if (process.env.NODE_ENV !== 'test') app.listen(PORT);
       resolve(null);
     });
   });

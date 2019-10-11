@@ -59,15 +59,6 @@ describe('preSave', () => {
       company,
     );
   });
-
-  it('should throw an error', (done) => {
-    get.mockReturnValue(null);
-    Model.create({ name: 'Jon' }, (err, doc) => {
-      expect(err).toBeDefined();
-      expect(doc).toBeUndefined();
-      done();
-    });
-  });
 });
 
 describe('preFind', () => {

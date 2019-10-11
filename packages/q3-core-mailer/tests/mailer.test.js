@@ -1,7 +1,5 @@
 const mailer = require('..');
 
-jest.mock('../strategies/mailgun');
-
 describe('Email chain', () => {
   it('should return default', () => {
     const inst = mailer();

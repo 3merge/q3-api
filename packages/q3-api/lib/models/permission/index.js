@@ -37,21 +37,27 @@ const PermissionModel = new Schema(
 );
 
 // eslint-disable-next-line
-PermissionModel.pre('save', async function() {
+PermissionModel.pre('save',  function(next) {
   const { role, op, coll, isNew } = this;
-  const doc = await invoke(this, 'constructor.findOne', {
-    coll,
-    op,
-    role,
-  });
+  this.constructor
+    .findOne({
+      coll,
+      op,
+      role,
+    })
+    .lean()
+    .then((doc) => {
+      let err;
+      if (doc && isNew)
+        err = exception('ConflictError')
+          .msg('duplicate')
+          .field('coll')
+          .field('role')
+          .field('op')
+          .boomerang();
 
-  if (doc && isNew)
-    exception('ConflictError')
-      .msg('duplicate')
-      .field('coll')
-      .field('role')
-      .field('op')
-      .throw();
+      next(err);
+    });
 });
 
 PermissionModel.constants = constants;

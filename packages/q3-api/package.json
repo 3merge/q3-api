@@ -5,7 +5,10 @@
   "main": "lib/index.js",
   "license": "MIT",
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/lib/"
+    ]
   },
   "dependencies": {
     "bcrypt": "^3.0.6",

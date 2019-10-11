@@ -49,12 +49,17 @@ describe('fetchPermission', () => {
 
 describe('middleware', () => {
   it('should set context', async () => {
+    jest
+      .spyOn(ctx, 'get')
+      .mockReturnValue({ t: jest.fn() });
     const spy = jest
       .spyOn(ctx, 'set')
       .mockReturnValue(null);
     const req = {
       method: 'PATCH',
-      role: 'Developer',
+      user: {
+        role: 'Super',
+      },
     };
 
     middleware(req, {}, jest.fn());
