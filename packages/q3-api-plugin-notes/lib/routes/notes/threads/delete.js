@@ -4,19 +4,18 @@ const {
   redact,
   verify,
 } = require('q3-core-composer');
-const { MODEL_NAME } = require('../../constants');
+const { MODEL_NAME } = require('../../../constants');
 const {
   checkNoteID,
   checkThreadID,
-} = require('../../helpers');
+} = require('../../../helpers');
 
 const DeleteThreadController = async (
-  { params: { noteID, threadID }, t, user },
+  { params: { notesID, threadsID }, t },
   res,
 ) => {
-  const doc = await model(MODEL_NAME).findStrictly(noteID);
-  doc.findThreadStrictly(threadID, user);
-  await doc.removeFromThread(threadID);
+  const doc = await model(MODEL_NAME).findStrictly(notesID);
+  await doc.removeFromThread(threadsID);
 
   res.acknowledge({
     message: t('messages:pulledFromThread'),

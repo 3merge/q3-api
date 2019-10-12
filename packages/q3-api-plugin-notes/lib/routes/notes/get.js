@@ -1,6 +1,6 @@
 const { model } = require('q3-api');
 const { compose } = require('q3-core-composer');
-const { MODEL_NAME } = require('../constants');
+const { MODEL_NAME } = require('../../constants');
 
 const ListByInvolvement = async ({ user }, res) => {
   const docs = await model(MODEL_NAME)

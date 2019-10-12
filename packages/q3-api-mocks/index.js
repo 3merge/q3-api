@@ -23,6 +23,7 @@ module.exports = class ControllerMock {
       body: { ...body },
       params: { ...params },
       query: { ...query },
+      evoke: jest.fn(),
       t: jest.fn(),
       user,
     };

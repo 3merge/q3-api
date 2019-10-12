@@ -1,7 +1,7 @@
 const { model } = require('q3-api');
 const { compose } = require('q3-core-composer');
-const { MODEL_NAME } = require('../constants');
-const { checkNoteID } = require('./helpers');
+const { MODEL_NAME } = require('../../constants');
+const { checkNoteID } = require('../../helpers');
 
 const DeleteNote = async (
   { params: { noteID }, t },

@@ -2,11 +2,15 @@ const { exception } = require('q3-api');
 const { Schema } = require('mongoose');
 
 class ModelDecorator {
-  async findThreadStrictly(id, user) {
-    await this.populate({
+  async populateAuthors() {
+    const select = 'firstName, lastName, email';
+    return this.populate({
       path: 'thread.author',
-      select: 'firstName, lastName, _id, email',
+      select,
     }).execPopulate();
+  }
+
+  async checkIfThreadExists(id) {
     const subdoc = this.thread.id(id);
 
     if (!subdoc)
@@ -14,28 +18,22 @@ class ModelDecorator {
         .msg('threadNotFound')
         .throw();
 
-    if (!subdoc.author)
-      exception('BadRequest')
-        .msg('unknownAuthor')
-        .throw();
-
-    if (!user || !subdoc.author.equals(user.id))
-      exception('Authorization')
-        .msg('mustOwnThread')
-        .throw();
-
     return subdoc;
+  }
+
+  async findThreadStrictly(id) {
+    await this.populateAuthors();
+    return this.checkIfThreadExists(id);
   }
 
   async addToThread(args) {
     this.thread.addToSet(args);
     await this.save();
-    return this.toJSON({
-      virtuals: true,
-    });
+    return this.toJSON();
   }
 
   async removeFromThread(id) {
+    await this.checkIfThreadExists(id);
     this.thread.remove(id);
     return this.save();
   }

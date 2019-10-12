@@ -6,8 +6,8 @@ const plugin = require('..');
 const userID = Types.ObjectId().toString();
 
 let agent;
-let threadID;
-let noteID;
+let threadsID;
+let notesID;
 
 beforeAll(async () => {
   const app = Q3.$app;
@@ -42,7 +42,16 @@ beforeAll(async () => {
   });
 });
 
-/*
+/**  
+
+describe('/GET threads', () => {
+  it('should return 200', async () =>
+    await agent
+      .get(`/notes/${notesID}/threads`)
+      .expect(200));
+});
+
+ 
 describe('POST to notes', () => {
   it('should create a new topic', async () => {
     const { body, status } = await agent

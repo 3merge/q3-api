@@ -1,7 +1,7 @@
 const { model, exception } = require('q3-api');
 const { check, compose } = require('q3-core-composer');
-const { MODEL_NAME } = require('../constants');
-const { checkMessage } = require('./helpers');
+const { MODEL_NAME } = require('../../constants');
+const { checkMessage } = require('../../helpers');
 
 const CreateNote = async (
   { body: { topic, message }, t, user },

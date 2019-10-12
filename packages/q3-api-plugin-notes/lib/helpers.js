@@ -4,16 +4,16 @@ module.exports = {
   checkMessage: check('message')
     .isString()
     .withMessage((v, { req }) =>
-      req.translate('validations:required'),
+      req.t('validations:required'),
     ),
-  checkNoteID: check('noteID')
+  checkNoteID: check('notesID')
     .isMongoId()
     .withMessage((v, { req }) =>
-      req.translate('validations:mongoID', [v]),
+      req.t('validations:mongoID', [v]),
     ),
-  checkThreadID: check('threadID')
+  checkThreadID: check('threadsID')
     .isMongoId()
     .withMessage((v, { req }) =>
-      req.translate('validations:mongoID', [v]),
+      req.t('validations:mongoID', [v]),
     ),
 };
