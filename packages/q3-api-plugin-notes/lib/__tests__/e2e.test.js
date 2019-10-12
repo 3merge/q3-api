@@ -18,6 +18,7 @@ beforeAll(async () => {
   app.use((req, res, next) => {
     req.user = {};
     req.user.id = userID;
+    req.user.role = 'Super';
     next();
   });
 

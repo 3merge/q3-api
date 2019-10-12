@@ -1,28 +1,28 @@
-const { exception, translate } = require('q3-api');
+const { exception } = require('q3-api');
 const { Schema } = require('mongoose');
 
 class ModelDecorator {
-  static async findNoteStrictly(id) {
-    const doc = await this.findById(id);
-    if (!id)
-      exception('ResourceNotFound').throw(
-        translate('messages:noteNotFound'),
-      );
-
-    return doc;
-  }
-
-  findThreadStrictly(id, user) {
+  async findThreadStrictly(id, user) {
+    await this.populate({
+      path: 'thread.author',
+      select: 'firstName, lastName, _id, email',
+    }).execPopulate();
     const subdoc = this.thread.id(id);
-    if (!subdoc)
-      exception('ResourceNotFoundError').throw(
-        translate('messages:threadNotFound'),
-      );
 
-    if (!subdoc.author.equals(user.id))
-      exception('AuthorizationError').throw(
-        translate('messages:mustOwnThread'),
-      );
+    if (!subdoc)
+      exception('ResourceNotFound')
+        .msg('threadNotFound')
+        .throw();
+
+    if (!subdoc.author)
+      exception('BadRequest')
+        .msg('unknownAuthor')
+        .throw();
+
+    if (!user || !subdoc.author.equals(user.id))
+      exception('Authorization')
+        .msg('mustOwnThread')
+        .throw();
 
     return subdoc;
   }
@@ -41,7 +41,7 @@ class ModelDecorator {
   }
 }
 
-module.exports = (ref = 'q3-users') => {
+module.exports = (ref = 'q3-api-users') => {
   const Base = new Schema(
     {
       topic: {
@@ -60,6 +60,9 @@ module.exports = (ref = 'q3-users') => {
           author: {
             type: Schema.Types.ObjectId,
             ref,
+          },
+          date: {
+            type: Date,
           },
           message: {
             type: String,

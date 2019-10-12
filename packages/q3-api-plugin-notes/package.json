@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "main": "lib/index.js",
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/lib/"
+    ]
   },
   "peerDependencies": {
     "express": "^4.17.1",
@@ -13,6 +16,9 @@
     "q3-core-composer": "^1.0.0"
   },
   "devDependencies": {
+    "jest-environment-node": "^24.9.0",
+    "q3-api-mocks": "^1.0.0",
+    "q3-test-utils": "^1.0.0",
     "supertest": "^4.0.2"
   }
 }

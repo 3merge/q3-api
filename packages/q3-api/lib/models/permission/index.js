@@ -1,5 +1,4 @@
 const { Schema } = require('mongoose');
-const { invoke } = require('lodash');
 const exception = require('../../errors');
 
 const constants = {
@@ -18,6 +17,9 @@ const PermissionModel = new Schema(
       type: String,
       default: 'Own',
       enum: constants.OWNERSHIP_ENUM,
+    },
+    condition: {
+      type: String,
     },
     coll: {
       type: String,
