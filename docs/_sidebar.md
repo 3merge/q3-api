@@ -4,6 +4,7 @@
 
   * [Composer](/core/composer.md)
   * [Mailer](/core/mailer.md)
+  * [Puncher](/core/puncher.md)
   * [Walker](/core/walker.md)
 
 * Plugins

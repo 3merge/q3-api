@@ -9,6 +9,7 @@ module.exports = {
     '<rootDir>/packages/q3-api-plugin-notes',
     '<rootDir>/packages/q3-core-composer',
     '<rootDir>/packages/q3-core-mailer',
+    '<rootDir>/packages/q3-core-puncher',
     '<rootDir>/packages/q3-core-walker',
   ],
 };

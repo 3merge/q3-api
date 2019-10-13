@@ -13,4 +13,8 @@ app
   .get(require('./download'))
   .delete(require('./delete'));
 
+app.get('/fooey', (req, res) => {
+  res.ok();
+});
+
 module.exports = app;
