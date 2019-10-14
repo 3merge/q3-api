@@ -21,21 +21,31 @@ const convertHTTPtoOp = (method) => {
   }
 };
 
-const fetchPermission = async ({ role, op, coll }) =>
-  role === 'Super'
-    ? {
-        fields: '*',
-        ownership: 'Any',
-      }
-    : mongoose
-        .model(MODEL_NAMES.PERMISSIONS)
-        .findOne({
-          role,
-          op,
-          coll,
-        })
-        .lean()
-        .exec();
+const fetchPermission = async ({ role, op, coll }) => {
+  if (role === 'Super')
+    return {
+      fields: '*',
+      ownership: 'Any',
+    };
+
+  const grant = await mongoose
+    .model(MODEL_NAMES.PERMISSIONS)
+    .findOne({
+      role,
+      op,
+      coll,
+    })
+    .lean()
+    .exec();
+
+  if (!grant)
+    exception('Authorization')
+      .msg('grants')
+      .throw();
+
+  await grant.isValid();
+  return grant;
+};
 
 const middleware = (req, res, next) => {
   const { method, user } = req;
@@ -51,12 +61,6 @@ const middleware = (req, res, next) => {
 
     ctx.set('q3-session:user', user);
     ctx.set('q3-session:grant', result);
-
-    if (!result)
-      exception('Authorization')
-        .msg('grants')
-        .throw();
-
     return result.fields;
   };
 

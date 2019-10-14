@@ -27,6 +27,7 @@
     "i18next-sprintf-postprocessor": "^0.2.2",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
+    "micromatch": "^4.0.2",
     "moment": "^2.24.0",
     "mongoose-unique-validator": "^2.0.3",
     "request-context": "^2.0.0"

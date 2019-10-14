@@ -35,7 +35,11 @@ decorateResponse.handleUncaughtErrors = (err, req, res, next) => {
   const status = detectErrorByName(err.name);
   res.status(status);
 
-  if (err.errors && Object.keys(err.errors).length) {
+  if (
+    err.errors &&
+    Object.keys(err.errors).length &&
+    status === 500
+  ) {
     res.status(422).json({
       message: req.t('messages:validationError'),
       ...err,

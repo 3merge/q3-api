@@ -1,7 +1,7 @@
+/* eslint-disable func-names, no-param-reassign */
 const expection = require('../errors');
 
 const plugin = (schema) => {
-  // eslint-disable-next-line
   schema.statics.findStrictly = async function(id) {
     const doc = await this.findById(id).exec();
     if (!doc)
@@ -12,8 +12,20 @@ const plugin = (schema) => {
     return doc;
   };
 
-  // eslint-disable-next-line
-  schema.statics.findOneOrCreate = async function(args, options) {
+  schema.statics.getRequiredFields = function() {
+    return Object.entries(this.schema.paths)
+      .filter(([, value]) => {
+        return value.isRequired;
+      })
+      .map(([key]) => {
+        return key;
+      });
+  };
+
+  schema.statics.findOneOrCreate = async function(
+    args,
+    options,
+  ) {
     const Self = this;
     const doc = await Self.findOne(args)
       .setOptions(options)

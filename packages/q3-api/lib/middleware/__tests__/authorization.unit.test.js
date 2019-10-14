@@ -11,7 +11,9 @@ jest.mock('../../config/mongoose', () => ({
   model: jest.fn().mockReturnValue({
     findOne: jest.fn().mockReturnValue({
       lean: jest.fn().mockReturnValue({
-        exec: jest.fn(),
+        exec: jest.fn().mockResolvedValue({
+          isValid: jest.fn(),
+        }),
       }),
     }),
   }),

@@ -10,8 +10,11 @@ const { checkMsg } = require('../../helpers/validation');
 
 const Post = async ({ body, t }, res) => {
   const permission = await Permissions.create(body);
+
   res.create({
-    message: t.msg('permission.new', [permission.coll]),
+    message: t('messages:permission.new', [
+      permission.coll,
+    ]),
     permission,
   });
 };
