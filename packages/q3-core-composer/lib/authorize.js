@@ -70,7 +70,6 @@ const redact = (modelName) => {
         throw new Error('Authorization middleware missing');
 
       const grant = await req.authorization(modelName);
-      console.log(grant);
       set(req, `redactions.${modelName}`, {
         fields: splitDelineatedList(grant),
         locations,

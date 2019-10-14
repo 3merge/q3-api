@@ -1,9 +1,6 @@
 const Q3 = require('q3-api');
 const Q3Mock = require('q3-api-mocks');
 const { Types } = require('mongoose');
-const {
-  willThrowException,
-} = require('q3-api-test-utils/helpers');
 const { MODEL_NAME } = require('../../../constants');
 const fixture = require('../../../model/__fixture');
 const model = require('../../../model');

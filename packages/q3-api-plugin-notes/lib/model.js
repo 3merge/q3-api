@@ -74,6 +74,7 @@ module.exports = (ref = 'q3-api-users') => {
 
   Base.loadClass(ModelDecorator);
 
+  // eslint-disable-next-line
   Base.pre('save', async function(next) {
     let err;
     if (

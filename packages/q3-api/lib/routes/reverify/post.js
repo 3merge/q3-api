@@ -20,7 +20,12 @@ reverify.effect = [
     mailer()
       .to([email])
       .subject(t('reverify'))
-      .props({})
+      .props({
+        body: t('verificationDetails', {
+          id,
+          secret,
+        }),
+      })
       .send(),
 ];
 

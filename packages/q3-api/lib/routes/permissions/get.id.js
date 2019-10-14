@@ -22,7 +22,6 @@ const GetById = async (
 };
 
 GetById.validation = [
-  verify(),
   check('permissionID')
     .isMongoId()
     .withMessage(reportMongoId),
