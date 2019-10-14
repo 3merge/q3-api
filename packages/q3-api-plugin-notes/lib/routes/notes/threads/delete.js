@@ -1,9 +1,5 @@
 const { model } = require('q3-api');
-const {
-  compose,
-  redact,
-  verify,
-} = require('q3-core-composer');
+const { compose, redact } = require('q3-core-composer');
 const { MODEL_NAME } = require('../../../constants');
 const {
   checkNoteID,
@@ -22,10 +18,7 @@ const DeleteThreadController = async (
   });
 };
 
-DeleteThreadController.authorization = [
-  verify(),
-  redact(MODEL_NAME),
-];
+DeleteThreadController.authorization = [redact(MODEL_NAME)];
 
 DeleteThreadController.validation = [
   checkNoteID,

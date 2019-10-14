@@ -1,9 +1,5 @@
 const { model } = require('q3-api');
-const {
-  compose,
-  verify,
-  redact,
-} = require('q3-core-composer');
+const { compose, redact } = require('q3-core-composer');
 const { MODEL_NAME } = require('../../../constants');
 const { checkNoteID } = require('../../../helpers');
 
@@ -19,10 +15,7 @@ const ListThreadController = async (
   });
 };
 
-ListThreadController.authorization = [
-  verify(),
-  redact(MODEL_NAME),
-];
+ListThreadController.authorization = [redact(MODEL_NAME)];
 
 ListThreadController.validation = [checkNoteID];
 

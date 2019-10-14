@@ -1,4 +1,4 @@
-const middleware = require('../middleware');
+const middleware = require('..');
 
 test('middleware should push files into req.body', () => {
   const req = { body: {}, files: {} };

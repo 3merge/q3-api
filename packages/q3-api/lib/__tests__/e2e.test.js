@@ -191,17 +191,16 @@ describe('permissions /POST', () => {
       .set({ Authorization: AuthorizationDeveloper })
       .expect(403));
 
-  it('should return 201', async () =>
-    agent
+  it('should return 201', async () => {
+    await agent
       .post('/permissions')
       .send(args)
       .set({ Authorization: AuthorizationSuper })
-      .expect(201));
-
-  it('should return 409', async () =>
-    agent
+      .expect(201);
+    await agent
       .post('/permissions')
       .send(args)
       .set({ Authorization: AuthorizationSuper })
-      .expect(409));
+      .expect(409);
+  });
 });

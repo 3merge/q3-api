@@ -24,36 +24,38 @@ const filterObject = (fields = [], doc = {}) => {
 const iterateRedactions = (req, target, mutable) => {
   const { redactions = {} } = req;
 
-  // allow callstack to clear
-  setTimeout(() => {
-    Object.values(redactions).forEach(
-      ({ fields, locations }) => {
-        get(locations, target, []).forEach((field) => {
-          const prev = mutable[field];
-          const { prefix } = locations;
+  // allow call stack to clear
+  // otherwise, it maximizes
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      Object.values(redactions).forEach(
+        ({ fields, locations }) =>
+          get(locations, target, []).forEach((field) => {
+            const prev = mutable[field];
+            const { prefix } = locations;
 
-          const filter = (input) => {
-            let i = input;
-            if (prefix)
-              i = {
-                [prefix]: input,
-              };
+            const filter = (input) => {
+              let i = input;
+              if (prefix)
+                i = {
+                  [prefix]: input,
+                };
 
-            let o = filterObject(fields, i);
-            if (prefix) o = o[prefix];
+              let o = filterObject(fields, i);
+              if (prefix) o = o[prefix];
 
-            return o;
-          };
+              return o;
+            };
 
-          Object.assign(mutable, {
-            [field]: !Array.isArray(prev)
+            // eslint-disable-next-line
+            mutable[field] = !Array.isArray(prev)
               ? filter(prev)
-              : prev.map(filter),
-          });
-        });
-      },
-    );
-  }, 0);
+              : prev.map(filter);
+          }),
+      );
+      resolve();
+    }, 0);
+  });
 };
 
 const redact = (modelName) => {
@@ -68,6 +70,7 @@ const redact = (modelName) => {
         throw new Error('Authorization middleware missing');
 
       const grant = await req.authorization(modelName);
+      console.log(grant);
       set(req, `redactions.${modelName}`, {
         fields: splitDelineatedList(grant),
         locations,
@@ -110,13 +113,13 @@ module.exports = {
   filterObject,
   verify,
 
-  authorizeResponse: mung.json((body, req) => {
-    iterateRedactions(req, 'response', body);
+  authorizeResponse: mung.jsonAsync(async (body, req) => {
+    await iterateRedactions(req, 'response', body);
     return body;
   }),
 
-  authorizeRequest: (req, res, next) => {
-    // iterateRedactions(req, 'request', req);
+  authorizeRequest: async (req, res, next) => {
+    await iterateRedactions(req, 'request', req);
     next();
   },
 };

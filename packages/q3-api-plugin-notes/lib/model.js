@@ -73,5 +73,23 @@ module.exports = (ref = 'q3-api-users') => {
   );
 
   Base.loadClass(ModelDecorator);
+
+  Base.pre('save', async function(next) {
+    let err;
+    if (
+      this.isNew &&
+      (await this.constructor
+        .countDocuments({
+          topic: this.topic,
+        })
+        .exec())
+    )
+      err = exception('Conflict')
+        .msg('duplicateNote')
+        .boomerang();
+
+    next(err);
+  });
+
   return Base;
 };

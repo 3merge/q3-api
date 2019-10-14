@@ -1,9 +1,5 @@
 const { model } = require('q3-api');
-const {
-  compose,
-  verify,
-  redact,
-} = require('q3-core-composer');
+const { compose, redact } = require('q3-core-composer');
 const { MODEL_NAME } = require('../../../constants');
 const {
   checkNoteID,
@@ -22,10 +18,7 @@ const GetInThreadController = async (
   });
 };
 
-GetInThreadController.authorization = [
-  verify(),
-  redact(MODEL_NAME),
-];
+GetInThreadController.authorization = [redact(MODEL_NAME)];
 
 GetInThreadController.validation = [
   checkNoteID,

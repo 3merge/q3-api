@@ -1,9 +1,9 @@
 const { model } = require('q3-api');
-const { compose } = require('q3-core-composer');
+const { compose, redact } = require('q3-core-composer');
 const { MODEL_NAME } = require('../../constants');
 const { checkNoteID } = require('../../helpers');
 
-const DeleteNote = async (
+const DeleteNoteController = async (
   { params: { noteID }, t },
   res,
 ) => {
@@ -13,5 +13,7 @@ const DeleteNote = async (
   });
 };
 
-DeleteNote.validation = [checkNoteID];
-module.exports = compose(DeleteNote);
+DeleteNoteController.validation = [checkNoteID];
+DeleteNoteController.authorization = [redact(MODEL_NAME)];
+
+module.exports = compose(DeleteNoteController);

@@ -37,7 +37,7 @@ describe('compose', () => {
       .end(done);
   });
 
-  it('should run validation', async (done) => {
+  it('should run validation', async () => {
     const route = (req, res) => {
       res.send();
     };
@@ -46,13 +46,10 @@ describe('compose', () => {
     app.get('/validation', compose(route));
     app.use(listenForErrors);
 
-    agent
-      .get('/validation')
-      .expect(422)
-      .end(done);
+    return agent.get('/validation').expect(422);
   });
 
-  it('should run authorization', async (done) => {
+  it('should run authorization', async () => {
     const route = (req, res) => {
       res.json({
         mono: {
@@ -86,7 +83,7 @@ describe('compose', () => {
     app.get('/authorization', compose(route));
     app.use(listenForErrors);
 
-    agent
+    return agent
       .get('/authorization')
       .expect(({ body }) => {
         expect(body.mono).not.toHaveProperty('foo');
@@ -94,8 +91,7 @@ describe('compose', () => {
           bar: 1,
           quux: 1,
         });
-      })
-      .end(done);
+      });
   });
 
   it('should call effect', async () => {

@@ -1,20 +1,9 @@
-const { Router } = require('express');
+// allows express-validator to read it
+// necessary for RBAC plugin to work, too
+module.exports = (req, res, next) => {
+  Object.assign(req.body, {
+    files: req.files,
+  });
 
-const app = Router();
-app.use(require('./middleware'));
-
-app
-  .route('/files')
-  .get(require('./list'))
-  .post(require('./upload'));
-
-app
-  .route('/files/:fileID')
-  .get(require('./download'))
-  .delete(require('./delete'));
-
-app.get('/fooey', (req, res) => {
-  res.ok();
-});
-
-module.exports = app;
+  next();
+};

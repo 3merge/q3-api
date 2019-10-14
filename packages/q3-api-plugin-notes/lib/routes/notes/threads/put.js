@@ -1,9 +1,5 @@
 const { model } = require('q3-api');
-const {
-  compose,
-  verify,
-  redact,
-} = require('q3-core-composer');
+const { compose, redact } = require('q3-core-composer');
 const mailer = require('q3-core-mailer');
 const { MODEL_NAME } = require('../../../constants');
 const {
@@ -23,6 +19,7 @@ const AddToThreadController = async (
 ) => {
   const doc = await model(MODEL_NAME).findStrictly(notesID);
   const note = await doc.addToThread({
+    date: new Date(),
     author: user.id,
     message,
   });
@@ -39,10 +36,7 @@ const AddToThreadController = async (
   });
 };
 
-AddToThreadController.authorization = [
-  verify(),
-  redact(MODEL_NAME),
-];
+AddToThreadController.authorization = [redact(MODEL_NAME)];
 
 AddToThreadController.validation = [
   checkMessage,

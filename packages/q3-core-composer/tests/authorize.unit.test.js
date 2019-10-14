@@ -150,7 +150,7 @@ describe('verify API', () => {
 });
 
 describe('authorizeRequest', () => {
-  it('should mutate the request body', () => {
+  it('should mutate the request body', async () => {
     const mutate = {
       body: {
         foo: 1,
@@ -167,7 +167,7 @@ describe('authorizeRequest', () => {
       },
     };
 
-    authorizeRequest(mutate, null, next);
+    await authorizeRequest(mutate, null, next);
     expect(next).toHaveBeenCalled();
     expect(mutate.body).toMatchObject({
       foo: 1,
@@ -175,7 +175,7 @@ describe('authorizeRequest', () => {
     });
   });
 
-  it('should prefix the mutation object', () => {
+  it('should prefix the mutation object', async () => {
     const mutate = {
       body: {
         quuz: 1,
@@ -192,7 +192,7 @@ describe('authorizeRequest', () => {
       },
     };
 
-    authorizeRequest(mutate, null, next);
+    await authorizeRequest(mutate, null, next);
     expect(next).toHaveBeenCalled();
     expect(mutate.body).not.toHaveProperty('quuz');
     expect(mutate.body).toHaveProperty('garply');

@@ -12,7 +12,7 @@ describe('Model creation', () => {
   };
 
   it('should use the default user ref', () => {
-    followSchemaPaths(undefined, 'q3-users');
+    followSchemaPaths(undefined, 'q3-api-users');
   });
 
   it('should overwrite default user ref', () => {

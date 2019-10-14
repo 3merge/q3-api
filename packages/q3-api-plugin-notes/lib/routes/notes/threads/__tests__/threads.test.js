@@ -3,23 +3,23 @@ const Q3Mock = require('q3-api-mocks');
 const {
   willThrowException,
 } = require('q3-api-test-utils/helpers');
-const { MODEL_NAME } = require('../../../constants');
-const fixture = require('../../../model/__fixture');
-const model = require('../../../model');
+const { MODEL_NAME } = require('../../../../constants');
+const fixture = require('../../../../model/__fixture');
+const model = require('../../../../model');
 
-const DeleteThreadController = require('./delete').__get__(
+const DeleteThreadController = require('../delete').__get__(
   'DeleteThreadController',
 );
 
-const ListThreadController = require('./get').__get__(
+const ListThreadController = require('../get').__get__(
   'ListThreadController',
 );
 
-const GetInThreadController = require('./get.id').__get__(
+const GetInThreadController = require('../get.id').__get__(
   'GetInThreadController',
 );
 
-const AddToThreadController = require('./put').__get__(
+const AddToThreadController = require('../put').__get__(
   'AddToThreadController',
 );
 

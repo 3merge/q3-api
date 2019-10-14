@@ -1,9 +1,13 @@
 const { model, exception } = require('q3-api');
-const { check, compose } = require('q3-core-composer');
+const {
+  check,
+  compose,
+  redact,
+} = require('q3-core-composer');
 const { MODEL_NAME } = require('../../constants');
 const { checkMessage } = require('../../helpers');
 
-const CreateNote = async (
+const CreateNoteController = async (
   { body: { topic, message }, t, user },
   res,
 ) => {
@@ -18,26 +22,28 @@ const CreateNote = async (
     subscribers: [user.id],
     thread: [
       {
+        date: new Date(),
         author: user.id,
         message,
       },
     ],
   });
+
   res.create({
     message: t('messages:newNoteStarted'),
-    note: doc.toJSON({
-      virtuals: true,
-    }),
+    note: doc.toJSON(),
   });
 };
 
-CreateNote.validation = [
+CreateNoteController.validation = [
   checkMessage,
   check('topic')
     .isMongoId()
-    .withMessage((v, { req }) =>
-      req.t('validations:mongoID', [v]),
-    ),
+    .respondsWith('mongoID'),
 ];
 
-module.exports = compose(CreateNote);
+CreateNoteController.authorization = [
+  redact(MODEL_NAME).inResponse('note'),
+];
+
+module.exports = compose(CreateNoteController);

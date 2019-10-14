@@ -61,7 +61,7 @@ const middleware = (req, res, next) => {
 
     ctx.set('q3-session:user', user);
     ctx.set('q3-session:grant', result);
-    return result.fields;
+    return result;
   };
 
   next();
