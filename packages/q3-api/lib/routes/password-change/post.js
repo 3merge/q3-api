@@ -55,7 +55,7 @@ const onPasswordUpdate = async ({ to, name }, { t }) => {
     .send();
 };
 
-updatePassword.authorization = [verify()];
+updatePassword.authorization = [verify];
 updatePassword.effect = [onPasswordUpdate];
 
 module.exports = compose(updatePassword);

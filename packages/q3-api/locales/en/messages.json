@@ -11,5 +11,7 @@
   "threadUpdated": "threadUpdated",
   "noteDelete": "noteDelete",
   "passwordUpdate": "passwordUpdate",
-  "passwordUpdateNotification": "passwordUpdateNotification"
+  "passwordUpdateNotification": "passwordUpdateNotification",
+  "newAddress": "newAddress",
+  "updatedAddress": "updatedAddress"
 }

@@ -1,14 +1,14 @@
-import { model } from 'mongoose';
-import Schema from '../schema';
+const { model } = require('mongoose');
+const Schema = require('../schema');
 
-describe('validation', () => {
+describe('Address schema', () => {
   let Address;
 
   beforeAll(() => {
     Address = model('mock-address', Schema);
   });
 
-  it('should fail locale enums', () => {
+  it('should fail validation without locale enums', () => {
     const { errors } = new Address({
       country: 'Brazil',
       region: 'ASK',
@@ -17,7 +17,7 @@ describe('validation', () => {
     expect(errors).toHaveProperty('region');
   });
 
-  it('should fail if state matched in Canada', () => {
+  it('should fail validation if state matched in Canada', () => {
     const { errors } = new Address({
       country: 'Canada',
       region: 'ID',
@@ -25,7 +25,7 @@ describe('validation', () => {
     expect(errors).toHaveProperty('region');
   });
 
-  it('should fail without required fields', () => {
+  it('should fail validation without required fields', () => {
     const { errors } = new Address({}).validateSync();
     expect(Object.keys(errors)).toEqual(
       expect.arrayContaining([
@@ -43,7 +43,7 @@ describe('validation', () => {
     );
   });
 
-  it('should pass', () => {
+  it('should pass validation', () => {
     const response = new Address({
       company: 'Hooli',
       firstName: 'Richard',

@@ -3,8 +3,8 @@ const { flatten, unflatten } = require('flat');
 const micromatch = require('micromatch');
 const mung = require('express-mung');
 
-const splitDelineatedList = (doc) =>
-  String(doc || '!*')
+const splitDelineatedList = (doc = {}) =>
+  String(doc.fields || '!*')
     .split(',')
     .map((i) => i.trim());
 
@@ -24,18 +24,36 @@ const filterObject = (fields = [], doc = {}) => {
 const iterateRedactions = (req, target, mutable) => {
   const { redactions = {} } = req;
 
-  Object.values(redactions).forEach(
-    ({ fields, locations }) => {
-      get(locations, target, []).forEach((field) => {
-        // eslint-disable-next-line
-        mutable[field] = !Array.isArray(mutable[field])
-          ? filterObject(fields, mutable[field])
-          : mutable[field].map((item) =>
-              filterObject(fields, item),
-            );
-      });
-    },
-  );
+  // allow callstack to clear
+  setTimeout(() => {
+    Object.values(redactions).forEach(
+      ({ fields, locations }) => {
+        get(locations, target, []).forEach((field) => {
+          const prev = mutable[field];
+          const { prefix } = locations;
+
+          const filter = (input) => {
+            let i = input;
+            if (prefix)
+              i = {
+                [prefix]: input,
+              };
+
+            let o = filterObject(fields, i);
+            if (prefix) o = o[prefix];
+
+            return o;
+          };
+
+          Object.assign(mutable, {
+            [field]: !Array.isArray(prev)
+              ? filter(prev)
+              : prev.map(filter),
+          });
+        });
+      },
+    );
+  }, 0);
 };
 
 const redact = (modelName) => {
@@ -50,7 +68,6 @@ const redact = (modelName) => {
         throw new Error('Authorization middleware missing');
 
       const grant = await req.authorization(modelName);
-
       set(req, `redactions.${modelName}`, {
         fields: splitDelineatedList(grant),
         locations,
@@ -60,6 +77,11 @@ const redact = (modelName) => {
     } catch (err) {
       next(err);
     }
+  };
+
+  chain.withPrefix = function setPrefix(prefix) {
+    locations.prefix = prefix;
+    return this;
   };
 
   chain.inRequest = function setLocation(location) {
@@ -75,7 +97,7 @@ const redact = (modelName) => {
   return chain;
 };
 
-const verify = () => ({ user }, res, next) => {
+const verify = ({ user }, res, next) => {
   if (!user) {
     res.status(401).send();
   } else {
@@ -94,7 +116,7 @@ module.exports = {
   }),
 
   authorizeRequest: (req, res, next) => {
-    iterateRedactions(req, 'request', req);
+    // iterateRedactions(req, 'request', req);
     next();
   },
 };

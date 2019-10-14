@@ -20,7 +20,8 @@ beforeAll(() => {
 describe('compose', () => {
   it('should stack middleware', () => {
     const obj = () => null;
-    expect(compose(obj).stack).toHaveLength(4);
+    expect(compose(obj).stack).toHaveLength(5);
+    expect(compose(obj).root).toEqual(expect.any(Function));
   });
 
   it('should skip middleware without validation or authorizaion', async (done) => {
@@ -67,12 +68,17 @@ describe('compose', () => {
     ];
 
     app.use((req, res, next) => {
-      req.grants = [
-        {
+      req.user = {
+        _id: 1,
+        role: 'Developer',
+      };
+
+      req.authorization = async () =>
+        Promise.resolve({
           coll: 'Foo',
           fields: 'bar, quux',
-        },
-      ];
+          role: 'Developer',
+        });
 
       next();
     });
@@ -113,5 +119,11 @@ describe('compose', () => {
       expect.any(Object),
     );
     expect(second).not.toHaveBeenCalled();
+  });
+});
+
+describe('Lib', () => {
+  it('should append new method to express-validator', () => {
+    expect(check('hello').respondsWith).toBeDefined();
   });
 });

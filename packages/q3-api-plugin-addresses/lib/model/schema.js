@@ -1,89 +1,21 @@
-import { Schema } from 'mongoose';
-import {
+const { Schema } = require('mongoose');
+const {
   validateNorthAmericanPostalCode,
   validateNorthAmericanPhoneNumber,
   validateWebsite,
-} from './helpers';
+} = require('../validations');
+const {
+  PROVINCES,
+  STATES,
+  COUNTRIES,
+  REGIONS,
+  KIND,
+} = require('../constants');
 
-const states = [
-  'AL',
-  'AK',
-  'AS',
-  'AZ',
-  'AR',
-  'CA',
-  'CO',
-  'CT',
-  'DE',
-  'DC',
-  'FM',
-  'FL',
-  'GA',
-  'GU',
-  'HI',
-  'ID',
-  'IL',
-  'IN',
-  'IA',
-  'KS',
-  'KY',
-  'LA',
-  'ME',
-  'MH',
-  'MD',
-  'MA',
-  'MI',
-  'MN',
-  'MS',
-  'MO',
-  'MT',
-  'NE',
-  'NV',
-  'NH',
-  'NJ',
-  'NM',
-  'NY',
-  'NC',
-  'ND',
-  'MP',
-  'OH',
-  'OK',
-  'OR',
-  'PW',
-  'PA',
-  'PR',
-  'RI',
-  'SC',
-  'SD',
-  'TN',
-  'TX',
-  'UT',
-  'VT',
-  'VI',
-  'VA',
-  'WA',
-  'WV',
-  'WI',
-  'WY',
-];
-
-const provinces = [
-  'AB',
-  'BC',
-  'MB',
-  'NB',
-  'NL',
-  'NT',
-  'NS',
-  'NU',
-  'ON',
-  'PE',
-  'QC',
-  'SK',
-  'YT',
-];
-
-export default new Schema({
+module.exports = new Schema({
+  primary: {
+    type: Boolean,
+  },
   company: {
     type: String,
     required: true,
@@ -91,6 +23,9 @@ export default new Schema({
   firstName: {
     type: String,
     required: true,
+  },
+  branch: {
+    type: Boolean,
   },
   lastName: {
     type: String,
@@ -110,17 +45,17 @@ export default new Schema({
   kind: {
     type: String,
     required: true,
-    enum: ['Shipping', 'Billing'],
+    enum: KIND,
   },
   region: {
     type: String,
     required: true,
-    enum: [...states, ...provinces],
+    enum: REGIONS,
     validate(v) {
       if (
-        (this.country === 'Canada' && states.includes(v)) ||
+        (this.country === 'Canada' && STATES.includes(v)) ||
         (this.country === 'United States' &&
-          provinces.includes(v))
+          PROVINCES.includes(v))
       ) {
         return false;
       }
@@ -134,7 +69,7 @@ export default new Schema({
   },
   country: {
     type: String,
-    enum: ['Canada', 'United States'],
+    enum: COUNTRIES,
     required: true,
   },
   phone1: {

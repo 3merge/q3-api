@@ -4,5 +4,8 @@
   "password": "password",
   "prohibited": "prohibited",
   "grants": "grants",
-  "duplicate": "duplicate"
+  "duplicate": "duplicate",
+  "addressesNotRemoved": "addressesNotRemoved",
+  "documentNotFound": "documentNotFound",
+  "missingBody": "missingBody"
 }

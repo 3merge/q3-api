@@ -115,10 +115,10 @@ describe('verify API', () => {
     });
   });
 
-  it('should append to request object', () => {
+  it('should append to request object', async () => {
     const chain = redact('foo');
 
-    chain(req, null, next);
+    await chain(req, null, next);
     expect(next).toHaveBeenCalled();
     expect(req.redactions).toMatchObject({
       foo: {
@@ -131,11 +131,11 @@ describe('verify API', () => {
     });
   });
 
-  it('should add target locations', () => {
+  it('should add target locations', async () => {
     const chain = redact('foo')
       .inRequest('body')
       .inResponse('bar');
-    chain(req, null, next);
+    await chain(req, null, next);
     expect(next).toHaveBeenCalled();
     expect(req.redactions).toMatchObject({
       foo: {
@@ -173,5 +173,28 @@ describe('authorizeRequest', () => {
       foo: 1,
       quux: 1,
     });
+  });
+
+  it('should prefix the mutation object', () => {
+    const mutate = {
+      body: {
+        quuz: 1,
+        garply: 1,
+      },
+      redactions: {
+        name: {
+          fields: ['*', '!bar.quuz'],
+          locations: {
+            request: ['body'],
+            prefix: 'bar',
+          },
+        },
+      },
+    };
+
+    authorizeRequest(mutate, null, next);
+    expect(next).toHaveBeenCalled();
+    expect(mutate.body).not.toHaveProperty('quuz');
+    expect(mutate.body).toHaveProperty('garply');
   });
 });

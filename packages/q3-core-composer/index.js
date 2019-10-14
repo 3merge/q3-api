@@ -15,21 +15,36 @@ const {
 const flatten = (a = [], b = []) => {
   const m = connect();
   if (!a || !a.length) return m;
-  a.concat(b)
-    .flat()
-    .forEach(m.use.bind(m));
+  const arr = a.concat(b).flat();
+
+  arr.forEach(m.use.bind(m));
+  m.root = arr.pop();
   return m;
+};
+
+const check = (...args) => {
+  const methods = dep.check(...args);
+  methods.respondsWith = (name) =>
+    methods.withMessage((value, { req }) =>
+      req.t(`validations:${name}`, {
+        value,
+      }),
+    );
+
+  return methods;
 };
 
 const compose = (ctr) =>
   flatten([
     flatten(ctr.validation, [validate]),
     flatten(ctr.authorization, [
+      verify,
       authorizeRequest,
       authorizeResponse,
     ]),
     flatten(effect(ctr.effect)),
     aa(ctr),
+    ctr,
   ]);
 
 module.exports = {
@@ -37,4 +52,5 @@ module.exports = {
   redact,
   verify,
   compose,
+  check,
 };

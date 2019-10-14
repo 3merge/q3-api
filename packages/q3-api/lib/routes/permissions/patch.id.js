@@ -2,7 +2,6 @@ const {
   compose,
   check,
   redact,
-  verify,
 } = require('q3-core-composer');
 const {
   MODEL_NAMES,
@@ -49,7 +48,6 @@ PatchById.validation = [
 ];
 
 PatchById.authorization = [
-  verify(),
   redact(MODEL_NAMES.PERMISSION)
     .inRequest('body')
     .inResponse('permission'),

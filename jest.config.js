@@ -5,6 +5,7 @@ module.exports = {
   watchPathIgnorePatterns: ['<rootDir>/node_modules'],
   projects: [
     '<rootDir>/packages/q3-api',
+    '<rootDir>/packages/q3-api-plugin-addresses',
     '<rootDir>/packages/q3-api-plugin-files',
     '<rootDir>/packages/q3-api-plugin-notes',
     '<rootDir>/packages/q3-core-composer',

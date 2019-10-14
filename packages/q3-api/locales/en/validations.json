@@ -15,5 +15,7 @@
   "mongoId": "mongoId",
   "sensitive": "sensitive",
   "role": "role",
-  "op": "op"
+  "op": "op",
+  "mongoID": "mongoID",
+  "array": "array"
 }

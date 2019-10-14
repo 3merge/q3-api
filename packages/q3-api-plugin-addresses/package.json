@@ -1,35 +1,26 @@
 {
   "name": "q3-api-plugin-addresses",
   "version": "1.0.0",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "license": "MIT",
-  "scripts": {
-    "build": "babel src -d dist --copy-files",
-    "lint": "eslint \"src/**/*.js\" --fix",
-    "test": "jest"
-  },
   "jest": {
-    "verbose": true,
     "testEnvironment": "node",
-    "transform": {
-      "^.+\\.jsx?$": "babel-jest"
-    },
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/dist/"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/src/testSetup.js"
+    "roots": [
+      "<rootDir>/lib/"
     ]
   },
   "dependencies": {
     "express": "^4.17.1",
-    "express-validator": "^6.2.0",
-    "mongoose": "^5.7.1",
-    "q3-api": "^1.0.0"
+    "mongoose": "^5.7.1"
   },
   "devDependencies": {
-    "mongodb-memory-server": "^5.2.3",
+    "q3-api-mocks": "^1.0.0",
+    "q3-api-test-utils": "^1.0.0",
     "supertest": "^4.0.2"
+  },
+  "peerDependencies": {
+    "q3-api": "^1.0.0",
+    "q3-core-composer": "^1.0.0",
+    "q3-core-walker": "^1.0.0"
   }
 }

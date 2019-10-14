@@ -14,5 +14,5 @@ const getProfile = async ({ user }, res) => {
   });
 };
 
-getProfile.authorization = [verify()];
+getProfile.authorization = [verify];
 module.exports = compose(getProfile);

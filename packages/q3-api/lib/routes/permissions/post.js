@@ -2,7 +2,6 @@ const {
   compose,
   check,
   redact,
-  verify,
 } = require('q3-core-composer');
 const { MODEL_NAMES } = require('../../constants');
 const { Permissions } = require('../../models');
@@ -39,7 +38,6 @@ Post.validation = [
 ];
 
 Post.authorization = [
-  verify(),
   redact(MODEL_NAMES.PERMISSIONS)
     .inRequest('body')
     .inResponse('permission'),
