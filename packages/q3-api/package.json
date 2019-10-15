@@ -20,6 +20,7 @@
     "dotenv": "^8.1.0",
     "express-fileupload": "^1.1.5",
     "express-rate-limit": "^5.0.0",
+    "flat": "^4.1.0",
     "generate-password": "^1.4.2",
     "helmet": "^3.20.0",
     "i18next": "^17.0.14",

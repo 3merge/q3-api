@@ -11,6 +11,8 @@ const splitDelineatedList = (doc = {}) =>
 const ifArray = (input, next) =>
   !Array.isArray(input) ? next(input) : input.map(next);
 
+// @TODO
+// this needs refactoring
 const redact = (modelName) => {
   const locations = {
     request: [],
@@ -23,10 +25,23 @@ const redact = (modelName) => {
         throw new Error('Authorization middleware missing');
 
       const grant = await req.authorization(modelName);
+      const fields = splitDelineatedList(grant);
       set(req, `redactions.${modelName}`, {
-        fields: splitDelineatedList(grant),
         locations,
+        fields,
       });
+
+      if (
+        locations.required &&
+        !micromatch.isMatch(locations.required, fields)
+      ) {
+        const e = new Error();
+        e.name = 'AuthorizationError';
+        e.message = req.t
+          ? req.t('messages:fieldPermissions')
+          : 'Insufficent field-level permissions';
+        throw e;
+      }
 
       next();
     } catch (err) {
@@ -46,6 +61,11 @@ const redact = (modelName) => {
 
   chain.inResponse = function setLocation(location) {
     locations.response.push(location);
+    return this;
+  };
+
+  chain.requireField = function setRequiredField(field) {
+    locations.required = field;
     return this;
   };
 
@@ -163,7 +183,6 @@ module.exports = {
 
   authorizeResponse: mung.jsonAsync(async (body, req) => {
     await process(req, body, 'response');
-
     return body;
   }),
 

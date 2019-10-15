@@ -61,8 +61,20 @@ const middleware = (req, res, next) => {
       coll,
     });
 
+    if (
+      result.condition &&
+      (!user || !user[result.condition])
+    )
+      exception('Authorization')
+        .msg('conditions')
+        .throw();
+
     ctx.set('q3-session:user', user);
     ctx.set('q3-session:grant', result);
+
+    // @TODO
+    // should return only fields I think...
+    // can format here also
     return result;
   };
 

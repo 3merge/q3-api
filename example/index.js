@@ -12,6 +12,13 @@ const seedDB = async () => {
   // await Q3.model('q3-api-permissions').create(permissions);
 };
 
+Q3.config({
+  authorization: {
+    roles: ['Assassin', 'King', 'Badass'],
+    conditions: ['isVeteran'],
+  },
+});
+
 Q3.routes(walker('example/routes'));
 
 Q3.connect()

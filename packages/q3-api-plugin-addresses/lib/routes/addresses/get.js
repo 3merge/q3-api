@@ -10,16 +10,17 @@ module.exports = (collectionName) => {
   const Collection = model(collectionName);
 
   const GetAddressesController = async (
-    { params, query },
+    { params, query, marshal },
     res,
   ) => {
     const { kind } = query;
     const { documentID } = params;
-    const doc = await Collection.findById(documentID)
-      .select('addresses')
-      .lean();
+    const doc = await Collection.findById(
+      documentID,
+    ).select('addresses');
 
-    let addresses = doc ? doc.addresses : [];
+    let addresses = doc ? marshal(doc).addresses : [];
+
     if (kind)
       addresses = addresses.filter((a) => a.kind === kind);
 

@@ -1,6 +1,14 @@
 /* eslint-disable func-names, no-param-reassign */
 const expection = require('../errors');
 
+const getPathsRecursively = ([key, v]) => {
+  if (v.schema)
+    return Object.entries(v.schema.paths)
+      .map(getPathsRecursively)
+      .map((i) => `${key}.${i}`);
+  return key;
+};
+
 const plugin = (schema) => {
   schema.statics.findStrictly = async function(id) {
     const doc = await this.findById(id).exec();
@@ -10,6 +18,12 @@ const plugin = (schema) => {
         .throw();
 
     return doc;
+  };
+
+  schema.statics.getAllFields = function() {
+    return Object.entries(this.schema.paths)
+      .map(getPathsRecursively)
+      .flat();
   };
 
   schema.statics.getRequiredFields = function() {

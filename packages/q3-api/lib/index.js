@@ -24,6 +24,10 @@ Q3.$mongoose = mongoose;
 Q3.User = Users;
 Q3.exception = manageErrors;
 
+Q3.config = (args = {}) => {
+  Object.assign(app.locals, args);
+};
+
 Q3.routes = (routes) => {
   app.use(routes);
 };

@@ -1,4 +1,5 @@
 {
   "reverify": "reverify",
-  "verificationDetails": "verificationDetails"
+  "verificationDetails": "verificationDetails",
+  "fieldPermissions": "fieldPermissions"
 }

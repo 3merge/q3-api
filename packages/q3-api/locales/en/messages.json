@@ -15,6 +15,7 @@
   "newAddress": "newAddress",
   "updatedAddress": "updatedAddress",
   "verification": "To access this API, you will need to verify this email address. To do so, use the details below to do something.",
+  "fieldPermissions": "Insufficient field-level permissions on this role type.",
   "permission": {
     "new": "New permission added to the database"
   }

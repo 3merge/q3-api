@@ -8,5 +8,7 @@
   "addressesNotRemoved": "addressesNotRemoved",
   "documentNotFound": "documentNotFound",
   "missingBody": "missingBody",
-  "unknownCollection": "unknownCollection"
+  "unknownCollection": "unknownCollection",
+  "addressNotRemoved": "addressNotRemoved",
+  "conditions": "conditions"
 }

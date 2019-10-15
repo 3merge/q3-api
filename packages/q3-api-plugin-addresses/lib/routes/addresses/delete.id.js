@@ -42,7 +42,7 @@ module.exports = (collectionName) => {
   ];
 
   DeleteAddressController.authorization = [
-    redact(collectionName),
+    redact(collectionName).requireField('addresses'),
   ];
 
   return compose(DeleteAddressController);
