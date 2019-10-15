@@ -1,6 +1,6 @@
 {
   "name": "q3-api-plugin-files",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "lib/index.js",
   "jest": {
     "testEnvironment": "node"
