@@ -15,12 +15,13 @@
   },
   "devDependencies": {
     "q3-api-mocks": "^1.0.1",
-    "q3-api-test-utils": "^1.0.1",
+    "q3-test-utils": "^1.0.1",
     "supertest": "^4.0.2"
   },
   "peerDependencies": {
     "q3-api": "^1.0.0",
     "q3-core-composer": "^1.0.0",
     "q3-core-walker": "^1.0.0"
-  }
+  },
+  "gitHead": "81a5fe7302e68374a7f3c1d1773c9efcd52d7a38"
 }

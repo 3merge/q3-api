@@ -2,7 +2,7 @@
 const Q3 = require('q3-api');
 const Q3Mock = require('q3-api-mocks');
 const mongoose = require('mongoose');
-const helpers = require('q3-api-test-utils/helpers');
+const helpers = require('q3-test-utils/helpers');
 const { Schema } = require('mongoose');
 const plugin = require('../../../model');
 const fixture = require('../../../model/__fixture');

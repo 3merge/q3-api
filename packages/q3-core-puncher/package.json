@@ -4,5 +4,6 @@
   "main": "index.js",
   "dependencies": {
     "lodash.get": "^4.4.2"
-  }
+  },
+  "gitHead": "81a5fe7302e68374a7f3c1d1773c9efcd52d7a38"
 }

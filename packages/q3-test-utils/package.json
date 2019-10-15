@@ -1,5 +1,5 @@
 {
-  "name": "q3-api-test-utils",
+  "name": "q3-test-utils",
   "version": "1.0.1",
   "main": "index.js",
   "dependencies": {
@@ -8,5 +8,6 @@
   },
   "jest": {
     "preset": "./index.js"
-  }
+  },
+  "gitHead": "81a5fe7302e68374a7f3c1d1773c9efcd52d7a38"
 }
