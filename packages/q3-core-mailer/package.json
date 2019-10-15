@@ -1,7 +1,7 @@
 {
   "name": "q3-core-mailer",
   "main": "index.js",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "dependencies": {
     "dotenv": "^8.1.0",
     "handlebars": "^4.4.2",
