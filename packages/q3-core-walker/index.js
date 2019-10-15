@@ -95,10 +95,10 @@ class DirectoryWalker {
   }
 }
 
-module.exports = (root) => {
+module.exports = (root, folder = '/routes') => {
   const app = new Router();
   const opts = { withFileTypes: true };
-  const workingDir = getWorkingDirectory(root);
+  const workingDir = join(root, folder);
 
   const recursive = (dir) =>
     sortFiles(readdirSync(dir, opts)).forEach((dirent) => {

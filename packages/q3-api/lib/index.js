@@ -15,7 +15,7 @@ require('./plugins');
 
 const { Users } = require('./models');
 
-app.use(walker('packages/q3-api/lib/routes'));
+app.use(walker(__dirname));
 
 const Q3 = {};
 

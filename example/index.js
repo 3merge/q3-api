@@ -19,7 +19,7 @@ Q3.config({
   },
 });
 
-Q3.routes(walker('example/routes'));
+Q3.routes(walker(__dirname));
 
 Q3.connect()
   .then(clearDB)

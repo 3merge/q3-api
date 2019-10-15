@@ -24,7 +24,8 @@ module.exports = class ControllerMock {
       params: { ...params },
       query: { ...query },
       evoke: jest.fn(),
-      t: jest.fn(),
+      t: jest.fn().mockImplementation((v) => v),
+      marshal: jest.fn().mockImplementation((v) => v),
       user,
     };
 
