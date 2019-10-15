@@ -24,8 +24,8 @@ Q3.$mongoose = mongoose;
 Q3.User = Users;
 Q3.exception = manageErrors;
 
-Q3.register = (plugin, opts) => {
-  plugin(app, mongoose, opts);
+Q3.routes = (routes) => {
+  app.use(routes);
 };
 
 Q3.model = (name) => {

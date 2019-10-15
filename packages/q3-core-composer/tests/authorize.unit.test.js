@@ -1,8 +1,15 @@
 const {
   redact,
   authorizeRequest,
-  filterObject,
 } = require('../lib/authorize');
+
+const process = require('../lib/authorize').__get__(
+  'process',
+);
+
+const FieldRedactionCommander = require('../lib/authorize').__get__(
+  'FieldRedactionCommander',
+);
 
 let req;
 const next = jest.fn();
@@ -92,7 +99,9 @@ describe.each([
   [undefined, {}],
 ])('Pattern testing', (fields, expected) => {
   test(`"${fields}" matches expected`, () => {
-    expect(filterObject(fields, doc)).toEqual(expected);
+    const inst = new FieldRedactionCommander('request', {});
+    inst.fields = fields;
+    expect(inst.$filter(doc)).toEqual(expected);
   });
 });
 
@@ -196,5 +205,43 @@ describe('authorizeRequest', () => {
     expect(next).toHaveBeenCalled();
     expect(mutate.body).not.toHaveProperty('quuz');
     expect(mutate.body).toHaveProperty('garply');
+  });
+});
+
+describe('Process generator', () => {
+  it('it should redact ... Messy', async () => {
+    const input = {
+      foo: {
+        garply: 1,
+        quux: 1,
+      },
+      bar: {
+        garply: 1,
+        quux: 1,
+      },
+    };
+    await process(
+      {
+        redactions: {
+          foo: {
+            locations: {
+              request: ['foo', 'bar'],
+            },
+            fields: ['*', '!quux'],
+          },
+        },
+      },
+      input,
+      'request',
+    );
+
+    expect(input).toEqual({
+      foo: {
+        garply: 1,
+      },
+      bar: {
+        garply: 1,
+      },
+    });
   });
 });

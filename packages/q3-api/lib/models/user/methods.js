@@ -136,7 +136,7 @@ module.exports = class UserAuthDecorator {
     if (!matches && strict)
       exception('Authentication')
         .msg('credentials')
-        .msg('password')
+        .field('password')
         .throw();
 
     return matches;

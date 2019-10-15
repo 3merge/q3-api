@@ -84,6 +84,12 @@ class DirectoryWalker {
     const ctrl = this.getController();
     const verb = getVerb(this.name);
 
+    if (process.env.DEBUG)
+      // eslint-disable-next-line
+      console.log(
+        `${verb.toUpperCase()} route registered:`,
+        this.getSlug(),
+      );
     if (ctrl && verb in app)
       app[verb](this.getSlug(), ctrl);
   }

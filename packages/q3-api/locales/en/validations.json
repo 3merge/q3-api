@@ -17,5 +17,11 @@
   "role": "role",
   "op": "op",
   "mongoID": "mongoID",
-  "array": "array"
+  "array": "array",
+  "required": "required",
+  "addressType": "addressType",
+  "region": "region",
+  "postal": "postal",
+  "country": "country",
+  "tel": "tel"
 }

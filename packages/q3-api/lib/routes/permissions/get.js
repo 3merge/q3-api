@@ -7,9 +7,9 @@ const { Permissions } = require('../../models');
 const { MODEL_NAMES } = require('../../constants');
 
 const GetAll = async ({ query }, res) => {
-  const permissions = await Permissions.find(query).exec();
+  const docs = await Permissions.find(query).exec();
   res.ok({
-    permissions,
+    permissions: docs.map((doc) => doc.toJSON()),
   });
 };
 

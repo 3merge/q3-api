@@ -13,5 +13,9 @@
   "passwordUpdate": "passwordUpdate",
   "passwordUpdateNotification": "passwordUpdateNotification",
   "newAddress": "newAddress",
-  "updatedAddress": "updatedAddress"
+  "updatedAddress": "updatedAddress",
+  "verification": "To access this API, you will need to verify this email address. To do so, use the details below to do something.",
+  "permission": {
+    "new": "New permission added to the database"
+  }
 }

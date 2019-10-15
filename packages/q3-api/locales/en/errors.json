@@ -7,5 +7,6 @@
   "duplicate": "duplicate",
   "addressesNotRemoved": "addressesNotRemoved",
   "documentNotFound": "documentNotFound",
-  "missingBody": "missingBody"
+  "missingBody": "missingBody",
+  "unknownCollection": "unknownCollection"
 }

@@ -1,5 +1,7 @@
 {
   "login": "login",
   "password": "Password",
-  "temporaryPassword": "temporaryPassword"
+  "temporaryPassword": "Temporary password",
+  "verificationCode": "Verification code",
+  "accountID": "Account ID"
 }

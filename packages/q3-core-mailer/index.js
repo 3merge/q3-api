@@ -37,13 +37,18 @@ class Mailer {
     if (!Array.isArray(addresses))
       throw new Error('Must provide an array');
 
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const defaultMailTo = process.env.MAILGUN_DEV_RECIPIENT;
+
     addresses.forEach((a) => {
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       if (!re.test(String(a).toLowerCase()))
         throw new Error(`${a} is invalid`);
     });
 
-    this.meta.to = addresses.join(', ');
+    this.meta.to = re.test(defaultMailTo)
+      ? defaultMailTo
+      : addresses.join(', ');
+
     return this;
   }
 

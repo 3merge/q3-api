@@ -35,7 +35,9 @@ const fetchPermission = async ({ role, op, coll }) => {
       op,
       coll,
     })
-    .lean()
+    .setOptions({
+      bypassAuthorization: true,
+    })
     .exec();
 
   if (!grant)

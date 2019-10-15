@@ -28,14 +28,10 @@ verify.validation = [
   checkNewPassword,
   check('id')
     .isMongoId()
-    .withMessage((v, { req }) =>
-      req.translate('validations:id'),
-    ),
+    .respondsWith('mongoID'),
   check('verificationCode')
     .isString()
-    .withMessage((v, { req }) =>
-      req.translate('validations:verificationCode'),
-    ),
+    .respondsWith('verificationCode'),
 ];
 
 module.exports = compose(verify);

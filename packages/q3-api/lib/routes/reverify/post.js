@@ -1,9 +1,9 @@
-import { compose } from 'q3-core-composer';
-import mailer from 'q3-core-mailer';
-import { Users } from '../../models';
-import { checkEmail } from '../../helpers/validation';
+const { compose } = require('q3-core-composer');
+const mailer = require('q3-core-mailer');
+const { Users } = require('../../models');
+const { checkEmail } = require('../../helpers/validation');
 
-const reverify = async (
+const ReverificationController = async (
   { body: { email }, evoke },
   res,
 ) => {
@@ -13,20 +13,27 @@ const reverify = async (
   res.acknowledge();
 };
 
-reverify.validation = [checkEmail];
+ReverificationController.validation = [checkEmail];
 
-reverify.effect = [
+ReverificationController.effect = [
   async ({ email, id, secret }, { t }) =>
     mailer()
       .to([email])
       .subject(t('reverify'))
       .props({
-        body: t('verificationDetails', {
-          id,
-          secret,
-        }),
+        body: t('messages:verification'),
+        rows: [
+          {
+            label: t('labels:accountID'),
+            value: id,
+          },
+          {
+            label: t('labels:verificationCode'),
+            value: secret,
+          },
+        ],
       })
       .send(),
 ];
 
-module.exports = compose(reverify);
+module.exports = compose(ReverificationController);

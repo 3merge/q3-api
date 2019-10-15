@@ -11,7 +11,6 @@ const LoginIntoAccount = async (
   res,
 ) => {
   const userResult = await Users.findVerifiedByEmail(email);
-
   if (!userResult.isPermitted)
     exception('Authorization')
       .msg('prohibited')

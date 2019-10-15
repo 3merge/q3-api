@@ -51,6 +51,10 @@ beforeEach(async () => {
   }));
 });
 
+afterEach(async () => {
+  await Q3.model(name).findByIdAndDelete(documentID);
+});
+
 describe('POST', () => {
   it('should return 404', async () =>
     agent

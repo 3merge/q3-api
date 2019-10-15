@@ -23,6 +23,11 @@ const detectErrorByName = (name) => {
 
 const decorateResponse = (req, res, next) => {
   const dispatch = statusCodeHelper(res);
+  req.marshal = (o) =>
+    Array.isArray(o)
+      ? o.map((i) => i.toJSON())
+      : o.toJSON();
+
   res.acknowledge = dispatch(204);
   res.ok = dispatch(200);
   res.update = dispatch(200);
@@ -44,12 +49,12 @@ decorateResponse.handleUncaughtErrors = (err, req, res, next) => {
       message: req.t('messages:validationError'),
       ...err,
     });
-  } else if (status !== 500) {
-    res.json(err);
   } else {
     res.json({
+      errors: err.errors,
       message: err.message,
       trace: err.trace,
+      name: err.name,
     });
   }
 };

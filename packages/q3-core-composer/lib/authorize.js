@@ -8,55 +8,8 @@ const splitDelineatedList = (doc = {}) =>
     .split(',')
     .map((i) => i.trim());
 
-const filterObject = (fields = [], doc = {}) => {
-  const flat = flatten(doc);
-  const match = micromatch(
-    Object.keys(flat),
-    fields,
-  ).reduce((acc, key) => {
-    acc[key] = flat[key];
-    return acc;
-  }, {});
-
-  return unflatten(match);
-};
-
-const iterateRedactions = (req, target, mutable) => {
-  const { redactions = {} } = req;
-
-  // allow call stack to clear
-  // otherwise, it maximizes
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      Object.values(redactions).forEach(
-        ({ fields, locations }) =>
-          get(locations, target, []).forEach((field) => {
-            const prev = mutable[field];
-            const { prefix } = locations;
-
-            const filter = (input) => {
-              let i = input;
-              if (prefix)
-                i = {
-                  [prefix]: input,
-                };
-
-              let o = filterObject(fields, i);
-              if (prefix) o = o[prefix];
-
-              return o;
-            };
-
-            // eslint-disable-next-line
-            mutable[field] = !Array.isArray(prev)
-              ? filter(prev)
-              : prev.map(filter);
-          }),
-      );
-      resolve();
-    }, 0);
-  });
-};
+const ifArray = (input, next) =>
+  !Array.isArray(input) ? next(input) : input.map(next);
 
 const redact = (modelName) => {
   const locations = {
@@ -107,18 +60,115 @@ const verify = ({ user }, res, next) => {
   }
 };
 
+class FieldRedactionCommander {
+  constructor(id, target = {}) {
+    if (!id || !['response', 'request'].includes(id))
+      throw new Error(
+        'ID must equal "request" or "response"',
+      );
+
+    this.id = id;
+    this.mutable = target;
+  }
+
+  $append(doc) {
+    return ifArray(doc, (v) =>
+      this.prefix
+        ? {
+            [this.prefix]: v,
+          }
+        : v,
+    );
+  }
+
+  $detach(doc) {
+    return ifArray(doc, (v) =>
+      this.prefix ? v[this.prefix] : v,
+    );
+  }
+
+  $filter(doc = {}) {
+    const flat = flatten(doc);
+    const match = micromatch(
+      Object.keys(flat),
+      this.fields,
+    );
+
+    const unwind = match.reduce(
+      (acc, key) =>
+        Object.assign(acc, {
+          [key]: flat[key],
+        }),
+      {},
+    );
+
+    return unflatten(unwind);
+  }
+
+  $runTransformers(acc, v) {
+    const input = this.$append(this.mutable[v]);
+    const output = ifArray(input, this.$filter.bind(this));
+    const transformed = this.$detach(output);
+
+    return Object.assign(acc, {
+      [v]: transformed,
+    });
+  }
+
+  $getEntries() {
+    return new Promise((resolve) =>
+      setTimeout(() => {
+        resolve(
+          this.rules.reduce(
+            this.$runTransformers.bind(this),
+            {},
+          ),
+        );
+      }, 0),
+    );
+  }
+
+  // really, the only public method
+  exec({ fields = [], locations = {} }) {
+    const { prefix } = locations;
+    this.rules = get(locations, this.id, []);
+    this.fields = fields;
+    this.prefix = prefix;
+    return this.$getEntries();
+  }
+}
+
+const process = async ({ redactions }, mutable, id) => {
+  if (!redactions) return;
+  const rules = Object.values(redactions);
+
+  const entries = await Promise.all(
+    rules.map((...args) => {
+      const inst = new FieldRedactionCommander(id, mutable);
+      return inst.exec(...args);
+    }),
+  );
+
+  const primed = entries.reduce(
+    (a, b) => Object.assign(a, b),
+    {},
+  );
+
+  Object.assign(mutable, primed);
+};
+
 module.exports = {
   redact,
-  filterObject,
   verify,
 
   authorizeResponse: mung.jsonAsync(async (body, req) => {
-    await iterateRedactions(req, 'response', body);
+    await process(req, body, 'response');
+
     return body;
   }),
 
   authorizeRequest: async (req, res, next) => {
-    await iterateRedactions(req, 'request', req);
+    await process(req, req, 'request');
     next();
   },
 };

@@ -1,7 +1,11 @@
-import { compose, check, verify } from 'q3-core-composer';
-import mailer from 'q3-core-mailer';
-import { Users } from '../../models';
-import exception from '../../errors';
+const {
+  compose,
+  check,
+  verify,
+} = require('q3-core-composer');
+const mailer = require('q3-core-mailer');
+const { Users } = require('../../models');
+const exception = require('../../errors');
 
 const updatePassword = async (
   { body, user, evoke },

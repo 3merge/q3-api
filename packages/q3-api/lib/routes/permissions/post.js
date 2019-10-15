@@ -9,13 +9,11 @@ const { constants } = require('../../models/permission');
 const { checkMsg } = require('../../helpers/validation');
 
 const Post = async ({ body, t }, res) => {
-  const permission = await Permissions.create(body);
+  const doc = await Permissions.create(body);
 
   res.create({
-    message: t('messages:permission.new', [
-      permission.coll,
-    ]),
-    permission,
+    message: t('messages:permission.new'),
+    permission: doc.toJSON(),
   });
 };
 

@@ -3,7 +3,10 @@ const { ERRORS, CONTEXT } = require('./constants');
 
 class ErrorDispatch {
   constructor(name) {
-    this.dp = ctx.get(CONTEXT.LOCALE);
+    this.dp = ctx.get(CONTEXT.LOCALE) || {
+      t: (v) => v,
+    };
+
     this.errors = {};
     this.id = '';
 

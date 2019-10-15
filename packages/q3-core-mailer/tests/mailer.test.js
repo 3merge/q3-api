@@ -30,6 +30,7 @@ describe('Email chain', () => {
   });
 
   it('should configure email meta', async () => {
+    process.env.MAILGUN_DEV_RECIPIENT = false;
     const args = {
       title: 'Password reset',
       body:
