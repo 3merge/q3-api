@@ -24,12 +24,10 @@ class Mailer {
       `./templates/${template}.html`,
     );
 
-    fs.statSync(tmp);
-
     this.data = settings;
     this.meta = settings;
     this.src = Handlebars.compile(
-      `${fs.readFileSync(tmp)}`,
+      `${fs.readFileSync(tmp, 'utf8')}`,
     );
   }
 
