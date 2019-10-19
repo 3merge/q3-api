@@ -22,7 +22,7 @@ module.exports = async (strat, args) => {
         : await require(`./${strat}`)(nodemailer);
 
     const info = await transporter.sendMail(args);
-    if (process.env.PREVIEW_EMAIL === true)
+    if (process.env.PREVIEW_EMAIL)
       console.log(
         'Preview URL: %s',
         nodemailer.getTestMessageUrl(info),

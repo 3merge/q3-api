@@ -1,6 +1,11 @@
 const mailer = require('..');
 
 describe('Email chain', () => {
+  beforeAll(() => {
+    process.env.MAILGUN_DEV_RECIPIENT = false;
+    process.env.PREVIEW_EMAIL = true;
+  });
+
   it('should return default', () => {
     const inst = mailer();
     expect(inst.src).toEqual(expect.any(Function));
@@ -23,14 +28,12 @@ describe('Email chain', () => {
   });
 
   it('should fail with invalid email', () => {
-    expect(() => mailer().to()).toThrowError();
     expect(() =>
       mailer().setRecipients(['mibb']),
     ).toThrowError();
   });
 
   it('should configure email meta', async () => {
-    process.env.MAILGUN_DEV_RECIPIENT = false;
     const args = {
       title: 'Password reset',
       body:

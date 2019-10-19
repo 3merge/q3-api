@@ -9,5 +9,5 @@
   "jest": {
     "preset": "./index.js"
   },
-  "gitHead": "2d3801d191b031d5323a8e5c898bd3881081aca0"
+  "gitHead": "e935e479800c7c34276d7ebda76c26b8ceada39d"
 }

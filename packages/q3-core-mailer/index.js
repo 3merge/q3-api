@@ -21,7 +21,7 @@ class Mailer {
   constructor(template = 'transactional') {
     const tmp = path.resolve(
       __dirname,
-      `./templates/${template}.html`,
+      `./templates/${template}.handlebars`,
     );
 
     this.data = settings;
