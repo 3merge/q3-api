@@ -19,9 +19,8 @@ const settings = {
 
 class Mailer {
   constructor(template = 'transactional') {
-    const tmp = path.resolve(
-      __dirname,
-      `templates/${template}.html`,
+    const tmp = require.resolve(
+      `./templates/${template}.html`,
     );
 
     fs.statSync(tmp);
