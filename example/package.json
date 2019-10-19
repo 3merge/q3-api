@@ -1,15 +1,15 @@
 {
   "name": "example",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "dependencies": {
     "mongoose": "^5.7.1",
-    "q3-api": "^1.0.5",
-    "q3-api-plugin-addresses": "^1.0.5",
-    "q3-api-plugin-notes": "^1.0.5",
-    "q3-api-plugin-uploads": "^1.0.5",
-    "q3-core-composer": "^1.0.5",
-    "q3-core-mailer": "^1.0.5",
-    "q3-core-walker": "^1.0.5"
+    "q3-api": "^1.0.6",
+    "q3-api-plugin-addresses": "^1.0.6",
+    "q3-api-plugin-notes": "^1.0.6",
+    "q3-api-plugin-uploads": "^1.0.6",
+    "q3-core-composer": "^1.0.6",
+    "q3-core-mailer": "^1.0.6",
+    "q3-core-walker": "^1.0.6"
   },
   "gitHead": "17c3f2d12d4b63c4c3cd59c75400a5a4e39d91c3"
 }
