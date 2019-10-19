@@ -39,6 +39,8 @@
     "jest-watch-yarn-workspaces": "^1.1.0",
     "lerna": "^3.16.4",
     "nodemon": "^1.19.1",
+    "patch-package": "^6.2.0",
+    "postinstall-postinstall": "^2.0.0",
     "prettier": "^1.18.2",
     "rewire": "^4.0.1",
     "supertest": "^4.0.2"
