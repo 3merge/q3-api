@@ -1,5 +1,5 @@
 require('dotenv').config();
-
+const ctx = require('request-context');
 const { get } = require('lodash');
 const walker = require('q3-core-walker');
 const i18 = require('./config/i18next');
@@ -40,6 +40,8 @@ Q3.model = (name) => {
 
 Q3.setModel = (name, Schema) =>
   mongoose.model(name, Schema);
+
+Q3.getSessionUser = () => ctx.get('q3-session:user');
 
 Q3.connect = () =>
   new Promise((resolve) => {

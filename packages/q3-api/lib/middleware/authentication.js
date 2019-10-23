@@ -1,3 +1,4 @@
+const ctx = require('request-context');
 const { MODEL_NAMES } = require('../constants');
 const mongoose = require('../config/mongoose');
 const app = require('../config/express');
@@ -23,6 +24,7 @@ const middleware = async (req, res, next) => {
     await req.tChange(req.user.lang);
   }
 
+  ctx.set('q3-session:user', req.user);
   next();
 };
 

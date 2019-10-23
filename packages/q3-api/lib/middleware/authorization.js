@@ -69,12 +69,11 @@ const middleware = (req, res, next) => {
         .msg('conditions')
         .throw();
 
-    ctx.set('q3-session:user', user);
-    ctx.set('q3-session:grant', result);
-
     // @TODO
     // should return only fields I think...
     // can format here also
+
+    ctx.set('q3-session:grant', result);
     return result;
   };
 
