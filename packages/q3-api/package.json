@@ -30,6 +30,8 @@
     "lodash": "^4.17.15",
     "micromatch": "^4.0.2",
     "moment": "^2.24.0",
+    "mongoose-autopopulate": "^0.9.1",
+    "mongoose-paginate-v2": "^1.3.3",
     "mongoose-unique-validator": "^2.0.3",
     "request-context": "^2.0.0"
   },
@@ -43,5 +45,5 @@
   "devDependencies": {
     "supertest": "^4.0.2"
   },
-  "gitHead": "071984736607acf049a88ef04ef85ddaca3bf043"
+  "gitHead": "5bec38a21ebf5b582dfc48ee2fe0f6bad28f8dfe"
 }

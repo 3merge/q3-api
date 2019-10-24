@@ -1,3 +1,4 @@
+const ctx = require('request-context');
 const {
   verifyToken,
 } = require('../../models/user/helpers');
@@ -22,6 +23,10 @@ beforeEach(() => {
 });
 
 describe('authentication', () => {
+  beforeAll(() => {
+    jest.spyOn(ctx, 'set');
+  });
+
   it('should append user details to session', async () => {
     const decoded = { _id: 1 };
     verifyToken.mockResolvedValue(decoded);
