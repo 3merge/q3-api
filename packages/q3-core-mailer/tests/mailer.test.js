@@ -33,7 +33,7 @@ describe('Email chain', () => {
     ).toThrowError();
   });
 
-  it('should configure email meta', async () => {
+  it('should configure email meta', async (done) => {
     const args = {
       title: 'Password reset',
       body:
@@ -50,6 +50,10 @@ describe('Email chain', () => {
       ],
     };
 
+    mailer.listen(() => {
+      done();
+    });
+
     mailer.config({
       logo:
         'https://placeholder.com/wp-content/uploads/2018/10/placeholder.com-logo1.png',
@@ -65,7 +69,6 @@ describe('Email chain', () => {
     expect(msg.meta.to).toBe('foo@bar.ca, quuz@baz.com');
     expect(msg.meta.subject).toMatch('Hey there!');
     expect(msg.data).toMatchObject(args);
-
     await msg.send();
   });
 });

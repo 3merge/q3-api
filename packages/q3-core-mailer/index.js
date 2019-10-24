@@ -1,11 +1,14 @@
 require('dotenv').config();
 require('./templates');
 
-const Events = require('events');
+const EventEmitter = require('events');
 const Handlebars = require('handlebars');
 const path = require('path');
 const fs = require('fs');
 const send = require('./strategies');
+
+const emitter = new EventEmitter();
+const e = 'smtp';
 
 const settings = {
   website: 'https://3merge.ca',
@@ -71,13 +74,14 @@ class Mailer {
       html: this.src(this.data),
     });
 
-    Events.emit('smtp', output);
+    emitter.emit(e, output);
     return output;
   }
 }
 
 // chainable singleton
 const chain = (templateName) => new Mailer(templateName);
+chain.listen = (next) => emitter.on(e, next);
 chain.config = (options) =>
   Object.assign(settings, options);
 
