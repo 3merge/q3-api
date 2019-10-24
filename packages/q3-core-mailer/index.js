@@ -1,6 +1,7 @@
 require('dotenv').config();
 require('./templates');
 
+const Events = require('events');
 const Handlebars = require('handlebars');
 const path = require('path');
 const fs = require('fs');
@@ -65,10 +66,13 @@ class Mailer {
   }
 
   async send() {
-    return send(this.data.strategy, {
+    const output = await send(this.data.strategy, {
       ...this.meta,
       html: this.src(this.data),
     });
+
+    Events.emit('smtp', output);
+    return output;
   }
 }
 
