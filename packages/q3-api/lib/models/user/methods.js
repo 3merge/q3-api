@@ -33,6 +33,12 @@ module.exports = class UserAuthDecorator {
     return diff.asHours() > 24;
   }
 
+  static async isListeningFor(listensTo = '') {
+    return this.find({
+      listensTo,
+    }).exec();
+  }
+
   static async findByApiKey(str = '') {
     if (!str) return null;
     return this.findOne({

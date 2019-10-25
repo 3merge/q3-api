@@ -69,12 +69,17 @@ class Mailer {
   }
 
   async send() {
+    const html = this.src(this.data);
     const output = await send(this.data.strategy, {
       ...this.meta,
-      html: this.src(this.data),
+      html,
     });
 
-    emitter.emit(e, output);
+    emitter.emit(e, {
+      ...output,
+      html,
+    });
+
     return output;
   }
 }

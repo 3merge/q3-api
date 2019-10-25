@@ -1,13 +1,13 @@
 const { get } = require('lodash');
 const ctx = require('request-context');
-const { $inst } = require('../config/i18next');
+const i18Base = require('../config/i18next');
 
 const queryLang = (lang) => {
   return lang ? lang.split('-')[0] : null;
 };
 
 module.exports = async (req, res, next) => {
-  const i18n = $inst.cloneInstance({
+  const i18n = i18Base.cloneInstance({
     lng: queryLang(get(req, 'query.lang')),
   });
 

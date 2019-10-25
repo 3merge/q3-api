@@ -57,6 +57,7 @@ const BaseUserModel = new Schema(
       type: String,
       required: true,
     },
+    listensTo: [String],
     apiKeys: [
       {
         type: String,
