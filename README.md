@@ -1,3 +1,3 @@
-# Q3 API
+# Q3 API Framework
 
 __Coming soon__
