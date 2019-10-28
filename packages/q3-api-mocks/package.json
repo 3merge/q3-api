@@ -1,7 +1,7 @@
 {
   "name": "q3-api-mocks",
   "main": "index.js",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "peerDependencies": {
     "mongoose": "^5.7.1"
   },
