@@ -23,7 +23,8 @@ class AccessHooks {
     const { ownershipAliases = [] } = grant;
     const { ownership } = grant;
 
-    if (bypassAuthorization || ownership === 'Any') return;
+    if (!user || bypassAuthorization || ownership === 'Any')
+      return;
 
     if (ownershipAliases.length) {
       this.or([

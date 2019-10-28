@@ -10,5 +10,6 @@
   "missingBody": "missingBody",
   "unknownCollection": "unknownCollection",
   "addressNotRemoved": "addressNotRemoved",
-  "conditions": "conditions"
+  "conditions": "conditions",
+  "validationError": "Failed request validation"
 }

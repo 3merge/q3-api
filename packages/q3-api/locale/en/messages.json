@@ -1,6 +1,6 @@
 {
   "passwordReset": "Password reset request",
-  "validationError": "validationError",
+  "validationError": "Failed request validation. Please check your inputs.",
   "reverify": "reverify",
   "permission.new": "permission.new",
   "ifEmailExists": "If this email belongs to an account, you should receive a new password shortly.",

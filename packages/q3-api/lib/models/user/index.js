@@ -75,9 +75,9 @@ const BaseUserModel = new Schema(
     restify: 'post get patch delete',
     collectionPluralName: 'users',
     collectionSingularName: 'user',
+    version: true,
     timestamps: true,
     ownership: true,
-    version: true,
   },
 );
 

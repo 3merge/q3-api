@@ -32,6 +32,8 @@ mongoose.plugin((s) => {
             name !== 'DocumentArray' &&
             name !== 'DocumentArrayPath' &&
             pathname !== '_id' &&
+            pathname !== 'active' &&
+            pathname !== 'createdBy' &&
             pathname !== '__v') ||
           options.includeInRest
         )

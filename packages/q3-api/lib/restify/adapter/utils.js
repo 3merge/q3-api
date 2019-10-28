@@ -69,8 +69,10 @@ const mapToValue = (o = {}, fn) =>
   }, {});
 
 const getValidationType = (v = '', opts = {}) => {
-  const out = {};
   const str = v.toLowerCase();
+  const out = {
+    in: ['body', 'query'],
+  };
 
   if (opts.systemOnly) return out;
 
@@ -100,7 +102,7 @@ const getValidationType = (v = '', opts = {}) => {
   if (str.includes('string'))
     return {
       ...out,
-      isString: true,
+      isAlphanumeric: true,
       errorMessage: setDynamicErrorMsg('isString'),
     };
 
@@ -123,6 +125,13 @@ const getValidationType = (v = '', opts = {}) => {
           return value.filter(Boolean);
         },
       },
+    };
+
+  if (str.includes('date'))
+    return {
+      ...out,
+      isISO8601: true,
+      errorMessage: setDynamicErrorMsg('isDate'),
     };
 
   return out;

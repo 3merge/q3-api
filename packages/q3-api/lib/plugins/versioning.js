@@ -52,7 +52,10 @@ const plugin = (schema) => {
       };
 
       if (hasLength)
-        this.versions = [changelog, ...prev.versions];
+        this.versions = [
+          changelog,
+          ...(prev.versions ? prev.versions : []),
+        ];
     });
   }
 };
