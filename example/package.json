@@ -1,11 +1,11 @@
 {
   "name": "example",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "dependencies": {
     "mongoose": "^5.7.1",
-    "q3-api": "^1.0.20",
-    "q3-api-plugin-addresses": "^1.0.20",
-    "q3-api-plugin-notes": "^1.0.20",
+    "q3-api": "^1.0.21",
+    "q3-api-plugin-addresses": "^1.0.21",
+    "q3-api-plugin-notes": "^1.0.21",
     "q3-api-plugin-uploads": "^1.0.20",
     "q3-core-composer": "^1.0.20",
     "q3-core-mailer": "^1.0.20",
