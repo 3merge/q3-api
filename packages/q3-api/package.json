@@ -22,7 +22,6 @@
     "dotenv": "^8.1.0",
     "express-fileupload": "^1.1.5",
     "express-rate-limit": "^5.0.0",
-    "express-validator": "^6.2.0",
     "flat": "5.0.0",
     "generate-password": "^1.4.2",
     "helmet": "^3.20.0",
@@ -49,5 +48,5 @@
     "aws-sdk-mock": "^4.5.0",
     "supertest": "^4.0.2"
   },
-  "gitHead": "0b3cd9783303e9853037b7bdacdaffbc549f4ad2"
+  "gitHead": "34f6447832469c69e7b564695c5b412341752907"
 }
