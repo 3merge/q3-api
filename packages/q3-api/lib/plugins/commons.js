@@ -1,7 +1,9 @@
 /* eslint-disable func-names, no-param-reassign */
 const { Schema } = require('mongoose');
 const { invoke, get } = require('lodash');
-const expection = require('../errors');
+const Files = require('../models/files');
+
+const exception = require('../errors');
 
 const getPathsRecursively = ([key, v]) => {
   if (v.schema)
@@ -12,14 +14,15 @@ const getPathsRecursively = ([key, v]) => {
 };
 
 const plugin = (schema) => {
-  schema.add(
-    new Schema({
-      active: {
-        type: Boolean,
-        default: true,
-      },
-    }),
-  );
+  if (!schema.options.disableArchive)
+    schema.add(
+      new Schema({
+        active: {
+          type: Boolean,
+          default: true,
+        },
+      }),
+    );
 
   schema.statics.archive = async function(id) {
     const doc = await this.findById(id).exec();
@@ -54,7 +57,11 @@ const plugin = (schema) => {
     id,
   ) {
     const subdoc = invoke(get(this, field), 'id', id);
-    if (!subdoc) throw new Error('Noop');
+    if (!subdoc)
+      exception('ResourceMissing')
+        .msg('subdocumentNotFound')
+        .throw();
+
     return subdoc;
   };
 
@@ -75,7 +82,8 @@ const plugin = (schema) => {
     field,
     id,
   ) {
-    this.getSubDocument(field, id).remove();
+    const subdoc = await this.getSubDocument(field, id);
+    subdoc.remove();
     return this.save();
   };
 
@@ -84,7 +92,8 @@ const plugin = (schema) => {
     id,
     args,
   ) {
-    this.getSubDocument(field, id).set(args);
+    const subdoc = await this.getSubDocument(field, id);
+    subdoc.set(args);
     return this.save();
   };
 
@@ -104,7 +113,7 @@ const plugin = (schema) => {
   schema.statics.findStrictly = async function(id) {
     const doc = await this.findById(id).exec();
     if (!doc)
-      expection('ResourceNotFound')
+      exception('ResourceNotFound')
         .msg('missing')
         .throw();
 
@@ -138,6 +147,51 @@ const plugin = (schema) => {
 
     return doc || Self.create(args);
   };
+
+  schema.statics.list = async function(params) {
+    const {
+      limit = 50,
+      skip = 0,
+      active = true,
+      search: searchTerm,
+      select,
+      ...rest
+    } = params;
+
+    // find it in the ensted paths
+    const { search = [] } = this.schema.options;
+
+    return this.paginate(
+      {
+        ...rest,
+        ...this.searchBuilder(searchTerm, search),
+        active,
+      },
+      {
+        limit,
+        select,
+        skip,
+      },
+    );
+  };
+
+  schema.statics.verifyOutput = function(d) {
+    if (!d)
+      exception('ResourceMissing')
+        .msg('notFound')
+        .throw();
+
+    return d;
+  };
+
+  // more will happen later
+  schema.methods.version = function(a) {
+    return this.set(a).save();
+  };
+
+  if (schema.options.uploads) {
+    schema.add(Files);
+  }
 
   Object.assign(schema.options, {
     toObject: {

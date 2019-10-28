@@ -6,6 +6,7 @@ const i18 = require('./config/i18next');
 const app = require('./config/express');
 const mongoose = require('./config/mongoose');
 const manageErrors = require('./errors');
+const restify = require('./restify');
 const {
   handleUncaughtErrors,
 } = require('./middleware/decorators');
@@ -24,11 +25,14 @@ Q3.$mongoose = mongoose;
 Q3.User = Users;
 Q3.exception = manageErrors;
 
+// restify all of mongoos
+
 Q3.config = (args = {}) => {
   Object.assign(app.locals, args);
 };
 
 Q3.routes = (routes) => {
+  Object.values(mongoose.models).forEach(restify);
   app.use(routes);
 };
 

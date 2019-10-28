@@ -3,6 +3,7 @@ const MODEL_NAMES = {
   PERMISSIONS: 'q3-api-permissions',
   LOGS: 'q3-api-logs',
   VERSIONS: 'q3-api-versions',
+  NOTES: 'q3-api-notes',
 };
 
 const ERRORS = {

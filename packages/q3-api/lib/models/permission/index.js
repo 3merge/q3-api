@@ -40,6 +40,9 @@ const PermissionModel = new Schema(
     },
   },
   {
+    restify: 'post get patch delete',
+    collectionPluralName: 'permissions',
+    collectionSingularName: 'permission',
     timestamps: true,
     ownership: true,
   },

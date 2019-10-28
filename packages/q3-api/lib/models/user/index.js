@@ -20,6 +20,7 @@ const BaseUserModel = new Schema(
     },
     secretIssuedOn: {
       type: Date,
+      private: true,
     },
     firstName: {
       type: String,
@@ -41,10 +42,12 @@ const BaseUserModel = new Schema(
     verified: {
       type: Boolean,
       default: false,
+      private: true,
     },
     loginAttempts: {
       type: Number,
       default: 0,
+      private: true,
     },
     frozen: {
       type: Boolean,
@@ -52,6 +55,7 @@ const BaseUserModel = new Schema(
     },
     password: {
       type: String,
+      private: true,
     },
     role: {
       type: String,
@@ -61,13 +65,19 @@ const BaseUserModel = new Schema(
     apiKeys: [
       {
         type: String,
+        private: true,
       },
     ],
   },
   {
+    uploads: true,
     discriminatorKey: 'kind',
+    restify: 'post get patch delete',
+    collectionPluralName: 'users',
+    collectionSingularName: 'user',
     timestamps: true,
     ownership: true,
+    version: true,
   },
 );
 

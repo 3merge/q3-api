@@ -3,6 +3,7 @@ const unique = require('mongoose-unique-validator');
 const autopopulate = require('mongoose-autopopulate');
 const paginate = require('mongoose-paginate-v2');
 
+mongoose.pluralize(null);
 mongoose.set('useEnsureIndex', true);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);

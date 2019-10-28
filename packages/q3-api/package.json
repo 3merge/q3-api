@@ -11,16 +11,18 @@
     ]
   },
   "dependencies": {
+    "aws-sdk": "^2.556.0",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "connect": "^3.7.0",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
+    "deep-diff": "^1.0.2",
     "dotenv": "^8.1.0",
     "express-fileupload": "^1.1.5",
     "express-rate-limit": "^5.0.0",
-    "flat": "^4.1.0",
+    "flat": "5.0.0",
     "generate-password": "^1.4.2",
     "helmet": "^3.20.0",
     "i18next": "^17.0.14",
@@ -32,6 +34,7 @@
     "mongoose-autopopulate": "^0.9.1",
     "mongoose-paginate-v2": "^1.3.3",
     "mongoose-unique-validator": "^2.0.3",
+    "mongoose-validator": "^2.1.0",
     "request-context": "^2.0.0"
   },
   "peerDependencies": {
@@ -42,7 +45,8 @@
     "q3-core-walker": "^1.0.0"
   },
   "devDependencies": {
+    "aws-sdk-mock": "^4.5.0",
     "supertest": "^4.0.2"
   },
-  "gitHead": "824e526a638198a3d3ddbd7d077bdf676f876711"
+  "gitHead": "0b3cd9783303e9853037b7bdacdaffbc549f4ad2"
 }

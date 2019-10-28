@@ -13,6 +13,8 @@ const ifArray = (input, next) =>
 
 // @TODO
 // this needs refactoring
+// needs conditional?
+
 const redact = (modelName) => {
   const locations = {
     request: [],
@@ -72,8 +74,8 @@ const redact = (modelName) => {
   return chain;
 };
 
-const verify = ({ user }, res, next) => {
-  if (!user) {
+const verify = ({ user, passedGrants }, res, next) => {
+  if (!user && !passedGrants) {
     res.status(401).send();
   } else {
     next();

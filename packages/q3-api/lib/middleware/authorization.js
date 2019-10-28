@@ -69,11 +69,8 @@ const middleware = (req, res, next) => {
         .msg('conditions')
         .throw();
 
-    // @TODO
-    // should return only fields I think...
-    // can format here also
-
-    ctx.set('q3-session:grant', result);
+    ctx.set('q3-session:grants', result);
+    req.passedGrants = true;
     return result;
   };
 

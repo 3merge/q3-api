@@ -1,4 +1,4 @@
-const validate = require('../lib/validate');
+const { validateBody } = require('../lib/validate');
 
 const req = { body: {} };
 const res = {};
@@ -11,7 +11,7 @@ beforeEach(() => {
 describe('validate', () => {
   it('should catch validation errors', () => {
     req.body = null;
-    validate(req, res, next);
+    validateBody(req, res, next);
     expect(next).toHaveBeenCalledWith(expect.any(Object));
   });
 
@@ -24,7 +24,7 @@ describe('validate', () => {
       dropUndefined: undefined,
     };
 
-    validate(req, res, next);
+    validateBody(req, res, next);
     expect(req.body).not.toHaveProperty('dropNull');
     expect(req.body).not.toHaveProperty('dropUndefined');
     expect(req.body).toMatchObject({

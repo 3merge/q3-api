@@ -36,6 +36,7 @@
     "jest": "^24.9.0",
     "jest-haste-map": "^24.9.0",
     "jest-resolve": "^24.9.0",
+    "jest-watch-typeahead": "^0.4.0",
     "jest-watch-yarn-workspaces": "^1.1.0",
     "lerna": "^3.16.4",
     "nodemon": "^1.19.1",

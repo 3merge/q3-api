@@ -3,7 +3,10 @@ const aa = require('express-async-handler');
 const dep = require('express-validator');
 const authorize = require('./lib/authorize');
 const effect = require('./lib/effect');
-const validate = require('./lib/validate');
+const {
+  validateBody,
+  validateIf,
+} = require('./lib/validate');
 
 const {
   redact,
@@ -36,7 +39,7 @@ const check = (...args) => {
 
 const compose = (ctr) =>
   flatten([
-    flatten(ctr.validation, [validate]),
+    flatten(ctr.validation, [validateBody]),
     flatten(ctr.authorization, [
       verify,
       authorizeRequest,
@@ -53,4 +56,5 @@ module.exports = {
   verify,
   compose,
   check,
+  validateIf,
 };

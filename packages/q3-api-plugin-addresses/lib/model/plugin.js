@@ -50,6 +50,7 @@ module.exports = (collectionSchema) => {
   collectionSchema.pre('save', function(next) {
     let err;
     if (
+      this.addresses &&
       this.addresses.filter((address) =>
         address ? address.kind === 'Billing' : false,
       ).length > 1

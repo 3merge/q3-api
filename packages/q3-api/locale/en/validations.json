@@ -23,5 +23,16 @@
   "region": "region",
   "postal": "postal",
   "country": "country",
-  "tel": "tel"
+  "tel": "tel",
+  "isString": "Must be a valid string",
+  "isFloat": "Must be a floating-point number",
+  "enum": "`{{value}}` is not a recognized value. Please enter: {{acceptable}}.",
+  "unique": "Must be unique and `{{value}}` is taken",
+  "isURL": "Must be a valid website, including its top-level domain and HTTP protocol",
+  "conditional": "Not a recognized discriminator",
+  "isMongoId": "Must be a valid Mongo document ID",
+  "isISO8601": "Must be a valid date string",
+  "isBoolean": "Must be true or false",
+  "scope": "Pricing must include either global, vendor or sku value",
+  "length": "Must meet required length"
 }
