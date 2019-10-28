@@ -1,6 +1,6 @@
 {
   "name": "q3-api-plugin-uploads",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "main": "lib/index.js",
   "jest": {
     "testEnvironment": "node"

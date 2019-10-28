@@ -1,6 +1,6 @@
 {
   "name": "q3-core-puncher",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "main": "index.js",
   "dependencies": {
     "lodash.get": "^4.4.2"
