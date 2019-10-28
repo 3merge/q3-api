@@ -4,6 +4,7 @@ const plugin = require('../commons');
 let Model;
 
 const pluginSchemaEnabled = new mongoose.Schema({
+  friend: mongoose.Types.ObjectId,
   name: String,
 });
 
@@ -27,5 +28,11 @@ describe('findStrictly', () => {
     expect(Model.findStrictly(id)).resolves.toHaveProperty(
       'id',
     );
+  });
+});
+
+describe('getObjectIds', () => {
+  it('should return array', async () => {
+    expect(Model.getReferentialPaths()).toEqual(['friend']);
   });
 });

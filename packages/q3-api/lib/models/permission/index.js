@@ -8,8 +8,25 @@ const { Schema } = mongoose;
 
 const constants = {
   OP_ENUM: ['Create', 'Read', 'Update', 'Delete'],
-  OWNERSHIP_ENUM: ['Any', 'Own', 'Shared'],
+  OWNERSHIP_ENUM: ['Any', 'Own'],
 };
+
+const Alias = new Schema(
+  {
+    local: {
+      type: String,
+      requied: true,
+    },
+    foreign: {
+      type: String,
+      requied: true,
+    },
+  },
+  {
+    disableOwnership: true,
+    disableArchive: true,
+  },
+);
 
 const PermissionModel = new Schema(
   {
@@ -22,6 +39,11 @@ const PermissionModel = new Schema(
       type: String,
       default: 'Own',
       enum: constants.OWNERSHIP_ENUM,
+    },
+    ownershipAliases: {
+      type: [Alias],
+      default: [],
+      includeInRest: true,
     },
     condition: {
       type: String,
@@ -44,7 +66,7 @@ const PermissionModel = new Schema(
     collectionPluralName: 'permissions',
     collectionSingularName: 'permission',
     timestamps: true,
-    ownership: true,
+    enableOwnership: true,
   },
 );
 
@@ -74,6 +96,7 @@ PermissionModel.methods.isValid = function() {
 };
 
 PermissionModel.pre('save', async function(next) {
+  console.log(this);
   const { role, op, coll, isNew } = this;
   let err;
 

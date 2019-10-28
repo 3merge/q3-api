@@ -28,10 +28,12 @@ mongoose.plugin((s) => {
         } = t;
 
         if (
-          name !== 'SingleNestedPath' &&
-          name !== 'DocumentArray' &&
-          pathname !== '_id' &&
-          pathname !== '__v'
+          (name !== 'SingleNestedPath' &&
+            name !== 'DocumentArray' &&
+            name !== 'DocumentArrayPath' &&
+            pathname !== '_id' &&
+            pathname !== '__v') ||
+          options.includeInRest
         )
           merge(output, {
             [field]: {
@@ -39,7 +41,7 @@ mongoose.plugin((s) => {
                 get(
                   options,
                   'validate.message',
-                  options.type.name,
+                  options.type.name || name,
                 ),
                 pick(options, [
                   'required',

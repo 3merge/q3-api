@@ -5,33 +5,38 @@ const { MODEL_NAMES } = require('../constants');
 
 const { Schema } = mongoose;
 
-const getFromSessionByKey = (key) =>
-  get(ctx.get('q3-session:user'), key, null);
-
-const groupName = (arg) =>
-  get(arg, 'schema._userProvidedOptions.group');
-
 class AccessHooks {
   static append() {
     if (this.isNew)
-      this.createdBy = getFromSessionByKey('id');
+      this.createdBy = get(
+        ctx.get('q3-session'),
+        'user.id',
+        null,
+      );
   }
 
   static identify() {
-    const grant = ctx.get('q3-session:grants');
-    const ownership = grant ? grant.ownership : 'Own';
+    const { bypassAuthorization } = this.options;
+    const session = ctx.get('q3-session');
+    const user = get(session, 'user', {});
+    const grant = get(session, 'grants', {});
+    const { ownershipAliases = [] } = grant;
+    const { ownership } = grant;
 
-    if (get(this, 'options.bypassAuthorization')) return;
+    if (bypassAuthorization || ownership === 'Any') return;
 
-    if (ownership === 'Shared')
+    if (ownershipAliases.length) {
+      this.or([
+        ...ownershipAliases.map(({ foreign, local }) => ({
+          [local]: user[foreign],
+        })),
+        { createdBy: user.id },
+      ]);
+    } else {
       this.where({
-        ownedBy: getFromSessionByKey(groupName(this)),
+        createdBy: user.id,
       });
-
-    if (ownership === 'Own')
-      this.where({
-        createdBy: getFromSessionByKey('id'),
-      });
+    }
   }
 }
 
@@ -39,23 +44,17 @@ const PluginSchema = new Schema({
   createdBy: {
     type: Schema.Types.ObjectId,
     ref: MODEL_NAMES.USERS,
+    private: true,
   },
 });
 
-const plugin = (schema) => {
-  const { ownership } = schema.options;
+module.exports = (schema) => {
+  if (schema.disableOwnership) return;
 
-  if (ownership) {
-    schema.pre('save', AccessHooks.append);
-    schema.pre('find', AccessHooks.identify);
-    schema.pre('findOne', AccessHooks.identify);
-  }
-
-  if (schema.options.group)
-    PluginSchema.ownedBy = [Schema.Types.ObjectId];
-
+  schema.pre('save', AccessHooks.append);
+  schema.pre('count', AccessHooks.identify);
+  schema.pre('countDocuments', AccessHooks.identify);
+  schema.pre('find', AccessHooks.identify);
+  schema.pre('findOne', AccessHooks.identify);
   schema.add(PluginSchema);
-  return schema;
 };
-
-module.exports = plugin;

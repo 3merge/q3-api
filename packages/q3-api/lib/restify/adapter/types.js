@@ -21,6 +21,8 @@ module.exports = (v) => {
   let output;
   const { options = {} } = v;
 
+  console.log(v.constructor.name);
+
   switch (v.constructor.name) {
     case STRING:
       output = {

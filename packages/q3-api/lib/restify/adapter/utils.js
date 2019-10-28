@@ -111,6 +111,20 @@ const getValidationType = (v = '', opts = {}) => {
       errorMessage: setDynamicErrorMsg('isNumber'),
     };
 
+  if (str.includes('array'))
+    return {
+      ...out,
+      errorMessage: setDynamicErrorMsg('isArray'),
+      custom: {
+        options: Array.isArray,
+      },
+      customSanitizer: {
+        options: (value) => {
+          return value.filter(Boolean);
+        },
+      },
+    };
+
   return out;
 };
 

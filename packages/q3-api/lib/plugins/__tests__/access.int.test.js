@@ -7,17 +7,13 @@ let get;
 const id = mongoose.Types.ObjectId();
 const company = mongoose.Types.ObjectId();
 
-const getFromSessionByKey = plugin.__get__(
-  'getFromSessionByKey',
-);
-
 const pluginSchemaEnabled = new mongoose.Schema(
   {
     name: String,
+    belongs: mongoose.Types.ObjectId,
   },
   {
-    ownership: true,
-    group: 'company',
+    enableOwnership: true,
   },
 );
 
@@ -32,20 +28,9 @@ beforeEach(() => {
   get.mockReset();
 });
 
-describe('request-context lookup', () => {
-  it('should return id', () => {
-    get.mockReturnValue({ id: 1 });
-    expect(getFromSessionByKey('id')).toBe(1);
-  });
-
-  it('should return null', () => {
-    expect(getFromSessionByKey('foo')).toBeNull();
-  });
-});
-
-describe('preSave', () => {
+describe('Save middleware', () => {
   it('should append createdBy meta', async () => {
-    get.mockReturnValue({ id });
+    get.mockReturnValue({ user: { id } });
     const doc = await Model.create({ name: 'Jon' });
     expect(doc).toHaveProperty('createdBy', id);
   });
@@ -61,36 +46,136 @@ describe('preSave', () => {
   });
 });
 
-describe('preFind', () => {
-  const mockWhere = async (expected) => {
+describe('Find middleware', () => {
+  it('should append createdBy meta', async () => {
+    get.mockReturnValue({
+      grants: {
+        ownership: 'Own',
+      },
+      user: {
+        id,
+      },
+    });
+
     const query = Model.findOne();
     const spy = jest.fn().mockReturnValue(query);
     query.where = spy;
     await query.exec();
+
     expect(spy).toHaveBeenCalledWith(
-      expect.objectContaining(expected),
+      expect.objectContaining({
+        createdBy: id,
+      }),
     );
-  };
-
-  it('should append createdBy meta', async () => {
-    get.mockReturnValue({
-      ownership: 'Own',
-      id,
-    });
-
-    await mockWhere({
-      createdBy: id,
-    });
   });
 
-  it('should append ownedBy meta', async () => {
+  it('should append alias meta', async () => {
     get.mockReturnValue({
-      ownership: 'Shared',
-      company,
+      grants: {
+        ownership: 'Own',
+        ownershipAliases: [
+          {
+            local: 'belongs',
+            foreign: 'group',
+          },
+        ],
+      },
+      user: {
+        id,
+        group: 'foo',
+      },
     });
 
-    await mockWhere({
-      ownedBy: company,
+    const query = Model.findOne();
+    const spy = jest.fn().mockReturnValue(query);
+    query.or = spy;
+    await query.exec();
+
+    expect(spy).toHaveBeenCalledWith([
+      { belongs: 'foo' },
+      { createdBy: id },
+    ]);
+  });
+
+  it('should skip all authorization', async () => {
+    get.mockReturnValue({
+      grants: {
+        ownership: 'Any',
+      },
     });
+
+    const query = Model.findOne();
+    query.where = jest.fn();
+    query.or = jest.fn();
+    await query.exec();
+
+    expect(query.where).not.toHaveBeenCalled();
+    expect(query.or).not.toHaveBeenCalled();
+  });
+});
+
+describe('Plugin integration test', () => {
+  const seedDB = async (o) => {
+    get.mockReturnValue(o);
+
+    await Model.create([
+      { name: 'Foo', belongs: id },
+      { name: 'Bar', belongs: id },
+      { name: 'Quux' },
+    ]);
+  };
+
+  beforeEach(async () => {
+    await Model.deleteMany({});
+  });
+
+  it('should filter by belongs property', async () => {
+    const session = {
+      grants: {
+        ownership: 'Own',
+        ownershipAliases: [
+          {
+            local: 'belongs',
+            foreign: 'company',
+          },
+        ],
+      },
+      user: {
+        id,
+      },
+    };
+
+    await seedDB(session);
+    await seedDB({
+      ...session,
+      user: {
+        id: mongoose.Types.ObjectId(),
+        company: id,
+      },
+    });
+
+    expect(await Model.countDocuments().exec()).toBe(5);
+  });
+
+  it('should filter by creator', async () => {
+    const newID = mongoose.Types.ObjectId();
+    const session = {
+      grants: {
+        ownership: 'Own',
+      },
+      user: {
+        id,
+      },
+    };
+
+    await seedDB(session);
+    await seedDB({
+      ...session,
+      user: {
+        id: newID,
+      },
+    });
+
+    expect(await Model.countDocuments().exec()).toBe(3);
   });
 });

@@ -126,6 +126,20 @@ const plugin = (schema) => {
       .flat();
   };
 
+  schema.statics.getReferentialPaths = function() {
+    const arr = [];
+    this.schema.eachPath((pathname, schematype) => {
+      if (
+        schematype.constructor.name === 'ObjectId' &&
+        pathname !== '_id' &&
+        pathname !== 'createdBy'
+      )
+        arr.push(pathname);
+    });
+
+    return arr;
+  };
+
   schema.statics.getRequiredFields = function() {
     return Object.entries(this.schema.paths)
       .filter(([, value]) => {

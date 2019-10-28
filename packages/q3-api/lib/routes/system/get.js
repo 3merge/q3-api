@@ -8,7 +8,10 @@ const SystemInformationController = async (req, res) => {
   ).reduce(
     (acc, [key, v]) =>
       Object.assign(acc, {
-        [key]: v.getAllFields(),
+        [key]: {
+          paths: v.getAllFields(),
+          refs: v.getReferentialPaths(),
+        },
       }),
     {},
   );
