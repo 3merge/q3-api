@@ -60,6 +60,27 @@ const setDynamicErrorMsg = (term, vars = {}) => (
     value,
   });
 
+const decypherMessage = (v) => {
+  let validator;
+
+  const containsWord = (n) =>
+    String(v === 'object' ? v.message : '')
+      .toLowerCase()
+      .includes(n);
+
+  if (containsWord('email')) validator = 'isEmail';
+  if (containsWord('phone')) validator = 'isMobilePhone';
+  if (containsWord('url')) validator = 'isURL';
+
+  return {
+    isLength: { options: { min: 1 } },
+    errorMessage: setDynamicErrorMsg(
+      validator || 'isString',
+    ),
+    ...(validator && { [validator]: true }),
+  };
+};
+
 const mapToValue = (o = {}, fn) =>
   Object.entries(o).reduce((a, [name, props]) => {
     const copy = { ...a };
@@ -92,6 +113,13 @@ const getValidationType = (v = '', opts = {}) => {
       },
     };
 
+  if (str.includes('string'))
+    return {
+      ...out,
+      isLength: { options: { min: 1 } },
+      errorMessage: setDynamicErrorMsg('isString'),
+    };
+
   if (str.includes('email'))
     return {
       ...out,
@@ -99,11 +127,18 @@ const getValidationType = (v = '', opts = {}) => {
       errorMessage: setDynamicErrorMsg('isEmail'),
     };
 
-  if (str.includes('string'))
+  if (str.includes('phone'))
     return {
       ...out,
-      isAlphanumeric: true,
-      errorMessage: setDynamicErrorMsg('isString'),
+      isMobilePhone: true,
+      errorMessage: setDynamicErrorMsg('isPhone'),
+    };
+
+  if (str.includes('url'))
+    return {
+      ...out,
+      isURL: true,
+      errorMessage: setDynamicErrorMsg('isUrl'),
     };
 
   if (str.includes('number'))
@@ -132,6 +167,13 @@ const getValidationType = (v = '', opts = {}) => {
       ...out,
       isISO8601: true,
       errorMessage: setDynamicErrorMsg('isDate'),
+    };
+
+  if (str.includes('bool'))
+    return {
+      ...out,
+      isBoolean: true,
+      errorMessage: setDynamicErrorMsg('isBoolean'),
     };
 
   return out;

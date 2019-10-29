@@ -1,5 +1,6 @@
-const mongoose = require('../config/mongoose');
-
-mongoose.plugin(require('./commons'));
-mongoose.plugin(require('./access'));
-mongoose.plugin(require('./versioning'));
+/* eslint-disable global-require */
+module.exports = (m) => {
+  m.plugin(require('./commons'));
+  m.plugin(require('./access'));
+  m.plugin(require('./versioning'));
+};

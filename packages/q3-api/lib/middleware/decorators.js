@@ -40,6 +40,8 @@ const stripMongoDBProps = (i) => {
 
     delete json._id;
     delete json.__v;
+    delete json.password;
+    delete json.secret;
 
     Object.entries(json).forEach(([k, v]) => {
       if (typeof v !== 'object') return;

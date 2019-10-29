@@ -1,5 +1,6 @@
 const { get } = require('lodash');
 const { compose, verify } = require('q3-core-composer');
+const events = require('../../events/emitter');
 const mongoose = require('../../config/mongoose');
 
 const SystemInformationController = async (req, res) => {
@@ -8,16 +9,22 @@ const SystemInformationController = async (req, res) => {
   ).reduce(
     (acc, [key, v]) =>
       Object.assign(acc, {
-        [key]: {
-          paths: v.getAllFields(),
-          refs: v.getReferentialPaths(),
-        },
+        [key]: v
+          ? {
+              paths: v.getAllFields(),
+              refs: v.getReferentialPaths(),
+            }
+          : {
+              paths: [],
+              refs: [],
+            },
       }),
     {},
   );
 
   res.ok({
     ...get(req, 'app.locals.authorization', {}),
+    events: events.eventNames(),
     collections,
   });
 };

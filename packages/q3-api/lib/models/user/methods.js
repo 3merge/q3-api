@@ -33,10 +33,16 @@ module.exports = class UserAuthDecorator {
     return diff.asHours() > 24;
   }
 
-  static async isListeningFor(listensTo = '') {
-    return this.find({
-      listensTo,
-    }).exec();
+  static async isListeningFor(listens = '') {
+    try {
+      const users = await this.find({
+        listens,
+      }).exec();
+
+      return users ? users.map((user) => user.email) : [];
+    } catch (e) {
+      return [];
+    }
   }
 
   static async findByApiKey(str = '') {
@@ -48,7 +54,10 @@ module.exports = class UserAuthDecorator {
   }
 
   static async $findOneStrictly(args) {
-    const doc = await this.findOne(args);
+    const doc = await this.findOne(args)
+      .setOptions({ bypassAuthorization: true })
+      .exec();
+
     if (!doc)
       exception('BadRequest')
         .msg('account')
@@ -94,10 +103,10 @@ module.exports = class UserAuthDecorator {
     });
   }
 
-  async setSecret() {
+  async setSecret(skipSave) {
     this.secret = generateRandomSecret();
     this.secretIssuedOn = new Date();
-    return this.save();
+    return skipSave ? this : this.save();
   }
 
   async setPassword(s) {
@@ -111,10 +120,12 @@ module.exports = class UserAuthDecorator {
     const password =
       s ||
       generatePsw.generate({
-        length: 10,
+        length: 20,
         numbers: true,
         symbols: true,
         uppercase: true,
+        excludeSimilarCharacters: true,
+        exclude: '`,\'".',
       });
 
     this.set({

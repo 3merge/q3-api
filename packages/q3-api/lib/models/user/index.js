@@ -1,22 +1,18 @@
-const { Schema } = require('mongoose');
+const { Schema, SchemaTypes } = require('mongoose');
 const methods = require('./methods');
-
-const isValidEmail = (v) => {
-  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(v).toLowerCase());
-};
+const emitter = require('../../events/emitter');
 
 const BaseUserModel = new Schema(
   {
     email: {
-      type: String,
+      type: SchemaTypes.Email,
       required: true,
-      validate: isValidEmail,
       unique: true,
     },
     secret: {
       type: String,
-      required: true,
+      select: false,
+      private: true,
     },
     secretIssuedOn: {
       type: Date,
@@ -49,25 +45,24 @@ const BaseUserModel = new Schema(
       default: 0,
       private: true,
     },
+    listens: [String],
     frozen: {
       type: Boolean,
       default: false,
-    },
-    password: {
-      type: String,
-      private: true,
     },
     role: {
       type: String,
       required: true,
     },
-    listensTo: [String],
-    apiKeys: [
-      {
-        type: String,
-        private: true,
-      },
-    ],
+    password: {
+      type: String,
+      private: true,
+    },
+    apiKeys: {
+      type: [String],
+      select: false,
+      private: true,
+    },
   },
   {
     uploads: true,
@@ -82,5 +77,14 @@ const BaseUserModel = new Schema(
 );
 
 BaseUserModel.loadClass(methods);
+
+BaseUserModel.pre('save', function setSecret() {
+  this.wasNew = this.isNew;
+  if (this.isNew) this.setSecret(true);
+});
+
+BaseUserModel.post('save', function emitVerification() {
+  if (this.wasNew) emitter.emit('onNewUser', this);
+});
 
 module.exports = BaseUserModel;

@@ -215,6 +215,8 @@ const plugin = (schema) => {
       virtuals: true,
     },
   });
+
+  return schema;
 };
 
 module.exports = plugin;

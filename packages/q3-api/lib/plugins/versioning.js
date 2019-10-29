@@ -51,7 +51,7 @@ const plugin = (schema) => {
         diff,
       };
 
-      if (hasLength)
+      if (hasLength && prev)
         this.versions = [
           changelog,
           ...(prev.versions ? prev.versions : []),

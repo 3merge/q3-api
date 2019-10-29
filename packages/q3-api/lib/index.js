@@ -7,12 +7,12 @@ const app = require('./config/express');
 const mongoose = require('./config/mongoose');
 const manageErrors = require('./errors');
 const restify = require('./restify');
+const eventEmitter = require('./events');
 const {
   handleUncaughtErrors,
 } = require('./middleware/decorators');
 
 require('./middleware');
-require('./plugins');
 
 const { Users } = require('./models');
 
@@ -24,8 +24,7 @@ Q3.$app = app;
 Q3.$mongoose = mongoose;
 Q3.User = Users;
 Q3.exception = manageErrors;
-
-// restify all of mongoos
+Q3.emitter = eventEmitter;
 
 Q3.config = (args = {}) => {
   Object.assign(app.locals, args);

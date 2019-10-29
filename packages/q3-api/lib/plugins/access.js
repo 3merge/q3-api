@@ -1,9 +1,7 @@
 const { get } = require('lodash');
 const ctx = require('request-context');
-const mongoose = require('../config/mongoose');
+const { Schema } = require('mongoose');
 const { MODEL_NAMES } = require('../constants');
-
-const { Schema } = mongoose;
 
 class AccessHooks {
   static append() {
