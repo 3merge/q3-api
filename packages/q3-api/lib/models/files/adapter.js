@@ -1,10 +1,10 @@
 const AWSInterface = require('../../config/aws');
 
 module.exports = class FileUploadAdapter {
-  async handleUpload({ sensitive = false, files }) {
+  async handleUpload({ files }) {
     const sdk = AWSInterface();
 
-    const method = sdk.addToBucket(sensitive);
+    const method = sdk.addToBucket(true);
     const data = Object.values(files).map((file) => [
       `${this.id}/${file.name}`,
       file,
@@ -14,7 +14,7 @@ module.exports = class FileUploadAdapter {
       Promise.all(
         keys.map((name) =>
           this.uploads.push({
-            sensitive,
+            sensitive: true,
             name,
           }),
         ),
@@ -26,11 +26,12 @@ module.exports = class FileUploadAdapter {
 
   async handleFeaturedUpload({ files }) {
     const sdk = AWSInterface();
+    const file = files[Object.keys(files)[0]];
 
     const method = sdk.addToBucket();
     const response = await method([
-      `${this.id}/${files.featured.name}`,
-      files.featured,
+      `${this.id}/${file.name}`,
+      file,
     ]);
 
     this.featuredUpload = response;

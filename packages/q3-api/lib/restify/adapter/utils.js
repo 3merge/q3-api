@@ -144,7 +144,7 @@ const getValidationType = (v = '', opts = {}) => {
   if (str.includes('number'))
     return {
       ...out,
-      isInt: true,
+      isFloat: true,
       errorMessage: setDynamicErrorMsg('isNumber'),
     };
 

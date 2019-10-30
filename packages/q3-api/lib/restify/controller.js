@@ -4,6 +4,8 @@ const {
   redact,
   check,
 } = require('q3-core-composer');
+const aqp = require('api-query-params');
+
 const exception = require('../errors');
 const {
   discernIfValidationSchemaIsDiscriminated,
@@ -62,11 +64,12 @@ module.exports = ({
 
   const PostFile = async ({ params, files }, res) => {
     const doc = await Model.findStrictly(params.resourceID);
-
-    if (files.featured && doc.handleFeaturedUpload) {
+    if (
+      files &&
+      Object.keys(files).length &&
+      doc.handleFeaturedUpload
+    ) {
       await doc.handleFeaturedUpload({ files });
-    } else {
-      exception('MissingResource').throw();
     }
 
     res.acknowledge();
@@ -77,10 +80,36 @@ module.exports = ({
   ];
 
   const List = async ({ query, marshal }, res) => {
-    const { docs, ...rest } = await Model.list(query);
+    const {
+      sort,
+      limit = 50,
+      skip = 1,
+      projection: select,
+      filter: { search, ...where },
+    } = aqp(query);
+
+    const params = Object.assign(
+      Model.searchBuilder(search),
+      where,
+    );
+
+    const {
+      docs,
+      totalDocs,
+      hasNextPage,
+      hasPrevPage,
+    } = await Model.paginate(params, {
+      page: skip > 0 ? skip : 1,
+      sort,
+      select,
+      limit,
+    });
+
     res.ok({
-      ...rest,
       [collectionPluralName]: marshal(docs),
+      total: totalDocs,
+      hasNextPage,
+      hasPrevPage,
     });
   };
 
@@ -107,6 +136,7 @@ module.exports = ({
 
   const Get = async ({ params, marshal }, res) => {
     const doc = await Model.findStrictly(params.resourceID);
+
     res.ok({
       [collectionSingularName]: marshal(doc),
     });
@@ -115,7 +145,7 @@ module.exports = ({
   Get.authorization = [
     redact(collectionName)
       .inRequest('query')
-      .inResponse(collectionPluralName),
+      .inResponse(collectionSingularName),
   ];
 
   const Delete = async ({ params, t }, res) => {

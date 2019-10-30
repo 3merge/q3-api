@@ -32,29 +32,27 @@ const detectErrorByName = (name) => {
 
 const stripMongoDBProps = (i) => {
   try {
-    const json = removeEmpty(i.toJSON());
+    if (typeof i !== 'object') return i;
 
-    if (json.id && json.id.toString) {
-      json.id = json.id.toString();
-    }
+    const json = JSON.parse(JSON.stringify(i));
+    const cleaned = removeEmpty(json);
 
-    delete json._id;
-    delete json.__v;
-    delete json.password;
-    delete json.secret;
+    delete cleaned._id;
+    delete cleaned.__v;
+    delete cleaned.password;
+    delete cleaned.secret;
 
-    Object.entries(json).forEach(([k, v]) => {
-      if (typeof v !== 'object') return;
-      if (v._bsontype === 'ObjectID') {
-        json[k] = Types.ObjectId(v).toString();
-      } else if (!(v instanceof Date)) {
-        json[k] = stripMongoDBProps(v);
-      }
-    });
-
-    return json;
+    return Object.entries(cleaned).reduce(
+      (a, [k, v]) =>
+        Object.assign(a, {
+          [k]: Array.isArray(v)
+            ? v.map(stripMongoDBProps)
+            : stripMongoDBProps(v),
+        }),
+      cleaned,
+    );
   } catch (e) {
-    return removeEmpty(i);
+    return JSON.parse(JSON.stringify(i));
   }
 };
 

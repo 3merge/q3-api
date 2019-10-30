@@ -1,6 +1,7 @@
 /* eslint-disable func-names, no-param-reassign */
 const { Schema } = require('mongoose');
 const { invoke, get } = require('lodash');
+const Notes = require('../models/note');
 const Files = require('../models/files');
 
 const exception = require('../errors');
@@ -32,24 +33,35 @@ const plugin = (schema) => {
     return doc.save();
   };
 
-  schema.statics.searchBuilder = function(
-    term,
-    fields = [],
-  ) {
+  schema.statics.searchBuilder = function(term) {
     if (!term) return {};
-    const statement = String(
-      Array.isArray(term) ? term.join('|') : term,
-    )
+
+    const arr = [];
+    const statement = String(term || '')
       .split(' ')
       .map((phrase) => `(?=.*${phrase})`)
-      .join('');
-    const $regex = new RegExp(`^${statement}.*$`, 'gi');
+      .join('|');
 
-    return {
-      $or: fields.map((field) => ({
-        [field]: { $regex },
-      })),
-    };
+    const iterateSchema = (s, prevpath) =>
+      s.eachPath((path, obj) => {
+        const join = [prevpath, path]
+          .filter((i = '') => i.trim())
+          .join('.');
+
+        if (obj.options.searchable) arr.push(join);
+        if (obj.schema) iterateSchema(obj.schema, join);
+      });
+
+    const $regex = new RegExp(`^${statement}.*$`, 'gi');
+    iterateSchema(schema);
+
+    return arr.length
+      ? {
+          $or: arr.map((field) => ({
+            [field]: { $regex },
+          })),
+        }
+      : {};
   };
 
   schema.methods.getSubDocument = async function(
@@ -202,6 +214,10 @@ const plugin = (schema) => {
   schema.methods.version = function(a) {
     return this.set(a).save();
   };
+
+  if (schema.options.uploads) {
+    schema.add(Notes);
+  }
 
   if (schema.options.uploads) {
     schema.add(Files);

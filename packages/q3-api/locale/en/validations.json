@@ -39,5 +39,6 @@
   "isEmail": "Must be a valid email address",
   "isNumber": "Must be a number",
   "isPhone": "Must be a valid phone number",
-  "isDate": "Must be a valid date"
+  "isDate": "Must be a valid date",
+  "incorrectPassword": "Incorrect user password"
 }

@@ -24,9 +24,23 @@ class ErrorDispatch {
   }
 
   field(fieldName) {
-    this.errors[fieldName] = this.dp.t(
-      `validations:${fieldName}`,
-    );
+    const asServerError = (v) => ({
+      msg: this.dp.t(`validations:${v}`),
+      in: 'application',
+    });
+
+    if (typeof fieldName === 'object') {
+      const { name, msg, value } = fieldName;
+      this.errors[name] = {
+        ...asServerError(msg),
+        value,
+      };
+    } else {
+      this.errors[fieldName] = {
+        msg: asServerError(fieldName),
+      };
+    }
+
     return this;
   }
 

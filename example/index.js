@@ -2,16 +2,6 @@ require('./models');
 const Q3 = require('q3-api');
 const walker = require('q3-core-walker');
 
-const clearDB = async () => {
-  // await Q3.User.deleteMany({});
-  // await Q3.model('q3-api-permissions').deleteMany({});
-};
-
-const seedDB = async () => {
-  // await Q3.User.create(users);
-  // await Q3.model('q3-api-permissions').create(permissions);
-};
-
 Q3.config({
   authorization: {
     roles: ['Assassin', 'King', 'Badass'],
@@ -21,6 +11,6 @@ Q3.config({
 
 Q3.routes(walker(__dirname));
 
-Q3.connect()
-  .then(clearDB)
-  .then(seedDB);
+Q3.connect().then(() => {
+  // noop
+});

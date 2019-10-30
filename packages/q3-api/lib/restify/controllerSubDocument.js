@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const { get } = require('lodash');
 const {
   check,
   compose,
@@ -8,6 +9,25 @@ const {
   discernIfValidationSchemaIsDiscriminated,
 } = require('./utils');
 
+const constructPopulatePaths = (Model) => (doc) => {
+  const fields = get(
+    Model,
+    'schema.options.onPopulate',
+    {},
+  );
+
+  return Object.entries(fields).reduce(
+    (a, [path, select], i) => {
+      a.populate({ path, select });
+
+      return i === Object.keys(fields).length - 1
+        ? doc.execPopulate()
+        : a;
+    },
+    doc,
+  );
+};
+
 module.exports = ({
   Model,
   field,
@@ -16,6 +36,7 @@ module.exports = ({
   discriminatorKey,
 }) => {
   const app = Router();
+  const populate = constructPopulatePaths(Model);
   const validation = discernIfValidationSchemaIsDiscriminated(
     validationSchema,
     discriminatorKey,
@@ -36,7 +57,7 @@ module.exports = ({
   ) => {
     const doc = await getParentResource(params.resourceID);
     await doc.set({ [field]: body }).save();
-    await doc.populate().execPopulate();
+    await populate(doc);
 
     res.create({
       message: t('messages:newSubResourceAdded'),
@@ -58,6 +79,7 @@ module.exports = ({
     res,
   ) => {
     const doc = await getParentResource(params.resourceID);
+    await populate(doc);
 
     if (!files) {
       await doc.pushSubDocument(field, body);
@@ -83,6 +105,8 @@ module.exports = ({
 
   const Get = async ({ marshal, params }, res) => {
     const doc = await getParentResource(params.resourceID);
+    await populate(doc);
+
     res.ok({
       [field]: marshal(doc[field]),
     });
@@ -109,11 +133,11 @@ module.exports = ({
       body,
     );
 
-    const populated = await doc.populate().execPopulate();
+    await populate(doc);
 
     res.update({
       message: t('messages:subResourceUpdated'),
-      [field]: marshal(populated[field]),
+      [field]: marshal(doc[field]),
     });
   };
 

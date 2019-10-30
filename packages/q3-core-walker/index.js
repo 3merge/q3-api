@@ -2,7 +2,7 @@ const { Router } = require('express');
 const { readdirSync } = require('fs');
 const { resolve, relative, join } = require('path');
 
-const appendID = (str) => `:${str}ID`;
+const appendID = (str) => `:${str.replace(/-/g, '')}ID`;
 
 const appendIDToLast = (p, i, c) =>
   i === c.length - 1 ? p : `${p}/${appendID(p)}`;

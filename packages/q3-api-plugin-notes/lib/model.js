@@ -42,17 +42,6 @@ class ModelDecorator {
 module.exports = (ref = 'q3-api-users') => {
   const Base = new Schema(
     {
-      topic: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        unique: true,
-      },
-      subscribers: [
-        {
-          type: Schema.Types.ObjectId,
-          ref,
-        },
-      ],
       thread: [
         {
           author: {
@@ -73,24 +62,6 @@ module.exports = (ref = 'q3-api-users') => {
   );
 
   Base.loadClass(ModelDecorator);
-
-  // eslint-disable-next-line
-  Base.pre('save', async function(next) {
-    let err;
-    if (
-      this.isNew &&
-      (await this.constructor
-        .countDocuments({
-          topic: this.topic,
-        })
-        .exec())
-    )
-      err = exception('Conflict')
-        .msg('duplicateNote')
-        .boomerang();
-
-    next(err);
-  });
 
   return Base;
 };

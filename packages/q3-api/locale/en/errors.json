@@ -1,8 +1,6 @@
 {
   "account": "account",
-  "credentials": "credentials",
   "password": "password",
-  "prohibited": "prohibited",
   "grants": "grants",
   "duplicate": "duplicate",
   "addressesNotRemoved": "addressesNotRemoved",
@@ -11,5 +9,8 @@
   "unknownCollection": "unknownCollection",
   "addressNotRemoved": "addressNotRemoved",
   "conditions": "conditions",
-  "validationError": "Failed request validation"
+  "validationError": "Failed request validation",
+  "prohibited": "Account has been blocked due to suspicious activity",
+  "fieldPermissions": "Insufficient field-level permissions on this role type",
+  "credentials": "Bad access credentials"
 }

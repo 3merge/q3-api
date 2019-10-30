@@ -11,6 +11,7 @@
     ]
   },
   "dependencies": {
+    "api-query-params": "^4.14.0",
     "aws-sdk": "^2.556.0",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
@@ -33,6 +34,7 @@
     "moment": "^2.24.0",
     "mongoose-autopopulate": "^0.9.1",
     "mongoose-paginate-v2": "^1.3.3",
+    "mongoose-string-query": "^0.2.7",
     "mongoose-type-email": "^1.0.11",
     "mongoose-type-phone": "^1.0.1",
     "mongoose-type-url": "^1.0.6",
@@ -51,5 +53,5 @@
     "aws-sdk-mock": "^4.5.0",
     "supertest": "^4.0.2"
   },
-  "gitHead": "b61f680247a00b416afcbda93073132b05244fc8"
+  "gitHead": "8ebb5b1bbfa63bd5aef64743f7f3d8a327f186b0"
 }
