@@ -29,8 +29,9 @@ const plugin = (schema) => {
     const doc = await this.findById(id).exec();
     if (!doc) return null;
 
-    doc.active = false;
-    return doc.save();
+    return doc.updateOne({
+      active: false,
+    });
   };
 
   schema.statics.searchBuilder = function(term) {
@@ -53,7 +54,14 @@ const plugin = (schema) => {
       });
 
     const $regex = new RegExp(`^${statement}.*$`, 'gi');
-    iterateSchema(schema);
+    iterateSchema(this.schema);
+
+    /*
+    iterateSchema(
+      Object.values(
+        this.schema.discriminators || {},
+      ).forEach((d) => iterateSchema(d.schema)),
+    ); */
 
     return arr.length
       ? {
@@ -123,7 +131,11 @@ const plugin = (schema) => {
   };
 
   schema.statics.findStrictly = async function(id) {
-    const doc = await this.findById(id).exec();
+    const doc = await this.findOne({
+      _id: id,
+      active: true,
+    }).exec();
+
     if (!doc)
       exception('ResourceNotFound')
         .msg('missing')
