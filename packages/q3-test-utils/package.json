@@ -10,5 +10,5 @@
   "jest": {
     "preset": "./index.js"
   },
-  "gitHead": "1714cc0b375145a5ca4c47ea80560a471d3ccbb9"
+  "gitHead": "420783bd6d5430fb818f1a5211aa09947d4a13ae"
 }

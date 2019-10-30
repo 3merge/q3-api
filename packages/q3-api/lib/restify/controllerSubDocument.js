@@ -79,11 +79,10 @@ module.exports = ({
     res,
   ) => {
     const doc = await getParentResource(params.resourceID);
-    await populate(doc);
 
     if (!files) {
       await doc.pushSubDocument(field, body);
-      await doc.populate().execPopulate();
+      await populate(doc);
     } else {
       await doc.handleUpload({ files, ...body });
     }

@@ -8,6 +8,7 @@ const BaseUserModel = new Schema(
       type: SchemaTypes.Email,
       required: true,
       unique: true,
+      searchable: true,
     },
     secret: {
       type: String,
@@ -21,10 +22,12 @@ const BaseUserModel = new Schema(
     firstName: {
       type: String,
       required: true,
+      searchable: true,
     },
     lastName: {
       type: String,
       required: true,
+      searchable: true,
     },
     lang: {
       type: String,
@@ -53,6 +56,7 @@ const BaseUserModel = new Schema(
     role: {
       type: String,
       required: true,
+      searchable: true,
     },
     password: {
       type: String,
