@@ -1,6 +1,6 @@
 {
   "name": "q3-api-plugin-notes",
-  "version": "1.0.27",
+  "version": "1.0.28",
   "main": "lib/index.js",
   "jest": {
     "testEnvironment": "node",
@@ -20,7 +20,7 @@
   "devDependencies": {
     "jest-environment-node": "^24.9.0",
     "q3-api-mocks": "^1.0.20",
-    "q3-test-utils": "^1.0.27",
+    "q3-test-utils": "^1.0.28",
     "supertest": "^4.0.2"
   },
   "gitHead": "0910c3e16e2728678d05d462696ede7f7d65302b"

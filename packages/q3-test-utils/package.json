@@ -1,6 +1,6 @@
 {
   "name": "q3-test-utils",
-  "version": "1.0.27",
+  "version": "1.0.28",
   "main": "index.js",
   "dependencies": {
     "jest-environment-node": "^24.9.0",
