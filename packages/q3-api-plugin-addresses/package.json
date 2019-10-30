@@ -1,6 +1,6 @@
 {
   "name": "q3-api-plugin-addresses",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "main": "lib/index.js",
   "license": "MIT",
   "jest": {
@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "q3-api-mocks": "^1.0.20",
-    "q3-test-utils": "^1.0.25",
+    "q3-test-utils": "^1.0.26",
     "supertest": "^4.0.2"
   },
   "peerDependencies": {
