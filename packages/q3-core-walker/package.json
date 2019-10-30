@@ -1,6 +1,6 @@
 {
   "name": "q3-core-walker",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "main": "index.js",
   "jest": {
     "testEnvironment": "node"

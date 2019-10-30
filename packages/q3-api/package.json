@@ -1,6 +1,6 @@
 {
   "name": "q3-api",
-  "version": "1.0.28",
+  "version": "1.0.29",
   "description": "REST api configurations",
   "main": "lib/index.js",
   "license": "MIT",
