@@ -19,6 +19,7 @@
     "connect": "^3.7.0",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
+    "csv-express": "^1.2.2",
     "deep-diff": "^1.0.2",
     "dotenv": "^8.1.0",
     "express-fileupload": "^1.1.5",
@@ -53,5 +54,5 @@
     "aws-sdk-mock": "^4.5.0",
     "supertest": "^4.0.2"
   },
-  "gitHead": "0910c3e16e2728678d05d462696ede7f7d65302b"
+  "gitHead": "4772d6cd9db6831f5545c02aee2369d10cd05e3d"
 }

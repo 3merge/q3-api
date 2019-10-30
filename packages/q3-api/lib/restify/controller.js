@@ -90,8 +90,8 @@ module.exports = ({
 
     const params = Object.assign(
       Model.searchBuilder(search),
-      { active: true },
       where,
+      { active: true },
     );
 
     const {
