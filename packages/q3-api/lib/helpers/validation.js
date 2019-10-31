@@ -19,7 +19,7 @@ module.exports.checkNewPassword = check('newPassword')
     return value;
   })
   .withMessage((v, { req }) =>
-    req.translate('validations:newPassword'),
+    req.t('validations:newPassword'),
   );
 
 module.exports.reportMongoId = (v, { req }) =>
