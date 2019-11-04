@@ -8,11 +8,10 @@
     "mongoose-type-url": "^1.0.6",
     "mongoose-validator": "^2.1.0",
     "q3-api": "^1.0.31",
-    "q3-api-plugin-addresses": "^1.0.31",
     "q3-core-composer": "^1.0.20",
     "q3-core-mailer": "^1.0.20",
     "q3-core-responder": "^1.0.21",
     "q3-core-walker": "^1.0.27"
   },
-  "gitHead": "1ed7e0072b05603ffbea5688991b6c2962a27e21"
+  "gitHead": "24b07fc92698b652b8941b372eeaac70a0a0d999"
 }

@@ -1,5 +1,4 @@
 const { Schema } = require('mongoose');
-const { plugin } = require('q3-api-plugin-addresses');
 
 const Vertical = new Schema(
   {
@@ -23,5 +22,4 @@ const Startup = new Schema({
   vertical: Vertical,
 });
 
-Startup.plugin(plugin);
 module.exports = Startup;

@@ -1,5 +1,4 @@
 const { Schema, SchemaTypes } = require('mongoose');
-const { plugin } = require('q3-api-plugin-addresses');
 
 const SubDocumentArray = new Schema({
   name: {
@@ -67,8 +66,6 @@ const Company = new Schema(
     },
   },
 );
-
-Company.plugin(plugin);
 
 // indexing
 Company.index(
