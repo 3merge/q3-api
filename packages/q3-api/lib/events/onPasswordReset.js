@@ -1,25 +1,25 @@
 const mailer = require('q3-core-mailer');
-const i18Base = require('../config/i18next');
+const { i18n } = require('q3-core-responder');
 
 const EVENT_NAME = 'onPasswordReset';
 
 require('./emitter').on(
   EVENT_NAME,
   async ({ email, password, firstName, lang }) => {
-    const i18n = i18Base.cloneInstance({
+    const i18nClone = i18n.cloneInstance({
       lng: lang,
     });
 
-    const subject = i18n.t('messages:passwordReset');
-    const body = i18n.t('messages:temporaryPassword');
-    const button = i18n.t('labels:login');
-    const title = i18n.t('messages:greetings', {
+    const subject = i18nClone.t('messages:passwordReset');
+    const body = i18nClone.t('messages:temporaryPassword');
+    const button = i18nClone.t('labels:login');
+    const title = i18nClone.t('messages:greetings', {
       firstName,
     });
 
     const rows = [
       {
-        label: i18n.t('labels:temporaryPassword'),
+        label: i18nClone.t('labels:temporaryPassword'),
         value: `"${password}"`,
       },
     ];

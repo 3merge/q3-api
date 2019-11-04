@@ -1,9 +1,9 @@
 const { compose, check } = require('q3-core-composer');
+const { exception } = require('q3-core-responder');
 const {
   generateIDToken,
 } = require('../../models/user/helpers');
 const { Users } = require('../../models');
-const exception = require('../../errors');
 const { checkEmail } = require('../../helpers/validation');
 
 const LoginIntoAccount = async (

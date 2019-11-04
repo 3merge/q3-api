@@ -1,6 +1,6 @@
 const { compose } = require('q3-core-composer');
+const { exception } = require('q3-core-responder');
 const { Users } = require('../../models');
-const exception = require('../../errors');
 const { checkEmail } = require('../../helpers/validation');
 
 const LookupAccount = async ({ query: { email } }, res) => {

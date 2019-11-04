@@ -1,6 +1,6 @@
 const moment = require('moment');
 const generatePsw = require('generate-password');
-const exception = require('../../errors');
+const { exception } = require('q3-core-responder');
 const {
   compareWithHash,
   createHash,

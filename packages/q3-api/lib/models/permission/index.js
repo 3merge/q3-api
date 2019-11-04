@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 const micromatch = require('micromatch');
 const { get } = require('lodash');
-const exception = require('../../errors');
+const { exception } = require('q3-core-responder');
 
 const { Schema } = mongoose;
 

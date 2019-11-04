@@ -1,5 +1,5 @@
 const mailer = require('q3-core-mailer');
-const i18Base = require('../config/i18next');
+const { i18n } = require('q3-core-responder');
 const { Users } = require('../models');
 
 const EVENT_NAME = 'onNewUser';
@@ -7,7 +7,7 @@ const EVENT_NAME = 'onNewUser';
 require('./emitter').on(
   EVENT_NAME,
   async ({ email, id, secret, lang }) => {
-    const i18n = i18Base.cloneInstance({
+    const i18nClone = i18n.cloneInstance({
       lng: lang,
     });
 
@@ -19,16 +19,16 @@ require('./emitter').on(
       .to([email])
       .subject('newAccount')
       .props({
-        body: i18n.t('messages:verification'),
+        body: i18nClone.t('messages:verification'),
         button: 'Verify now',
         url: `${process.env.WEB_APP}/verify`,
         rows: [
           {
-            label: i18n.t('labels:id'),
+            label: i18nClone.t('labels:id'),
             value: id,
           },
           {
-            label: i18n.t('labels:verificationCode'),
+            label: i18nClone.t('labels:verificationCode'),
             value: secret,
           },
         ],

@@ -1,7 +1,7 @@
 const { get } = require('lodash');
 const ctx = require('request-context');
+const { exception } = require('q3-core-responder');
 const { MODEL_NAMES } = require('../constants');
-const exception = require('../errors');
 const app = require('../config/express');
 const mongoose = require('../config/mongoose');
 

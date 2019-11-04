@@ -1,10 +1,9 @@
 /* eslint-disable func-names, no-param-reassign */
 const { Schema } = require('mongoose');
 const { invoke, get } = require('lodash');
+const { exception } = require('q3-core-responder');
 const Notes = require('../models/note');
 const Files = require('../models/files');
-
-const exception = require('../errors');
 
 const getPathsRecursively = ([key, v]) => {
   if (v.schema)

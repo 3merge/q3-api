@@ -4,8 +4,8 @@ const {
   verify,
 } = require('q3-core-composer');
 const mailer = require('q3-core-mailer');
+const { exception } = require('q3-core-responder');
 const { Users } = require('../../models');
-const exception = require('../../errors');
 
 const updatePassword = async (
   { body, user, evoke },

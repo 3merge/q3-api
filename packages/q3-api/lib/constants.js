@@ -6,15 +6,6 @@ const MODEL_NAMES = {
   NOTES: 'q3-api-notes',
 };
 
-const ERRORS = {
-  BadRequestError: 'BadRequestError',
-  AuthenticationError: 'AuthenticationError',
-  AuthorizationError: 'AuthorizationError',
-  ValidationError: 'ValidationError',
-  ResourceNotFoundError: 'ResourceNotFoundError',
-  ConflictError: 'ConflictError',
-};
-
 const CONTEXT = {
   LOCALE: 'q3-session:locale',
   USER: 'q3-session:user',
@@ -22,7 +13,6 @@ const CONTEXT = {
 };
 
 module.exports = {
-  ERRORS,
   MODEL_NAMES,
   CONTEXT,
 };

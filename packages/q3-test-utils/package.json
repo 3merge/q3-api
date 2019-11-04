@@ -1,7 +1,7 @@
 {
   "name": "q3-test-utils",
   "version": "1.0.30",
-  "main": "index.js",
+  "main": "jest-preset.js",
   "dependencies": {
     "jest-environment-node": "^24.9.0",
     "mongodb-memory-server": "^5.2.5",
@@ -10,5 +10,5 @@
   "jest": {
     "preset": "./index.js"
   },
-  "gitHead": "0acb47caf9e278469940f2343fc667dd287a0ac7"
+  "gitHead": "1ed7e0072b05603ffbea5688991b6c2962a27e21"
 }

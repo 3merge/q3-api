@@ -18,5 +18,7 @@
   "resourceCreated": "Resource added to the collection",
   "resourceUpdated": "Resource updated in the collection",
   "subResourceUpdated": "Entry changes saved on this resource",
-  "newSubResourceAdded": "Entry added on this resource"
+  "newSubResourceAdded": "Entry added on this resource",
+  "Authorization": "Forbidden from accessing this resource",
+  "Authentication": "Must log in to perform this action"
 }

@@ -6,7 +6,6 @@ const {
 } = require('q3-core-composer');
 const aqp = require('api-query-params');
 
-const exception = require('../errors');
 const {
   discernIfValidationSchemaIsDiscriminated,
 } = require('./utils');

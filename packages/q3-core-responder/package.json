@@ -1,0 +1,16 @@
+{
+  "name": "q3-core-responder",
+  "main": "lib/index.js",
+  "version": "1.0.20",
+  "peerDependencies": {
+    "express": "^4.17.1",
+    "i18next": "^17.0.14",
+    "request-context": "^2.0.0"
+  },
+  "devDependencies": {
+    "supertest": "^4.0.2"
+  },
+  "dependencies": {
+    "cookies": "^0.8.0"
+  }
+}

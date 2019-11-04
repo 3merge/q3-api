@@ -1,5 +1,5 @@
 const { check } = require('q3-core-composer');
-const exception = require('../errors');
+const { exception } = require('q3-core-responder');
 
 module.exports.checkMsg = (v, { req, path }) =>
   req.t.val(path, [v]);

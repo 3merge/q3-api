@@ -1,10 +1,10 @@
 // eslint-disable-next-line
 const supertest = require('supertest');
+const {
+  handleUncaughtExceptions,
+} = require('q3-core-responder');
 const app = require('./config/express');
 const mongoose = require('./config/mongoose');
-const {
-  handleUncaughtErrors,
-} = require('./middleware/decorators');
 
 require('./models');
 require('./middleware');
@@ -12,7 +12,7 @@ require('./plugins');
 
 const setup = async (middleware) => {
   app.use(middleware);
-  app.use(handleUncaughtErrors);
+  app.use(handleUncaughtExceptions);
   await mongoose.connect(process.env.CONNECTION);
   return supertest(app);
 };
