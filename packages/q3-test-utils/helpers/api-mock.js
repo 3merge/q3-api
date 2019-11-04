@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 const { merge } = require('lodash');
 const mongoose = require('mongoose');
 
