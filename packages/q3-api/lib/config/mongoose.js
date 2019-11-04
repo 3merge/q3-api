@@ -4,10 +4,7 @@ const autopopulate = require('mongoose-autopopulate');
 const paginate = require('mongoose-paginate-v2');
 const plugins = require('../plugins');
 
-// replace this ...
-require('mongoose-type-email');
-require('mongoose-type-phone');
-require('mongoose-type-url');
+require('q3-schema-types');
 
 mongoose.pluralize(null);
 mongoose.set('useEnsureIndex', true);

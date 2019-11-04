@@ -14,6 +14,7 @@ const decypherMessage = (v = []) => {
   if (containsWord('email')) return 'isEmail';
   if (containsWord('phone')) return 'isMobilePhone';
   if (containsWord('url')) return 'isURL';
+  // postal code too...
   return 'isString';
 };
 

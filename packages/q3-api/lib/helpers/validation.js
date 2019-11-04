@@ -6,7 +6,9 @@ module.exports.checkMsg = (v, { req, path }) =>
 
 module.exports.checkEmail = check('email')
   .isEmail()
-  .withMessage((v, { req }) => req.dirty('email'));
+  .withMessage((v, { req }) =>
+    req.t('validations:isEmail'),
+  );
 
 module.exports.checkNewPassword = check('newPassword')
   .isString()
@@ -23,4 +25,4 @@ module.exports.checkNewPassword = check('newPassword')
   );
 
 module.exports.reportMongoId = (v, { req }) =>
-  req.t.val('mongo', [v]);
+  req.t('validations:mongo', [v]);

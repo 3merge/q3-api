@@ -1,11 +1,11 @@
-const { Schema, SchemaTypes } = require('mongoose');
+const { Schema } = require('mongoose');
 const methods = require('./methods');
 const emitter = require('../../events/emitter');
 
 const BaseUserModel = new Schema(
   {
     email: {
-      type: SchemaTypes.Email,
+      type: Schema.Types.Email,
       required: true,
       unique: true,
       searchable: true,

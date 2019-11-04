@@ -8176,6 +8176,14 @@ punycode@^2.1.0, punycode@^2.1.1:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
+q3-schema-types@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/q3-schema-types/-/q3-schema-types-1.0.1.tgz#f544ed19670dbe5e39317cd8dfbbace53917f788"
+  integrity sha512-QUcpab0SbbCoJVAiWykC9AD6mR93K6mqy1y3PitRrKkgp0aX3wgisKbfWbw2wO1TA1qlO55iKCLqfBVswRtr1A==
+  dependencies:
+    is-glob "^4.0.1"
+    mongoose "^5.7.7"
+
 q@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"

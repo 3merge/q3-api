@@ -11,28 +11,21 @@ require('./emitter').on(
     });
 
     const subject = i18nClone.t('messages:passwordReset');
-    const body = i18nClone.t('messages:temporaryPassword');
-    const button = i18nClone.t('labels:login');
-    const title = i18nClone.t('messages:greetings', {
-      firstName,
-    });
-
-    const rows = [
+    const url = `${process.env.WEB_APP}/login`;
+    const body = i18nClone.t(
+      'messages:resetPasswordEmail',
       {
-        label: i18nClone.t('labels:temporaryPassword'),
-        value: `"${password}"`,
+        firstName,
+        password,
+        url,
       },
-    ];
+    );
 
     await mailer()
       .to([email])
       .subject(subject)
       .props({
-        url: `${process.env.WEB_APP}/login`,
-        title,
         body,
-        button,
-        rows,
       })
       .send();
   },

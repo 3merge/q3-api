@@ -1,4 +1,4 @@
-const { Schema, SchemaTypes } = require('mongoose');
+const { Schema } = require('mongoose');
 
 const SubDocumentArray = new Schema({
   name: {
@@ -19,18 +19,18 @@ const Company = new Schema(
       searchable: true,
     },
     email: {
-      type: SchemaTypes.Email,
+      type: Schema.Types.Email,
       searchable: true,
       required: true,
     },
     tel: {
-      type: SchemaTypes.Phone,
+      type: Schema.Types.Tel,
       required: true,
       defaultRegion: 'CA',
       searchable: true,
     },
     url: {
-      type: SchemaTypes.Url,
+      type: Schema.Types.Url,
       required: true,
     },
     incorporationDate: {
