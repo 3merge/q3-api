@@ -1,6 +1,6 @@
 {
   "name": "q3-api-plugin-addresses",
-  "version": "1.0.31",
+  "version": "1.1.0",
   "main": "lib/index.js",
   "license": "MIT",
   "jest": {
@@ -23,5 +23,5 @@
     "q3-core-composer": "^1.0.0",
     "q3-core-walker": "^1.0.0"
   },
-  "gitHead": "1ed7e0072b05603ffbea5688991b6c2962a27e21"
+  "gitHead": "24b07fc92698b652b8941b372eeaac70a0a0d999"
 }
