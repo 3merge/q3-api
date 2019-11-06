@@ -3,6 +3,7 @@ const {
   compose,
   redact,
   check,
+  query,
 } = require('q3-core-composer');
 const aqp = require('api-query-params');
 const flatten = require('flat');
@@ -207,22 +208,33 @@ module.exports = ({
 
   Delete.authorization = [redact(collectionName)];
 
-  /**
-   * Let's assign the controllers now.
-   * @NOTE Get will control both singular and plural.
-   */
+  const DeleteMany = async ({ query: { ids }, t }, res) => {
+    await Model.updateMany(
+      {
+        _id: { $in: ids },
+      },
+      { active: false },
+    );
+    res.acknowledge({
+      message: t('messages:resourceDeleted'),
+    });
+  };
+
+  Delete.authorization = [redact(collectionName)];
+  Delete.validation = [query('ids').isArray()];
 
   if (restify.includes('get')) {
     app.get(`/${collectionName}`, compose(List));
     app.get(`/${collectionName}/:resourceID`, compose(Get));
   }
 
-  // multidelete
-  if (restify.includes('delete'))
+  if (restify.includes('delete')) {
+    app.delete(`/${collectionName}`, compose(DeleteMany));
     app.delete(
       `/${collectionName}/:resourceID`,
       compose(Delete),
     );
+  }
 
   if (restify.includes('post')) {
     app.post(`/${collectionName}`, compose(Post));

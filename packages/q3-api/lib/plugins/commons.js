@@ -71,10 +71,7 @@ const plugin = (schema) => {
       : {};
   };
 
-  schema.methods.getSubDocument = async function(
-    field,
-    id,
-  ) {
+  schema.methods.getSubDocument = function(field, id) {
     const subdoc = invoke(get(this, field), 'id', id);
     if (!subdoc)
       exception('ResourceMissing')
@@ -101,8 +98,18 @@ const plugin = (schema) => {
     field,
     id,
   ) {
-    const subdoc = await this.getSubDocument(field, id);
-    subdoc.remove();
+    // allow repetition
+    const removeChild = (v) => {
+      const subdoc = this.getSubDocument(field, v);
+      subdoc.remove();
+    };
+
+    if (Array.isArray(id)) {
+      id.map(removeChild);
+    } else {
+      removeChild(id);
+    }
+
     return this.save();
   };
 
