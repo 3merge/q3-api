@@ -1,31 +1,56 @@
 {
   "name": "q3-api",
-  "version": "1.0.0",
+  "version": "1.0.31",
   "description": "REST api configurations",
-  "main": "dist/index.js",
-  "author": "Mike <mibberson@3merge.ca>",
+  "main": "lib/index.js",
   "license": "MIT",
-  "scripts": {
-    "start": "nodemon demo --exec babel-node"
+  "jest": {
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/lib/"
+    ]
   },
   "dependencies": {
+    "api-query-params": "^4.14.0",
+    "aws-sdk": "^2.556.0",
+    "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "connect": "^3.7.0",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
+    "csv-express": "^1.2.2",
+    "deep-diff": "^1.0.2",
     "dotenv": "^8.1.0",
-    "express-async-handler": "^1.1.4",
     "express-fileupload": "^1.1.5",
     "express-rate-limit": "^5.0.0",
+    "flat": "5.0.0",
+    "generate-password": "^1.4.2",
     "helmet": "^3.20.0",
     "i18next": "^17.0.14",
-    "i18next-sprintf-postprocessor": "^0.2.2",
-    "lodash": "^4.17.15"
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
+    "micromatch": "^4.0.2",
+    "moment": "^2.24.0",
+    "mongoose-autopopulate": "^0.9.1",
+    "mongoose-paginate-v2": "^1.3.3",
+    "mongoose-string-query": "^0.2.7",
+    "mongoose-unique-validator": "^2.0.3",
+    "mongoose-validator": "^2.1.0",
+    "q3-schema-types": "^1.0.1",
+    "request-context": "^2.0.0"
   },
   "peerDependencies": {
     "express": "^4.17.1",
-    "express-validator": "^6.2.0",
-    "mongoose": "^5.7.1"
-  }
+    "mongoose": "^5.7.1",
+    "q3-core-composer": "^1.0.0",
+    "q3-core-mailer": "^1.0.0",
+    "q3-core-responder": "^1.0.0",
+    "q3-core-walker": "^1.0.0"
+  },
+  "devDependencies": {
+    "aws-sdk-mock": "^4.5.0",
+    "supertest": "^4.0.2"
+  },
+  "gitHead": "24b07fc92698b652b8941b372eeaac70a0a0d999"
 }

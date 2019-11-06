@@ -1,13 +1,17 @@
 {
   "name": "example",
-  "version": "1.0.0",
-  "scripts": {
-    "start": "nodemon src --exec babel-node"
-  },
+  "version": "1.0.31",
   "dependencies": {
-    "express-validator": "^6.2.0",
     "mongoose": "^5.7.1",
-    "q3-api": "^1.0.0",
-    "q3-api-plugin-users": "^1.0.0"
-  }
+    "mongoose-type-email": "^1.0.11",
+    "mongoose-type-phone": "^1.0.1",
+    "mongoose-type-url": "^1.0.6",
+    "mongoose-validator": "^2.1.0",
+    "q3-api": "^1.0.31",
+    "q3-core-composer": "^1.0.20",
+    "q3-core-mailer": "^1.0.20",
+    "q3-core-responder": "^1.0.21",
+    "q3-core-walker": "^1.0.27"
+  },
+  "gitHead": "24b07fc92698b652b8941b372eeaac70a0a0d999"
 }

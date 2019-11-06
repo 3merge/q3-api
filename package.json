@@ -11,7 +11,8 @@
     "bootstrap": "lerna bootstrap --use-workspaces",
     "build": "lerna exec --parallel -- babel --root-mode upward src -d dist --ignore **/__mocks__,**/*.test.js",
     "lint": "eslint . --ext .js --ext .jsx --ignore-pattern dist --ignore-pattern node_modules",
-    "lerna-publish": "lerna publish"
+    "lerna-publish": "lerna publish",
+    "develop": "nodemon --watch example example/index.js"
   },
   "workspaces": [
     "packages/*",
@@ -35,9 +36,12 @@
     "jest": "^24.9.0",
     "jest-haste-map": "^24.9.0",
     "jest-resolve": "^24.9.0",
+    "jest-watch-typeahead": "^0.4.0",
     "jest-watch-yarn-workspaces": "^1.1.0",
     "lerna": "^3.16.4",
     "nodemon": "^1.19.1",
+    "patch-package": "^6.2.0",
+    "postinstall-postinstall": "^2.0.0",
     "prettier": "^1.18.2",
     "rewire": "^4.0.1",
     "supertest": "^4.0.2"

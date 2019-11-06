@@ -1,0 +1,9 @@
+{
+  "name": "q3-core-puncher",
+  "version": "1.0.20",
+  "main": "index.js",
+  "dependencies": {
+    "lodash.get": "^4.4.2"
+  },
+  "gitHead": "0b3cd9783303e9853037b7bdacdaffbc549f4ad2"
+}

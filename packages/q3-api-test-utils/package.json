@@ -1,8 +1,0 @@
-{
-  "name": "q3-api-test-utils",
-  "version": "1.0.0",
-  "main": "index.js",
-  "dependencies": {
-    "mongodb-memory-server": "^5.2.5"
-  }
-}
