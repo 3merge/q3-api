@@ -8,7 +8,6 @@ const BaseUserModel = new Schema(
       type: Schema.Types.Email,
       required: true,
       unique: true,
-      searchable: true,
     },
     secret: {
       type: String,

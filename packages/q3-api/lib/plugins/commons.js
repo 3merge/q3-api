@@ -52,7 +52,7 @@ const plugin = (schema) => {
         if (obj.schema) iterateSchema(obj.schema, join);
       });
 
-    const $regex = new RegExp(`^${statement}.*$`, 'gi');
+    const $regex = new RegExp(`^${statement}.*$`);
     iterateSchema(this.schema);
 
     /*
@@ -65,7 +65,7 @@ const plugin = (schema) => {
     return arr.length
       ? {
           $or: arr.map((field) => ({
-            [field]: { $regex },
+            [field]: { $regex, $options: 'gi' },
           })),
         }
       : {};

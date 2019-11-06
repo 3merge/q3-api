@@ -3,5 +3,7 @@
   "password": "Password",
   "temporaryPassword": "Temporary password",
   "verificationCode": "Verification code",
-  "accountID": "Account ID"
+  "accountID": "Account ID",
+  "subbies.$.active": "Active subby",
+  "subbies.$.name": "Active name"
 }

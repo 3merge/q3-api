@@ -10,7 +10,6 @@
   "newPassword": "newPassword",
   "passwordUpdated": "passwordUpdated",
   "ownership": "ownership",
-  "coll": "coll",
   "mongoId": "mongoId",
   "sensitive": "sensitive",
   "role": "role",
@@ -39,5 +38,6 @@
   "isNumber": "Must be a number",
   "isPhone": "Must be a valid phone number",
   "isDate": "Must be a valid date",
-  "incorrectPassword": "Incorrect user password"
+  "incorrectPassword": "Incorrect user password",
+  "coll": "Unknown collection"
 }

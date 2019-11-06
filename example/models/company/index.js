@@ -27,7 +27,6 @@ const Company = new Schema(
       type: Schema.Types.Tel,
       required: true,
       defaultRegion: 'CA',
-      searchable: true,
     },
     url: {
       type: Schema.Types.Url,

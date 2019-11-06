@@ -5,10 +5,38 @@ const {
   check,
 } = require('q3-core-composer');
 const aqp = require('api-query-params');
+const flatten = require('flat');
 
 const {
   discernIfValidationSchemaIsDiscriminated,
 } = require('./utils');
+
+const reduceByObjectLength = (o) =>
+  o.reduce((a, c) => {
+    const keys = Object.keys(flatten(c));
+    return keys.length > a.length ? keys : a;
+  }, []);
+
+const populateEmptyObjectKeys = (o, keys) =>
+  o.map((p) => {
+    const flat = flatten(p);
+    keys.forEach((key) => {
+      if (!flat[key]) flat[key] = '';
+    });
+
+    return flat;
+  });
+
+const transformObjectKeys = (arr, next) =>
+  arr.map((r) =>
+    Object.entries(r).reduce(
+      (a, c) =>
+        Object.assign(a, {
+          [next(c[0].replace(/(\.\d+\.)/, '.$.'))]: c[1],
+        }),
+      {},
+    ),
+  );
 
 module.exports = ({
   Model,
@@ -78,7 +106,8 @@ module.exports = ({
     redact(collectionName).requireField('featuredUpload'),
   ];
 
-  const List = async ({ query, marshal }, res) => {
+  const List = async (req, res) => {
+    const { query, marshal, t } = req;
     const {
       sort,
       limit = 50,
@@ -93,8 +122,6 @@ module.exports = ({
       { active: true },
     );
 
-    console.log(params.$or[0]);
-
     const {
       docs,
       totalDocs,
@@ -107,12 +134,31 @@ module.exports = ({
       limit,
     });
 
-    res.ok({
-      [collectionPluralName]: marshal(docs),
-      total: totalDocs,
-      hasNextPage,
-      hasPrevPage,
-    });
+    const payload = marshal(docs);
+
+    if (req.get('Accept') === 'text/csv') {
+      const columns = reduceByObjectLength(payload);
+      const rows = populateEmptyObjectKeys(
+        payload,
+        columns,
+      );
+
+      /**
+       * @TODO
+       * Access control...
+       */
+      res.csv(
+        transformObjectKeys(rows, (v) => t(`labels:${v}`)),
+        true,
+      );
+    } else {
+      res.ok({
+        [collectionPluralName]: payload,
+        total: totalDocs,
+        hasNextPage,
+        hasPrevPage,
+      });
+    }
   };
 
   List.authorization = [
@@ -169,6 +215,7 @@ module.exports = ({
     app.get(`/${collectionName}/:resourceID`, compose(Get));
   }
 
+  // multidelete
   if (restify.includes('delete'))
     app.delete(
       `/${collectionName}/:resourceID`,
