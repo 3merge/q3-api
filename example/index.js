@@ -14,6 +14,7 @@ mailer.config({
     'https://pbs.twimg.com/profile_images/1186142762179186688/icUsNEYO_400x400.jpg',
 });
 
+Q3.routes();
 Q3.connect().then(() => {
   // noop
 });

@@ -93,6 +93,8 @@ module.exports = ({
       { active: true },
     );
 
+    console.log(params.$or[0]);
+
     const {
       docs,
       totalDocs,

@@ -38,7 +38,7 @@ Q3.config = (args = {}) => {
 
 Q3.routes = (routes) => {
   Object.values(mongoose.models).forEach(restify);
-  app.use(routes);
+  if (routes) app.use(routes);
 };
 
 Q3.model = (name) => {
