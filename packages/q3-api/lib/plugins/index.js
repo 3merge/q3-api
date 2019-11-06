@@ -2,5 +2,4 @@
 module.exports = (m) => {
   m.plugin(require('./commons'));
   m.plugin(require('./access'));
-  // m.plugin(require('./versioning'));
 };

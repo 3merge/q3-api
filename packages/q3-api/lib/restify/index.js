@@ -1,14 +1,17 @@
-require('./adapter');
 const app = require('../config/express');
 const controller = require('./controller');
 const controllerDocumentArray = require('./controllerSubDocument');
+const validationMap = require('../helpers/m2e.adapter');
 
 module.exports = (Model) => {
   const {
     collection: { collectionName },
     schema,
   } = Model;
-  const { paths, subpaths } = Model.getValidation();
+
+  const full = validationMap(Model.schema, true);
+  const lean = validationMap(Model.schema, false);
+
   const discriminatorKey = schema.get('discriminatorKey');
   const restify = schema.get('restify');
 
@@ -31,11 +34,14 @@ module.exports = (Model) => {
     controller({
       Model,
       restify,
-      validationSchema: paths,
       collectionName,
       collectionPluralName,
       collectionSingularName,
       discriminatorKey,
+      validationSchema: {
+        post: full.paths,
+        patch: lean.paths,
+      },
     }),
   );
 
@@ -43,15 +49,18 @@ module.exports = (Model) => {
    * @TODO
    * How to make this recursive?
    */
-  Object.entries(subpaths).forEach(
+  Object.entries(full.subpaths).forEach(
     ([subpath, subpathValidation]) =>
       app.use(
         controllerDocumentArray({
           Model,
           field: subpath,
-          validationSchema: subpathValidation,
           collectionName,
           discriminatorKey,
+          validationSchema: {
+            post: subpathValidation,
+            patch: lean.subpaths[subpath],
+          },
         }),
       ),
   );

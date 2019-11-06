@@ -48,10 +48,6 @@ module.exports = ({
   discriminatorKey,
 }) => {
   const app = Router();
-  const validation = discernIfValidationSchemaIsDiscriminated(
-    validationSchema,
-    discriminatorKey,
-  );
 
   const Post = async ({ body, marshal, t }, res) => {
     const doc = await Model.create(body);
@@ -67,7 +63,10 @@ module.exports = ({
       .inResponse(collectionSingularName),
   ];
 
-  Post.validation = validation;
+  Post.validation = discernIfValidationSchemaIsDiscriminated(
+    validationSchema.post,
+    discriminatorKey,
+  );
 
   const Patch = async (
     { body, marshal, params, t },
@@ -87,7 +86,10 @@ module.exports = ({
       .inResponse(collectionSingularName),
   ];
 
-  Patch.validation = validation;
+  Patch.validation = discernIfValidationSchemaIsDiscriminated(
+    validationSchema.patch,
+    discriminatorKey,
+  );
 
   const PostFile = async ({ params, files }, res) => {
     const doc = await Model.findStrictly(params.resourceID);

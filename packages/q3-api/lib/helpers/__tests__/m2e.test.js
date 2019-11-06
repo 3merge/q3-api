@@ -1,6 +1,8 @@
-require('..');
+require('q3-schema-types');
 const mongoose = require('mongoose');
-const validate = require('mongoose-validator');
+const adapter = require('../m2e.adapter');
+
+const { ValidationSchemaMapper } = adapter;
 
 let Model;
 
@@ -14,12 +16,9 @@ beforeAll(() => {
     new mongoose.Schema(
       {
         email: {
-          type: String,
+          type: mongoose.Schema.Types.Email,
           required: true,
           unique: false,
-          validate: validate({
-            validator: 'isEmail',
-          }),
         },
         nest: {
           type: Sub,
@@ -52,6 +51,19 @@ beforeAll(() => {
   );
 });
 
-test('Should read...', () => {
-  const { paths } = Model.getValidation();
+describe('getValidationType', () => {
+  it('should return schema option type', () => {
+    expect(
+      new ValidationSchemaMapper({
+        minLength: 3,
+        maxLength: 10,
+        enum: ['Foo'],
+      }).fromTo('String'),
+    ).toMatchObject({
+      isLength: { options: { min: 3, max: 10 } },
+      isIn: {
+        options: [['Foo']],
+      },
+    });
+  });
 });

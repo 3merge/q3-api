@@ -37,10 +37,6 @@ module.exports = ({
 }) => {
   const app = Router();
   const populate = constructPopulatePaths(Model);
-  const validation = discernIfValidationSchemaIsDiscriminated(
-    validationSchema,
-    discriminatorKey,
-  );
 
   const getParentResource = async (id) => {
     const doc = await Model.findById(id)
@@ -72,7 +68,10 @@ module.exports = ({
       .inResponse(field),
   ];
 
-  PutSingle.validation = validation;
+  PutSingle.validation = discernIfValidationSchemaIsDiscriminated(
+    validationSchema.post,
+    discriminatorKey,
+  );
 
   const Post = async (
     { t, body, marshal, params, files },
@@ -100,7 +99,10 @@ module.exports = ({
       .inResponse(field),
   ];
 
-  Post.validation = validation;
+  Post.validation = discernIfValidationSchemaIsDiscriminated(
+    validationSchema.post,
+    discriminatorKey,
+  );
 
   const Get = async ({ marshal, params }, res) => {
     const doc = await getParentResource(params.resourceID);
@@ -147,7 +149,10 @@ module.exports = ({
       .inResponse(field),
   ];
 
-  Put.validation = validation;
+  Put.validation = discernIfValidationSchemaIsDiscriminated(
+    validationSchema.patch,
+    discriminatorKey,
+  );
 
   const Delete = async ({ params }, res) => {
     const doc = await getParentResource(params.resourceID);

@@ -9,7 +9,7 @@
     "supertest": "^4.0.2"
   },
   "jest": {
-    "preset": "./index.js"
+    "preset": "./jest-preset.js"
   },
   "gitHead": "24b07fc92698b652b8941b372eeaac70a0a0d999",
   "devDependencies": {
