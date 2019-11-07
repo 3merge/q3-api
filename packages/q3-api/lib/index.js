@@ -20,12 +20,6 @@ require('./middleware');
 
 const { Users } = require('./models');
 
-/**
- * Init routes and locale.
- */
-app.use(walker(__dirname));
-loadLocaleFromFs(path.resolve(__dirname, '..'));
-
 const Q3 = {};
 Q3.User = Users;
 
@@ -33,12 +27,19 @@ Q3.$app = app;
 Q3.$mongoose = mongoose;
 Q3.emitter = eventEmitter;
 Q3.mail = mailHelpers;
+Q3.session = ctx;
 
 Q3.config = (args = {}) => {
   Object.assign(app.locals, args);
 };
 
 Q3.routes = (routes) => {
+  /**
+   * Init routes and locale.
+   */
+  app.use(walker(__dirname));
+  loadLocaleFromFs(path.resolve(__dirname, '..'));
+
   Object.values(mongoose.models).forEach(restify);
   if (routes) app.use(routes);
 };
