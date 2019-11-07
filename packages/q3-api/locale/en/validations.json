@@ -34,7 +34,7 @@
   "scope": "Pricing must include either global, vendor or sku value",
   "length": "Must meet required length",
   "email": "Must be a valid email address",
-  "inumber": "Must be a number",
+  "number": "Must be a number",
   "phone": "Must be a valid phone number",
   "date": "Must be a valid date",
   "incorrectPassword": "Incorrect user password",

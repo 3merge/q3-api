@@ -2,6 +2,13 @@ const { get, merge, pick } = require('lodash');
 
 const filterFalsy = (value) => value.filter(Boolean);
 
+const minMax = ({ minLength, maxLength, min, max }) => ({
+  options: {
+    min: min || minLength || 0,
+    max: max || maxLength || Number.MAX_VALUE,
+  },
+});
+
 const setDynamicErrorMsg = (term) => (
   value,
   { req: { t } },
@@ -46,6 +53,7 @@ class ValidationSchemaMapper {
       number: {
         ...this.required,
         ...this.range,
+        toFloat: true,
       },
       array: {
         ...this.required,
@@ -108,30 +116,16 @@ class ValidationSchemaMapper {
   }
 
   get length() {
-    const {
-      options: { minLength = 0, maxLength },
-    } = this;
+    const { options } = this;
     return {
-      isLength: {
-        options: {
-          min: minLength,
-          max: maxLength,
-        },
-      },
+      isLength: minMax(options).options,
     };
   }
 
   get range() {
-    const {
-      options: { min = 0, max },
-    } = this;
+    const { options } = this;
     return {
-      isFloat: {
-        options: {
-          min,
-          max,
-        },
-      },
+      isFloat: minMax(options),
     };
   }
 
