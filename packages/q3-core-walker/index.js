@@ -16,11 +16,6 @@ const getNestedPath = (sub, name = '') => {
   return arr.join('/');
 };
 
-const getWorkingDirectory = (dir) => {
-  const workingDir = process.cwd();
-  return dir ? join(workingDir, dir) : workingDir;
-};
-
 const getVerb = (name) => {
   const [verb] = name.split('.');
   if (

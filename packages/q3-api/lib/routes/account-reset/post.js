@@ -1,16 +1,15 @@
 const { compose, redact } = require('q3-core-composer');
 const { Users } = require('../../models');
 
-const CreateAPIKeyController = async ({ user, t }, res) => {
-  res.create({
-    message: t('messages:apikeygenerated'),
-    key: await user.generateApiKey(),
-  });
+const CreateAPIKeyController = async ({ query }, res) => {
+  const user = await Users.findStrictly(query.id);
+  await user.setSecret();
+  res.acknowledge();
 };
 
 CreateAPIKeyController.authorization = [
   redact(Users.collection.collectionName).requireField(
-    'apiKeys',
+    'secret',
   ),
 ];
 

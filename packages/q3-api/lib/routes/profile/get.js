@@ -12,7 +12,7 @@ const getProfile = async ({ user, marshal }, res) => {
     .exec();
 
   res.ok({
-    profile: marshal(user),
+    profile: marshal(user.obfuscatePrivateFields()),
     permissions,
   });
 };

@@ -12,8 +12,7 @@ const resetPassword = async (
     const password = await doc.setPassword();
 
     emitter.emit('onPasswordReset', {
-      ...doc,
-      email,
+      ...doc.toJSON(),
       password,
     });
   } catch (err) {

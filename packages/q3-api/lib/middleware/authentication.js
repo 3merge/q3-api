@@ -16,7 +16,7 @@ const middleware = async (req, res, next) => {
 
   if (!req.user) {
     req.user = await User.findByApiKey(
-      req.header('Authorization'),
+      req.header('Api-Key'),
     );
   }
 

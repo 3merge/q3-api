@@ -11,6 +11,7 @@ const app = require('./config/express');
 const mongoose = require('./config/mongoose');
 const restify = require('./restify');
 const eventEmitter = require('./events');
+const mailHelpers = require('./events/utils');
 
 /**
  * Auto-appends middleware
@@ -31,6 +32,7 @@ Q3.User = Users;
 Q3.$app = app;
 Q3.$mongoose = mongoose;
 Q3.emitter = eventEmitter;
+Q3.mail = mailHelpers;
 
 Q3.config = (args = {}) => {
   Object.assign(app.locals, args);

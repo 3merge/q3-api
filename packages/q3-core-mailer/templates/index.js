@@ -1,5 +1,10 @@
 const Handlebars = require('handlebars');
 
+Handlebars.registerPartial(
+  'head',
+  require('./head.handlebars'),
+);
+
 Handlebars.registerHelper('list', (items, options) => {
   if (!items) return '';
 

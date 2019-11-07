@@ -48,13 +48,17 @@ module.exports = class UserAuthDecorator {
   static async findByApiKey(str = '') {
     if (!str) return null;
     return this.findOne({
-      apiKeys: str.slice(6, str.length).trim(),
+      apiKeys: str.trim(),
       ...isVerifiedQuery,
-    });
+    })
+      .setOptions({ bypassAuthorization: true })
+      .select('+apiKeys')
+      .exec();
   }
 
   static async $findOneStrictly(args) {
     const doc = await this.findOne(args)
+      .select('+apiKeys')
       .setOptions({ bypassAuthorization: true })
       .exec();
 
@@ -106,6 +110,7 @@ module.exports = class UserAuthDecorator {
   async setSecret(skipSave) {
     this.secret = generateRandomSecret();
     this.secretIssuedOn = new Date();
+    this.apiKeys = [];
     return skipSave ? this : this.save();
   }
 
@@ -197,7 +202,12 @@ module.exports = class UserAuthDecorator {
       0,
       7,
     )}-${key}-${moment(new Date()).unix()}`;
-    this.apiKeys.push(stringify);
+    if (this.apiKeys) {
+      this.apiKeys.push(stringify);
+    } else {
+      this.apiKeys = [stringify];
+    }
+
     await this.save();
     return stringify;
   }

@@ -14,7 +14,13 @@ module.exports = (src) => {
         'utf8',
       );
 
-      i18next.addResources(lang, name, JSON.parse(json));
+      if (ns.includes('handlebars')) {
+        i18next.addResources(lang, 'emails', {
+          [name]: json,
+        });
+      } else {
+        i18next.addResources(lang, name, JSON.parse(json));
+      }
     });
   });
 };

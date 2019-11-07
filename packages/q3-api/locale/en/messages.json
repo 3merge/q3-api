@@ -1,5 +1,5 @@
 {
-  "passwordReset": "Password reset request",
+  "onPasswordReset": "Password reset request",
   "validationError": "Failed request validation. Please check your inputs.",
   "reverify": "reverify",
   "permission.new": "permission.new",
@@ -22,5 +22,5 @@
   "Authorization": "Forbidden from accessing this resource",
   "Authentication": "Must log in to perform this action",
   "Validation": "Request did not pass server validation",
-  "resetPasswordEmail": "<h1>Hi {{firstName}},</h1><p>Looks like you require a new password. We've auto-generated a password for you to temporarily access your account. If you did not ask for new credentials, reach out to an administrator immediately.</p><ul class=\"list\"><li><strong>Temporary password:</strong> `{{password}}`</li></ul><p><a class=\"button\" href=\"{{url}}\">Login</a></p>"
+  "apikeygenerated": "New API key ready"
 }

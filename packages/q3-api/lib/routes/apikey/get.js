@@ -6,13 +6,13 @@ const GetAPIKeyController = async (
   res,
 ) => {
   const { apiKeys } = await user.obfuscatePrivateFields();
-  res.create({
+  res.ok({
     keys: marshal(apiKeys),
   });
 };
 
 GetAPIKeyController.authorization = [
-  redact(Users.collection.collectionName).requiredField(
+  redact(Users.collection.collectionName).requireField(
     'apiKeys',
   ),
 ];

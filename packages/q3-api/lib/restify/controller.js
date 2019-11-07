@@ -110,14 +110,14 @@ module.exports = ({
   ];
 
   const List = async (req, res) => {
-    const { query, marshal, t } = req;
+    const { query: q, marshal, t } = req;
     const {
       sort,
       limit = 50,
       skip = 1,
       projection: select,
       filter: { search, ...where },
-    } = aqp(query);
+    } = aqp(q);
 
     const params = Object.assign(
       Model.searchBuilder(search),
