@@ -4,6 +4,7 @@ const {
   check,
   compose,
   redact,
+  query,
 } = require('q3-core-composer');
 const {
   discernIfValidationSchemaIsDiscriminated,
@@ -162,11 +163,24 @@ module.exports = ({
 
   Delete.authorization = [redact(collectionName)];
 
+  const DeleteMany = async (
+    { params, query: { ids } },
+    res,
+  ) => {
+    const doc = await getParentResource(params.resourceID);
+    await doc.removeSubDocument(field, ids);
+    res.acknowledge();
+  };
+
+  DeleteMany.authorization = [redact(collectionName)];
+  DeleteMany.validation = [query('ids').isArray()];
+
   app
     .route(`/${collectionName}/:resourceID/${field}`)
     .get(compose(Get))
     .put(compose(PutSingle))
-    .post(compose(Post));
+    .post(compose(Post))
+    .delete(compose(DeleteMany));
 
   app
     .route(

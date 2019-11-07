@@ -1,4 +1,5 @@
 const supertest = require('supertest');
+const mongoose = require('mongoose');
 
 const getSuperAgent = async (Q3) => {
   const passport = await Q3.User.create({
@@ -34,8 +35,18 @@ const willThrowException = async (fn, name) => {
   }
 };
 
+const initMongoose = () => {
+  mongoose.pluralize(null);
+  mongoose.set('useEnsureIndex', true);
+  mongoose.set('useCreateIndex', true);
+  mongoose.set('useFindAndModify', false);
+  mongoose.set('useNewUrlParser', true);
+  mongoose.set('useUnifiedTopology', true);
+};
+
 module.exports = {
   getSuperAgent,
   destroySuperAgent,
   willThrowException,
+  initMongoose,
 };

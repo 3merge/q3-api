@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const unique = require('mongoose-unique-validator');
-const autopopulate = require('mongoose-autopopulate');
 const paginate = require('mongoose-paginate-v2');
 const plugins = require('../plugins');
 
@@ -15,7 +14,6 @@ mongoose.set('useUnifiedTopology', true);
 
 plugins(mongoose);
 mongoose.plugin(unique);
-mongoose.plugin(autopopulate);
 mongoose.plugin(paginate);
 
 module.exports = mongoose;
