@@ -43,7 +43,6 @@ const PermissionModel = new Schema(
     ownershipAliases: {
       type: [Alias],
       default: [],
-      includeInRest: true,
     },
     condition: {
       type: String,
@@ -51,6 +50,7 @@ const PermissionModel = new Schema(
     coll: {
       type: String,
       required: true,
+      searchable: true,
     },
     role: {
       type: String,
@@ -59,6 +59,7 @@ const PermissionModel = new Schema(
     fields: {
       type: String,
       default: '*',
+      searchable: true,
     },
   },
   {
