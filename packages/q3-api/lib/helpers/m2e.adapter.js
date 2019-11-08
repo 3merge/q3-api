@@ -29,7 +29,6 @@ class ValidationSchemaMapper {
      */
     this.$ref = {
       string: {
-        ...this.length,
         ...this.required,
         ...this.enum,
         trim: true,
@@ -52,7 +51,6 @@ class ValidationSchemaMapper {
       },
       number: {
         ...this.required,
-        ...this.range,
         toFloat: true,
       },
       array: {
@@ -144,7 +142,7 @@ class ValidationSchemaMapper {
       return {
         optional: {
           nullable: true,
-          falsy: false,
+          falsy: true,
         },
       };
 

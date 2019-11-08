@@ -124,13 +124,15 @@ module.exports = ({
       { active: true },
     );
 
+    const activePage = page + 1;
+
     const {
       docs,
       totalDocs,
       hasNextPage,
       hasPrevPage,
     } = await Model.paginate(params, {
-      page: page >= 1 ? page : 1,
+      page: activePage >= 1 ? activePage : 1,
       sort,
       select,
       limit,
