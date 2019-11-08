@@ -1,17 +1,17 @@
 {
   "name": "example",
-  "version": "1.0.36",
+  "version": "1.0.37",
   "dependencies": {
     "mongoose": "^5.7.1",
     "mongoose-type-email": "^1.0.11",
     "mongoose-type-phone": "^1.0.1",
     "mongoose-type-url": "^1.0.6",
     "mongoose-validator": "^2.1.0",
-    "q3-api": "^1.0.36",
+    "q3-api": "^1.0.37",
     "q3-core-composer": "^1.0.20",
-    "q3-core-mailer": "^1.0.25",
-    "q3-core-responder": "^1.0.26",
-    "q3-core-walker": "^1.0.32"
+    "q3-core-mailer": "^1.0.26",
+    "q3-core-responder": "^1.0.27",
+    "q3-core-walker": "^1.0.33"
   },
   "gitHead": "61cedd14f8e80edac61ce68fc48a905311032f83"
 }
