@@ -32,6 +32,7 @@ const Company = new Schema(
       type: Schema.Types.Url,
       required: true,
     },
+
     incorporationDate: {
       type: Date,
       required: true,
@@ -62,6 +63,7 @@ const Company = new Schema(
     onPopulate: {
       'subbies.reference': 'firstName email id',
       'thread.createdBy': 'firstName featuredUpload photo',
+      'friends': 'email',
     },
   },
 );

@@ -88,7 +88,7 @@ BaseUserModel.pre('save', function setSecret() {
 });
 
 BaseUserModel.post('save', function emitVerification(d) {
-  if (this.wasNew) emitter.emit('onNewUser', d);
+  if (this.wasNew) emitter.emit('onNewUser', d.toJSON());
 });
 
 module.exports = BaseUserModel;

@@ -22,5 +22,7 @@
   "Authorization": "Forbidden from accessing this resource",
   "Authentication": "Must log in to perform this action",
   "Validation": "Request did not pass server validation",
-  "apikeygenerated": "New API key ready"
+  "apikeygenerated": "New API key ready",
+  "verify": "Verify your account",
+  "onReverify": "New verification token generated"
 }

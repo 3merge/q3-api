@@ -1,3 +1,5 @@
+const { model } = require('mongoose');
+
 const pushUniquely = (a, i) =>
   a.indexOf(i) === -1 && a.push(i);
 
@@ -12,24 +14,32 @@ module.exports = (schema) => {
       (pathname, { options, schema: embedded }) => {
         if (embedded) getPaths(embedded, pathname);
         if (options.autopopulate)
-          pushUniquely(paths, setPrefix(p, pathname));
+          pushUniquely(paths, {
+            path: setPrefix(p, pathname),
+            model: model(options.ref),
+            select: options.autopopulateSelect,
+          });
       },
     );
 
-  function autopopulate() {
+  async function autopopulate(doc) {
+    if (!doc || !doc.populate) return;
     getPaths(schema);
+
     if (schema.discriminators)
       Object.values(schema.discriminators).forEach(
         getPaths,
       );
 
-    paths.flat().forEach((p) => {
-      this.populate(p);
-    });
+    await Promise.all(
+      paths
+        .flat()
+        .map((o) => doc.populate(o).execPopulate()),
+    );
   }
 
   schema
-    .pre('find', autopopulate)
-    .pre('findOne', autopopulate)
-    .pre('findOneAndUpdate', autopopulate);
+    .post('find', autopopulate)
+    .post('findOne', autopopulate)
+    .post('findOneAndUpdate', autopopulate);
 };

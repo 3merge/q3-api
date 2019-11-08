@@ -20,6 +20,12 @@ const Startup = new Schema({
     searchable: true,
   },
   vertical: Vertical,
+  friends: {
+    type: Schema.Types.ObjectId,
+    ref: 'q3-api-users',
+    autopopulate: true,
+    autopopulateSelect: 'firstName email',
+  },
 });
 
 module.exports = Startup;
