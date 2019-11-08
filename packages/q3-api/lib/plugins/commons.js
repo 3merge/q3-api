@@ -43,8 +43,8 @@ const plugin = (schema) => {
     const arr = [];
     const statement = String(term || '')
       .split(' ')
-      .map((phrase) => `(?=.*${phrase})`)
-      .join('|');
+      .map((i) => i.trim())
+      .filter(Boolean);
 
     const iterateSchema = (s, prevpath) =>
       s.eachPath((path, obj) => {
@@ -56,7 +56,12 @@ const plugin = (schema) => {
         if (obj.schema) iterateSchema(obj.schema, join);
       });
 
-    const $regex = new RegExp(`^${statement}.*$`);
+    const constructOr = (a) => (part) => ({
+      $or: a.map((field) => ({
+        [field]: new RegExp(part, 'gi'),
+      })),
+    });
+
     iterateSchema(this.schema);
 
     /*
@@ -66,13 +71,12 @@ const plugin = (schema) => {
       ).forEach((d) => iterateSchema(d.schema)),
     ); */
 
-    return arr.length
-      ? {
-          $or: arr.map((field) => ({
-            [field]: { $regex, $options: 'gi' },
-          })),
-        }
-      : {};
+    if (!arr.length) return {};
+    if (statement.length === 1) constructOr(arr)(statement);
+
+    return {
+      $and: statement.map(constructOr(arr)),
+    };
   };
 
   schema.methods.getSubDocument = function(field, id) {
