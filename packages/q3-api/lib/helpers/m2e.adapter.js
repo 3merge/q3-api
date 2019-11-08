@@ -4,8 +4,8 @@ const filterFalsy = (value) => value.filter(Boolean);
 
 const minMax = ({ minLength, maxLength, min, max }) => ({
   options: {
-    min: min || minLength || 0,
-    max: max || maxLength || Number.MAX_VALUE,
+    min: min || minLength,
+    max: max || maxLength,
   },
 });
 
@@ -33,13 +33,13 @@ class ValidationSchemaMapper {
         ...this.required,
         ...this.enum,
         trim: true,
+        isString: true,
       },
       email: {
-        ...this.length,
         ...this.required,
-        ...this.enum,
-        normalizeEmail: true,
         isEmail: true,
+        normalizeEmail: true,
+        trim: true,
       },
       phone: {
         ...this.required,
@@ -125,7 +125,7 @@ class ValidationSchemaMapper {
   get range() {
     const { options } = this;
     return {
-      isFloat: minMax(options),
+      isNumeric: minMax(options),
     };
   }
 
@@ -139,16 +139,27 @@ class ValidationSchemaMapper {
       options: { required },
       strictMode,
     } = this;
-    return !required || !strictMode
-      ? {
-          optional: {
-            options: {
-              nullable: true,
-              falsy: true,
-            },
-          },
-        }
-      : {};
+
+    if (required && !strictMode)
+      return {
+        optional: {
+          nullable: true,
+          falsy: false,
+        },
+      };
+
+    if (required)
+      return {
+        isEmpty: {
+          negated: true,
+          checkFalsy: true,
+          errorMessage: setDynamicErrorMsg('required'),
+        },
+      };
+
+    return {
+      optional: true,
+    };
   }
 }
 

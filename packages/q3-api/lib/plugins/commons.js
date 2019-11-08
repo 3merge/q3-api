@@ -21,6 +21,10 @@ const plugin = (schema) => {
           type: Boolean,
           default: true,
         },
+        featured: {
+          type: Boolean,
+          default: false,
+        },
       }),
     );
 

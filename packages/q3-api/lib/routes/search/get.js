@@ -33,7 +33,10 @@ const SearchParams = async (
 
     res.ok({
       coll,
-      total: await model.countDocuments(params).exec(),
+      total: await model
+        .estimatedDocumentCount(params)
+        .exec(),
+
       fields: fields.reduce((a, c, i) => {
         const val = values[i];
         return val

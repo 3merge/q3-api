@@ -114,9 +114,8 @@ module.exports = ({
     const {
       sort,
       limit = 50,
-      skip = 1,
       projection: select,
-      filter: { search, ...where },
+      filter: { search, page, ...where },
     } = aqp(q);
 
     const params = Object.assign(
@@ -131,7 +130,7 @@ module.exports = ({
       hasNextPage,
       hasPrevPage,
     } = await Model.paginate(params, {
-      page: skip > 0 ? skip : 1,
+      page: page >= 1 ? page : 1,
       sort,
       select,
       limit,

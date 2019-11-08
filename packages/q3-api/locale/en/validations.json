@@ -16,7 +16,7 @@
   "op": "op",
   "mongoID": "mongoID",
   "array": "array",
-  "required": "required",
+  "string": "Must be a simple string",
   "addressType": "addressType",
   "region": "region",
   "postal": "postal",
@@ -38,5 +38,6 @@
   "phone": "Must be a valid phone number",
   "date": "Must be a valid date",
   "incorrectPassword": "Incorrect user password",
-  "coll": "Unknown collection"
+  "coll": "Unknown collection",
+  "required": "This is a required field"
 }

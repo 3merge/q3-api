@@ -10,7 +10,7 @@
   "jest": {
     "preset": "./jest-preset.js"
   },
-  "gitHead": "fa705957c99a8b0a0e4ff5476f5a322c1d549946",
+  "gitHead": "f6b778cf53eebe9ec47e5108a65a9086131ad3b3",
   "devDependencies": {
     "lodash": "^4.17.15"
   },

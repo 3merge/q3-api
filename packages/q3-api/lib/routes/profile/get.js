@@ -4,6 +4,7 @@ const { Permissions } = require('../../models');
 const getProfile = async ({ user, marshal }, res) => {
   const permissions = await Permissions.find({
     role: user.role,
+    active: true,
   })
     .setOptions({
       bypassAuthorization: true,
