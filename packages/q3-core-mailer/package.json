@@ -9,5 +9,5 @@
     "nodemailer": "^6.3.1",
     "nodemailer-mailgun-transport": "^1.4.0"
   },
-  "gitHead": "61cedd14f8e80edac61ce68fc48a905311032f83"
+  "gitHead": "5984023aa21a72f6dc844703119429ded27be8b3"
 }

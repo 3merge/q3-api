@@ -156,7 +156,11 @@ class ValidationSchemaMapper {
       };
 
     return {
-      optional: true,
+      optional: {
+        options: {
+          checkFalsy: true,
+        },
+      },
     };
   }
 }

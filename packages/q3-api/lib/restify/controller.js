@@ -7,6 +7,7 @@ const {
 } = require('q3-core-composer');
 const aqp = require('api-query-params');
 const flatten = require('flat');
+const read = require('url');
 
 const {
   discernIfValidationSchemaIsDiscriminated,
@@ -110,13 +111,15 @@ module.exports = ({
   ];
 
   const List = async (req, res) => {
-    const { query: q, marshal, t } = req;
+    const { url, marshal, t } = req;
+    const { query: q } = read.parse(url);
+
     const {
       sort,
       limit = 50,
       projection: select,
       filter: { search, page, ...where },
-    } = aqp(q);
+    } = aqp(q !== null ? q : {});
 
     const params = Object.assign(
       Model.searchBuilder(search),
@@ -124,15 +127,13 @@ module.exports = ({
       { active: true },
     );
 
-    const activePage = page + 1;
-
     const {
       docs,
       totalDocs,
       hasNextPage,
       hasPrevPage,
     } = await Model.paginate(params, {
-      page: activePage >= 1 ? activePage : 1,
+      page: page >= 0 ? page + 1 : 1,
       sort,
       select,
       limit,

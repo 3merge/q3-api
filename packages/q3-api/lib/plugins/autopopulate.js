@@ -18,6 +18,7 @@ module.exports = (schema) => {
             path: setPrefix(p, pathname),
             model: model(options.ref),
             select: options.autopopulateSelect,
+            options: { bypassAuthorization: true },
           });
       },
     );
