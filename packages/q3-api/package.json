@@ -34,7 +34,7 @@
     "moment": "^2.24.0",
     "mongoose-paginate-v2": "^1.3.3",
     "mongoose-unique-validator": "^2.0.3",
-    "q3-schema-types": "1.0.2",
+    "q3-schema-types": "1.0.3",
     "request-context": "^2.0.0"
   },
   "peerDependencies": {

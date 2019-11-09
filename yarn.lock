@@ -8147,10 +8147,10 @@ punycode@^2.1.0, punycode@^2.1.1:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-q3-schema-types@1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/q3-schema-types/-/q3-schema-types-1.0.2.tgz#7b21ad6508ed7e1d9606781326173dcd51228d10"
-  integrity sha512-njx5IVRiz4Y+jU+URhIAlvt5BjjiT4B1LqT6tJtkalQR5YaHjF60OUaCXdEVeOVKt/3mwET9r0B8gEEN+sAK/g==
+q3-schema-types@1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/q3-schema-types/-/q3-schema-types-1.0.3.tgz#1d9b0478e4235c1fcd994bf8fe878cf7bb5cda92"
+  integrity sha512-mfBnMt/u0RInCvlxd+BHy84IxuAb1KbmfDcgvSnZrSp6ZFXlxNqTzHqqpz/vqK+15PndxDtP7+MKKI7I699GBg==
   dependencies:
     is-glob "^4.0.1"
     mongoose "^5.7.7"
