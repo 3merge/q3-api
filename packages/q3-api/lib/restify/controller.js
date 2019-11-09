@@ -222,8 +222,8 @@ module.exports = ({
     });
   };
 
-  Delete.authorization = [redact(collectionName)];
-  Delete.validation = [query('ids').isArray()];
+  DeleteMany.authorization = [redact(collectionName)];
+  DeleteMany.validation = [query('ids').isArray()];
 
   if (restify.includes('get')) {
     app.get(`/${collectionName}`, compose(List));

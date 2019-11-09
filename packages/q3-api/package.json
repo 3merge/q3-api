@@ -49,5 +49,5 @@
     "aws-sdk-mock": "^4.5.0",
     "supertest": "^4.0.2"
   },
-  "gitHead": "5984023aa21a72f6dc844703119429ded27be8b3"
+  "gitHead": "de68d53ebadf98cf6cebced7c582359187a1ebf3"
 }
