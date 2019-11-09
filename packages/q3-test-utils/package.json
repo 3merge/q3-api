@@ -1,6 +1,6 @@
 {
   "name": "q3-test-utils",
-  "version": "1.0.38",
+  "version": "1.0.39",
   "main": "jest-preset.js",
   "dependencies": {
     "jest-environment-node": "^24.9.0",
