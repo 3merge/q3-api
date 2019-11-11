@@ -252,9 +252,11 @@ const plugin = (schema) => {
   Object.assign(schema.options, {
     toObject: {
       virtuals: true,
+      getters: true,
     },
     toJSON: {
       virtuals: true,
+      getters: true,
     },
   });
 
