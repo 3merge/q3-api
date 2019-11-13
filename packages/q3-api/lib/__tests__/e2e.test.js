@@ -1,44 +1,23 @@
 const supertest = require('supertest');
-const Q3 = require('../..');
+const Q3 = require('..');
 const { Users } = require('../models');
 const fixture = require('../models/user/__fixture__');
-const { MODEL_NAMES } = require('../constants');
 
 let agent;
 let id;
 let password;
 let AuthorizationSuper;
-let AuthorizationDeveloper;
-const role = 'Developer';
-
-const base = {
-  ...fixture,
-  verified: true,
-  password: 'Sh!0978ydsn*1',
-};
-
-const args = {
-  coll: MODEL_NAMES.PERMISSIONS,
-  op: 'Update',
-  fields: 'email, firstName, lastName, role',
-  ownership: 'Any',
-  role,
-};
 
 beforeAll(async () => {
+  Q3.routes();
   agent = supertest(Q3.$app);
   await Q3.connect();
   const sup = await Users.findOneOrCreate(
-    { ...base, role: 'Super' },
     {
-      bypassAuthorization: true,
-    },
-  );
-  const dev = await Users.findOneOrCreate(
-    {
-      ...base,
-      email: 'dever@net.com',
-      role,
+      ...fixture,
+      verified: true,
+      password: 'Sh!0978ydsn*1',
+      role: 'Super',
     },
     {
       bypassAuthorization: true,
@@ -46,7 +25,6 @@ beforeAll(async () => {
   );
 
   AuthorizationSuper = `ApiKey ${await sup.generateApiKey()}`;
-  AuthorizationDeveloper = `ApiKey ${await dev.generateApiKey()}`;
   ({ _id: id } = sup);
 });
 
@@ -174,33 +152,5 @@ describe('reverify /POST', () => {
       .post('/reverify')
       .send({ email: fixture.email })
       .expect(204);
-  });
-});
-
-describe('permissions /POST', () => {
-  beforeAll(async () => {
-    const doc = await Users.findById(id);
-    doc.verified = true;
-    await doc.save();
-  });
-
-  it('should return 403', async () =>
-    agent
-      .post('/permissions')
-      .send(args)
-      .set({ Authorization: AuthorizationDeveloper })
-      .expect(403));
-
-  it('should return 201', async () => {
-    await agent
-      .post('/permissions')
-      .send(args)
-      .set({ Authorization: AuthorizationSuper })
-      .expect(201);
-    await agent
-      .post('/permissions')
-      .send(args)
-      .set({ Authorization: AuthorizationSuper })
-      .expect(409);
   });
 });

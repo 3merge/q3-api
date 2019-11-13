@@ -1,9 +1,18 @@
 const Handlebars = require('handlebars');
+const path = require('path');
+const fs = require('fs');
 
-Handlebars.registerPartial(
-  'head',
-  require('./head.handlebars'),
-);
+const loadTemplate = (name) => {
+  const tmp = path.resolve(
+    __dirname,
+    `./${name}.handlebars`,
+  );
+
+  return `${fs.readFileSync(tmp, 'utf8')}`;
+};
+
+/** Parts of email */
+Handlebars.registerPartial('head', loadTemplate('head'));
 
 Handlebars.registerHelper('list', (items, options) => {
   if (!items) return '';
@@ -49,3 +58,5 @@ Handlebars.registerHelper('list', (items, options) => {
     </tr>
   </table>`;
 });
+
+module.exports = loadTemplate;

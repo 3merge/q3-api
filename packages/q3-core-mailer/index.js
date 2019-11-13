@@ -5,7 +5,7 @@ const { readdirSync } = require('fs');
 const EventEmitter = require('events');
 const Handlebars = require('handlebars');
 const path = require('path');
-const fs = require('fs');
+const loadTemplate = require('./templates');
 const send = require('./strategies');
 
 const emitter = new EventEmitter();
@@ -24,16 +24,9 @@ const settings = {
 
 class Mailer {
   constructor(template = 'transactional') {
-    const tmp = path.resolve(
-      __dirname,
-      `./templates/${template}.handlebars`,
-    );
-
+    this.src = Handlebars.compile(loadTemplate(template));
     this.data = settings;
     this.meta = settings;
-    this.src = Handlebars.compile(
-      `${fs.readFileSync(tmp, 'utf8')}`,
-    );
   }
 
   to(addresses) {

@@ -7,7 +7,7 @@ module.exports = {
   ],
   projects: ['<rootDir>/packages/*'],
   watchPathIgnorePatterns: [
+    '<rootDir>/packages/*/node_modules/*',
     '<rootDir>/node_modules',
-    '<rootDir>/packages/**/node_modules/*',
   ],
 };
