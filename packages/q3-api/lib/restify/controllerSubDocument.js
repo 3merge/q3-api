@@ -54,7 +54,7 @@ module.exports = ({
   ) => {
     const doc = await getParentResource(params.resourceID);
     await doc.set({ [field]: body }).save();
-    await populate(doc);
+    //  await populate(doc);
 
     res.create({
       message: t('messages:newSubResourceAdded'),
@@ -82,7 +82,7 @@ module.exports = ({
 
     if (!files) {
       await doc.pushSubDocument(field, body);
-      await populate(doc);
+      // await populate(doc);
     } else {
       await doc.handleUpload({ files, ...body });
     }
@@ -107,7 +107,7 @@ module.exports = ({
 
   const Get = async ({ marshal, params }, res) => {
     const doc = await getParentResource(params.resourceID);
-    await populate(doc);
+    // await populate(doc);
 
     res.ok({
       [field]: marshal(doc[field]),
@@ -135,7 +135,7 @@ module.exports = ({
       body,
     );
 
-    await populate(doc);
+    // await populate(doc);
 
     res.update({
       message: t('messages:subResourceUpdated'),

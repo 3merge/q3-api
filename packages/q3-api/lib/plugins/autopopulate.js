@@ -35,12 +35,17 @@ module.exports = (schema) => {
     await Promise.all(
       paths
         .flat()
-        .map((o) => doc.populate(o).execPopulate()),
+        .map((o) =>
+          !('parent' in this)
+            ? doc.populate(o).execPopulate()
+            : null,
+        ),
     );
   }
 
   schema
     .post('find', autopopulate)
     .post('findOne', autopopulate)
-    .post('findOneAndUpdate', autopopulate);
+    .post('findOneAndUpdate', autopopulate)
+    .post('save', autopopulate);
 };

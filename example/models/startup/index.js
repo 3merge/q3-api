@@ -6,6 +6,12 @@ const Vertical = new Schema(
       type: String,
       required: true,
     },
+    person: {
+      type: Schema.Types.ObjectId,
+      ref: 'q3-api-users',
+      autopopulate: true,
+      autopopulateSelect: 'firstName email',
+    },
   },
   {
     _id: false,
@@ -19,7 +25,7 @@ const Startup = new Schema({
     required: true,
     searchable: true,
   },
-  vertical: Vertical,
+  vertical: [Vertical],
   friends: {
     type: Schema.Types.ObjectId,
     ref: 'q3-api-users',

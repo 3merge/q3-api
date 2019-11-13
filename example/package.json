@@ -2,6 +2,7 @@
   "name": "example",
   "version": "1.0.40",
   "dependencies": {
+    "memory-cache": "^0.2.0",
     "mongoose": "^5.7.1",
     "mongoose-type-email": "^1.0.11",
     "mongoose-type-phone": "^1.0.1",

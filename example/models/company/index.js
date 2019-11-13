@@ -32,7 +32,6 @@ const Company = new Schema(
       type: Schema.Types.Url,
       required: true,
     },
-
     incorporationDate: {
       type: Date,
       required: true,

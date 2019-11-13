@@ -249,15 +249,16 @@ const plugin = (schema) => {
     schema.add(Files);
   }
 
-  Object.assign(schema.options, {
-    toObject: {
-      virtuals: true,
-      getters: true,
-    },
-    toJSON: {
-      virtuals: true,
-      getters: true,
-    },
+  schema.set('timestamps', true);
+
+  schema.set('toObject', {
+    virtuals: true,
+    getters: true,
+  });
+
+  schema.set('toJSON', {
+    virtuals: true,
+    getters: true,
   });
 
   return schema;

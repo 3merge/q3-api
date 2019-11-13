@@ -71,15 +71,17 @@ module.exports = ({
   );
 
   const Patch = async (
-    { body, marshal, params, t },
+    { body, marshal, params, t, isFresh },
     res,
   ) => {
     const doc = await Model.findStrictly(params.resourceID);
-    const output = await doc.set(body).save();
-    res.update({
-      message: t('messages:resourceUpdated'),
-      [collectionSingularName]: marshal(output),
-    });
+    if (isFresh(doc.updatedAt)) {
+      const output = await doc.set(body).save();
+      res.update({
+        message: t('messages:resourceUpdated'),
+        [collectionSingularName]: marshal(output),
+      });
+    }
   };
 
   Patch.authorization = [

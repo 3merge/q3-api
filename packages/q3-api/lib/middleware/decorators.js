@@ -1,4 +1,8 @@
+const etag = require('etag');
+const moment = require('moment');
+
 const statusCodeHelper = (res) => (code) => (body = {}) => {
+  res.set('ETag', etag(JSON.stringify(body)));
   res.status(code).json(body);
 };
 
@@ -42,6 +46,15 @@ const decorateResponse = (req, res, next) => {
     Array.isArray(o)
       ? o.map(stripMongoDBProps)
       : stripMongoDBProps(o);
+
+  req.isFresh = (d) =>
+    moment(d).isAfter(
+      new Date(
+        req.headers['if-unmodified-since'],
+      ).toISOString(),
+    )
+      ? res.status(412).send()
+      : true;
 
   res.acknowledge = dispatch(204);
   res.ok = dispatch(200);
