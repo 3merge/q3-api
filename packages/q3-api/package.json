@@ -5,6 +5,9 @@
   "main": "lib/index.js",
   "license": "MIT",
   "jest": {
+    "setupFilesAfterEnv": [
+      "q3-test-utils/jest-setup.js"
+    ],
     "testEnvironment": "node",
     "roots": [
       "<rootDir>/lib/"
@@ -49,7 +52,8 @@
   },
   "devDependencies": {
     "aws-sdk-mock": "^4.5.0",
+    "q3-test-utils": "^1.0.0",
     "supertest": "^4.0.2"
   },
-  "gitHead": "4a98589107961ea42c38092cd372e2c50385ab81"
+  "gitHead": "1552170e150d37831f62d8db8da5dfa7a9799226"
 }

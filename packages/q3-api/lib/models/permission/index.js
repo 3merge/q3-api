@@ -97,7 +97,6 @@ PermissionModel.methods.isValid = function() {
 };
 
 PermissionModel.pre('save', async function(next) {
-  console.log(this);
   const { role, op, coll, isNew } = this;
   let err;
 

@@ -5,8 +5,6 @@ const Schema = require('..');
 let Model;
 const coll = 'test_access';
 
-jest.mock('../../../errors');
-
 beforeAll(async () => {
   Model = mongoose.model(coll, Schema);
   await mongoose.connect(process.env.CONNECTION);

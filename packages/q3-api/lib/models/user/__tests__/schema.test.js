@@ -44,7 +44,6 @@ describe('UserModel validation', () => {
         'firstName',
         'lastName',
         'email',
-        'secret',
         'role',
       ]),
     );
