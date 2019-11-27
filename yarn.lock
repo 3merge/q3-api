@@ -4084,6 +4084,14 @@ express-validator@^6.2.0:
     lodash "^4.17.15"
     validator "^11.1.0"
 
+express-validator@^6.3.0:
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/express-validator/-/express-validator-6.3.0.tgz#db40dca4228c8cd6524b929ead1876520aee3dee"
+  integrity sha512-qzKJaUg6BrcRBeZH+QNq2G8/QrLOuaozWKFeeod1oVcMcdauDiTxgbvQeWkhCSlS9V37mx/CVaXKvpRBjR0IeQ==
+  dependencies:
+    lodash "^4.17.15"
+    validator "^11.1.0"
+
 express@^4.17.1:
   version "4.17.1"
   resolved "https://registry.yarnpkg.com/express/-/express-4.17.1.tgz#4491fc38605cf51f8629d39c2b5d026f98a4c134"
@@ -6566,6 +6574,14 @@ lru-cache@^5.1.1:
   integrity sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==
   dependencies:
     yallist "^3.0.2"
+
+m2e-validator@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/m2e-validator/-/m2e-validator-1.1.0.tgz#496a23eaa91a3afd3a7d8e8c6837593d3da6ba21"
+  integrity sha512-spNP+wew3qfja0zSgSJVZ3JJ/yTuAnKJ0QXiiiZkSbUTbflVHrT6QJOWFGA+t3tx4pfiWvayD608VSG1zoTDKw==
+  dependencies:
+    express-validator "^6.3.0"
+    lodash "^4.17.15"
 
 macos-release@^2.2.0:
   version "2.3.0"

@@ -34,6 +34,7 @@
     "i18next": "^17.0.14",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
+    "m2e-validator": "^1.1.0",
     "memory-cache": "^0.2.0",
     "micromatch": "^4.0.2",
     "moment": "^2.24.0",

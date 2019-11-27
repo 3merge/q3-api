@@ -1,0 +1,29 @@
+{
+  "name": "q3-core-rester",
+  "version": "1.0.41",
+  "description": "Mongoose schema REST exports",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "jest": {
+    "setupFilesAfterEnv": [
+      "q3-test-utils/jest-setup.js"
+    ],
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/lib/"
+    ]
+  },
+  "dependencies": {
+    "lodash": "^4.17.15",
+    "m2e-validator": "^1.1.0",
+    "q3-core-composer": "^1.0.20"
+  },
+  "peerDependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.7.1"
+  },
+  "devDependencies": {
+    "q3-test-utils": "^1.0.0",
+    "supertest": "^4.0.2"
+  }
+}
