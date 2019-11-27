@@ -29,3 +29,8 @@
 
 <p><a href="https://3merge.gitbook.io/q3/">🕮 Documentation</a></p>
 
+<h2>Contributing</h2>
+<p>TBD</p>
+
+<h2>Ticketing</h2>
+<p>TBD</p>
