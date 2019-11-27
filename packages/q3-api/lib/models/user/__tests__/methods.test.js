@@ -1,4 +1,5 @@
 const moment = require('moment');
+const MockModel = require('q3-test-utils/helpers/modelMock');
 const Decorator = require('../methods');
 const { compareWithHash } = require('../helpers');
 
@@ -37,13 +38,14 @@ const doc = {
 const findAsMissing = () => findOne.mockResolvedValue(null);
 
 const findUser = (args = {}) =>
-  findOne.mockResolvedValue({
+  MockModel.exec.mockResolvedValue({
     ...args,
     ...doc,
   });
 
 beforeEach(() => {
   findOne.mockReset();
+  MockModel.reset();
 });
 
 describe('$findOneStrictly', () => {
@@ -57,13 +59,12 @@ describe('$findOneStrictly', () => {
   it('should return document', async () => {
     findUser();
     await willResolveObject(
-      Decorator.$findOneStrictly.call(
-        { findOne },
-        { email },
-      ),
+      Decorator.$findOneStrictly.call(MockModel, { email }),
       doc,
     );
-    expect(findOne).toHaveBeenCalledWith({ email });
+    expect(MockModel.findOne).toHaveBeenCalledWith({
+      email,
+    });
   });
 });
 
@@ -83,8 +84,8 @@ describe('static find abstractions', () => {
   });
 
   it('should query by key', async () => {
-    await Decorator.findByApiKey.call(inst, 'Apikey 123');
-    expect(findOne).toHaveBeenCalledWith({
+    await Decorator.findByApiKey.call(MockModel, '123');
+    expect(MockModel.findOne).toHaveBeenCalledWith({
       password: { $exists: true },
       apiKeys: '123',
       verified: true,

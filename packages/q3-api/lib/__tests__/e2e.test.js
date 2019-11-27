@@ -8,6 +8,8 @@ let id;
 let password;
 let AuthorizationSuper;
 
+jest.unmock('request-context');
+
 beforeAll(async () => {
   Q3.routes();
   agent = supertest(Q3.$app);
@@ -24,7 +26,7 @@ beforeAll(async () => {
     },
   );
 
-  AuthorizationSuper = `ApiKey ${await sup.generateApiKey()}`;
+  AuthorizationSuper = `Apikey ${await sup.generateApiKey()}`;
   ({ _id: id } = sup);
 });
 

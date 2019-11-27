@@ -4,20 +4,22 @@ const mongoose = require('../config/mongoose');
 const app = require('../config/express');
 const { verifyToken } = require('../models/user/helpers');
 
+const isApiKey = (s = '') =>
+  s.startsWith('Apikey') ? s.substr(7) : s;
+
 const middleware = async (req, res, next) => {
   const User = mongoose.model(MODEL_NAMES.USERS);
+  const auth = req.header('Authorization');
 
   req.user = await verifyToken(
-    req.header('Authorization'),
+    auth,
     req.header('exp-nonce'),
     req.get('host'),
     User,
   );
 
   if (!req.user) {
-    req.user = await User.findByApiKey(
-      req.header('Api-Key'),
-    );
+    req.user = await User.findByApiKey(isApiKey(auth));
   }
 
   if (req.user && req.user.lang && req.tChange) {

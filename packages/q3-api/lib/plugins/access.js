@@ -32,7 +32,9 @@ class AccessHooks {
         { createdBy: user.id },
       ]);
     } else {
-      this.where('createdBy').equals(user.id);
+      this.where({
+        'createdBy': user.id,
+      });
     }
   }
 }

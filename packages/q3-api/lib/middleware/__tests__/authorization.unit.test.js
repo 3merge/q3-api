@@ -51,12 +51,6 @@ describe('fetchPermission', () => {
 
 describe('middleware', () => {
   it('should set context', async () => {
-    jest
-      .spyOn(ctx, 'get')
-      .mockReturnValue({ t: jest.fn() });
-    const spy = jest
-      .spyOn(ctx, 'set')
-      .mockReturnValue(null);
     const req = {
       method: 'PATCH',
       user: {
@@ -67,6 +61,6 @@ describe('middleware', () => {
     middleware(req, {}, jest.fn());
     expect(req).toHaveProperty('authorization');
     await req.authorization('FOO');
-    expect(spy.mock.calls).toHaveLength(2);
+    expect(ctx.set.mock.calls).toHaveLength(1);
   });
 });

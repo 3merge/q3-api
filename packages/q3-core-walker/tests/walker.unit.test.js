@@ -28,20 +28,6 @@ describe('getVerb', () => {
     expect(fn('get.id.js')).toBe('get'));
 });
 
-describe('getWorkingDirectory', () => {
-  const fn = testUtils.__get__('getWorkingDirectory');
-
-  beforeAll(() => {
-    jest.spyOn(process, 'cwd').mockReturnValue('foo');
-  });
-
-  it('should return working directory without path', () =>
-    expect(fn()).toBe('foo'));
-
-  it('should resolve root', () =>
-    expect(fn('bar')).toBe('foo\\bar'));
-});
-
 describe('DirectoryWalker', () => {
   let inst;
 
@@ -51,7 +37,7 @@ describe('DirectoryWalker', () => {
   });
 
   it('should return an export', () => {
-    inst.setContext(__dirname, '../fixtures/get');
+    inst.setContext(__dirname, '../fixtures/routes/get');
     expect(inst.getController()).toEqual(
       expect.any(Function),
     );
@@ -65,7 +51,7 @@ describe('DirectoryWalker', () => {
   it('should register a new route', () => {
     const app = { post: jest.fn() };
     inst.setContext(
-      resolve(__dirname, '../fixtures/authenticate'),
+      resolve(__dirname, '../fixtures/routes/authenticate'),
       'post.js',
     );
     inst.exec(app);
