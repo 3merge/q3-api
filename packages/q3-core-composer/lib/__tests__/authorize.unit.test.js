@@ -1,13 +1,11 @@
 const {
   redact,
   authorizeRequest,
-} = require('../lib/authorize');
+} = require('../authorize');
 
-const process = require('../lib/authorize').__get__(
-  'process',
-);
+const process = require('../authorize').__get__('process');
 
-const FieldRedactionCommander = require('../lib/authorize').__get__(
+const FieldRedactionCommander = require('../authorize').__get__(
   'FieldRedactionCommander',
 );
 

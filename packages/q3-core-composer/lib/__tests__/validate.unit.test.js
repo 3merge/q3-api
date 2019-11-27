@@ -1,8 +1,10 @@
-const { validateBody } = require('../lib/validate');
+const { validateBody } = require('../validate');
 
 const req = { body: {} };
 const res = {};
 const next = jest.fn();
+
+jest.mock('express-validator');
 
 beforeEach(() => {
   next.mockReset();

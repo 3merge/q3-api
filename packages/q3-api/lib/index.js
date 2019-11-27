@@ -18,6 +18,9 @@ const mailHelpers = require('./events/utils');
  */
 require('./middleware');
 
+// install core composer middleware here
+// install restify
+
 const { Users } = require('./models');
 
 const Q3 = {};

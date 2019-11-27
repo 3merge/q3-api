@@ -2,11 +2,8 @@ const connect = require('connect');
 const aa = require('express-async-handler');
 const dep = require('express-validator');
 const authorize = require('./lib/authorize');
-const effect = require('./lib/effect');
-const {
-  validateBody,
-  validateIf,
-} = require('./lib/validate');
+const middleware = require('./lib/middleware');
+const { validateBody } = require('./lib/validate');
 
 const {
   redact,
@@ -45,7 +42,6 @@ const compose = (ctr) =>
       authorizeRequest,
       authorizeResponse,
     ]),
-    flatten(effect(ctr.effect)),
     aa(ctr),
     ctr,
   ]);
@@ -56,5 +52,5 @@ module.exports = {
   verify,
   compose,
   check,
-  validateIf,
+  middleware,
 };

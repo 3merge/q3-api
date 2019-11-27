@@ -1,6 +1,11 @@
 const express = require('express');
 const supertest = require('supertest');
-const { compose, check, redact } = require('..');
+const {
+  compose,
+  check,
+  redact,
+  middleware,
+} = require('../..');
 
 jest.unmock('express-validator');
 
@@ -14,13 +19,14 @@ const listenForErrors = (err, req, res, next) => {
 
 beforeAll(() => {
   app = express();
+  app.use(middleware({}, {}));
   agent = supertest(app);
 });
 
 describe('compose', () => {
   it('should stack middleware', () => {
     const obj = () => null;
-    expect(compose(obj).stack).toHaveLength(5);
+    expect(compose(obj).stack).toHaveLength(4);
     expect(compose(obj).root).toEqual(expect.any(Function));
   });
 
@@ -92,29 +98,6 @@ describe('compose', () => {
           quux: 1,
         });
       });
-  });
-
-  it('should call effect', async () => {
-    const first = jest.fn();
-    const second = jest.fn();
-    const data = { foo: 'bar' };
-
-    const route = (req, res) => {
-      req.evoke(data);
-      res.json({});
-    };
-
-    route.effect = [first, second];
-
-    app.get('/effect', compose(route));
-    app.use(listenForErrors);
-    await agent.get('/effect').expect(200);
-
-    expect(first).toHaveBeenCalledWith(
-      data,
-      expect.any(Object),
-    );
-    expect(second).not.toHaveBeenCalled();
   });
 });
 

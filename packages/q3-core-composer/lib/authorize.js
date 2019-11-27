@@ -23,10 +23,10 @@ const redact = (modelName) => {
 
   const chain = async (req, res, next) => {
     try {
-      if (!req.authorization)
+      if (!req.authorize)
         throw new Error('Authorization middleware missing');
 
-      const grant = await req.authorization(modelName);
+      const grant = await req.authorize(modelName);
       const fields = splitDelineatedList(grant);
       set(req, `redactions.${modelName}`, {
         locations,
@@ -74,8 +74,8 @@ const redact = (modelName) => {
   return chain;
 };
 
-const verify = ({ user, passedGrants }, res, next) => {
-  if (!user && !passedGrants) {
+const verify = ({ user }, res, next) => {
+  if (!user) {
     res.status(401).send();
   } else {
     next();

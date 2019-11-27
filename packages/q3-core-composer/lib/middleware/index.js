@@ -5,6 +5,7 @@ class Session {
   }
 
   getToken() {
+    if (!this.auth) return '';
     return this.auth.startsWith('Apikey') ||
       this.auth.startsWith('Bearer')
       ? this.auth.substr(7)
@@ -36,7 +37,7 @@ class Session {
   }
 
   async getPermission(Model, collectionName) {
-    // how to do comparative?
+    if (!('hasGrant' in Model)) return null;
     return Model.hasGrant(
       collectionName,
       this.op,
@@ -77,7 +78,7 @@ function middleware(UserModel, PermissionModel) {
     req.authorize = (name) => {
       identity.setUser(req.user);
       identity.setOperation();
-      identity.getPermission(PermissionModel, name);
+      return identity.getPermission(PermissionModel, name);
     };
 
     next();

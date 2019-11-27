@@ -1,9 +1,23 @@
+/* eslint-disable no-unused-vars */
 const mongoose = require('mongoose');
 const express = require('express');
 const supertest = require('supertest');
+const { middleware } = require('q3-core-composer');
 const rester = require('..');
 
-// install middleware HERE
+const config = middleware(
+  {
+    findbyBearerToken: jest.fn().mockResolvedValue({
+      id: mongoose.Types.ObjectId(),
+      role: 'Super',
+    }),
+  },
+  {
+    hasGrant: jest.fn().mockResolvedValue({
+      fields: '*',
+    }),
+  },
+);
 
 const app = express();
 const rest = rester(app, mongoose).init();
@@ -41,8 +55,12 @@ const BasePlus = new Schema({
 const Foo = model('FOO', Base);
 Foo.discriminator('FOO_EXTENDS', BasePlus);
 
-beforeAll(() => {
+beforeAll(async () => {
+  app.use(config);
   rest.run();
+
+  await mongoose.connect(process.env.CONNECTION);
+
   app.use((e, req, res, next) => {
     console.log(e);
     res.status(500).send();
