@@ -3,10 +3,10 @@
 </p>
 
 <h1 align="center">
-  Q3
+  Q3 API
 </h1>
 
-<p>
+<p align="center">
   <a href="https://circleci.com/gh/3merge/q3-schema">
     <img src="https://circleci.com/gh/3merge/q3-schema.svg?style=shield" alt="Current CircleCI build status." />
   </a>
