@@ -3,7 +3,13 @@
   "version": "1.0.20",
   "main": "index.js",
   "jest": {
-    "testEnvironment": "node"
+    "setupFilesAfterEnv": [
+      "q3-test-utils/jest-setup.js"
+    ],
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/lib/"
+    ]
   },
   "dependencies": {
     "connect": "^3.7.0",

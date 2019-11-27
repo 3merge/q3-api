@@ -1,3 +1,5 @@
+const validatorAdapter = require('m2e-validator');
+const paginate = require('mongoose-paginate-v2');
 const Controller = require('./restDocuments');
 const SubController = require('./restSubDocuments');
 
@@ -58,6 +60,13 @@ module.exports = (app, mongoose) => ({
         }),
       );
     });
+  },
+
+  init() {
+    // check if middleware is installed?
+    mongoose.plugin(validatorAdapter);
+    mongoose.plugin(paginate);
+    return this;
   },
 
   run() {

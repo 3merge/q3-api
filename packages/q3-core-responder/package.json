@@ -7,6 +7,15 @@
     "i18next": "^17.0.14",
     "request-context": "^2.0.0"
   },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "q3-test-utils/jest-setup.js"
+    ],
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/lib/"
+    ]
+  },
   "devDependencies": {
     "supertest": "^4.0.2"
   },

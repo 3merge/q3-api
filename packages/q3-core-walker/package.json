@@ -3,7 +3,10 @@
   "version": "1.0.37",
   "main": "index.js",
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "q3-test-utils/jest-setup.js"
+    ]
   },
   "peerDependencies": {
     "express": "^4.17.1"

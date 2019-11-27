@@ -1,3 +1,5 @@
+/** DEPRECATE THIS */
+
 module.exports = (callbacks) =>
   callbacks
     ? [

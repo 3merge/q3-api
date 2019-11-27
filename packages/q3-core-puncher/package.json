@@ -5,5 +5,11 @@
   "dependencies": {
     "lodash.get": "^4.4.2"
   },
+  "jest": {
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "q3-test-utils/jest-setup.js"
+    ]
+  },
   "gitHead": "0b3cd9783303e9853037b7bdacdaffbc549f4ad2"
 }
