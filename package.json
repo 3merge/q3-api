@@ -7,16 +7,15 @@
     "node": "^12.9.0"
   },
   "scripts": {
-    "test": "jest",
     "bootstrap": "lerna bootstrap --use-workspaces",
-    "build": "lerna exec --parallel -- babel --root-mode upward src -d dist --ignore **/__mocks__,**/*.test.js",
+    "develop": "nodemon --watch example example/index.js",
     "lint": "eslint . --ext .js --ext .jsx --ignore-pattern dist --ignore-pattern node_modules",
-    "lerna-publish": "lerna publish",
-    "develop": "nodemon --watch example example/index.js"
+    "test": "jest --collectCoverage",
+    "upload": "lerna publish"
   },
   "workspaces": [
     "packages/*",
-    "example"
+    "examples/*"
   ],
   "devDependencies": {
     "@babel/cli": "^7.5.5",
