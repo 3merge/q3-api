@@ -1,9 +1,9 @@
-<p>
+<p align="center">
     <img alt="3merge" src="https://github.com/3merge/q3-client/blob/master/logo.png" width="22" />
 </p>
 
-<h1>
-  Q3 - API Framework for Headless PWA clients
+<h1 align="center">
+  Q3
 </h1>
 
 <p>
