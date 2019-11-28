@@ -2,6 +2,11 @@
 
 * [Initial page](README.md)
 
+## Model Decorators
+
+* [Sub-documents](model-decorators/sub-documents.md)
+* [Soft deleting](model-decorators/soft-deleting.md)
+
 ## Schemas <a id="schema"></a>
 
 * [Address](schema/address.md)
@@ -11,8 +16,4 @@
   * [Sample JSON](schema/order/sample-json.md)
 * [Rate](schema/rate.md)
 * [Rebate](schema/rebate.md)
-
-## Model Decorators
-
-* [Sub-documents](model-decorators/sub-documents.md)
 
