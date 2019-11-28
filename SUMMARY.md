@@ -12,3 +12,7 @@
 * [Rate](schema/rate.md)
 * [Rebate](schema/rebate.md)
 
+## Model Decorators
+
+* [Sub-documents](model-decorators/sub-documents.md)
+
