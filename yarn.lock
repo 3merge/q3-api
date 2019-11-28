@@ -2794,7 +2794,7 @@ dot-prop@^4.2.0:
   dependencies:
     is-obj "^1.0.0"
 
-dotenv@^8.1.0, dotenv@^8.2.0:
+dotenv@^8.2.0:
   version "8.2.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
   integrity sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==
@@ -5794,29 +5794,6 @@ moment@^2.24.0:
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
   integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
 
-mongodb-memory-server-core@5.2.11:
-  version "5.2.11"
-  resolved "https://registry.yarnpkg.com/mongodb-memory-server-core/-/mongodb-memory-server-core-5.2.11.tgz#b555ca3ec9c3669e6d4e2d86b072431e42a50a97"
-  integrity sha512-KYU+bg5p0Mjo9yS9mMs5TnaTe82ATOhM6p2C7hrMk4v1RpawzoMTKcp/A7ynHavnNOeNLh6ESP1ScabL1fGqkw==
-  dependencies:
-    camelcase "^5.3.1"
-    cross-spawn "^6.0.5"
-    debug "^4.1.1"
-    decompress "^4.2.0"
-    dedent "^0.7.0"
-    find-cache-dir "^3.0.0"
-    find-package-json "^1.2.0"
-    get-port "^5.0.0"
-    getos "^3.1.1"
-    https-proxy-agent "^3.0.0"
-    lockfile "^1.0.4"
-    md5-file "^4.0.0"
-    mkdirp "^0.5.1"
-    tmp "^0.1.0"
-    uuid "^3.3.3"
-  optionalDependencies:
-    mongodb "^3.2.7"
-
 mongodb-memory-server-core@6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/mongodb-memory-server-core/-/mongodb-memory-server-core-6.0.1.tgz#24c7062868e358245e44b7a815c8a69e9078bfbd"
@@ -5839,13 +5816,6 @@ mongodb-memory-server-core@6.0.1:
     uuid "^3.3.3"
   optionalDependencies:
     mongodb "^3.2.7"
-
-mongodb-memory-server@^5.2.5:
-  version "5.2.11"
-  resolved "https://registry.yarnpkg.com/mongodb-memory-server/-/mongodb-memory-server-5.2.11.tgz#b0eba224235cafaa0f351b3db8eebee2111c053b"
-  integrity sha512-QeFC/n/rXYKO8DSt7SyN5wA1myXxS6lTnv0ACTwtwjcoiOcX06mLsJyQ2hrC/HwTQX7afHCSNiphMWMWzojUtw==
-  dependencies:
-    mongodb-memory-server-core "5.2.11"
 
 mongodb-memory-server@^6.0.1:
   version "6.0.1"

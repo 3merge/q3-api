@@ -8,14 +8,14 @@ const {
 
 module.exports = async (req, res) => {
   const {
-    url,
     t,
     marshal,
     collectionPluralName,
+    originalUrl,
     datasource,
   } = req;
 
-  const { query: q } = read.parse(url);
+  const { query: q } = read.parse(originalUrl, true);
 
   const {
     sort,
@@ -24,11 +24,10 @@ module.exports = async (req, res) => {
     filter: { search, page, ...where },
   } = aqp(q !== null ? q : {});
 
-  const params = Object.assign(
-    datasource.searchBuilder(search),
-    where,
-    { active: true },
-  );
+  const regex = datasource.searchBuilder(search) || {};
+  const params = Object.assign(regex, where, {
+    active: true,
+  });
 
   const {
     docs,

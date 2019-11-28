@@ -27,7 +27,7 @@ module.exports = (app) => (Model) => {
 
   app.use(new Controller(Model).exec());
 
-  childSchemas.forEach(({ model: { path } }) => {
-    app.use(new SubController(Model, path).exec());
-  });
+  childSchemas.forEach(({ model: { path } }) =>
+    app.use(new SubController(Model, path).exec()),
+  );
 };

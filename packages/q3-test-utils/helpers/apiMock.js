@@ -36,19 +36,8 @@ module.exports = class ControllerMock {
       acknowledge: jest.fn(),
       update: jest.fn(),
       create: jest.fn(),
+      csv: jest.fn(),
     };
-  }
-
-  clear() {
-    this.req.t.mockReset();
-    this.res.ok.mockReset();
-    this.res.acknowledge.mockReset();
-    this.res.update.mockReset();
-    this.res.create.mockReset();
-  }
-
-  reset() {
-    this.setup(this.init);
   }
 
   inject(req = {}, res = {}) {
