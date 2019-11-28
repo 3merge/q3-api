@@ -24,7 +24,8 @@
   },
   "peerDependencies": {
     "express": "^4.17.1",
-    "mongoose": "^5.7.1"
+    "mongoose": "^5.7.1",
+    "q3-core-responder": "1.0.31"
   },
   "devDependencies": {
     "q3-test-utils": "^1.0.0",

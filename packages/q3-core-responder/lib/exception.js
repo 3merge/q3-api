@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-unused-vars, max-classes-per-file */
 const ctx = require('request-context');
 const i18n = require('i18next');
 
@@ -6,6 +6,8 @@ const executeTranslation = (
   name,
   sessionVar = 'q3-session:locale',
 ) => {
+  // don't know if I love this
+  // maybe have a fallback i18next?
   const locale = ctx.get(sessionVar);
   if (locale) return locale.t(name);
   if (i18n.exists(name)) return i18n.t(name);
@@ -30,6 +32,7 @@ const retrieveStatusMeta = (code) =>
 class Exception {
   constructor(code) {
     const [name, statusCode] = retrieveStatusMeta(code);
+    this.code = code;
     this.name = name;
     this.statusCode = statusCode;
     this.errors = {};

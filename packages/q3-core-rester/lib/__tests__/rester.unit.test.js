@@ -1,11 +1,11 @@
 const rester = require('..');
-const Controller = require('../restDocuments');
-const SubController = require('../restSubDocuments');
+const Controller = require('../controllerDocs');
+const SubController = require('../controllerSubDocs');
 
 const collectionName = 'Foo';
 
-jest.mock('../restDocuments');
-jest.mock('../restSubDocuments');
+jest.mock('../controllerDocs');
+jest.mock('../controllerSubDocs');
 
 describe('rester unit tests', () => {
   describe('validateModelOptions', () => {
@@ -52,7 +52,7 @@ describe('rester unit tests', () => {
       });
 
       expect(use).toHaveBeenCalled();
-      expect(Controller).toHaveBeenCalled();
+      expect(Controller.exec).toHaveBeenCalled();
     });
   });
 
@@ -74,7 +74,7 @@ describe('rester unit tests', () => {
       });
 
       expect(use).toHaveBeenCalled();
-      expect(SubController).toHaveBeenCalled();
+      expect(SubController.exec).toHaveBeenCalled();
     });
 
     it('should not attempt subcontrollers', () => {

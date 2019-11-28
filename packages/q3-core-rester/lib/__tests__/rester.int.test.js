@@ -62,6 +62,7 @@ beforeAll(async () => {
   await mongoose.connect(process.env.CONNECTION);
 
   app.use((e, req, res, next) => {
+    // eslint-disable-next-line
     console.log(e);
     res.status(500).send();
   });
