@@ -1,3 +1,2 @@
-# Q3 API Framework
+# Initial page
 
-__Coming soon__
