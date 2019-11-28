@@ -4,13 +4,15 @@ const {
   query,
 } = require('q3-core-composer');
 const RestRegistration = require('../../datasource');
-const Remove = require('./delete');
-const RemoveMany = require('./deleteMany');
-const Get = require('./get');
-const List = require('./list');
-const Patch = require('./patch');
-const Post = require('./post');
-const Upload = require('./upload');
+const {
+  List,
+  Get,
+  Post,
+  Remove,
+  RemoveMany,
+  Patch,
+  Upload,
+} = require('./handlers');
 
 module.exports = class DocumentControllerCommander extends RestRegistration {
   exec() {
@@ -93,7 +95,7 @@ module.exports = class DocumentControllerCommander extends RestRegistration {
     ];
 
     Patch.validation = this.getValidationSchema(false);
-    return this.makePost(path, Post);
+    return this.makePatch(path, Patch);
   }
 
   getDeleteController(path) {

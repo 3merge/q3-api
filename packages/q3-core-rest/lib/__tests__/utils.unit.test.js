@@ -48,4 +48,12 @@ describe('Utility functions', () => {
       expect(next).toHaveBeenCalledWith('foo.$.bar');
     });
   });
+
+  describe('pick', () => {
+    it('should parse object for specific keys', () => {
+      expect(
+        Controller.pick({ foo: 1, bar: 1 }, ['foo']),
+      ).toMatchObject({ foo: 1 });
+    });
+  });
 });

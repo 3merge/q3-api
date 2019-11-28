@@ -28,6 +28,7 @@ module.exports = class ControllerMock {
       get: jest.fn(),
       t: jest.fn().mockImplementation((v) => v),
       marshal: jest.fn().mockImplementation((v) => v),
+      isFresh: jest.fn(),
       user,
     };
 
@@ -38,6 +39,10 @@ module.exports = class ControllerMock {
       create: jest.fn(),
       csv: jest.fn(),
     };
+  }
+
+  reset() {
+    this.setup(this.init);
   }
 
   inject(req = {}, res = {}) {

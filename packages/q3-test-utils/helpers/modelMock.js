@@ -1,6 +1,16 @@
 const Model = {};
 
 [
+  'create',
+  'update',
+  'updateOne',
+  'findStrictly',
+  'archive',
+  'archiveMany',
+  'pushSubDocument',
+  'removeSubDocuments',
+  'getSubDocument',
+  'updateSubDocument',
   'exec',
   'find',
   'findOne',
@@ -9,6 +19,7 @@ const Model = {};
   'select',
   'setOptions',
   'validate',
+  'set',
 ].forEach((name) => {
   Model[name] = jest.fn().mockReturnValue(Model);
 });
@@ -18,5 +29,17 @@ Model.reset = () =>
     if (typeof method === 'object' && 'mockReset' in method)
       method.mockReset();
   });
+
+Model.collection = {
+  collectionName: 'foo',
+};
+
+Model.schema = {
+  childSchemas: [],
+  options: {},
+  get: jest.fn(),
+  set: jest.fn(),
+  path: jest.fn(),
+};
 
 module.exports = Model;

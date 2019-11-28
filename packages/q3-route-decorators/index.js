@@ -47,14 +47,15 @@ const decorateResponse = (req, res, next) => {
       ? o.map(stripMongoDBProps)
       : stripMongoDBProps(o);
 
-  req.isFresh = (d) =>
-    moment(d).isAfter(
-      new Date(
-        req.headers['if-unmodified-since'],
-      ).toISOString(),
-    )
+  req.isFresh = (d) => {
+    const unmod = req.headers['if-unmodified-since'];
+    return unmod &&
+      moment(unmod).isValid() &&
+      moment(d).isValid() &&
+      moment(d).isAfter(new Date(unmod).toISOString())
       ? res.status(412).send()
       : true;
+  };
 
   res.acknowledge = dispatch(204);
   res.ok = dispatch(200);
