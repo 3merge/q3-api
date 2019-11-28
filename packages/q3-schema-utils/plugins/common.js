@@ -20,58 +20,6 @@ const plugin = (schema) => {
     });
   };
 
-  schema.methods.getSubDocument = function(field, id) {
-    const subdoc = invoke(get(this, field), 'id', id);
-    if (!subdoc)
-      exception('ResourceMissing')
-        .msg('subdocumentNotFound')
-        .throw();
-
-    return subdoc;
-  };
-
-  schema.methods.pushSubDocument = async function(
-    field,
-    args,
-  ) {
-    if (Array.isArray(this[field])) {
-      this[field].push(args);
-    } else {
-      this[field] = [args];
-    }
-
-    return this.save();
-  };
-
-  schema.methods.removeSubDocument = async function(
-    field,
-    id,
-  ) {
-    // allow repetition
-    const removeChild = (v) => {
-      const subdoc = this.getSubDocument(field, v);
-      subdoc.remove();
-    };
-
-    if (Array.isArray(id)) {
-      id.map(removeChild);
-    } else {
-      removeChild(id);
-    }
-
-    return this.save();
-  };
-
-  schema.methods.updateSubDocument = async function(
-    field,
-    id,
-    args,
-  ) {
-    const subdoc = await this.getSubDocument(field, id);
-    subdoc.set(args);
-    return this.save();
-  };
-
   schema.statics.archiveMany = async function(ids) {
     const docs = await this.find({
       _id: { $in: ids },
@@ -99,10 +47,67 @@ const plugin = (schema) => {
     return doc;
   };
 
+  schema.methods.getSubDocument = function(field, id) {
+    const subdoc = invoke(get(this, field), 'id', id);
+    if (!subdoc)
+      exception('ResourceMissing')
+        .msg('subdocumentNotFound')
+        .throw();
+
+    return subdoc;
+  };
+
+  schema.methods.pushSubDocument = async function(
+    field,
+    args,
+  ) {
+    if (Array.isArray(this[field])) {
+      this[field].push(args);
+    } else {
+      this[field] = [args];
+    }
+
+    return this.save();
+  };
+
+  schema.methods.removeSubDocument = async function(
+    field,
+    id,
+  ) {
+    const removeChild = (v) => {
+      const subdoc = this.getSubDocument(field, v);
+      subdoc.remove();
+    };
+
+    if (Array.isArray(id)) {
+      id.map(removeChild);
+    } else {
+      removeChild(id);
+    }
+
+    return this.save();
+  };
+
+  schema.methods.updateSubDocument = async function(
+    field,
+    id,
+    args,
+  ) {
+    const subdoc = await this.getSubDocument(field, id);
+    subdoc.set(args);
+    return this.save();
+  };
+
   schema.statics.getAllFields = function() {
     return Object.entries(this.schema.paths)
       .map(getPathsRecursively)
-      .flat();
+      .flat()
+      .filter(
+        (name) =>
+          !name.includes('_id') &&
+          !name.includes('__v') &&
+          !name.includes('active'),
+      );
   };
 
   schema.statics.getReferentialPaths = function() {

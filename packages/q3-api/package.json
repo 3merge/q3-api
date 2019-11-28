@@ -24,7 +24,7 @@
     "cors": "^2.8.5",
     "csv-express": "^1.2.2",
     "deep-diff": "^1.0.2",
-    "dotenv": "^8.1.0",
+    "dotenv": "^8.2.0",
     "etag": "^1.8.1",
     "express-fileupload": "^1.1.5",
     "express-rate-limit": "^5.0.0",
