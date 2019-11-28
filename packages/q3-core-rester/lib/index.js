@@ -7,6 +7,7 @@ const addControllersToRest = require('./controllers');
 module.exports = (app, mongoose) => ({
   init() {
     app.use(decorators);
+    // add commons plugin here
     mongoose.plugin(partialSearch);
     mongoose.plugin(validatorAdapter);
     mongoose.plugin(paginate);

@@ -25,6 +25,7 @@ module.exports = class ControllerMock {
       params: { ...params },
       query: { ...query },
       evoke: jest.fn(),
+      get: jest.fn(),
       t: jest.fn().mockImplementation((v) => v),
       marshal: jest.fn().mockImplementation((v) => v),
       user,
@@ -50,7 +51,7 @@ module.exports = class ControllerMock {
     this.setup(this.init);
   }
 
-  inject(req, res) {
+  inject(req = {}, res = {}) {
     merge(this.req, req);
     merge(this.res, res);
   }

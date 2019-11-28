@@ -14,13 +14,16 @@ exports.withDateRange = (schema) => {
   schema.methods.hasNotYetBegun = function isAfter() {
     const { effectiveFrom } = this;
     return (
-      !effectiveFrom || moment(effectiveFrom).isAfter(new Date())
+      !effectiveFrom ||
+      moment(effectiveFrom).isAfter(new Date())
     );
   };
 
   schema.methods.hasExpired = function isBefore() {
     const { expiresOn } = this;
-    return !expiresOn || moment(expiresOn).isBefore(new Date());
+    return (
+      !expiresOn || moment(expiresOn).isBefore(new Date())
+    );
   };
 
   schema.statics.getDateQuery = function query() {
@@ -66,8 +69,10 @@ exports.withNorthAmericanCurrency = (schema) => {
     let sum = num;
     const equals = inboundCurrency === outboundCurrency;
 
-    if (!equals && inboundCurrency === 'USD') sum = num * rate;
-    if (!equals && inboundCurrency === 'CAD') sum = num / rate;
+    if (!equals && inboundCurrency === 'USD')
+      sum = num * rate;
+    if (!equals && inboundCurrency === 'CAD')
+      sum = num / rate;
     return sum;
   };
 
@@ -81,7 +86,9 @@ const toFixed = (num, fb = 0) =>
   Math.floor(Number.isNaN(num) ? fb : num * 100) / 100;
 
 const compareObjectIds = (a, b) =>
-  typeof a === 'object' && 'equals' in a ? a.equals(b) : a === b;
+  typeof a === 'object' && 'equals' in a
+    ? a.equals(b)
+    : a === b;
 
 const isMatch = (name, pattern = '*') =>
   micromatch.isMatch(String(name).toLowerCase(), pattern, {
