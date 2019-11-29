@@ -1,8 +1,8 @@
 ---
-description: Q3 registers a global mongoose plugin for easier sub-document management.
+description: Q3 registers a global mongoose plugin for easier subdocument management.
 ---
 
-# Sub-documents
+# Subdocuments
 
 ### API reference
 

@@ -4,8 +4,8 @@
 
 ## Model Decorators
 
-* [Sub-documents](model-decorators/sub-documents.md)
 * [Soft deleting](model-decorators/soft-deleting.md)
+* [Subdocuments](model-decorators/sub-documents.md)
 
 ## Schemas <a id="schema"></a>
 
