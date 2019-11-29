@@ -1,0 +1,30 @@
+{
+  "editor.tabSize": 2,
+  "editor.fontSize": 14,
+  "editor.detectIndentation": false,
+  "eslint.autoFixOnSave": true,
+  "eslint.alwaysShowStatus": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    {
+      "language": "typescript",
+      "autoFix": true
+    },
+    {
+      "language": "typescriptreact",
+      "autoFix": true
+    }
+  ],
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/.jest-cache": true,
+    "**/.jest-coverage": true,
+    "**/node_modules/": true,
+    "**/packages/*/node_modules/": true,
+  }
+}

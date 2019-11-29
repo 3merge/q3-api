@@ -1,12 +1,10 @@
 const { check, compose } = require('q3-core-composer');
 const { exception } = require('q3-core-responder');
-const {
-  checkNewPassword,
-} = require('../../helpers/validation');
+const { checkNewPassword } = require('../../utils');
 const { Users } = require('../../models');
 
 const verify = async (
-  { body: { id, password, verificationCode } },
+  { body: { id, newPassword, verificationCode } },
   res,
 ) => {
   const doc = await Users.findUserBySecret(
@@ -20,7 +18,7 @@ const verify = async (
       .field('verificationCode')
       .throw();
 
-  await doc.setPassword(password);
+  await doc.setPassword(newPassword);
   res.acknowledge();
 };
 

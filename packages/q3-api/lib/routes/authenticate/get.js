@@ -1,7 +1,6 @@
-const { compose } = require('q3-core-composer');
+const { check, compose } = require('q3-core-composer');
 const { exception } = require('q3-core-responder');
 const { Users } = require('../../models');
-const { checkEmail } = require('../../helpers/validation');
 
 const LookupAccount = async ({ query: { email } }, res) => {
   const doc = await Users.findOne({ email })
@@ -16,5 +15,10 @@ const LookupAccount = async ({ query: { email } }, res) => {
   res.acknowledge();
 };
 
-LookupAccount.validation = [checkEmail];
+LookupAccount.validation = [
+  check('email')
+    .isEmail()
+    .respondsWith('email'),
+];
+
 module.exports = compose(LookupAccount);

@@ -1,17 +1,25 @@
 {
   "name": "q3-core-responder",
   "main": "lib/index.js",
-  "version": "1.0.21",
+  "version": "1.0.31",
   "peerDependencies": {
-    "express": "^4.17.1",
-    "i18next": "^17.0.14",
-    "request-context": "^2.0.0"
+    "express": "^4.17.1"
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "q3-test-utils/jest-setup.js"
+    ],
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/lib/"
+    ]
   },
   "devDependencies": {
     "supertest": "^4.0.2"
   },
   "dependencies": {
-    "cookies": "^0.8.0"
+    "etag": "^1.8.1",
+    "moment": "^2.24.0"
   },
-  "gitHead": "24b07fc92698b652b8941b372eeaac70a0a0d999"
+  "gitHead": "1552170e150d37831f62d8db8da5dfa7a9799226"
 }

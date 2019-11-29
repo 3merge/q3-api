@@ -1,3 +1,4 @@
+require('q3-schema-types');
 const { resolve } = require('path');
 
 module.exports = {

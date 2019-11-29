@@ -7,25 +7,19 @@
     "node": "^12.9.0"
   },
   "scripts": {
-    "test": "jest",
+    "postinstall": "yarnw-sync-deps && yarn-deduplicate",
     "bootstrap": "lerna bootstrap --use-workspaces",
-    "build": "lerna exec --parallel -- babel --root-mode upward src -d dist --ignore **/__mocks__,**/*.test.js",
-    "lint": "eslint . --ext .js --ext .jsx --ignore-pattern dist --ignore-pattern node_modules",
-    "lerna-publish": "lerna publish",
-    "develop": "nodemon --watch example example/index.js"
+    "lint": "eslint . --ext .js --ignore-pattern node_modules",
+    "test": "jest --collectCoverage",
+    "upload": "lerna publish"
   },
   "workspaces": [
     "packages/*",
-    "example"
+    "tests/*"
   ],
   "devDependencies": {
-    "@babel/cli": "^7.5.5",
-    "@babel/core": "^7.5.5",
-    "@babel/node": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
-    "babel-plugin-rewire": "^1.2.0",
     "eslint": "^6.4.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-node-3merge": "^1.0.1",
@@ -39,16 +33,21 @@
     "jest-watch-typeahead": "^0.4.0",
     "jest-watch-yarn-workspaces": "^1.1.0",
     "lerna": "^3.16.4",
-    "nodemon": "^1.19.1",
-    "patch-package": "^6.2.0",
-    "postinstall-postinstall": "^2.0.0",
     "prettier": "^1.18.2",
-    "rewire": "^4.0.1",
-    "supertest": "^4.0.2"
+    "supertest": "^4.0.2",
+    "yarn-deduplicate": "^1.1.1",
+    "yarn-workspace-sync-deps": "^0.2.1"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.2.0",
+    "jest-environment-node": "^24.9.0",
+    "lodash": "^4.17.15",
+    "micromatch": "^4.0.2",
+    "moment": "^2.24.0",
+    "mongodb-memory-server": "^6.0.1",
     "mongoose": "^5.7.1"
   }
 }

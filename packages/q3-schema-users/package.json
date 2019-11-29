@@ -1,0 +1,24 @@
+{
+  "name": "q3-schema-users",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "dependencies": {
+    "bcrypt": "^3.0.7",
+    "generate-password": "^1.4.2",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.24.0",
+    "q3-core-responder": "^1.0.31"
+  },
+  "devDependencies": {
+    "q3-test-utils": "1.0.41"
+  },
+  "peerDependencies": {
+    "mongoose": "^5.7.1"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "q3-test-utils/jest-setup.js"
+    ]
+  }
+}

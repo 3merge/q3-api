@@ -1,8 +1,12 @@
+const req = require('request-context');
+const accessControl = require('q3-schema-permissions/lib/plugin');
+const Notes = require('q3-schema-notes');
 const mongoose = require('mongoose');
 const unique = require('mongoose-unique-validator');
-const autopopulate = require('mongoose-autopopulate');
-const paginate = require('mongoose-paginate-v2');
-const plugins = require('../plugins');
+const diff = require('mongoose-diff-history/diffHistory');
+const locking = require('mongoose-field-lock');
+const population = require('mongoose-field-populate');
+const Files = require('../models/files');
 
 require('q3-schema-types');
 
@@ -13,9 +17,28 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
 
-plugins(mongoose);
+mongoose.plugin(accessControl, {
+  getUser: () => req.get('q3-session:user'),
+  getGrant: () => req.get('q3-session:grant'),
+});
+
+mongoose.plugin(diff.plugin);
+mongoose.plugin(locking);
+mongoose.plugin(population);
 mongoose.plugin(unique);
-mongoose.plugin(autopopulate);
-mongoose.plugin(paginate);
+
+const plugin = (schema) => {
+  if (schema.options.uploads) {
+    schema.add(Notes);
+  }
+
+  if (schema.options.uploads) {
+    schema.add(Files);
+  }
+
+  return schema;
+};
+
+module.exports = plugin;
 
 module.exports = mongoose;

@@ -13,7 +13,6 @@ module.exports = class MongoEnvironment extends NodeEnvironment {
 
     this.global.__MONGO_URI__ = globalConfig.uri;
     this.global.__MONGO_DB_NAME__ = globalConfig.name;
-
     await super.setup();
   }
 

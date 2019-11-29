@@ -1,20 +1,15 @@
-const { compose, redact } = require('q3-core-composer');
-const { Users } = require('../../models');
+const { compose, verify } = require('q3-core-composer');
 
 const GetAPIKeyController = async (
   { user, marshal },
   res,
 ) => {
   const { apiKeys } = await user.obfuscatePrivateFields();
-  res.create({
+  res.ok({
     keys: marshal(apiKeys),
   });
 };
 
-GetAPIKeyController.authorization = [
-  redact(Users.collection.collectionName).requiredField(
-    'apiKeys',
-  ),
-];
+GetAPIKeyController.authorization = [verify];
 
 module.exports = compose(GetAPIKeyController);

@@ -1,10 +1,11 @@
 require('dotenv').config();
 require('./templates');
 
+const { readdirSync } = require('fs');
 const EventEmitter = require('events');
 const Handlebars = require('handlebars');
 const path = require('path');
-const fs = require('fs');
+const loadTemplate = require('./templates');
 const send = require('./strategies');
 
 const emitter = new EventEmitter();
@@ -23,16 +24,9 @@ const settings = {
 
 class Mailer {
   constructor(template = 'transactional') {
-    const tmp = path.resolve(
-      __dirname,
-      `./templates/${template}.handlebars`,
-    );
-
+    this.src = Handlebars.compile(loadTemplate(template));
     this.data = settings;
     this.meta = settings;
-    this.src = Handlebars.compile(
-      `${fs.readFileSync(tmp, 'utf8')}`,
-    );
   }
 
   to(addresses) {
@@ -68,6 +62,14 @@ class Mailer {
     return this;
   }
 
+  body(str) {
+    Object.assign(this.data, {
+      body: str,
+    });
+
+    return this;
+  }
+
   async send() {
     const html = this.src(this.data);
     const output = await send(this.data.strategy, {
@@ -86,7 +88,20 @@ class Mailer {
 
 // chainable singleton
 const chain = (templateName) => new Mailer(templateName);
+
+const walkDirectory = (dir, env) => {
+  readdirSync(dir).forEach((dirent) => {
+    const f = path.basename(dirent, path.extname(dirent));
+    if (f.startsWith('on')) {
+      // eslint-disable-next-line
+      env.on(f, require(path.join(dir, dirent)));
+    }
+  });
+};
+
 chain.listen = (next) => emitter.on(e, next);
+chain.discover = walkDirectory;
+
 chain.config = (options) =>
   Object.assign(settings, options);
 

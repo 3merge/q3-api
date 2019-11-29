@@ -1,9 +1,12 @@
 {
   "name": "q3-core-walker",
-  "version": "1.0.27",
-  "main": "index.js",
+  "version": "1.0.37",
+  "main": "lib/index.js",
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "q3-test-utils/jest-setup.js"
+    ]
   },
   "peerDependencies": {
     "express": "^4.17.1"
@@ -11,5 +14,5 @@
   "devDependencies": {
     "supertest": "^4.0.2"
   },
-  "gitHead": "24b07fc92698b652b8941b372eeaac70a0a0d999"
+  "gitHead": "1552170e150d37831f62d8db8da5dfa7a9799226"
 }
