@@ -20,7 +20,17 @@ const Q3 = {
   },
 
   routes(routes) {
-    app.use(middleware(models.Users, models.Permissions));
+    app.use(
+      middleware(
+        models.Users,
+        models.Permissions,
+        ({ user, grant }) => {
+          ctx.set('q3-session:user', user);
+          ctx.set('q3-session:grant', grant);
+        },
+      ),
+    );
+
     app.use(walker(__dirname));
     runner();
 

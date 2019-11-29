@@ -64,7 +64,7 @@ afterAll(async () => {
 });
 
 describe('Middleware', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     getUser.mockReturnValue({
       _id: id,
       company,
@@ -118,8 +118,8 @@ describe('Middleware', () => {
       await query.exec();
 
       expect(spy).toHaveBeenCalledWith([
-        { createdBy: id },
         { belongs: company },
+        { createdBy: id },
       ]);
     });
 
@@ -169,7 +169,7 @@ describe('Middleware', () => {
       await countResults(numNotCreatedByOrBelongingTo);
     });
 
-    it('should filter by special condition', async () => {
+    it('should filter by documentConditions condition', async () => {
       getGrant.mockReturnValue({
         documentConditions: ['specialCondition=2'],
         ownership: 'Own',

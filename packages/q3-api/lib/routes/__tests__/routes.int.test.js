@@ -16,6 +16,7 @@ beforeAll(async () => {
 
   agent = supertest(Q3.$app);
   await Q3.connect();
+
   const sup = await Users.findOneOrCreate(
     {
       email,

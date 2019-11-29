@@ -7,52 +7,25 @@ const StatementReader = require('./utils');
 const accessControl = (getUser, getGrant) => ({
   append() {
     const user = getUser();
-    if (this.isNew && user && !this.createdBy)
-      this.createdBy = user._id;
+
+    if (user) {
+      // for history plugin
+      this.__user = user._id;
+
+      if (this.isNew && !this.createdBy)
+        this.createdBy = user._id;
+    }
   },
 
   identify() {
     const user = getUser();
     const grant = getGrant();
     const { bypassAuthorization } = this.options;
-    const createdBy = get(user, '_id');
-    const ownershipAliases = get(
-      grant,
-      'ownershipAliases',
-      [],
-    );
 
-    const documentConditions = get(
-      grant,
-      'documentConditions',
-      [],
-    );
+    if (bypassAuthorization || (!grant && !user)) return;
 
-    if (!user && !grant && !bypassAuthorization)
-      exception('Authorization')
-        .msg('Grants required to continue')
-        .throw();
-
-    if (
-      bypassAuthorization ||
-      get(grant, 'ownership') === 'Any'
-    )
-      return;
-
-    if (documentConditions) this.eval(documentConditions);
-
-    if (ownershipAliases.length) {
-      this.or([
-        { createdBy },
-        ...ownershipAliases.map(({ foreign, local }) => ({
-          [local]: user[foreign],
-        })),
-      ]);
-    } else {
-      this.where({
-        createdBy,
-      });
-    }
+    this.eval(grant);
+    this.belongsTo(grant, user);
 
     if (
       process.env.NODE_ENV === 'test' &&
@@ -72,19 +45,52 @@ module.exports = (schema, sessionActions) => {
   );
 
   const queryMethods = [
-    'count',
-    'countDocuments',
-    'distinct',
     'find',
     'findOne',
+    'distinct',
+    'count',
+    'countDocuments',
   ];
 
   schema.pre('save', ac.append);
 
-  schema.query.eval = function parseStringOp(conds) {
-    const statements = new StatementReader(conds).get();
+  schema.query.eval = function parseStringOp(grant) {
+    const statements = new StatementReader(
+      get(grant, 'documentConditions', []),
+    ).get();
     if (statements.length) {
       this.and(statements);
+    }
+  };
+
+  schema.query.belongsTo = function addCreator(
+    grant,
+    user,
+  ) {
+    if (
+      get(grant, 'ownership') === 'Any' ||
+      get(grant, 'role') === 'Public'
+    )
+      return;
+
+    if (!user || !user._id)
+      exception('Authentication')
+        .msg('sessionUser')
+        .throw();
+
+    const createdBy = user._id;
+    const aliases = get(grant, 'ownershipAliases', []).map(
+      ({ foreign, local }) => ({
+        [local]: user[foreign],
+      }),
+    );
+
+    if (aliases.length) {
+      this.or(aliases.concat({ createdBy }));
+    } else {
+      this.where({
+        createdBy,
+      });
     }
   };
 

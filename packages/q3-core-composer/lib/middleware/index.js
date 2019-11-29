@@ -42,7 +42,7 @@ class Session {
   }
 }
 
-function middleware(UserModel, PermissionModel) {
+function middleware(UserModel, PermissionModel, callback) {
   if (!UserModel || !PermissionModel)
     throw new Error(
       'Cannot run middleware without User and Permission models',
@@ -51,6 +51,14 @@ function middleware(UserModel, PermissionModel) {
   return async (req, res, next) => {
     const hasMethod = (method) =>
       method in UserModel && !req.user;
+
+    const passDataBack = (r) =>
+      typeof callback === 'function'
+        ? callback({
+            user: r.user,
+            grant: r.grant,
+          })
+        : undefined;
 
     const identity = new Session(req);
     const token = identity.getToken();
@@ -71,15 +79,19 @@ function middleware(UserModel, PermissionModel) {
         host,
       );
 
-    req.authorize = (name) => {
+    req.authorize = async (name) => {
       identity.setOperation();
-      return identity.getPermission(
+      req.grant = await identity.getPermission(
         PermissionModel,
         name,
         req.user,
       );
+
+      passDataBack(req);
+      return req.grant;
     };
 
+    passDataBack(req);
     next();
   };
 }
