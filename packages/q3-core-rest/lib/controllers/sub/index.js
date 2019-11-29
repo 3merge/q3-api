@@ -4,12 +4,14 @@ const {
   query,
 } = require('q3-core-composer');
 const RestRegistration = require('../../datasource');
-const List = require('./list');
-const Put = require('./put');
-const Post = require('./post');
-const Patch = require('./patch');
-const Remove = require('./delete');
-const RemoveMany = require('./deleteMany');
+const {
+  List,
+  Put,
+  Post,
+  Patch,
+  Remove,
+  RemoveMany,
+} = require('./handlers');
 
 module.exports = class SubDocumentControllerCommander extends RestRegistration {
   exec() {

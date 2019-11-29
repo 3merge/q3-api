@@ -57,9 +57,8 @@ module.exports = class UserAuthDecorator {
       .exec();
   }
 
-  /** @TODO */
   static async findbyBearerToken(...args) {
-    return verifyToken.apply(this, ...args);
+    return verifyToken.apply(this, args);
   }
 
   static async $findOneStrictly(args) {

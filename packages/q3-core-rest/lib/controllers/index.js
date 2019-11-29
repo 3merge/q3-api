@@ -27,8 +27,7 @@ module.exports = (app) => (Model) => {
 
   app.use(new Controller(Model).exec());
 
-  /* RECURSIVELY?
   childSchemas.forEach(({ model: { path } }) =>
     app.use(new SubController(Model, path).exec()),
-  ); */
+  );
 };

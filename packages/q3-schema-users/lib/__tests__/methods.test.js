@@ -8,6 +8,7 @@ jest.mock('../helpers', () => ({
   generateRandomSecret: () => 'shh!',
   createHash: jest.fn().mockResolvedValue('hash!'),
   compareWithHash: jest.fn(),
+  verifyToken: jest.fn(),
 }));
 
 const id = 'foo';
@@ -285,6 +286,11 @@ describe('generateAPIKey', () => {
     expect(cls.save).toHaveBeenCalled();
     expect(cls.apiKeys).toHaveLength(1);
   });
+});
+
+describe('findbyBearerToken', () => {
+  it('should insert uniquely into array', async () =>
+    Decorator.findbyBearerToken('token', 'host'));
 });
 
 test('obfuscatePrivateFields should replace all but last four characters with asterisks', async () => {

@@ -2,7 +2,7 @@ const { compose, check } = require('q3-core-composer');
 const { exception } = require('q3-core-responder');
 const {
   generateIDToken,
-} = require('../../models/user/helpers');
+} = require('q3-schema-users/lib/helpers');
 const { Users } = require('../../models');
 const { checkEmail } = require('../../utils');
 

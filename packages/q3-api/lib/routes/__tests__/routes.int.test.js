@@ -1,12 +1,13 @@
 const supertest = require('supertest');
-const Q3 = require('..');
-const { Users } = require('../models');
-const fixture = require('../models/user/__fixture__');
+const Q3 = require('../..');
+const { Users } = require('../../models');
 
 let agent;
 let id;
 let password;
 let AuthorizationSuper;
+
+const email = 'developer@gmail.com';
 
 jest.unmock('request-context');
 
@@ -17,7 +18,9 @@ beforeAll(async () => {
   await Q3.connect();
   const sup = await Users.findOneOrCreate(
     {
-      ...fixture,
+      email,
+      firstName: 'Mike',
+      lastName: 'Ibberson',
       verified: true,
       password: 'Sh!0978ydsn*1',
       role: 'Super',
@@ -41,9 +44,7 @@ describe('authenticate /GET', () => {
       .expect(400));
 
   it('should return 204', async () =>
-    agent
-      .get(`/authenticate?email=${fixture.email}`)
-      .expect(204));
+    agent.get(`/authenticate?email=${email}`).expect(204));
 });
 
 describe('authenticate /POST', () => {
@@ -53,11 +54,10 @@ describe('authenticate /POST', () => {
   it('should return 401', async () =>
     agent
       .post('/authenticate')
-      .send({ email: fixture.email, password: 'noop' })
+      .send({ email, password: 'noop' })
       .expect(401));
 
   it('should return 401', async () => {
-    const { email } = fixture;
     const doc = await Users.findOne({ email });
     await doc.setPassword();
     await agent
@@ -67,7 +67,6 @@ describe('authenticate /POST', () => {
   });
 
   it('should return 403', async () => {
-    const { email } = fixture;
     const doc = await Users.findOne({ email });
     doc.set({
       password: 'noop',
@@ -91,7 +90,7 @@ describe('password-reset /POST', () => {
   it('should return 200', async () => {
     await agent
       .post('/password-reset')
-      .send(fixture)
+      .send({ email })
       .expect(200);
   });
 });
@@ -143,7 +142,7 @@ describe('reverify /POST', () => {
   it('should return 400', async () =>
     agent
       .post('/reverify')
-      .send({ email: fixture.email })
+      .send({ email })
       .expect(400));
 
   it('should return 204', async () => {
@@ -153,7 +152,7 @@ describe('reverify /POST', () => {
     await doc.save();
     await agent
       .post('/reverify')
-      .send({ email: fixture.email })
+      .send({ email })
       .expect(204);
   });
 });
