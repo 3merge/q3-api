@@ -5,6 +5,7 @@ const {
   compareWithHash,
   createHash,
   generateRandomSecret,
+  verifyToken,
 } = require('./helpers');
 
 const isVerifiedQuery = {
@@ -56,8 +57,9 @@ module.exports = class UserAuthDecorator {
       .exec();
   }
 
-  static async findbyBearerToken() {
-    return null;
+  /** @TODO */
+  static async findbyBearerToken(...args) {
+    return verifyToken.apply(this, ...args);
   }
 
   static async $findOneStrictly(args) {

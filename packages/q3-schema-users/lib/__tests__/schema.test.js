@@ -7,34 +7,6 @@ beforeAll(() => {
   UserModel = model('test_users', Schema);
 });
 
-describe('Email validation', () => {
-  it('should pass', () => {
-    [
-      'foo@gmail.com',
-      'foo+1@gmail.com',
-      'foo.bar@gmail.com',
-      'foo@yahoo.ca',
-      'foo1_92836@gov.uk.en',
-    ].forEach((email) => {
-      const doc = new UserModel({ email });
-      const { errors } = doc.validateSync();
-      expect(errors).not.toHaveProperty('email');
-    });
-  });
-
-  it('should fail', () => {
-    [
-      'foo@gmail',
-      'foo+1@gmail.',
-      'foo.barmail.com',
-    ].forEach((email) => {
-      const doc = new UserModel({ email });
-      const { errors } = doc.validateSync();
-      expect(errors).toHaveProperty('email');
-    });
-  });
-});
-
 describe('UserModel validation', () => {
   it('should mandate required fields', () => {
     const doc = new UserModel();

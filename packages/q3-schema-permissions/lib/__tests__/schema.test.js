@@ -1,5 +1,4 @@
-require('../../../plugins');
-const mongoose = require('../../../config/mongoose');
+const mongoose = require('mongoose');
 const Schema = require('..');
 
 let Model;

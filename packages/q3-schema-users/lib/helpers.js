@@ -4,13 +4,6 @@ const crypto = require('crypto');
 
 const getSalts = () => parseInt(process.env.SALTS || 8, 10);
 
-const decode = async (token = '') => {
-  return jwt.verify(
-    token.slice(7, token.length),
-    process.env.SECRET,
-  );
-};
-
 const generateRandomSecret = (byteSize = 20) =>
   crypto.randomBytes(byteSize).toString('hex');
 
@@ -40,16 +33,16 @@ const generateIDToken = async (id, code, audience) => {
   };
 };
 
-const verifyToken = async (token, nonce, host, User) => {
+async function verifyToken(token, nonce, host) {
   try {
     const {
       id,
       aud,
       code,
       nonce: secretNonce,
-    } = await decode(token);
+    } = await jwt.verify(token, process.env.SECRET);
 
-    const user = await User.findVerifiedById(id);
+    const user = await this.findVerifiedById(id);
 
     if (
       nonce !== secretNonce ||
@@ -66,7 +59,7 @@ const verifyToken = async (token, nonce, host, User) => {
     // log it?
     return null;
   }
-};
+}
 
 module.exports = {
   generateRandomSecret,
