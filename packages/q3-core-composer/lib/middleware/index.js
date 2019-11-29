@@ -49,7 +49,7 @@ class Session {
 function middleware(UserModel, PermissionModel) {
   if (!UserModel || !PermissionModel)
     throw new Error(
-      'Can run middleware without User and Permission models',
+      'Cannot run middleware without User and Permission models',
     );
 
   return async (req, res, next) => {

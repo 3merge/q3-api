@@ -4,7 +4,7 @@ const {
   generateIDToken,
 } = require('../../models/user/helpers');
 const { Users } = require('../../models');
-const { checkEmail } = require('../../helpers/validation');
+const { checkEmail } = require('../../utils');
 
 const LoginIntoAccount = async (
   { body: { email, password }, headers: { host } },

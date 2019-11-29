@@ -56,6 +56,10 @@ module.exports = class UserAuthDecorator {
       .exec();
   }
 
+  static async findbyBearerToken() {
+    return null;
+  }
+
   static async $findOneStrictly(args) {
     const doc = await this.findOne(args)
       .select('+apiKeys')

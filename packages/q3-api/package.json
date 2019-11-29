@@ -34,22 +34,22 @@
     "i18next": "^17.0.14",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
-    "m2e-validator": "^1.1.0",
     "memory-cache": "^0.2.0",
     "micromatch": "^4.0.2",
     "moment": "^2.24.0",
-    "mongoose-paginate-v2": "^1.3.3",
     "mongoose-unique-validator": "^2.0.3",
+    "q3-core-composer": "^1.0.0",
+    "q3-core-mailer": "^1.0.0",
+    "q3-core-rest": "^1.0.0",
+    "q3-core-responder": "^1.0.0",
+    "q3-core-walker": "^1.0.0",
+    "q3-locale": "^1.0.0",
     "q3-schema-types": "1.0.3",
     "request-context": "^2.0.0"
   },
   "peerDependencies": {
     "express": "^4.17.1",
-    "mongoose": "^5.7.1",
-    "q3-core-composer": "^1.0.0",
-    "q3-core-mailer": "^1.0.0",
-    "q3-core-responder": "^1.0.0",
-    "q3-core-walker": "^1.0.0"
+    "mongoose": "^5.7.1"
   },
   "devDependencies": {
     "aws-sdk-mock": "^4.5.0",

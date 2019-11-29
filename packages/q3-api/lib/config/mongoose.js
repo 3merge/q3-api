@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 const unique = require('mongoose-unique-validator');
-const paginate = require('mongoose-paginate-v2');
-const validatorAdapter = require('m2e-validator');
 const plugins = require('../plugins');
 
 require('q3-schema-types');
@@ -15,7 +13,5 @@ mongoose.set('useUnifiedTopology', true);
 
 plugins(mongoose);
 mongoose.plugin(unique);
-mongoose.plugin(paginate);
-mongoose.plugin(validatorAdapter);
 
 module.exports = mongoose;

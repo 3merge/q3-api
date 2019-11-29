@@ -1,7 +1,7 @@
 const { compose } = require('q3-core-composer');
 const emitter = require('../../events/emitter');
 const { Users } = require('../../models');
-const { checkEmail } = require('../../helpers/validation');
+const { checkEmail } = require('../../utils');
 
 const resetPassword = async (
   { body: { email }, t },

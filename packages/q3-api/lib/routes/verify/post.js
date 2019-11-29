@@ -1,8 +1,6 @@
 const { check, compose } = require('q3-core-composer');
 const { exception } = require('q3-core-responder');
-const {
-  checkNewPassword,
-} = require('../../helpers/validation');
+const { checkNewPassword } = require('../../utils');
 const { Users } = require('../../models');
 
 const verify = async (

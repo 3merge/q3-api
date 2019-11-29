@@ -82,7 +82,7 @@ const plugin = (schema) => {
   schema.methods.getSubDocument = function(field, id) {
     const subdoc = invoke(get(this, field), 'id', id);
     if (!subdoc)
-      exception('ResourceMissing')
+      exception('ResourceNotFound')
         .msg('subdocumentNotFound')
         .throw();
 
@@ -229,7 +229,7 @@ const plugin = (schema) => {
 
   schema.statics.verifyOutput = function(d) {
     if (!d)
-      exception('ResourceMissing')
+      exception('ResourceNotFound')
         .msg('notFound')
         .throw();
 

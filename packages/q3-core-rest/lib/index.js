@@ -9,13 +9,13 @@ const addControllersToRest = require('./controllers');
 
 module.exports = (app, mongoose) => ({
   init() {
-    app.use(decorators);
     app.use(
       middleware.handle(i18next, {
         removeLngFromUrl: false,
       }),
     );
 
+    app.use(decorators);
     mongoose.plugin(commonUtils);
     mongoose.plugin(partialSearch);
     mongoose.plugin(validatorAdapter);

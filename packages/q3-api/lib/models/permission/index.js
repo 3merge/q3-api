@@ -71,6 +71,10 @@ const PermissionModel = new Schema(
   },
 );
 
+PermissionModel.statics.hasGrant = function() {
+  return true;
+};
+
 PermissionModel.methods.isValid = function() {
   const { coll, op, fields = '' } = this;
   const Ref = get(mongoose, `models.${coll}`);

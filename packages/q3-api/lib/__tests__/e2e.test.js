@@ -12,6 +12,7 @@ jest.unmock('request-context');
 
 beforeAll(async () => {
   Q3.routes();
+
   agent = supertest(Q3.$app);
   await Q3.connect();
   const sup = await Users.findOneOrCreate(
