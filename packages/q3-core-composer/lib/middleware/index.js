@@ -62,7 +62,7 @@ function middleware(UserModel, PermissionModel, callback) {
 
     const identity = new Session(req);
     const token = identity.getToken();
-    const nonce = req.header('token-nonce');
+    const nonce = req.header('X-Session-Nonce');
     const host = req.get('host');
 
     if (hasMethod('findbyBearerToken'))

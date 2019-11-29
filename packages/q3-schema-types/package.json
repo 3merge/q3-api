@@ -11,12 +11,11 @@
     "q3-test-utils": "1.0.41"
   },
   "jest": {
+    "verbose": true,
+    "testEnvironment": "node",
+    "preset": "q3-test-utils",
     "setupFilesAfterEnv": [
       "q3-test-utils/jest-setup.js"
-    ],
-    "testEnvironment": "node",
-    "roots": [
-      "<rootDir>/lib/"
     ]
   }
 }

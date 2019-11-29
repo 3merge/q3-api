@@ -1,0 +1,25 @@
+[
+  {
+    "coll": "products",
+    "fields": "*, !manufacturerCode",
+    "role": "Secretary",
+    "documentConditions": "forSale=true",
+    "ownership": "Any",
+    "op": "Read"
+  },
+  {
+    "coll": "products",
+    "fields": "*",
+    "role": "Secretary",
+    "ownershipConditions": "isVerified=true",
+    "ownership": "Any",
+    "op": "Create"
+  },
+  {
+    "coll": "products",
+    "fields": "sku, price*",
+    "role": "Secretary",
+    "ownership": "Own",
+    "op": "Update"
+  }
+]

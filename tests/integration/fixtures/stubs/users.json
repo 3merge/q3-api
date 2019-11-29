@@ -1,0 +1,30 @@
+[
+  {
+    "firstName": "Tom",
+    "lastName": "Holland",
+    "role": "Manager",
+    "active": true,
+    "verified": true,
+    "secret": "ThisIsSecret",
+    "email": "tom.holland@gmail.com",
+    "lang": "en-CA"
+  },
+  {
+    "firstName": "Mary-anne",
+    "lastName": "Barry",
+    "role": "Secretary",
+    "active": true,
+    "verified": true,
+    "secret": "DoNotTellAnyone",
+    "email": "mary-anne-secret@yahoo.ca"
+  },
+  {
+    "firstName": "Mary-anne",
+    "lastName": "Barry",
+    "role": "Prospect",
+    "active": true,
+    "secret": "DoNotTellAnyone",
+    "email": "prospect@french.ca",
+    "lang": "fr-CA"
+  }
+]

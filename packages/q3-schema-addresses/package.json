@@ -3,19 +3,18 @@
   "version": "1.1.1",
   "license": "MIT",
   "main": "lib/index.js",
-  "jest": {
-    "setupFilesAfterEnv": [
-      "q3-test-utils/jest-setup.js"
-    ],
-    "testEnvironment": "node",
-    "roots": [
-      "<rootDir>/lib/"
-    ]
-  },
   "dependencies": {
     "mongoose": "^5.7.1",
     "q3-core-responder": "^1.0.21",
     "q3-schema-types": "^1.1.1",
     "q3-test-utils": "^1.0.41"
+  },
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node",
+    "preset": "q3-test-utils",
+    "setupFilesAfterEnv": [
+      "q3-test-utils/jest-setup.js"
+    ]
   }
 }
