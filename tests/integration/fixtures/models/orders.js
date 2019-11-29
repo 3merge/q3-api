@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 const { setModel } = require('q3-api');
 const iOrderBuilder = require('q3-schema-orders');
 const ProductModel = require('./products');
@@ -57,4 +58,8 @@ class Order extends iOrderBuilder {
 }
 
 const Schema = new Order().exec();
+Schema.set('restify', '*');
+Schema.set('collectionPluralName', 'orders');
+Schema.set('collectionSingularName', 'order');
+
 module.exports = setModel('orders', Schema);

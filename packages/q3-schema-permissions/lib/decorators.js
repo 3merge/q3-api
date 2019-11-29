@@ -45,7 +45,6 @@ module.exports = class PermissionDecorators {
       op,
     })
       .setOptions({ bypassAuthorization: true })
-      .lean()
       .exec();
 
     if (!doc || !doc.fields)

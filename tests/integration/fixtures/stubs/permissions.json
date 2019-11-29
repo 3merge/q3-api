@@ -21,5 +21,19 @@
     "role": "Secretary",
     "ownership": "Own",
     "op": "Update"
+  },
+  {
+    "coll": "orders",
+    "fields": "items.quantity, items.product, shipping, billing",
+    "role": "Public",
+    "ownership": "Any",
+    "op": "Create"
+  },
+  {
+    "coll": "orders",
+    "fields": "items.quantity, items.product, shipping, billing, gst, hst, status, tax, id, shippingFee, paymentFee",
+    "role": "Public",
+    "ownership": "Own",
+    "op": "Read"
   }
 ]

@@ -1,2 +1,7 @@
-module.exports = ({ user }, res, next) =>
-  !user ? res.status(401).send() : next();
+module.exports = ({ user, grant }, res, next) => {
+  if (!user && (!grant || grant.role !== 'Public')) {
+    return res.status(401).send();
+  }
+
+  return next();
+};

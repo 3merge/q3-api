@@ -52,6 +52,7 @@ module.exports = class RestRegistrationModule {
       Object.assign(req, this.getSchemaOptions(), {
         datasource: this.datasource,
       });
+
       next();
     });
   }

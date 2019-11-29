@@ -25,5 +25,6 @@
   "apikeygenerated": "New API key ready",
   "verify": "Verify your account",
   "onReverify": "New verification token generated",
-  "account": "Unknown account email"
+  "account": "Unknown account email",
+  "insufficientPermissions": "Account requires a greater permission level to complete this operation"
 }
