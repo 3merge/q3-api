@@ -4,7 +4,7 @@ const middleware = require('i18next-express-middleware');
 const paginate = require('mongoose-paginate-v2');
 const partialSearch = require('mongoose-partial-search');
 const commonUtils = require('q3-schema-utils/plugins/common');
-const decorators = require('q3-route-decorators');
+const { statusHelpers } = require('q3-core-responder');
 const addControllersToRest = require('./controllers');
 
 module.exports = (app, mongoose) => ({
@@ -15,7 +15,7 @@ module.exports = (app, mongoose) => ({
       }),
     );
 
-    app.use(decorators);
+    app.use(statusHelpers);
     mongoose.plugin(commonUtils);
     mongoose.plugin(partialSearch);
     mongoose.plugin(validatorAdapter);

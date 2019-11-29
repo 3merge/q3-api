@@ -1,9 +1,0 @@
-{
-  "name": "q3-route-decorators",
-  "version": "1.0.0",
-  "main": "index.js",
-  "dependencies": {
-    "etag": "^1.8.1",
-    "moment": "^2.24.0"
-  }
-}

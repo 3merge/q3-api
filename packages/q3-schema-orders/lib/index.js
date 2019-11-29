@@ -4,7 +4,9 @@ const {
   INTERFACE_RECOMMENDED_METHODS,
 } = require('./constants');
 const OrderSchema = require('./schema');
-const { mergeDuplicateLineItems } = require('./utils/helpers');
+const {
+  mergeDuplicateLineItems,
+} = require('./utils/helpers');
 const prepareVisitors = require('./visitors');
 
 class iOrderBuilder {

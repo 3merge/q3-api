@@ -1,12 +1,7 @@
-const ctx = require('request-context');
 const {
   exception,
   handleUncaughtExceptions,
 } = require('../exception');
-
-beforeAll(() => {
-  ctx.middleware('jest');
-});
 
 describe('Exception chain', () => {
   it('should return a decorated error', () => {
@@ -15,7 +10,7 @@ describe('Exception chain', () => {
       .boomerang();
 
     expect(err.name).toBe('Authorization');
-    expect(err.message).toBe('errors:fail');
+    expect(err.message).toBe('fail');
     expect(err.statusCode).toBe(403);
   });
 
@@ -36,15 +31,15 @@ describe('Exception chain', () => {
     expect(err.statusCode).toBe(500);
     expect(err.errors).toMatchObject({
       foo: {
-        msg: 'validations:baaz',
+        msg: 'baaz',
         value: 1,
       },
       bar: {
-        msg: 'validations:baaz',
+        msg: 'baaz',
         value: 1,
       },
       quuz: {
-        msg: 'validations:quuz',
+        msg: 'quuz',
         value: 2,
       },
     });

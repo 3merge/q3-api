@@ -1,19 +1,4 @@
 /* eslint-disable no-unused-vars, max-classes-per-file */
-const ctx = require('request-context');
-const i18n = require('i18next');
-
-const executeTranslation = (
-  name,
-  sessionVar = 'q3-session:locale',
-) => {
-  // don't know if I love this
-  // maybe have a fallback i18next?
-  const locale = ctx.get(sessionVar);
-  if (locale) return locale.t(name);
-  if (i18n.exists(name)) return i18n.t(name);
-  return name;
-};
-
 const retrieveStatusMeta = (code) =>
   Object.entries({
     BadRequest: 400,
@@ -46,9 +31,8 @@ class Exception {
 
   field(fieldName) {
     const formatAPIError = (name, msg, value) => {
-      const format = `validations:${msg || name}`;
       this.errors[name] = {
-        msg: executeTranslation(format),
+        msg: msg || name,
         in: 'application',
         value,
       };
@@ -80,7 +64,8 @@ class Exception {
   }
 
   msg(msg) {
-    this.message = executeTranslation(`errors:${msg}`);
+    this.message = msg;
+    this.code = msg;
     return this;
   }
 
@@ -105,6 +90,23 @@ const handleUncaughtExceptions = (err, req, res, next) => {
       ? res.status(code)
       : undefined;
 
+  const translateMessage = (m) =>
+    req.t ? req.t(`messages:${m}`) : m;
+
+  const translateErrors = (e = {}) =>
+    Object.entries(e).reduce(
+      (a, [key, value]) =>
+        req.t
+          ? Object.assign(a, {
+              [key]: {
+                ...value,
+                msg: req.t(`validations:${value.msg}`),
+              },
+            })
+          : a,
+      {},
+    );
+
   if (
     err.errors &&
     Object.keys(err.errors).length &&
@@ -112,14 +114,14 @@ const handleUncaughtExceptions = (err, req, res, next) => {
   ) {
     setHeader(422);
     res.json({
-      message: req.t('messages:validation'),
-      ...err,
+      message: translateMessage('validation'),
+      errors: translateErrors(err.errors),
     });
   } else {
     setHeader(status);
     res.json({
-      errors: err.errors,
-      message: err.message,
+      errors: translateErrors(err.errors),
+      message: translateMessage(err.message),
       trace: err.trace,
       name: err.name,
     });

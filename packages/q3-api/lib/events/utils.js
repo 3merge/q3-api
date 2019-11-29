@@ -1,6 +1,6 @@
 const mailer = require('q3-core-mailer');
 const path = require('path');
-const { i18n } = require('q3-core-responder');
+const i18n = require('i18next');
 const { Users } = require('../models');
 
 const send = async (args = {}) => {
