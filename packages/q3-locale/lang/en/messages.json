@@ -24,5 +24,6 @@
   "Validation": "Request did not pass server validation",
   "apikeygenerated": "New API key ready",
   "verify": "Verify your account",
-  "onReverify": "New verification token generated"
+  "onReverify": "New verification token generated",
+  "account": "Unknown account email"
 }

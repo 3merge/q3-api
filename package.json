@@ -14,7 +14,8 @@
     "upload": "lerna publish"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "tests/*"
   ],
   "devDependencies": {
     "babel-eslint": "^10.0.3",
