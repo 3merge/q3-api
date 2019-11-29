@@ -14,8 +14,8 @@ const Alias = new Schema({
 
 const PermissionModel = new Schema({
   ownershipAliases: [Alias],
+  ownershipConditions: [String],
   documentConditions: [String],
-  condition: [String],
   op: {
     type: String,
     required: true,

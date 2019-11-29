@@ -2,6 +2,7 @@
 const { get } = require('lodash');
 const { Schema } = require('mongoose');
 const { exception } = require('q3-core-responder');
+const StatementReader = require('./utils');
 
 const accessControl = (getUser, getGrant) => ({
   append() {
@@ -81,21 +82,10 @@ module.exports = (schema, sessionActions) => {
   schema.pre('save', ac.append);
 
   schema.query.eval = function parseStringOp(conds) {
-    if (!Array.isArray(conds)) return;
-    const statements = conds.filter((v) => v.includes('='));
-
-    if (statements.length)
-      this.and(
-        statements.reduce((a, s = '') => {
-          const [prop, value] = s
-            .split('=')
-            .map((v) => v.trim());
-
-          return a.concat({
-            [prop]: value,
-          });
-        }, []),
-      );
+    const statements = new StatementReader(conds).get();
+    if (statements.length) {
+      this.and(statements);
+    }
   };
 
   queryMethods.forEach((name) =>

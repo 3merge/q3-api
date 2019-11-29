@@ -12,10 +12,6 @@ class Session {
       : this.auth;
   }
 
-  setUser(user) {
-    this.role = user ? user.role : 'Public';
-  }
-
   setOperation() {
     switch (this.method) {
       case 'PATCH':
@@ -36,12 +32,12 @@ class Session {
     }
   }
 
-  async getPermission(Model, collectionName) {
+  async getPermission(Model, collectionName, sessionUser) {
     if (!('hasGrant' in Model)) return null;
     return Model.hasGrant(
       collectionName,
       this.op,
-      this.role,
+      sessionUser,
     );
   }
 }
@@ -76,7 +72,6 @@ function middleware(UserModel, PermissionModel) {
       );
 
     req.authorize = (name) => {
-      identity.setUser(req.user);
       identity.setOperation();
       return identity.getPermission(PermissionModel, name);
     };
