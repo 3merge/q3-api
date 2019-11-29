@@ -51,7 +51,8 @@ module.exports = class SubDocumentControllerCommander extends RestRegistration {
     List.authorization = [
       redact(this.collectionName)
         .requireField(this.field)
-        .inResponse(this.field),
+        .inResponse(this.field)
+        .done(),
     ];
 
     List.validation = [
@@ -68,7 +69,8 @@ module.exports = class SubDocumentControllerCommander extends RestRegistration {
       redact(this.collectionName)
         .requireField(this.field)
         .inRequest('body')
-        .inResponse(this.field),
+        .inResponse(this.field)
+        .done(),
     ];
 
     Post.validation = this.getChildValidationSchema();
@@ -80,7 +82,8 @@ module.exports = class SubDocumentControllerCommander extends RestRegistration {
       redact(this.collectionName)
         .requireField(this.field)
         .inRequest('body')
-        .inResponse(this.field),
+        .inResponse(this.field)
+        .done(),
     ];
 
     Put.validation = this.getChildValidationSchema();
@@ -92,7 +95,8 @@ module.exports = class SubDocumentControllerCommander extends RestRegistration {
       redact(this.collectionName)
         .requireField(this.field)
         .inRequest('body')
-        .inResponse(this.field),
+        .inResponse(this.field)
+        .done(),
     ];
 
     Patch.validation = this.getChildValidationSchema();
@@ -106,7 +110,7 @@ module.exports = class SubDocumentControllerCommander extends RestRegistration {
 
   getDeleteManyController(path) {
     RemoveMany.authorization = [
-      redact(this.collectionName),
+      redact(this.collectionName).done(),
     ];
     RemoveMany.validation = [query('ids').isArray()];
 

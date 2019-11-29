@@ -73,7 +73,11 @@ function middleware(UserModel, PermissionModel) {
 
     req.authorize = (name) => {
       identity.setOperation();
-      return identity.getPermission(PermissionModel, name);
+      return identity.getPermission(
+        PermissionModel,
+        name,
+        req.user,
+      );
     };
 
     next();

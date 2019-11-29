@@ -1,4 +1,4 @@
-const { validateBody } = require('../validate');
+const validateBody = require('../validate');
 
 const req = { body: {} };
 const res = {};

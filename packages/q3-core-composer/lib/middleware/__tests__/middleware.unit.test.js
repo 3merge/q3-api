@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 const mongoose = require('mongoose');
-const middleware = require('.');
+const middleware = require('..');
 
 const findbyBearerToken = jest.fn();
 const findByApiKey = jest.fn();
@@ -36,6 +36,10 @@ const DecoratoratedModel = mongoose.model(
   Schema,
 );
 
+afterAll(() => {
+  jest.restoreAllMocks();
+});
+
 describe('Middleware', () => {
   it('should error without models', () => {
     expect(middleware).toThrowError();
@@ -56,13 +60,20 @@ describe('Middleware', () => {
   });
 
   it('should translate the method and user role type', async () => {
-    const fn = middleware(NakedModel, DecoratoratedModel);
+    findByApiKey.mockResolvedValue({
+      _id: 123,
+    });
+
+    const fn = middleware(
+      DecoratoratedModel,
+      DecoratoratedModel,
+    );
     await fn(req, {}, next);
     await req.authorize('Foo');
     expect(getPermission).toHaveBeenCalledWith(
       'Foo',
       'Read',
-      'Public',
+      { _id: 123 },
     );
   });
 });

@@ -4,7 +4,7 @@ const {
 } = require('express-validator');
 const { pickBy, identity } = require('lodash');
 
-const validateBody = (req, res, next) => {
+module.exports = (req, res, next) => {
   try {
     validationResult(req).throw();
     const opts = { includeOptionals: true };
@@ -16,8 +16,4 @@ const validateBody = (req, res, next) => {
       errors: err.mapped(),
     });
   }
-};
-
-module.exports = {
-  validateBody,
 };

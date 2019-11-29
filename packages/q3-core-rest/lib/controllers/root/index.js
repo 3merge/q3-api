@@ -35,7 +35,8 @@ module.exports = class DocumentControllerCommander extends RestRegistration {
     List.authorization = [
       redact(this.collectionName)
         .inRequest('query')
-        .inResponse(this.collectionPluralName),
+        .inResponse(this.collectionPluralName)
+        .done(),
     ];
 
     List.validation = [
@@ -60,7 +61,8 @@ module.exports = class DocumentControllerCommander extends RestRegistration {
     Get.authorization = [
       redact(this.collectionName)
         .inRequest('query')
-        .inResponse(this.collectionSingularName),
+        .inResponse(this.collectionSingularName)
+        .done(),
     ];
 
     return this.makeGet(path, Get);
@@ -70,7 +72,8 @@ module.exports = class DocumentControllerCommander extends RestRegistration {
     Post.authorization = [
       redact(this.collectionName)
         .inRequest('body')
-        .inResponse(this.collectionSingularName),
+        .inResponse(this.collectionSingularName)
+        .done(),
     ];
 
     Post.validation = this.getValidationSchema(true);
@@ -79,9 +82,9 @@ module.exports = class DocumentControllerCommander extends RestRegistration {
 
   getUploadController(path) {
     Upload.authorization = [
-      redact(this.collectionName).requireField(
-        'featuredUpload',
-      ),
+      redact(this.collectionName)
+        .requireField('featuredUpload')
+        .done(),
     ];
 
     return this.makePost(path, Upload);
@@ -91,7 +94,8 @@ module.exports = class DocumentControllerCommander extends RestRegistration {
     Patch.authorization = [
       redact(this.collectionName)
         .inRequest('body')
-        .inResponse(this.collectionSingularName),
+        .inResponse(this.collectionSingularName)
+        .done(),
     ];
 
     Patch.validation = this.getValidationSchema(false);
@@ -106,7 +110,7 @@ module.exports = class DocumentControllerCommander extends RestRegistration {
   getDeleteManyController(path) {
     RemoveMany.validation = [query('ids').isArray()];
     RemoveMany.authorization = [
-      redact(this.collectionName),
+      redact(this.collectionName).done(),
     ];
 
     return this.makeDelete(path, RemoveMany);

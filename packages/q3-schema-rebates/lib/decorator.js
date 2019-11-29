@@ -24,7 +24,10 @@ class RebateDecorator {
   }
 
   static async reduceQualifiedRebates(couponCode, items) {
-    const rebates = await this.findApplicable(couponCode, items);
+    const rebates = await this.findApplicable(
+      couponCode,
+      items,
+    );
 
     return rebates.map((rebate) => {
       const redact = rebate.redactItems(items);
@@ -126,7 +129,9 @@ class RebateDecorator {
         item.quantity,
       );
 
-      return this.evaluate({ ...item, quantity }) * quantity;
+      return (
+        this.evaluate({ ...item, quantity }) * quantity
+      );
     };
 
     return items.sort((a, b) => multiply(b) - multiply(a));

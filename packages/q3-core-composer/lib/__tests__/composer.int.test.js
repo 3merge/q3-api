@@ -5,7 +5,7 @@ const {
   check,
   redact,
   middleware,
-} = require('../..');
+} = require('..');
 
 jest.unmock('express-validator');
 
@@ -67,26 +67,30 @@ describe('compose', () => {
     };
 
     route.authorization = [
-      redact('Foo').inResponse('mono'),
+      redact('Foo')
+        .inResponse('mono')
+        .done(),
     ];
 
-    app.use((req, res, next) => {
-      req.user = {
-        _id: 1,
-        role: 'Developer',
-      };
-
-      req.authorization = async () =>
-        Promise.resolve({
-          coll: 'Foo',
-          fields: 'bar, quux',
+    app.get(
+      '/authorization',
+      (req, res, next) => {
+        req.user = {
+          _id: 1,
           role: 'Developer',
-        });
+        };
 
-      next();
-    });
+        req.authorize = () =>
+          Promise.resolve({
+            coll: 'Foo',
+            fields: 'bar, quux',
+            role: 'Developer',
+          });
 
-    app.get('/authorization', compose(route));
+        next();
+      },
+      compose(route),
+    );
     app.use(listenForErrors);
 
     return agent

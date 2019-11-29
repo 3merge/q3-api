@@ -1,15 +1,12 @@
 {
   "name": "q3-core-composer",
   "version": "1.0.20",
-  "main": "index.js",
+  "main": "lib/index.js",
   "jest": {
     "setupFilesAfterEnv": [
       "q3-test-utils/jest-setup.js"
     ],
-    "testEnvironment": "node",
-    "roots": [
-      "<rootDir>/lib/"
-    ]
+    "testEnvironment": "node"
   },
   "dependencies": {
     "connect": "^3.7.0",
@@ -23,6 +20,7 @@
     "mongoose": "^5.7.1"
   },
   "devDependencies": {
+    "q3-test-utils": "^1.0.0",
     "supertest": "^4.0.2"
   },
   "gitHead": "0b3cd9783303e9853037b7bdacdaffbc549f4ad2"

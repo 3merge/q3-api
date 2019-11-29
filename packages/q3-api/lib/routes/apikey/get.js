@@ -12,9 +12,9 @@ const GetAPIKeyController = async (
 };
 
 GetAPIKeyController.authorization = [
-  redact(Users.collection.collectionName).requireField(
-    'apiKeys',
-  ),
+  redact(Users.collection.collectionName)
+    .requireField('apiKeys')
+    .done(),
 ];
 
 module.exports = compose(GetAPIKeyController);
