@@ -42,14 +42,15 @@ describe('Q3 smoke testing', () => {
         .set({ host })
         .expect(201);
 
-      await agent
-        .get('/profile')
+      const { body } = await agent
+        .post('/apikey')
         .set({
           Authorization: `Bearer ${token}`,
           'token-nonce': nonce,
           host,
         })
-        .expect(200);
+        .expect(201);
+        console.log(body)
     });
   });
 });
