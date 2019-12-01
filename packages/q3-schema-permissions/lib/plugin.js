@@ -2,7 +2,7 @@
 const { get } = require('lodash');
 const { Schema } = require('mongoose');
 const { exception } = require('q3-core-responder');
-const StatementReader = require('./utils');
+const Comparison = require('comparisons');
 
 const accessControl = (getUser, getGrant) => ({
   append() {
@@ -55,11 +55,12 @@ module.exports = (schema, sessionActions) => {
   schema.pre('save', ac.append);
 
   schema.query.eval = function parseStringOp(grant) {
-    const statements = new StatementReader(
+    const { $and } = new Comparison(
       get(grant, 'documentConditions', []),
-    ).get();
-    if (statements.length) {
-      this.and(statements);
+    ).query();
+
+    if ($and.length) {
+      this.and($and);
     }
   };
 
