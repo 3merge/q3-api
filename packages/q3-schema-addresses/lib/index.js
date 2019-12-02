@@ -25,7 +25,8 @@ function ensureSingleBilling(next) {
 Schema.path('region').validate(function verifyGeo(v) {
   if (
     (this.country === 'Canada' && STATES.includes(v)) ||
-    (this.country === 'United States' && PROVINCES.includes(v))
+    (this.country === 'United States' &&
+      PROVINCES.includes(v))
   )
     exception('Valiation')
       .msg('match')

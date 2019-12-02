@@ -1,5 +1,6 @@
 const getInt = (v) => (i) => Number(v.split(i)[1]);
-const checkOp = (v) => (op) => (v.startsWith(op) ? v : null);
+const checkOp = (v) => (op) =>
+  v.startsWith(op) ? v : null;
 
 module.exports = class RatesDecorator {
   meetsThreshold(v) {

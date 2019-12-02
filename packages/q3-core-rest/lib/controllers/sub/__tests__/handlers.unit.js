@@ -5,7 +5,6 @@ const {
   RemoveMany,
   List,
   Patch,
-  Post,
   Put,
 } = require('../handlers');
 

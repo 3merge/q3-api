@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const isGlob = require('is-glob');
 
-const clean = (a = []) => a.map((v) => v.trim().toLowerCase());
+const clean = (a = []) =>
+  a.map((v) => v.trim().toLowerCase());
 
 const throwOnDuplicate = (a = []) => {
   const simple = a.filter((v) => !isGlob(v));
@@ -11,7 +12,9 @@ const throwOnDuplicate = (a = []) => {
 
   if (dups.length)
     throw new Error(
-      `CommaDelimited: Values "${dups.join(', ')}" duplicated`,
+      `CommaDelimited: Values "${dups.join(
+        ', ',
+      )}" duplicated`,
     );
 };
 

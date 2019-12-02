@@ -8,7 +8,9 @@ Schema.path('value').set(function(v) {
   return v;
 });
 
-Schema.pre('save', async function checkForDuplicateRates(next) {
+Schema.pre('save', async function checkForDuplicateRates(
+  next,
+) {
   let err;
   const { name, value, threshold } = this;
 

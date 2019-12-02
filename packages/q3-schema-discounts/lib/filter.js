@@ -37,8 +37,9 @@ module.exports = class DiscountFilter {
   }
 
   $getDiscountByResourceNameAndKind(name, kinds = []) {
-    return this.$getDiscountByResourceName(name, ({ kind }) =>
-      kinds.includes(kind),
+    return this.$getDiscountByResourceName(
+      name,
+      ({ kind }) => kinds.includes(kind),
     );
   }
 

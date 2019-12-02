@@ -36,7 +36,11 @@ beforeAll(async () => {
 describe('DiscountFilter', () => {
   describe('getEligibleDiscounts', () => {
     it('should filter out expired and upcoming discounts', () => {
-      const inst = wrapConstructor([expired, foo, upcoming]);
+      const inst = wrapConstructor([
+        expired,
+        foo,
+        upcoming,
+      ]);
       const result = inst.$getEligibleDiscounts(Boolean);
       expect(result).toHaveLength(1);
     });
@@ -53,7 +57,11 @@ describe('DiscountFilter', () => {
   describe('getDiscountByTaxonomy', () => {
     it('should get taxonomy discounts', () => {
       const id = mongoose.Types.ObjectId();
-      const inst = wrapConstructor([foo, glob, taxonomy(id)]);
+      const inst = wrapConstructor([
+        foo,
+        glob,
+        taxonomy(id),
+      ]);
       const result = inst.getDiscountByTaxonomy(id);
       expect(result).toHaveLength(1);
     });
@@ -138,7 +146,11 @@ describe('DiscountFilter', () => {
     it('should return custom discount', () => {
       const resource = 'QUUZ';
       const inst = wrapConstructor([
-        { kind: 'Incremental MSRP', factor: 0.87, resource },
+        {
+          kind: 'Incremental MSRP',
+          factor: 0.87,
+          resource,
+        },
         { kind: 'Custom', factor: 3.5, resource },
       ]);
       const result = inst.getAugmentedDiscount(resource, {
@@ -162,7 +174,11 @@ describe('DiscountFilter', () => {
 
       const inst = wrapConstructor([
         { kind: 'Volume', factor: 0.87, resource },
-        { kind: 'Incremental MSRP', factor: 0.75, resource },
+        {
+          kind: 'Incremental MSRP',
+          factor: 0.75,
+          resource,
+        },
       ]);
       const result = inst.getBlendedDiscount(
         resource,
@@ -184,7 +200,11 @@ describe('DiscountFilter', () => {
 
       const inst = wrapConstructor([
         { kind: 'Volume', factor: 0.87, resource: 'NOOP' },
-        { kind: 'Incremental MSRP', factor: 0.75, resource },
+        {
+          kind: 'Incremental MSRP',
+          factor: 0.75,
+          resource,
+        },
       ]);
       const result = inst.getBlendedDiscount(
         resource,

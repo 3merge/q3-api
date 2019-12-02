@@ -81,7 +81,10 @@ const compareValues = (discounts = [], pricing) => {
   );
 };
 
-const returnHeaviestDiscountFromSortedArray = (a, pricing) =>
+const returnHeaviestDiscountFromSortedArray = (
+  a,
+  pricing,
+) =>
   a
     .map((discounts) =>
       Array.isArray(discounts) && discounts.length

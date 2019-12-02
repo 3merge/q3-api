@@ -5956,7 +5956,7 @@ mongoose-unique-validator@^2.0.3:
     lodash.foreach "^4.1.0"
     lodash.get "^4.0.2"
 
-mongoose@^5.7.1, mongoose@^5.7.12, mongoose@^5.7.13, mongoose@^5.7.7:
+mongoose@^5.7.1, mongoose@^5.7.12, mongoose@^5.7.7:
   version "5.7.13"
   resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.7.13.tgz#d8ebbc15cfb19d014cf1fbd4b7af413d75952d46"
   integrity sha512-MoTCETTIfXU1PqIYc+YAkhSB3uzK5xseh6ysAUnoOowkqS66OjBJtsL/bcgAKi6XfMYkFU6M1abKyuL7k//xeg==

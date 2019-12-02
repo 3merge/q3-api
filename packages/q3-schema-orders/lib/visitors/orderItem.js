@@ -19,7 +19,10 @@ module.exports = class OrderItemVisitor extends SchemaVisitorChain {
     const { setItemBucket } = actions;
     const { product, quantity } = this.store;
 
-    this.store.bucket = await setItemBucket(product, quantity);
+    this.store.bucket = await setItemBucket(
+      product,
+      quantity,
+    );
 
     if (!this.store.bucket)
       exception('Validation')
@@ -60,9 +63,10 @@ module.exports = class OrderItemVisitor extends SchemaVisitorChain {
 
     this.store.price = priceOverride
       ? priceOverride.evaluate(unmodifiedPrice)
-      : new DynamicDiscounts(unmodifiedPrice, discountBy).get(
-          discounts,
-        );
+      : new DynamicDiscounts(
+          unmodifiedPrice,
+          discountBy,
+        ).get(discounts);
   }
 
   calculate() {

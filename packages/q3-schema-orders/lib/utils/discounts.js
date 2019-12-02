@@ -48,7 +48,8 @@ module.exports = class DynamicDiscountUtils {
     if (this.method === BEST) return this.lowest(discounts);
     if (this.method === COMPOUND)
       return this.compound(discounts);
-    if (this.method === ADD) return this.together(discounts);
+    if (this.method === ADD)
+      return this.together(discounts);
     return 0;
   }
 };

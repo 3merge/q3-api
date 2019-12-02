@@ -89,7 +89,9 @@ describe('OrderFull visitor', () => {
   describe('checkShippingFees', () => {
     it('should pass shippingOption to fn', async () => {
       const inst = new VisitorOrderFull();
-      const setShipping = jest.fn().mockResolvedValue(12.32);
+      const setShipping = jest
+        .fn()
+        .mockResolvedValue(12.32);
       inst.store.shippingOption = 'Express';
       await inst.checkShippingFees({
         setShipping,

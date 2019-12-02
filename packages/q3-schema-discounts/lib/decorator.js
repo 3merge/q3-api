@@ -7,7 +7,11 @@ const {
   INCREMENTAL_VOLUME,
   CUSTOM,
 } = require('./constants');
-const { multiply, increment, toFixed } = require('./helpers');
+const {
+  multiply,
+  increment,
+  toFixed,
+} = require('./helpers');
 
 module.exports = class DiscountDecorator {
   evaluate({
@@ -18,7 +22,8 @@ module.exports = class DiscountDecorator {
   }) {
     const base = discounted || retail;
     const { kind, factor, rawFactor } = this;
-    const num = rawFactor !== undefined ? rawFactor : factor;
+    const num =
+      rawFactor !== undefined ? rawFactor : factor;
 
     const discount = (() => {
       switch (kind) {

@@ -4,7 +4,9 @@ const { COMPOUND } = require('../../constants');
 describe('DynamicDiscountUtils', () => {
   describe('lowest method', () => {
     it('should return the lowest output float', () => {
-      const inst = new DynamicDiscountUtils({ retail: 45.98 });
+      const inst = new DynamicDiscountUtils({
+        retail: 45.98,
+      });
       const result = inst.lowest([
         { diff: jest.fn().mockReturnValue(13.27) },
         { diff: jest.fn().mockReturnValue(9.87) },
@@ -16,7 +18,9 @@ describe('DynamicDiscountUtils', () => {
 
     it('should return 0 if the discount exceeds base value', () => {
       const mock = jest.fn();
-      const inst = new DynamicDiscountUtils({ retail: 11.11 });
+      const inst = new DynamicDiscountUtils({
+        retail: 11.11,
+      });
       const result = inst.lowest([
         { diff: mock.mockReturnValueOnce(13.27) },
         { diff: mock.mockReturnValueOnce(9.87) },
@@ -29,9 +33,12 @@ describe('DynamicDiscountUtils', () => {
 
   describe('accumlate method', () => {
     it('should compound the discount', () => {
-      const out = (i) => (v) => v.discounted || v.retail * i;
+      const out = (i) => (v) =>
+        v.discounted || v.retail * i;
       const mock = jest.fn();
-      const inst = new DynamicDiscountUtils({ retail: 45.98 });
+      const inst = new DynamicDiscountUtils({
+        retail: 45.98,
+      });
       const result = inst.compound([
         { diff: mock.mockImplementationOnce(out(0.13)) },
         { diff: mock.mockImplementationOnce(out(0.08)) },
@@ -45,7 +52,9 @@ describe('DynamicDiscountUtils', () => {
   describe('together method', () => {
     it('should add the discounts together', () => {
       const mock = jest.fn();
-      const inst = new DynamicDiscountUtils({ retail: 54.1 });
+      const inst = new DynamicDiscountUtils({
+        retail: 54.1,
+      });
       const result = inst.together([
         { diff: mock.mockReturnValueOnce(11) },
         { diff: mock.mockReturnValueOnce(2) },

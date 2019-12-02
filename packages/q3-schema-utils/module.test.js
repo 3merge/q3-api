@@ -58,7 +58,9 @@ describe('Mongoose plugin schemas', () => {
         currency: expect.any(Object),
       });
       expect(methods).toHaveProperty('convert');
-      expect(methods.convert(100, 'USD', 'CAD', 1.33)).toBe(133);
+      expect(methods.convert(100, 'USD', 'CAD', 1.33)).toBe(
+        133,
+      );
       expect(
         methods.convert(100, 'CAD', 'USD', 1.33),
       ).toBeCloseTo(75.18, 0.5);
@@ -105,7 +107,10 @@ describe('filters', () => {
         .mockReturnValueOnce(true)
         .mockReturnValueOnce(false);
 
-      const items = [{ _id: { equals } }, { _id: { equals } }];
+      const items = [
+        { _id: { equals } },
+        { _id: { equals } },
+      ];
       expect(items.filter(stub)).toHaveLength(1);
     });
   });

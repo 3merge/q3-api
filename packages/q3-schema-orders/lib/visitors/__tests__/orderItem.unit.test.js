@@ -23,7 +23,9 @@ describe('OrderItem visitor', () => {
   describe('checkAvailability method', () => {
     it('should call setItemBucket with product and quantity args', async () => {
       const inst = new VisitorOrderItem();
-      const setItemBucket = jest.fn().mockResolvedValue(true);
+      const setItemBucket = jest
+        .fn()
+        .mockResolvedValue(true);
       inst.store = { product: 1, quantity: 2 };
       await inst.checkAvailability({
         setItemBucket,
@@ -34,7 +36,9 @@ describe('OrderItem visitor', () => {
 
     it('should fail if setItemBucket returns falsy', async (done) => {
       const inst = new VisitorOrderItem();
-      const setItemBucket = jest.fn().mockResolvedValue(false);
+      const setItemBucket = jest
+        .fn()
+        .mockResolvedValue(false);
 
       return inst
         .checkAvailability({

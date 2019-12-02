@@ -16,7 +16,9 @@ afterAll(async () => {
 
 describe('Rate uniqueness', () => {
   it('should catch duplicate fees', async () => {
-    return expect(Model.create(stub)).rejects.toThrowError();
+    return expect(
+      Model.create(stub),
+    ).rejects.toThrowError();
   });
 
   it('should ignore duplicate if threshold is different', async () => {

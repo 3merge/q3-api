@@ -9,8 +9,6 @@ describe('Q3 guest checkout', () => {
     expect(status).toBe(201);
     expect(body.order).toHaveProperty('status', 'Open');
     ({ id: orderID } = body.order);
-
-    console.log(body.order);
   });
 
   it('should add an item to the order', async () => {

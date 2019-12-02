@@ -16,7 +16,11 @@ module.exports = class SchemaVisitorChain {
   }
 
   async *$chain(actions = {}) {
-    for (let i = 0; i < this.executionOrder.length; i += 1) {
+    for (
+      let i = 0;
+      i < this.executionOrder.length;
+      i += 1
+    ) {
       const item = this.executionOrder[i];
       yield invoke(this, item, actions);
     }

@@ -21,7 +21,8 @@ const hasExpired = (context = {}) => {
     schema: { options },
     updatedAt,
   } =
-    'parent' in context && typeof context.parent === 'function'
+    'parent' in context &&
+    typeof context.parent === 'function'
       ? context.parent()
       : context;
 
@@ -31,7 +32,9 @@ const hasExpired = (context = {}) => {
 };
 
 const compareObjectIds = (a, b) =>
-  typeof a === 'object' && 'equals' in a ? a.equals(b) : a === b;
+  typeof a === 'object' && 'equals' in a
+    ? a.equals(b)
+    : a === b;
 
 function validateStatus(v) {
   if (
@@ -78,8 +81,10 @@ const convert = (
   let sum = num;
   const equals = inboundCurrency === outboundCurrency;
 
-  if (!equals && inboundCurrency === 'USD') sum = num * rate;
-  if (!equals && inboundCurrency === 'CAD') sum = num / rate;
+  if (!equals && inboundCurrency === 'USD')
+    sum = num * rate;
+  if (!equals && inboundCurrency === 'CAD')
+    sum = num / rate;
 
   return round(sum, 2);
 };
