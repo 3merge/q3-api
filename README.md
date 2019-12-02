@@ -28,7 +28,7 @@
 <p>Note, V1 is still very much in development. I do not recommend deploying yet in production apps. More updates on the way.</p>
 
 <h2>Documentation</h2>
-<p>We host our documentation with GitBook. It auto-syncs with the master repository under the <code>schema</code> folder. Mostly, though, we update it through the web admin.</p>
+<p>We host our documentation with GitBook.</p>
 
 <p><a href="https://3merge.gitbook.io/q3/">🕮 Documentation</a></p>
 
