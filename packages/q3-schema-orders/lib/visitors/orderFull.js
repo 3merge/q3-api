@@ -2,7 +2,11 @@
 const { multiply, round } = require('lodash');
 const { exception } = require('q3-core-responder');
 const SchemaVisitorChain = require('./chain');
-const { addUp, convert, reducers } = require('../utils/helpers');
+const {
+  addUp,
+  convert,
+  reducers,
+} = require('../utils/helpers');
 
 module.exports = class OrderFullVisitor extends SchemaVisitorChain {
   constructor() {

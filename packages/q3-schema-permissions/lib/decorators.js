@@ -77,11 +77,10 @@ module.exports = class PermissionDecorators {
     doc.testFields(doc);
     doc.testOwnership(user);
 
-    if (op !== 'Read')
-      doc.readOnly = await this.getReadOnlyFieldProps(
-        coll,
-        user,
-      );
+    doc.readOnly =
+      op !== 'Read'
+        ? await this.getReadOnlyFieldProps(coll, user)
+        : doc.fields;
 
     return doc;
   }

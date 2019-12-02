@@ -4,6 +4,18 @@ const { Schema } = require('mongoose');
 const { exception } = require('q3-core-responder');
 const Comparison = require('comparisons');
 
+const isAny = (grant) => get(grant, 'ownership') === 'Any';
+const isPublic = (grant) => get(grant, 'role') === 'Public';
+
+const isAuthenticated = (user) => {
+  if (!user || !user._id)
+    exception('Authentication')
+      .msg('sessionUser')
+      .throw();
+
+  return user._id;
+};
+
 const accessControl = (getUser, getGrant) => ({
   append() {
     const user = getUser();
@@ -68,19 +80,17 @@ module.exports = (schema, sessionActions) => {
     grant,
     user,
   ) {
-    if (
-      get(grant, 'ownership') === 'Any' ||
-      get(grant, 'role') === 'Public'
-    )
+    if (isAny(grant)) return;
+
+    if (isPublic(grant)) {
+      this.where({
+        createdBy: { $exists: false },
+      });
+
       return;
+    }
 
-    /* @TODO: Need to allow OWN as public too */
-    if (!user || !user._id)
-      exception('Authentication')
-        .msg('sessionUser')
-        .throw();
-
-    const createdBy = user._id;
+    const createdBy = isAuthenticated(user);
     const aliases = get(grant, 'ownershipAliases', []).map(
       ({ foreign, local }) => ({
         [local]: user[foreign],

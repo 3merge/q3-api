@@ -8,6 +8,7 @@
     "mongoose": "^5.7.1",
     "q3-api": "^1.0.41",
     "q3-core-responder": "^1.0.31",
+    "q3-schema-rates": "^1.0.0",
     "q3-schema-orders": "^1.0.0",
     "q3-test-utils": "^1.0.41"
   },

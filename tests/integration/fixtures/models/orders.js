@@ -2,6 +2,7 @@
 const { setModel } = require('q3-api');
 const iOrderBuilder = require('q3-schema-orders');
 const ProductModel = require('./products');
+const RateModel = require('./rates');
 
 class Order extends iOrderBuilder {
   setItemBucket(id) {
@@ -9,26 +10,29 @@ class Order extends iOrderBuilder {
   }
 
   automateItemDiscounts() {
-    return [
-      {
-        factor: 0.12,
-        kind: 'Retail',
-        global: true,
-      },
-    ];
+    return [];
   }
 
-  setItemUnmodifiedPrice() {
+  setItemUnmodifiedPrice(v) {
+    return v.price;
+  }
+
+  async setTax() {
+    const { value: hst } = await RateModel.findOne({
+      name: 'HST',
+    })
+      .lean()
+      .exec();
+    const { value: gst } = await RateModel.findOne({
+      name: 'GST',
+    })
+      .lean()
+      .exec();
+
     return {
-      retail: 96.99,
+      hst,
+      gst,
     };
-  }
-
-  setTax() {
-    return Promise.resolve({
-      gst: 5,
-      hst: 9,
-    });
   }
 
   setPayment() {
@@ -36,7 +40,9 @@ class Order extends iOrderBuilder {
   }
 
   setLocale() {
-    return Promise.resolve(1.36);
+    return RateModel.findOne({
+      name: 'Exchange',
+    });
   }
 
   setShipping() {
