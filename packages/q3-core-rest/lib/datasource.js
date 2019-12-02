@@ -15,6 +15,7 @@ module.exports = class RestRegistrationModule {
     this.field = field;
 
     this.app = Router();
+    this.preRoute = [];
     this.addMiddleware();
     this.addOptions();
   }
@@ -52,6 +53,7 @@ module.exports = class RestRegistrationModule {
       Object.assign(req, this.getSchemaOptions(), {
         datasource: this.datasource,
       });
+
       next();
     });
   }
@@ -102,7 +104,11 @@ module.exports = class RestRegistrationModule {
       (this.restify.includes(verb) ||
         this.restify === '*') &&
       knownControllerVerbs.includes(verb)
-      ? this.app[verb](route, compose(Controller))
+      ? this.app[verb](
+          route,
+          this.preRoute,
+          compose(Controller),
+        )
       : undefined;
   }
 };

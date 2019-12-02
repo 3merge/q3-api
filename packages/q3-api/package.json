@@ -4,15 +4,6 @@
   "description": "REST api configurations",
   "main": "lib/index.js",
   "license": "MIT",
-  "jest": {
-    "setupFilesAfterEnv": [
-      "q3-test-utils/jest-setup.js"
-    ],
-    "testEnvironment": "node",
-    "roots": [
-      "<rootDir>/lib/"
-    ]
-  },
   "dependencies": {
     "aws-sdk": "^2.556.0",
     "body-parser": "^1.19.0",
@@ -56,5 +47,12 @@
     "q3-test-utils": "^1.0.0",
     "supertest": "^4.0.2"
   },
-  "gitHead": "1552170e150d37831f62d8db8da5dfa7a9799226"
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node",
+    "preset": "q3-test-utils",
+    "setupFilesAfterEnv": [
+      "q3-test-utils/jest-setup.js"
+    ]
+  }
 }

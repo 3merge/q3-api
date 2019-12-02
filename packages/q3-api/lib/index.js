@@ -31,8 +31,8 @@ const Q3 = {
       ),
     );
 
-    app.use(walker(__dirname));
     runner();
+    app.use(walker(__dirname));
 
     if (routes) app.use(routes);
     return app;

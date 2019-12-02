@@ -84,6 +84,7 @@ describe('compose', () => {
           Promise.resolve({
             coll: 'Foo',
             fields: 'bar, quux',
+            readOnly: 'bar, quux',
             role: 'Developer',
           });
 

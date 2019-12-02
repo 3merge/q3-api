@@ -10,7 +10,9 @@
     "postinstall": "yarnw-sync-deps && yarn-deduplicate",
     "bootstrap": "lerna bootstrap --use-workspaces",
     "lint": "eslint . --ext .js --ignore-pattern node_modules",
-    "test": "jest --collectCoverage",
+    "test": "yarn test:packages && yarn test:intergrations",
+    "test:packages": "jest --runInBand --collectCoverage",
+    "test:integrations": "jest --runInBand --config tests/integration/jest.config.js --collectCoverage",
     "upload": "lerna publish"
   },
   "workspaces": [
@@ -43,6 +45,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.2.0",
+    "glob": "^7.1.6",
     "jest-environment-node": "^24.9.0",
     "lodash": "^4.17.15",
     "micromatch": "^4.0.2",

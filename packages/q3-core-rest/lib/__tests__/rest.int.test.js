@@ -17,6 +17,7 @@ const config = middleware(
   {
     hasGrant: jest.fn().mockResolvedValue({
       fields: '*',
+      readOnly: '*',
     }),
   },
 );
@@ -137,6 +138,7 @@ describe('Rester', () => {
       body: { foo },
       status,
     } = await request.get(`/foos/${id}`);
+
     expect(foo).toHaveProperty('id', id);
     expect(status).toBe(200);
   });

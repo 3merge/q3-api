@@ -1,9 +1,11 @@
 /* eslint-disable func-names */
 const mongoose = require('mongoose');
 const micromatch = require('micromatch');
+const Comparison = require('comparisons');
 const { get } = require('lodash');
 const { exception } = require('q3-core-responder');
-const StatementReader = require('./utils');
+
+const getUserRole = (user) => (user ? user.role : 'Public');
 
 module.exports = class PermissionDecorators {
   static async isUnique(next) {
@@ -36,8 +38,28 @@ module.exports = class PermissionDecorators {
     next(err);
   }
 
+  static async getReadOnlyFieldProps(coll, user) {
+    try {
+      const role = getUserRole(user);
+      const doc = await this.findOne({
+        active: true,
+        op: 'Read',
+        role,
+        coll,
+      })
+        .setOptions({ bypassAuthorization: true })
+        .select('fields ownershipConditions')
+        .exec();
+
+      doc.testOwnership(user);
+      return doc.fields;
+    } catch (e) {
+      return '!*';
+    }
+  }
+
   static async hasGrant(coll, op, user) {
-    const role = user ? user.role : 'Public';
+    const role = getUserRole(user);
     const doc = await this.findOne({
       active: true,
       role,
@@ -45,16 +67,29 @@ module.exports = class PermissionDecorators {
       op,
     })
       .setOptions({ bypassAuthorization: true })
-      .lean()
       .exec();
 
-    if (!doc || !doc.fields)
+    if (!doc)
+      exception('Authorization')
+        .msg('noPermission')
+        .throw();
+
+    doc.testFields(doc);
+    doc.testOwnership(user);
+
+    doc.readOnly =
+      op !== 'Read'
+        ? await this.getReadOnlyFieldProps(coll, user)
+        : doc.fields;
+
+    return doc;
+  }
+
+  testFields() {
+    if (!this.fields || this.field === '!*')
       exception('Authorization')
         .msg('insufficientPermissions')
         .throw();
-
-    doc.testOwnership(user);
-    return doc;
   }
 
   isValid() {
@@ -92,9 +127,7 @@ module.exports = class PermissionDecorators {
     if (
       typeof user !== 'object' ||
       !Object.keys(user).length ||
-      !new StatementReader(
-        this.ownershipConditions,
-      ).compare(user)
+      !new Comparison(this.ownershipConditions).eval(user)
     )
       exception('Authorization')
         .msg('ownershipState')

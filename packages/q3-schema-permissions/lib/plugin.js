@@ -2,7 +2,19 @@
 const { get } = require('lodash');
 const { Schema } = require('mongoose');
 const { exception } = require('q3-core-responder');
-const StatementReader = require('./utils');
+const Comparison = require('comparisons');
+
+const isAny = (grant) => get(grant, 'ownership') === 'Any';
+const isPublic = (grant) => get(grant, 'role') === 'Public';
+
+const isAuthenticated = (user) => {
+  if (!user || !user._id)
+    exception('Authentication')
+      .msg('sessionUser')
+      .throw();
+
+  return user._id;
+};
 
 const accessControl = (getUser, getGrant) => ({
   append() {
@@ -55,11 +67,12 @@ module.exports = (schema, sessionActions) => {
   schema.pre('save', ac.append);
 
   schema.query.eval = function parseStringOp(grant) {
-    const statements = new StatementReader(
+    const { $and } = new Comparison(
       get(grant, 'documentConditions', []),
-    ).get();
-    if (statements.length) {
-      this.and(statements);
+    ).query();
+
+    if ($and.length) {
+      this.and($and);
     }
   };
 
@@ -67,18 +80,17 @@ module.exports = (schema, sessionActions) => {
     grant,
     user,
   ) {
-    if (
-      get(grant, 'ownership') === 'Any' ||
-      get(grant, 'role') === 'Public'
-    )
+    if (isAny(grant)) return;
+
+    if (isPublic(grant)) {
+      this.where({
+        createdBy: { $exists: false },
+      });
+
       return;
+    }
 
-    if (!user || !user._id)
-      exception('Authentication')
-        .msg('sessionUser')
-        .throw();
-
-    const createdBy = user._id;
+    const createdBy = isAuthenticated(user);
     const aliases = get(grant, 'ownershipAliases', []).map(
       ({ foreign, local }) => ({
         [local]: user[foreign],

@@ -33,8 +33,11 @@ jobs:
       - attach_workspace:
           at: ~/repo
       - run: 
-          name: Testing
-          command: yarn test
+          name: Units
+          command: yarn test:packages
+      - run: 
+          name: Integrations
+          command: yarn test:integrations
       - store_artifacts:
           path: coverage
           prefix: coverage

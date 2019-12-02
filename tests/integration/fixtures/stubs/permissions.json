@@ -1,0 +1,46 @@
+[
+  {
+    "coll": "products",
+    "fields": "*, !manufacturerCode",
+    "role": "Secretary",
+    "documentConditions": "forSale=true",
+    "ownership": "Any",
+    "op": "Read"
+  },
+  {
+    "coll": "products",
+    "fields": "*",
+    "role": "Secretary",
+    "ownershipConditions": "isVerified=true",
+    "ownership": "Any",
+    "op": "Create"
+  },
+  {
+    "coll": "products",
+    "fields": "sku, price*",
+    "role": "Secretary",
+    "ownership": "Own",
+    "op": "Update"
+  },
+  {
+    "coll": "orders",
+    "fields": "items.quantity, items.product, shipping, billing",
+    "role": "Public",
+    "ownership": "Own",
+    "op": "Create"
+  },
+  {
+    "coll": "orders",
+    "fields": "items.quantity,  items, shipping, billing",
+    "role": "Public",
+    "ownership": "Own",
+    "op": "Update"
+  },
+  {
+    "coll": "orders",
+    "fields": "items*, shipping, billing, gst, hst, status, tax, id, shippingFee, paymentFee",
+    "role": "Public",
+    "ownership": "Own",
+    "op": "Read"
+  }
+]

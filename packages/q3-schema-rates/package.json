@@ -2,15 +2,6 @@
   "name": "q3-schema-rates",
   "version": "1.0.1",
   "main": "lib/index.js",
-  "jest": {
-    "setupFilesAfterEnv": [
-      "q3-test-utils/jest-setup.js"
-    ],
-    "testEnvironment": "node",
-    "roots": [
-      "<rootDir>/lib/"
-    ]
-  },
   "peerDependencies": {
     "mongoose": "^5.7.12"
   },
@@ -19,5 +10,13 @@
   },
   "devDependencies": {
     "q3-test-utils": "1.0.41"
+  },
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node",
+    "preset": "q3-test-utils",
+    "setupFilesAfterEnv": [
+      "q3-test-utils/jest-setup.js"
+    ]
   }
 }

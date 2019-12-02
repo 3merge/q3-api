@@ -1,10 +1,19 @@
 const micromatch = require('micromatch');
 const { set } = require('lodash');
+const hasField = require('./hasField');
 
-const getFields = (grant) =>
-  String(grant || !grant.fields ? grant.fields : '!*')
+const splitter = (s) =>
+  String(s)
     .split(',')
     .map((i) => i.trim());
+
+const getFields = (grant) =>
+  splitter(grant || !grant.fields ? grant.fields : '!*');
+
+const getReadOnly = (grant) =>
+  splitter(
+    grant || !grant.readOnly ? grant.readOnly : '!*',
+  );
 
 const makeAuthorizationError = (t) => {
   const e = new Error();
@@ -34,6 +43,8 @@ class IsAuthorizedInLocationRef {
       const m = this.source;
       const grant = await req.authorize(m);
       const fields = getFields(grant);
+      const readOnly = getReadOnly(grant);
+
       const forNext = this.meetsFieldRequirements(
         makeAuthorizationError(req.t),
         fields,
@@ -41,6 +52,7 @@ class IsAuthorizedInLocationRef {
 
       set(req, `redactions.${m}`, {
         locations: this.locations,
+        readOnly,
         fields,
       });
 
@@ -66,15 +78,20 @@ class IsAuthorizedInLocationRef {
   }
 
   requireField(field) {
-    this.locations.required = field;
+    this.locations.required = hasField(this.source, field);
     return this;
   }
 
   meetsFieldRequirements(resp, fields) {
-    return this.locations.required &&
-      !micromatch.isMatch(this.locations.required, fields)
-      ? resp
-      : undefined;
+    const { required } = this.locations;
+    if (!required) return undefined;
+
+    const outcome = Array.isArray(required)
+      ? micromatch(required, fields).length ===
+        required.length
+      : micromatch.isMatch(this.locations.required, fields);
+
+    return !outcome ? resp : undefined;
   }
 }
 

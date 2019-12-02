@@ -26,7 +26,7 @@ module.exports = {
     res,
   ) {
     if (!files) {
-      await parent.pushSubDocument(this.field, body);
+      await parent.pushSubDocument(fieldName, body);
     } else {
       await parent.handleUpload({ files, ...body });
     }

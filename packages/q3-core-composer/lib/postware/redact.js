@@ -67,11 +67,16 @@ class Redact {
     );
   }
 
-  exec({ fields = [], locations = {} }) {
+  exec({ fields = [], readOnly = [], locations = {} }) {
     const { prefix } = locations;
     this.rules = get(locations, this.id, []);
-    this.fields = fields;
     this.prefix = prefix;
+
+    // for response payloads,
+    // only reference the readOnly field rules
+    this.fields =
+      this.id === 'response' ? readOnly : fields;
+
     return this.$getEntries();
   }
 }
