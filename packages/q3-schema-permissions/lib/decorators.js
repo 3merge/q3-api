@@ -38,33 +38,7 @@ module.exports = class PermissionDecorators {
     next(err);
   }
 
-  static async hasGrant(coll, op, user) {
-    const role = getUserRole(user);
-    const doc = await this.findOne({
-      active: true,
-      role,
-      coll,
-      op,
-    })
-      .setOptions({ bypassAuthorization: true })
-      .exec();
-
-    doc.testOwnership(user);
-    doc.testFields(doc);
-
-    if (op !== 'Read') {
-      doc.readOnly = await doc.getReadOnlyFieldProps(
-        coll,
-        user,
-      );
-    } else {
-      doc.readOnly = doc.fields;
-    }
-
-    return doc;
-  }
-
-  async getReadOnlyFieldProps(coll, user) {
+  static async getReadOnlyFieldProps(coll, user) {
     try {
       const role = getUserRole(user);
       const doc = await this.findOne({
@@ -84,8 +58,36 @@ module.exports = class PermissionDecorators {
     }
   }
 
+  static async hasGrant(coll, op, user) {
+    const role = getUserRole(user);
+    const doc = await this.findOne({
+      active: true,
+      role,
+      coll,
+      op,
+    })
+      .setOptions({ bypassAuthorization: true })
+      .exec();
+
+    if (!doc)
+      exception('Authorization')
+        .msg('noPermission')
+        .throw();
+
+    doc.testFields(doc);
+    doc.testOwnership(user);
+
+    if (op !== 'Read')
+      doc.readOnly = await this.getReadOnlyFieldProps(
+        coll,
+        user,
+      );
+
+    return doc;
+  }
+
   testFields() {
-    if (!this || !this.fields || this.field('!*'))
+    if (!this.fields || this.field === '!*')
       exception('Authorization')
         .msg('insufficientPermissions')
         .throw();

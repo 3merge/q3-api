@@ -31,7 +31,14 @@
   },
   {
     "coll": "orders",
-    "fields": "items.quantity, items.product, shipping, billing, gst, hst, status, tax, id, shippingFee, paymentFee",
+    "fields": "items.quantity,  items, shipping, billing",
+    "role": "Public",
+    "ownership": "Any",
+    "op": "Update"
+  },
+  {
+    "coll": "orders",
+    "fields": "items*, shipping, billing, gst, hst, status, tax, id, shippingFee, paymentFee",
     "role": "Public",
     "ownership": "Own",
     "op": "Read"

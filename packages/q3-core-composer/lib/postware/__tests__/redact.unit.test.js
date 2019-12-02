@@ -80,3 +80,39 @@ describe.each([
     expect(doc).toEqual({ body: expected });
   });
 });
+
+describe('Redact', () => {
+  it('it should work with embedded arrays', () => {
+    const resp = process(
+      {
+        redactions: {
+          foo: {
+            fields: ['name', 'friend.name'],
+            locations: {
+              request: ['body'],
+            },
+          },
+        },
+      },
+      {
+        body: {
+          name: 'Jon',
+          friend: {
+            name: 'Jess',
+            age: 1,
+          },
+        },
+      },
+      'request',
+    );
+
+    expect(resp).toEqual({
+      body: {
+        name: 'Jon',
+        friend: {
+          name: 'Jess',
+        },
+      },
+    });
+  });
+});

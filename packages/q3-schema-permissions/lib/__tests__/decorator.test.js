@@ -100,13 +100,15 @@ describe('Decorator', () => {
 
     it('should append a readOnly access levels', async () => {
       const role = 'Secretary';
+      Model.getReadOnlyFieldProps = jest
+        .fn()
+        .mockImplementation(() => 'firstName');
+
       Model.exec.mockResolvedValue({
         testFields: jest.fn(),
         testOwnership: jest.fn(),
-        getReadOnlyFieldProps: jest
-          .fn()
-          .mockImplementation(() => 'firstName'),
         fields: '*',
+        op: 'Update',
       });
 
       const doc = await Decorator.hasGrant.call(

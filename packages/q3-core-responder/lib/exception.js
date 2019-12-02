@@ -122,7 +122,7 @@ const handleUncaughtExceptions = (err, req, res, next) => {
     res.json({
       errors: translateErrors(err.errors),
       message: translateMessage(err.message),
-      trace: err.trace,
+      stack: err.stack,
       name: err.name,
     });
   }

@@ -24,5 +24,8 @@
     "setupFilesAfterEnv": [
       "q3-test-utils/jest-setup.js"
     ]
+  },
+  "peerDependencies": {
+    "mongoose": "^5.7.13"
   }
 }

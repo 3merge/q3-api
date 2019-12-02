@@ -30,22 +30,26 @@ module.exports = class SubDocumentControllerCommander extends RestRegistration {
   }
 
   addDocumentLookupMiddleware() {
-    return this.app.use(async (req, res, next) => {
-      const {
-        datasource,
-        params: { resourceID },
-      } = req;
+    this.preRoute.push(async (req, res, next) => {
+      try {
+        const {
+          datasource,
+          params: { resourceID },
+        } = req;
 
-      const doc = await datasource
-        .findById(resourceID)
-        .select(this.field)
-        .exec();
+        const doc = await datasource
+          .findById(resourceID)
+          .select(this.field)
+          .exec();
 
-      datasource.verifyOutput(doc);
-      req.parent = doc;
-      req.fieldName = this.field;
-      req.subdocs = doc[this.field];
-      next();
+        datasource.verifyOutput(doc);
+        req.parent = doc;
+        req.fieldName = this.field;
+        req.subdocs = doc[this.field];
+        next();
+      } catch (e) {
+        next(e);
+      }
     });
   }
 
@@ -54,6 +58,7 @@ module.exports = class SubDocumentControllerCommander extends RestRegistration {
       redact(this.collectionName)
         .requireField(this.field)
         .inResponse(this.field)
+        .withPrefix(this.field)
         .done(),
     ];
 
@@ -72,6 +77,7 @@ module.exports = class SubDocumentControllerCommander extends RestRegistration {
         .requireField(this.field)
         .inRequest('body')
         .inResponse(this.field)
+        .withPrefix(this.field)
         .done(),
     ];
 
@@ -85,6 +91,7 @@ module.exports = class SubDocumentControllerCommander extends RestRegistration {
         .requireField(this.field)
         .inRequest('body')
         .inResponse(this.field)
+        .withPrefix(this.field)
         .done(),
     ];
 
@@ -98,6 +105,7 @@ module.exports = class SubDocumentControllerCommander extends RestRegistration {
         .requireField(this.field)
         .inRequest('body')
         .inResponse(this.field)
+        .withPrefix(this.field)
         .done(),
     ];
 

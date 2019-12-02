@@ -74,6 +74,7 @@ module.exports = (schema, sessionActions) => {
     )
       return;
 
+    /* @TODO: Need to allow OWN as public too */
     if (!user || !user._id)
       exception('Authentication')
         .msg('sessionUser')

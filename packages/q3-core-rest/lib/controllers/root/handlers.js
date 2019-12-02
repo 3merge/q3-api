@@ -117,7 +117,6 @@ module.exports = {
     res,
   ) {
     const doc = await datasource.create(body);
-
     res.create({
       message: t('messages:resourceCreated'),
       [collectionSingularName]: marshal(doc),
