@@ -1,12 +1,12 @@
 {
   "name": "integration",
   "private": true,
-  "version": "1.0.2",
+  "version": "1.0.3",
   "dependencies": {
     "express": "^4.17.1",
     "i18next": "^19.0.1",
     "mongoose": "^5.7.1",
-    "q3-api": "^1.0.43",
+    "q3-api": "^1.0.44",
     "q3-core-responder": "^1.0.32",
     "q3-schema-orders": "^1.1.3",
     "q3-schema-rates": "^1.0.3",
