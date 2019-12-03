@@ -1,10 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 const i18next = require('i18next');
+const middleware = require('i18next-express-middleware');
 
 const dir = path.join(__dirname, 'lang');
 
-i18next.init({
+i18next.use(middleware.LanguageDetector).init({
   lng: 'en',
   fallbackLng: 'en',
   preload: ['en', 'fr'],
