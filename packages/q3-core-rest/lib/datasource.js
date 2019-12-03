@@ -100,15 +100,13 @@ module.exports = class RestRegistrationModule {
 
   $mkt(verb, args) {
     const [route, Controller] = args;
+    Controller.postAuthorization = this.preRoute;
+
     return typeof this.restify === 'string' &&
       (this.restify.includes(verb) ||
         this.restify === '*') &&
       knownControllerVerbs.includes(verb)
-      ? this.app[verb](
-          route,
-          this.preRoute,
-          compose(Controller),
-        )
+      ? this.app[verb](route, compose(Controller))
       : undefined;
   }
 };
