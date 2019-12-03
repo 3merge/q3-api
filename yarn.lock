@@ -5534,10 +5534,10 @@ lru-cache@^5.1.1:
   dependencies:
     yallist "^3.0.2"
 
-m2e-validator@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/m2e-validator/-/m2e-validator-1.1.0.tgz#496a23eaa91a3afd3a7d8e8c6837593d3da6ba21"
-  integrity sha512-spNP+wew3qfja0zSgSJVZ3JJ/yTuAnKJ0QXiiiZkSbUTbflVHrT6QJOWFGA+t3tx4pfiWvayD608VSG1zoTDKw==
+m2e-validator@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/m2e-validator/-/m2e-validator-1.2.0.tgz#1cbfce2436a5c1b4db44fe0fd27088fa5192aaab"
+  integrity sha512-7ogK3+qkvFtfBkBQ8QxAWjknhZRfYhxxG8xlUscSr4hycz3mEbwSLx8znXTEh4B8tLPGtGS6XZLeZizwa99z+w==
   dependencies:
     express-validator "^6.3.0"
     lodash "^4.17.15"
