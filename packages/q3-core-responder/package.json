@@ -6,6 +6,7 @@
     "express": "^4.17.1"
   },
   "devDependencies": {
+    "q3-test-utils": "1.0.43",
     "supertest": "^4.0.2"
   },
   "dependencies": {

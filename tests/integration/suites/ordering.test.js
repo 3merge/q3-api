@@ -8,7 +8,9 @@ describe('Q3 guest checkout', () => {
 
     expect(status).toBe(201);
     expect(body.order).toHaveProperty('status', 'Open');
+
     ({ id: orderID } = body.order);
+    return orderID;
   });
 
   it('should add an item to the order', async () => {
@@ -24,7 +26,7 @@ describe('Q3 guest checkout', () => {
       129.99,
     );
     expect(body.items[0].subtotal).toBe(259.98);
-    expect(body.items[0].bucket).toMatchObject({
+    return expect(body.items[0].bucket).toMatchObject({
       sku: 'Satin Sheets',
     });
   });
@@ -36,6 +38,6 @@ describe('Q3 guest checkout', () => {
 
     expect(status).toBe(200);
     expect(body.order).toHaveProperty('gst', 5);
-    expect(body.order).toHaveProperty('hst', 6);
+    return expect(body.order).toHaveProperty('hst', 6);
   });
 });

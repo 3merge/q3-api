@@ -99,6 +99,7 @@ module.exports = {
 
     doc.set(body);
     isFresh(doc.updatedAt);
+
     await doc.save({
       redact: true,
       op: 'Update',
@@ -136,13 +137,7 @@ module.exports = {
     res.acknowledge();
   },
 
-  async RemoveMany(
-    {
-      datasource,
-      query: { ids },
-    },
-    res,
-  ) {
+  async RemoveMany({ datasource, query: { ids } }, res) {
     await datasource.archiveMany(ids);
     res.acknowledge();
   },

@@ -13,6 +13,14 @@ const removeEmpty = (obj = {}) =>
     return copy;
   }, {});
 
+const getLastModifiedDate = (arr) =>
+  arr.reduce((a, c) => {
+    const d = typeof c === 'object' ? c.updatedAt : null;
+
+    if (!moment(d).isValid()) return a;
+    return moment(a).isAfter(d) ? a : d;
+  }, '');
+
 const stripMongoDBProps = (i) => {
   try {
     if (typeof i !== 'object') return i;
@@ -42,10 +50,15 @@ const stripMongoDBProps = (i) => {
 const decorateResponse = (req, res, next) => {
   const dispatch = statusCodeHelper(res);
 
-  req.marshal = (o) =>
-    Array.isArray(o)
-      ? o.map(stripMongoDBProps)
-      : stripMongoDBProps(o);
+  req.marshal = (o) => {
+    if (Array.isArray(o)) {
+      res.set('Last-Modified', getLastModifiedDate(o));
+      return o.map(stripMongoDBProps);
+    }
+
+    res.set('Last-Modified', o.updatedAt);
+    return stripMongoDBProps(o);
+  };
 
   req.isFresh = (d) => {
     const unmod = req.headers['if-unmodified-since'];

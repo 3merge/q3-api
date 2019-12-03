@@ -57,10 +57,12 @@ const Q3 = {
     return new Promise((resolve) => {
       const { CONNECTION, PORT } = process.env;
       mongoose.connect(CONNECTION, (err) => {
-        if (err) resolve(err);
+        if (err) throw err;
         app.use(handleUncaughtExceptions);
+
         if (process.env.NODE_ENV !== 'test')
           app.listen(PORT);
+
         resolve(null);
       });
     });

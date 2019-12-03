@@ -6,7 +6,7 @@ const RateModel = require('./rates');
 
 class Order extends iOrderBuilder {
   setItemBucket(id) {
-    return ProductModel.findStrictly(id);
+    return ProductModel.findById(id).exec();
   }
 
   automateItemDiscounts() {

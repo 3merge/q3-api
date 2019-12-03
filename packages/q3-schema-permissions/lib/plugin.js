@@ -55,11 +55,18 @@ module.exports = (schema, { getUser, lookup }) => {
 
   schema.statics.can = async function(op) {
     const { collectionName } = this.collection;
+    const { discriminators } = schema;
+
+    let coll = [collectionName];
+
+    if (discriminators)
+      coll = coll.concat(Object.keys(discriminators));
+
     const grant = await mongoose
       .model(lookup)
       .findOne({
         role: get(getUser(), 'role', 'Public'),
-        coll: getPluralizedCollectionName(collectionName),
+        coll: coll.map(getPluralizedCollectionName),
         op,
       })
       .lean()
