@@ -1,6 +1,6 @@
 {
   "name": "q3-schema-users",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "lib/index.js",
   "dependencies": {
     "bcrypt": "^3.0.7",
@@ -10,7 +10,7 @@
     "q3-core-responder": "^1.0.32"
   },
   "devDependencies": {
-    "q3-test-utils": "^1.0.42"
+    "q3-test-utils": "^1.0.43"
   },
   "peerDependencies": {
     "mongoose": "^5.7.1"
