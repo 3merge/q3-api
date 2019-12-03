@@ -50,8 +50,8 @@ const PricingSchema = new Schema(
 /** NEEDS TRANSLATING */
 PricingSchema.virtual('scope').get(function alias() {
   if (this.global) return 'Global';
-  if (this.vendor) return 'Vendor';
-  if (this.sku) return 'Sku';
+  if (this.taxonomy) return 'Taxonomy';
+  if (this.resource) return 'Resource';
   return 'Unknown';
 });
 
