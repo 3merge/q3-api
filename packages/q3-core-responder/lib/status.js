@@ -14,12 +14,14 @@ const removeEmpty = (obj = {}) =>
   }, {});
 
 const getLastModifiedDate = (arr) =>
-  arr.reduce((a, c) => {
-    const d = typeof c === 'object' ? c.updatedAt : null;
+  moment(
+    arr.reduce((a, c) => {
+      const d = typeof c === 'object' ? c.updatedAt : null;
 
-    if (!moment(d).isValid()) return a;
-    return moment(a).isAfter(d) ? a : d;
-  }, '');
+      if (!moment(d).isValid()) return a;
+      return moment(a).isAfter(d) ? a : d;
+    }, ''),
+  ).toISOString();
 
 const stripMongoDBProps = (i) => {
   try {
@@ -61,10 +63,12 @@ const decorateResponse = (req, res, next) => {
   };
 
   req.isFresh = (d) => {
-    const unmod = req.headers['if-unmodified-since'];
-    return unmod &&
-      moment(unmod).isValid() &&
-      moment(d).isValid() &&
+    const unmod =
+      req.headers['If-Unmodified-Since'] ||
+      req.headers['if-unmodified-since'];
+
+    return moment(unmod, moment.ISO_8601, true).isValid() &&
+      moment(d, moment.ISO_8601, true).isValid() &&
       moment(d).isAfter(new Date(unmod).toISOString())
       ? res.status(412).send()
       : true;

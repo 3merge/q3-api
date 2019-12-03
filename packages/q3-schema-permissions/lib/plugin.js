@@ -134,6 +134,7 @@ module.exports = (schema, { getUser, lookup }) => {
   schema.pre('findOne', useQuery);
   schema.pre('count', useQuery);
   schema.pre('countDocuments', useQuery);
+  schema.pre('estimatedDocumentCount', useQuery);
   schema.pre('distinct', useQuery);
 
   schema.add({

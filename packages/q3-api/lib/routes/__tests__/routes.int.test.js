@@ -1,6 +1,6 @@
 const supertest = require('supertest');
 const Q3 = require('../..');
-const { Users } = require('../../models');
+const { Users, Permissions } = require('../../models');
 
 let agent;
 let id;
@@ -17,19 +17,14 @@ beforeAll(async () => {
   agent = supertest(Q3.$app);
   await Q3.connect();
 
-  const sup = await Users.findOneOrCreate(
-    {
-      email,
-      firstName: 'Mike',
-      lastName: 'Ibberson',
-      verified: true,
-      password: 'Sh!0978ydsn*1',
-      role: 'Super',
-    },
-    {
-      bypassAuthorization: true,
-    },
-  );
+  const sup = await Users.findOneOrCreate({
+    email,
+    firstName: 'Mike',
+    lastName: 'Ibberson',
+    verified: true,
+    password: 'Sh!0978ydsn*1',
+    role: 'Super',
+  });
 
   AuthorizationSuper = `Apikey ${await sup.generateApiKey()}`;
   ({ _id: id } = sup);
@@ -137,6 +132,60 @@ describe('profile /GET', () => {
       .get('/profile')
       .set({ Authorization: AuthorizationSuper })
       .expect(200));
+});
+
+describe('Search', () => {
+  it('should yield distinct valuess', async () => {
+    await Permissions.create([
+      {
+        coll: 'q3-api-users',
+        op: 'Read',
+        role: 'Super',
+      },
+      {
+        coll: 'q3-api-users',
+        op: 'Update',
+        role: 'Dev',
+      },
+      {
+        coll: 'q3-api-users',
+        op: 'Create',
+        role: 'Builder',
+      },
+      {
+        coll: 'q3-api-permissions',
+        op: 'Read',
+        role: 'Dev',
+      },
+      {
+        coll: 'q3-api-permissions',
+        op: 'Update',
+        role: 'Dev',
+      },
+    ]);
+
+    const { body } = await agent
+      .get(
+        '/search?coll=q3-api-permissions&fields[]=coll&fields[]=role',
+      )
+      .set({ Authorization: AuthorizationSuper })
+      .expect(200);
+
+    expect(body.fields.coll).toHaveLength(2);
+    expect(body.fields.role).toHaveLength(3);
+    expect(body.total).toBe(5);
+
+    const { body: filtered } = await agent
+      .get(
+        '/search?coll=q3-api-permissions&fields[]=coll&fields[]=role&role=Dev',
+      )
+      .set({ Authorization: AuthorizationSuper })
+      .expect(200);
+
+    expect(filtered.fields.coll).toHaveLength(2);
+    expect(filtered.fields.role).toHaveLength(1);
+    expect(filtered.total).toBe(3);
+  });
 });
 
 describe('reverify /POST', () => {

@@ -1,4 +1,8 @@
-const { compose, query } = require('q3-core-composer');
+const {
+  compose,
+  query,
+  verify,
+} = require('q3-core-composer');
 const aqp = require('api-query-params');
 const mongoose = require('../../config/mongoose');
 
@@ -25,18 +29,9 @@ const SearchParams = async (
       ),
     );
 
-    /**
-     * @TODO
-     * Filter by search term
-     * Products pre-find as an example
-     */
-
     res.ok({
       coll,
-      total: await model
-        .estimatedDocumentCount(params)
-        .exec(),
-
+      total: await model.countDocuments(params).exec(),
       fields: fields.reduce((a, c, i) => {
         const val = values[i];
         return val
@@ -47,15 +42,14 @@ const SearchParams = async (
       }, {}),
     });
   } catch (e) {
-    res.status(404).send();
+    res.status(400).send();
   }
 };
-
-// auth needed...
 
 SearchParams.validation = [
   query('coll').isString(),
   query('fields').isArray(),
 ];
 
+SearchParams.authorization = [verify];
 module.exports = compose(SearchParams);

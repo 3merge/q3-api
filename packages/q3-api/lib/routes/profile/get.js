@@ -6,9 +6,6 @@ const getProfile = async ({ user, marshal }, res) => {
     role: user.role,
     active: true,
   })
-    .setOptions({
-      bypassAuthorization: true,
-    })
     .lean()
     .exec();
 
