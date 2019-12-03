@@ -1,6 +1,7 @@
 {
   "_id": "5de481769127c06214fa0ff2",
   "sku": "Satin Sheets",
+  "forSale": true,
   "price": {
     "retail": "129.99",
     "msrp": "139.99"

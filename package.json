@@ -11,8 +11,8 @@
     "bootstrap": "lerna bootstrap --use-workspaces",
     "lint": "eslint . --ext .js --ignore-pattern node_modules",
     "test": "yarn test:packages && yarn test:intergrations",
-    "test:packages": "jest --runInBand --collectCoverage --detectOpenHandles",
-    "test:integrations": "jest --runInBand --detectOpenHandles --config tests/integration/jest.config.js --collectCoverage",
+    "test:packages": "jest --runInBand --collectCoverage",
+    "test:integrations": "jest --runInBand --config tests/integration/jest.config.js --collectCoverage",
     "upload": "lerna publish"
   },
   "workspaces": [
@@ -51,7 +51,6 @@
     "lodash": "^4.17.15",
     "micromatch": "^4.0.2",
     "moment": "^2.24.0",
-    "mongodb-memory-server": "^6.0.1",
     "mongoose": "^5.7.1"
   }
 }

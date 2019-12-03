@@ -1,118 +1,138 @@
-/* eslint-disable no-param-reassign */
+/* eslint-disable no-param-reassign, func-names */
 const { get } = require('lodash');
-const { Schema } = require('mongoose');
+const mongoose = require('mongoose');
 const { exception } = require('q3-core-responder');
 const Comparison = require('comparisons');
 
-const isAny = (grant) => get(grant, 'ownership') === 'Any';
-const isPublic = (grant) => get(grant, 'role') === 'Public';
+module.exports = (schema, { getUser, lookup }) => {
+  const isConfigured = () =>
+    getUser &&
+    typeof getUser === 'function' &&
+    typeof lookup === 'string';
 
-const isAuthenticated = (user) => {
-  if (!user || !user._id)
-    exception('Authentication')
-      .msg('sessionUser')
-      .throw();
-
-  return user._id;
-};
-
-const accessControl = (getUser, getGrant) => ({
-  append() {
-    const user = getUser();
-
-    if (user) {
-      // for history plugin
-      this.__user = user._id;
-
-      if (this.isNew && !this.createdBy)
-        this.createdBy = user._id;
-    }
-  },
-
-  identify() {
-    const user = getUser();
-    const grant = getGrant();
-    const { bypassAuthorization } = this.options;
-
-    if (bypassAuthorization || (!grant && !user)) return;
-
-    this.eval(grant);
-    this.belongsTo(grant, user);
-
-    if (
-      process.env.NODE_ENV === 'test' &&
-      process.env.DEBUG
-    )
-      // eslint-disable-next-line
-      console.log(this.getQuery());
-  },
-});
-
-module.exports = (schema, sessionActions) => {
-  if (schema.disableOwnership || !sessionActions) return;
-
-  const ac = accessControl(
-    sessionActions.getUser,
-    sessionActions.getGrant,
-  );
-
-  const queryMethods = [
-    'find',
-    'findOne',
-    'distinct',
-    'count',
-    'countDocuments',
-  ];
-
-  schema.pre('save', ac.append);
-
-  schema.query.eval = function parseStringOp(grant) {
-    const { $and } = new Comparison(
-      get(grant, 'documentConditions', []),
-    ).query();
-
-    if ($and.length) {
-      this.and($and);
-    }
-  };
-
-  schema.query.belongsTo = function addCreator(
-    grant,
-    user,
-  ) {
-    if (isAny(grant)) return;
-
-    if (isPublic(grant)) {
-      this.where({
-        createdBy: { $exists: false },
-      });
-
-      return;
-    }
-
-    const createdBy = isAuthenticated(user);
-    const aliases = get(grant, 'ownershipAliases', []).map(
-      ({ foreign, local }) => ({
-        [local]: user[foreign],
-      }),
+  const hasCollection = (name) =>
+    new Promise((resolve) =>
+      mongoose.connection.db
+        .listCollections({ name })
+        .toArray(function(err) {
+          resolve(!err);
+        }),
     );
 
-    if (aliases.length) {
-      this.or(aliases.concat({ createdBy }));
-    } else {
-      this.where({
-        createdBy,
-      });
-    }
+  const hasOptions = async (d) =>
+    (await hasCollection(lookup)) && 'options' in d
+      ? d.options.redact
+      : d.redact;
+
+  const hasGrant = (grant) => {
+    if (!grant)
+      exception('Authorization')
+        .msg('recordMissing')
+        .throw();
   };
 
-  queryMethods.forEach((name) =>
-    schema.pre(name, ac.identify),
-  );
+  const meetsUserRequirements = (a = []) => {
+    const user = getUser();
+    const doc =
+      user && 'toJSON' in user ? user.toJSON() : user;
+    if (!new Comparison(a).eval(doc))
+      exception('Authorization')
+        .msg('ownershipConditions')
+        .throw();
+  };
+
+  const getPluralizedCollectionName = (n) =>
+    new RegExp(
+      `${
+        n.charAt(n.length - 1) === 's'
+          ? n.substring(0, n.length - 1)
+          : n
+      }+(s?)$`,
+      'i',
+    );
+
+  if (!isConfigured()) return;
+
+  schema.statics.can = async function(op) {
+    const { collectionName } = this.collection;
+    const grant = await mongoose
+      .model(lookup)
+      .findOne({
+        role: get(getUser(), 'role', 'Public'),
+        coll: getPluralizedCollectionName(collectionName),
+        op,
+      })
+      .lean()
+      .exec();
+
+    hasGrant(grant);
+    meetsUserRequirements(grant.ownershipConditions);
+
+    return grant;
+  };
+
+  async function checkOp(next, options = {}) {
+    const createdBy = get(getUser(), '_id', null);
+
+    this.__user = createdBy;
+    if (this.isNew) this.createdBy = createdBy;
+
+    if (await hasOptions(options))
+      await this.constructor.can(
+        options.op || this.isNew ? 'Create' : 'Update',
+      );
+  }
+
+  async function useQuery() {
+    if (!(await hasOptions(this))) return;
+
+    const user = getUser();
+    const createdBy = get(user, '_id', null);
+
+    const {
+      ownership = 'Own',
+      ownershipAliases = [],
+      documentConditions = [],
+    } = await this.model.can('Read');
+
+    const { $and } = new Comparison(
+      documentConditions,
+    ).query();
+
+    if ($and.length) this.and($and);
+
+    if (ownership !== 'Any') {
+      const aliases = ownershipAliases.map(
+        ({ foreign, local }) => ({
+          [local]: user[foreign],
+        }),
+      );
+
+      if (aliases.length) {
+        this.or(
+          aliases.concat({
+            createdBy,
+          }),
+        );
+      } else {
+        this.where({
+          createdBy,
+        });
+      }
+    }
+  }
+
+  schema.pre('save', checkOp);
+  schema.pre('find', useQuery);
+  schema.pre('findOne', useQuery);
+  schema.pre('count', useQuery);
+  schema.pre('countDocuments', useQuery);
+  schema.pre('distinct', useQuery);
 
   schema.add({
     createdBy: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
+      systemOnly: true,
       private: true,
     },
   });

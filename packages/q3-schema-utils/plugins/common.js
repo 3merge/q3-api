@@ -15,9 +15,15 @@ const plugin = (schema) => {
     const doc = await this.findById(id).exec();
     if (!doc) return null;
 
-    return doc.updateOne({
-      active: false,
-    });
+    return doc.updateOne(
+      {
+        active: false,
+      },
+      {
+        redact: true,
+        op: 'Delete',
+      },
+    );
   };
 
   schema.statics.archiveMany = async function(ids) {
@@ -28,7 +34,10 @@ const plugin = (schema) => {
     return Promise.all(
       docs.map((d) => {
         d.active = false;
-        return d.save();
+        return d.save({
+          redact: true,
+          op: 'Delete',
+        });
       }),
     );
   };
@@ -37,7 +46,9 @@ const plugin = (schema) => {
     const doc = await this.findOne({
       _id: id,
       active: true,
-    }).exec();
+    })
+      .setOptions({ redact: true })
+      .exec();
 
     if (!doc)
       exception('ResourceNotFound')
@@ -67,7 +78,9 @@ const plugin = (schema) => {
       this[field] = [args];
     }
 
-    return this.save();
+    return this.save({
+      redact: true,
+    });
   };
 
   schema.methods.removeSubDocument = async function(
@@ -85,7 +98,10 @@ const plugin = (schema) => {
       removeChild(id);
     }
 
-    return this.save();
+    return this.save({
+      redact: true,
+      op: 'Delete',
+    });
   };
 
   schema.methods.updateSubDocument = async function(
@@ -95,7 +111,10 @@ const plugin = (schema) => {
   ) {
     const subdoc = await this.getSubDocument(field, id);
     subdoc.set(args);
-    return this.save();
+    return this.save({
+      redact: true,
+      op: 'Update',
+    });
   };
 
   schema.statics.getAllFields = function() {

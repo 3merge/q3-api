@@ -1,11 +1,16 @@
 const globalizedPlugin = require('q3-schema-utils/plugins/common');
 const mongoose = require('mongoose');
 const plugin = require('../plugin');
+const PermissionSchema = require('..');
 
-const id = mongoose.Types.ObjectId();
-const company = mongoose.Types.ObjectId();
-const getGrant = jest.fn();
-const getUser = jest.fn();
+jest.unmock('request-context');
+
+let id;
+const userID = mongoose.Types.ObjectId();
+
+const coll = 'AccessControlPlugin';
+const lookup = 'Permissions';
+const role = 'Dev';
 
 const Schema = new mongoose.Schema({
   belongs: mongoose.Types.ObjectId,
@@ -14,175 +19,74 @@ const Schema = new mongoose.Schema({
 });
 
 mongoose.plugin(globalizedPlugin);
-
 Schema.plugin(plugin, {
-  getGrant,
-  getUser,
+  lookup,
+  getUser: () => ({
+    _id: userID,
+    isReady: false,
+    role,
+  }),
 });
 
 const Model = mongoose.model('AccessControlPlugin', Schema);
-
-let comparativeIds = [];
-const numNotCreatedBy = 3;
-const numNotCreatedByOrBelongingTo = 2;
-const numNotSpecial = 4;
-
-const countResults = async (num) => {
-  const total = await Model.countDocuments({
-    _id: comparativeIds,
-  })
-    .setOptions({ bypassAuthorization: true })
-    .exec();
-
-  const redacted = await Model.countDocuments({
-    _id: comparativeIds,
-  }).exec();
-
-  expect(redacted).toBe(total - num);
-};
+const PermissionModel = mongoose.model(
+  lookup,
+  PermissionSchema,
+);
 
 beforeAll(async () => {
   await mongoose.connect(process.env.CONNECTION);
 
-  const original = await Model.create([
-    { name: 'Bar', belongs: id }, // won't match
-    { name: 'Outlier' }, // won't match
-    { name: 'Foo', belongs: company }, // sometimes matches
-    { name: 'Quux', createdBy: id },
-    {
-      name: 'Graply',
-      specialCondition: 2,
-      createdBy: id,
-    },
-  ]);
-
-  comparativeIds = original.map(({ _id }) => _id);
+  ({ _id: id } = await PermissionModel.create({
+    op: 'Read',
+    fields: '*',
+    coll,
+    role,
+  }));
 });
 
-afterAll(async () => {
-  await Model.deleteMany({});
+describe('AccessControlPlugin configuration', () => {
+  it('it should run access on save if options is set', () =>
+    expect(
+      Model.create(
+        [{ op: 'Create', fields: '*', coll, role }],
+        { redact: true },
+      ),
+    ).rejects.toThrowError());
+
+  it('it should run access on find if set', async () =>
+    expect(
+      Model.find()
+        .setOptions({ redact: true })
+        .exec(),
+    ).resolves.toBeDefined());
 });
 
-describe('Middleware', () => {
-  beforeEach(() => {
-    getUser.mockReturnValue({
-      _id: id,
-      company,
+describe('AccessControlPlugin integration', () => {
+  it('it should check user conditions', async () => {
+    const name = 'OwnershipConditions';
+    await Model.create({ name });
+    await PermissionModel.findByIdAndUpdate(id, {
+      ownershipConditions: ['isReady=true'],
     });
+    return expect(
+      Model.findOne({ name })
+        .setOptions({ redact: true })
+        .exec(),
+    ).rejects.toThrowError();
   });
 
-  describe('Pre-save', () => {
-    it('should append createdBy meta', async () => {
-      const doc = await Model.create({ name: 'Jon' });
-      expect(doc).toHaveProperty('createdBy', id);
+  it('it should check document conditions', async () => {
+    const name = 'DocumentConditiosn';
+    await Model.create({ name, specialCondition: 6 });
+    await PermissionModel.findByIdAndUpdate(id, {
+      ownershipConditions: [],
+      documentConditions: ['specialCondition>4'],
     });
-
-    it('preserve createdBy meta', async () => {
-      const doc = await Model.create({ name: 'Jon' });
-      doc.createdBy = company;
-      expect(await doc.save()).toHaveProperty(
-        'createdBy',
-        company,
-      );
-    });
-  });
-
-  describe('Pre-find', () => {
-    it('should append createdBy meta', async () => {
-      const query = Model.findOne();
-      const spy = jest.fn().mockReturnValue(query);
-      query.where = spy;
-      await query.exec();
-
-      expect(spy).toHaveBeenCalledWith(
-        expect.objectContaining({
-          createdBy: id,
-        }),
-      );
-    });
-
-    it('should append alias meta', async () => {
-      getGrant.mockReturnValue({
-        ownership: 'Own',
-        ownershipAliases: [
-          {
-            local: 'belongs',
-            foreign: 'company',
-          },
-        ],
-      });
-
-      const query = Model.findOne();
-      const spy = jest.fn().mockReturnValue(query);
-      query.or = spy;
-      await query.exec();
-
-      expect(spy).toHaveBeenCalledWith([
-        { belongs: company },
-        { createdBy: id },
-      ]);
-    });
-
-    it('should skip all authorization', async () => {
-      getGrant.mockReturnValue({
-        ownership: 'Any',
-      });
-
-      const query = Model.findOne();
-      query.where = jest.fn();
-      query.or = jest.fn();
-      await query.exec();
-
-      expect(query.where).not.toHaveBeenCalled();
-      expect(query.or).not.toHaveBeenCalled();
-    });
-
-    it('should bypass authorization', async () => {
-      getGrant.mockReturnValue();
-      const query = Model.findOne().setOptions({
-        bypassAuthorization: true,
-      });
-
-      query.where = jest.fn();
-      query.or = jest.fn();
-      await query.exec();
-
-      expect(query.where).not.toHaveBeenCalled();
-      expect(query.or).not.toHaveBeenCalled();
-    });
-
-    it('should filter by creator', async () => {
-      await countResults(numNotCreatedBy);
-    });
-
-    it('should filter by belongs property', async () => {
-      getGrant.mockReturnValue({
-        ownership: 'Own',
-        ownershipAliases: [
-          {
-            local: 'belongs',
-            foreign: 'company',
-          },
-        ],
-      });
-
-      await countResults(numNotCreatedByOrBelongingTo);
-    });
-
-    it('should filter by documentConditions condition', async () => {
-      getGrant.mockReturnValue({
-        documentConditions: ['specialCondition=2'],
-        ownership: 'Own',
-        ownershipConditions: [],
-        ownershipAliases: [
-          {
-            local: 'belongs',
-            foreign: 'company',
-          },
-        ],
-      });
-
-      await countResults(numNotSpecial);
-    });
+    return expect(
+      Model.findOne({ name })
+        .setOptions({ redact: true })
+        .exec(),
+    ).resolves.toHaveProperty('_id');
   });
 });
