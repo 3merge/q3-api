@@ -131,7 +131,9 @@ describe('Handlers', () => {
       const args = { name: 'Mike', age: 28 };
       req.body = args;
       await Post(req, res);
-      expect(Model.create).toHaveBeenCalledWith(args);
+      expect(Model.create).toHaveBeenCalledWith([args], {
+        redact: true,
+      });
       expect(res.create).toHaveBeenCalled();
     });
   });

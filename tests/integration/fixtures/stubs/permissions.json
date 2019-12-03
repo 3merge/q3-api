@@ -1,7 +1,7 @@
 [
   {
     "coll": "products",
-    "fields": "*, !manufacturerCode",
+    "fields": "*",
     "role": "Secretary",
     "documentConditions": "forSale=true",
     "ownership": "Any",
@@ -9,9 +9,9 @@
   },
   {
     "coll": "products",
-    "fields": "*",
+    "fields": "*, !manufacturerCode",
     "role": "Secretary",
-    "ownershipConditions": "isVerified=true",
+    "ownershipConditions": "verified=true",
     "ownership": "Any",
     "op": "Create"
   },

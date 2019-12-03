@@ -49,6 +49,7 @@ module.exports = {
       hasNextPage,
       hasPrevPage,
     } = await datasource.paginate(params, {
+      redact: true,
       page: page >= 0 ? page + 1 : 1,
       sort,
       select,
@@ -98,7 +99,10 @@ module.exports = {
 
     doc.set(body);
     isFresh(doc.updatedAt);
-    await doc.save();
+    await doc.save({
+      redact: true,
+      op: 'Update',
+    });
 
     res.update({
       message: t('messages:resourceUpdated'),
@@ -116,10 +120,14 @@ module.exports = {
     },
     res,
   ) {
-    const doc = await datasource.create(body);
+    const doc = await datasource.create([body], {
+      redact: true,
+    });
     res.create({
       message: t('messages:resourceCreated'),
-      [collectionSingularName]: marshal(doc),
+      [collectionSingularName]: marshal(
+        Array.isArray(doc) ? doc.pop() : doc,
+      ),
     });
   },
 

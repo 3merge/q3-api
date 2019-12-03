@@ -7,6 +7,7 @@ const diff = require('mongoose-diff-history/diffHistory');
 const locking = require('mongoose-field-lock');
 const population = require('mongoose-field-populate');
 const Files = require('../models/files');
+const { MODEL_NAMES } = require('../constants');
 
 require('q3-schema-types');
 
@@ -17,28 +18,19 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
 
-mongoose.plugin(accessControl, {
-  getUser: () => req.get('q3-session:user'),
-  getGrant: () => req.get('q3-session:grant'),
-});
-
-mongoose.plugin(diff.plugin);
 mongoose.plugin(locking);
 mongoose.plugin(population);
+mongoose.plugin(diff.plugin);
 mongoose.plugin(unique);
 
-const plugin = (schema) => {
-  if (schema.options.uploads) {
-    schema.add(Notes);
-  }
+mongoose.plugin((schema) => {
+  if (schema.options.uploads) schema.add(Notes);
+  if (schema.options.uploads) schema.add(Files);
+});
 
-  if (schema.options.uploads) {
-    schema.add(Files);
-  }
-
-  return schema;
-};
-
-module.exports = plugin;
+mongoose.plugin(accessControl, {
+  getUser: () => req.get('q3-session:user'),
+  lookup: MODEL_NAMES.PERMISSIONS,
+});
 
 module.exports = mongoose;

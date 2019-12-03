@@ -25,6 +25,7 @@ module.exports = class PermissionDecorators {
         role,
       })
       .lean()
+      .setOptions({ system: true })
       .exec();
 
     if (doc && isNew)
@@ -47,7 +48,7 @@ module.exports = class PermissionDecorators {
         role,
         coll,
       })
-        .setOptions({ bypassAuthorization: true })
+        .setOptions({ system: true })
         .select('fields ownershipConditions')
         .exec();
 
@@ -66,7 +67,7 @@ module.exports = class PermissionDecorators {
       coll,
       op,
     })
-      .setOptions({ bypassAuthorization: true })
+      .setOptions({ system: true })
       .exec();
 
     if (!doc)
@@ -86,7 +87,7 @@ module.exports = class PermissionDecorators {
   }
 
   testFields() {
-    if (!this.fields || this.field === '!*')
+    if (!this.fields || this.fields === '!*')
       exception('Authorization')
         .msg('insufficientPermissions')
         .throw();
@@ -127,7 +128,9 @@ module.exports = class PermissionDecorators {
     if (
       typeof user !== 'object' ||
       !Object.keys(user).length ||
-      !new Comparison(this.ownershipConditions).eval(user)
+      !new Comparison(this.ownershipConditions).eval(
+        user && 'toJSON' in user ? user.toJSON() : user,
+      )
     )
       exception('Authorization')
         .msg('ownershipState')
