@@ -36,6 +36,7 @@ const compose = (ctr) =>
       request,
       response,
     ]),
+    ...(ctr.postAuthorization ? ctr.postAuthorization : []),
     aa(ctr),
     ctr,
   ]);
