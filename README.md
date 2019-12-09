@@ -21,9 +21,6 @@
   </a>
     <img alt="npm" src="https://img.shields.io/npm/v/q3-api">
     <img alt="npm" src="https://img.shields.io/npm/dw/q3-api">
-  <a href="https://twitter.com/intent/follow?screen_name=3mergeinc">
-    <img src="https://img.shields.io/twitter/follow/3mergeinc.svg?label=3merge" alt="@3mergeinc" />
-  </a>
 </p>
 
 <p>Q3 is a set of packages for scaffolding REST APIs with portable data schemas, controllers and service helpers. It comprises a core package, along with many optional plugins and utilities. Currently, you must install each package separately; however, a script installer will ship in V2.</p>
