@@ -98,14 +98,20 @@ module.exports = class RestRegistrationModule {
     return `/${this.collectionName}/:resourceID/${this.field}/:fieldID`;
   }
 
+  isRestEnabled(verb) {
+    return (
+      typeof this.restify === 'string' &&
+      knownControllerVerbs.includes(verb) &&
+      (this.restify.includes(verb) || this.restify === '*')
+    );
+  }
+
   $mkt(verb, args) {
     const [route, Controller] = args;
+    const restReady = this.isRestEnabled(verb);
     Controller.postAuthorization = this.preRoute;
 
-    return typeof this.restify === 'string' &&
-      (this.restify.includes(verb) ||
-        this.restify === '*') &&
-      knownControllerVerbs.includes(verb)
+    return restReady
       ? this.app[verb](route, compose(Controller))
       : undefined;
   }

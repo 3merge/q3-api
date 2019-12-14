@@ -2,5 +2,5 @@ const mongoose = require('mongoose');
 
 module.exports = () => {
   mongoose.connection.close();
-  // global.__MONGOD__.stop();
+  global.__MONGOD__.stop();
 };
