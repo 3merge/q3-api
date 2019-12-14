@@ -106,7 +106,15 @@ module.exports = class DiscountFilter {
       }),
     );
 
-    if (a) return a;
+    if (a) {
+      a.incrementalHistory = {
+        base: discounted,
+        bucket: b,
+      };
+
+      return a;
+    }
+
     if (b) return b;
     return null;
   }

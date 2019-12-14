@@ -14,6 +14,7 @@ module.exports = new Schema({
     type: String,
     required: true,
   },
+  email: Schema.Types.Email,
   branch: {
     type: Boolean,
   },

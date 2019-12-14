@@ -1,1 +1,4 @@
-{"uri":"mongodb://127.0.0.1:59821/935016d5-4d33-48fa-85e4-23becd93fc4f?","name":"935016d5-4d33-48fa-85e4-23becd93fc4f"}
+{
+  "uri": "mongodb://127.0.0.1:61104/jest?",
+  "name": "jest"
+}

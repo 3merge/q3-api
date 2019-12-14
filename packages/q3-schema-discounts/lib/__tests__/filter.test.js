@@ -176,7 +176,7 @@ describe('DiscountFilter', () => {
         { kind: 'Volume', factor: 0.87, resource },
         {
           kind: 'Incremental MSRP',
-          factor: 0.75,
+          factor: 0.21,
           resource,
         },
       ]);
@@ -185,9 +185,8 @@ describe('DiscountFilter', () => {
         mongoose.Types.ObjectId(),
         pricing,
       );
-
       expect(pricing).toHaveProperty('discounted', 3.91);
-      expect(result).toHaveProperty('factor', 0.75);
+      expect(result).toHaveProperty('factor', 0.21);
     });
 
     it('should assign a discount value a falsy value', () => {
@@ -202,7 +201,7 @@ describe('DiscountFilter', () => {
         { kind: 'Volume', factor: 0.87, resource: 'NOOP' },
         {
           kind: 'Incremental MSRP',
-          factor: 0.75,
+          factor: 25,
           resource,
         },
       ]);
@@ -213,7 +212,7 @@ describe('DiscountFilter', () => {
       );
 
       expect(pricing).toHaveProperty('discounted', null);
-      expect(result).toHaveProperty('factor', 0.75);
+      expect(result).toHaveProperty('factor', 25);
     });
 
     it('should ignore augmented discounts', () => {

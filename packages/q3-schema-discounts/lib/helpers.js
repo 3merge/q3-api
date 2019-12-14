@@ -70,7 +70,9 @@ function toFactor(v) {
 
 function fromFactor(v) {
   this.rawFactor = v;
-  return isPercent(this.kind) ? 100 - v * 100 : v;
+  return isPercent(this.kind)
+    ? round(round(100 - v * 100, 4), 2)
+    : v;
 }
 
 const compareValues = (discounts = [], pricing) => {

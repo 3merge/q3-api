@@ -15,6 +15,7 @@ const RebatesSchema = new Schema({
     type: String,
     required: true,
     unique: true,
+    sparse: true,
   },
   description: {
     type: String,
