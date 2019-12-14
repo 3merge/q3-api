@@ -63,7 +63,9 @@ const splitCommaDelimited = (a) => {
 };
 
 function toFactor(v) {
-  if (isPercent(this.kind)) return (100 - v) / 100;
+  if (isPercent(this.kind))
+    return round(round((100 - v) / 100, 4), 2);
+
   if (isFloat(this.kind)) return clamp(v, 0, 1.5);
   return v;
 }
