@@ -78,11 +78,16 @@ describe('OrderFull visitor', () => {
       const inst = new VisitorOrderFull();
       const setPayment = jest.fn().mockResolvedValue(1.11);
       inst.store.paymentOption = 'Visa';
+      inst.store.billing = { city: 'Toronto' };
+
       await inst.checkPaymentFees({
         setPayment,
       });
       expect(inst.store.paymentFee).toBe(1.11);
-      expect(setPayment).toHaveBeenCalledWith('Visa');
+      expect(setPayment).toHaveBeenCalledWith(
+        'Visa',
+        expect.any(Object),
+      );
     });
   });
 
@@ -93,11 +98,16 @@ describe('OrderFull visitor', () => {
         .fn()
         .mockResolvedValue(12.32);
       inst.store.shippingOption = 'Express';
+      inst.store.shipping = { streetLine1: 'Fake Street' };
+
       await inst.checkShippingFees({
         setShipping,
       });
       expect(inst.store.shippingFee).toBe(12.32);
-      expect(setShipping).toHaveBeenCalledWith('Express');
+      expect(setShipping).toHaveBeenCalledWith(
+        'Express',
+        expect.any(Object),
+      );
     });
   });
 

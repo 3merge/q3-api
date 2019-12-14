@@ -1,3 +1,3 @@
 module.exports = async () => {
-  await global.__MONGOD__.stop();
+  return global.__MONGOD__.stop();
 };
