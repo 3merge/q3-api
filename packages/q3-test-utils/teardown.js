@@ -1,6 +1,3 @@
-const mongoose = require('mongoose');
-
-module.exports = () => {
-  mongoose.connection.close();
-  // global.__MONGOD__.stop();
+module.exports = async () => {
+  await global.__MONGOD__.stop();
 };

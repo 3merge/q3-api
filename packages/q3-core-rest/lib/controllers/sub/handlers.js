@@ -55,11 +55,7 @@ module.exports = {
   },
 
   async RemoveMany(
-    {
-      parent,
-      fieldName,
-      query: { ids },
-    },
+    { parent, fieldName, query: { ids } },
     res,
   ) {
     await parent.removeSubDocument(fieldName, ids);

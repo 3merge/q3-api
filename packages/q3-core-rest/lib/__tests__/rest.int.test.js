@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const express = require('express');
 const i18next = require('i18next');
 const supertest = require('supertest');
+const i18nextMiddleware = require('i18next-express-middleware');
 const parser = require('body-parser');
 const { middleware } = require('q3-core-composer');
 const rester = require('..');
@@ -69,7 +70,9 @@ const Foo = model('FOO', Base);
 const FooPlus = Foo.discriminator('FOO_EXTENDS', BasePlus);
 
 beforeAll(async () => {
-  i18next.init({ preload: ['en'] });
+  i18next
+    .use(i18nextMiddleware.LanguageDetector)
+    .init({ fallbackLng: 'en', preload: ['en'] });
 
   app.use(config);
   app.use(parser.json());
@@ -170,12 +173,11 @@ describe('Rester', () => {
   });
 
   it('should make a new resource', async () => {
-    const { body, status } = await request
+    const { status, body } = await request
       .post('/foos')
       .send({
         name: 'Colin',
       });
-
     expect(status).toBe(201);
     expect(body).toHaveProperty('foo');
   });
@@ -184,7 +186,6 @@ describe('Rester', () => {
     const { body, status } = await request
       .post('/foos')
       .send();
-
     expect(body).toHaveProperty(
       'errors',
       expect.any(Object),

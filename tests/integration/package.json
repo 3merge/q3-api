@@ -5,6 +5,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "i18next": "^19.0.1",
+    "moment": "^2.24.0",
     "mongoose": "^5.7.1",
     "q3-api": "^1.0.47",
     "q3-core-responder": "^1.0.35",

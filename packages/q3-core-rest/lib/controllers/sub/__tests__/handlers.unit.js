@@ -60,10 +60,9 @@ describe('SubController route handlers', () => {
       req.query.ids = ['1', '2'];
       await RemoveMany(req, res);
       expect(res.acknowledge).toHaveBeenCalled();
-      expect(Model.removeSubDocument).toHaveBeenCalledWith(
-        'foo',
-        ['1', '2'],
-      );
+      expect(
+        Model.removeSubDocument,
+      ).toHaveBeenCalledWith('foo', ['1', '2']);
     });
   });
 

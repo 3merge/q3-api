@@ -12,6 +12,7 @@ const app = require('./config/express');
 const mongoose = require('./config/mongoose');
 const models = require('./models');
 const eventEmitter = require('./events');
+const jobScheduler = require('./scheduler');
 const mailHelpers = require('./events/utils');
 
 const Q3 = {
@@ -72,6 +73,7 @@ const Q3 = {
 Q3.$app = app;
 Q3.$mongoose = mongoose;
 Q3.emitter = eventEmitter;
+Q3.schedule = jobScheduler;
 Q3.mail = mailHelpers;
 Q3.session = ctx;
 
