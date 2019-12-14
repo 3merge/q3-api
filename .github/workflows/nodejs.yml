@@ -1,4 +1,5 @@
 name: Node CI
+<<<<<<< HEAD
 on: 
   push:
     branches:
@@ -6,6 +7,9 @@ on:
   pull_request:
     branches:
       - master
+=======
+on: [pull]
+>>>>>>> 8bac54bbcccc7db8845122dbbf2041174f2e72b9
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,4 +23,5 @@ jobs:
       run: |
         yarn install
         yarn lint
-        yarn test
+        yarn test:packages
+        yarn test:integrations

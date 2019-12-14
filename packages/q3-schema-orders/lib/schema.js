@@ -160,6 +160,7 @@ const OrderSchema = new Schema(
       type: String,
       default: 'Open',
       enum: STATUS_ENUM,
+      systemOnly: true,
       validate: {
         validator: validateStatus,
       },

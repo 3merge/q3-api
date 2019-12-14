@@ -116,6 +116,34 @@ describe('OrderSchema', () => {
     const doc = await Model.findById(id);
     doc.currency = 'CAD';
     doc.globalDiscount = 2;
+    doc.shippingOption = 'Express';
+    doc.paymentOption = 'Visa';
+
+    doc.billing = {
+      streetLine1: '123 Fake Street',
+      city: 'Toronto',
+      postal: 'M2k0a8',
+      phone1: '416-902-1234',
+      firstName: 'Mike',
+      lastName: 'Foo',
+      region: 'ON',
+      kind: 'Billing',
+      country: 'Canada',
+      company: 'Q3'
+    };
+    
+    doc.shipping = {
+      streetLine1: '123 Fake Street',
+      city: 'Toronto',
+      postal: 'M2k0a8',
+      phone1: '416-902-1234',
+      firstName: 'Mike',
+      lastName: 'Foo',
+      region: 'ON',
+      kind: 'Shipping',
+      country: 'Canada',
+      company: 'Q3'
+    };
 
     doc.items.push({
       product: mongoose.Types.ObjectId(),

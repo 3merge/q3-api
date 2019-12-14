@@ -38,15 +38,19 @@ module.exports = class OrderFullVisitor extends SchemaVisitorChain {
   }
 
   async checkPaymentFees(actions) {
-    this.store.paymentFee = await actions.setPayment(
-      this.store.paymentOption,
-    );
+    if (this.store.paymentOption && this.store.billing)
+      this.store.paymentFee = await actions.setPayment(
+        this.store.paymentOption,
+        this.store.billing,
+      );
   }
 
   async checkShippingFees(actions) {
-    this.store.shippingFee = await actions.setShipping(
-      this.store.shippingOption,
-    );
+    if (this.store.shippingOption && this.store.shipping)
+      this.store.shippingFee = await actions.setShipping(
+        this.store.shippingOption,
+        this.store.shipping,
+      );
   }
 
   async checkTaxes(actions) {

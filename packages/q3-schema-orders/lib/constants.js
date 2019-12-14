@@ -13,13 +13,6 @@ const INTERFACE_RECOMMENDED_METHODS = [
   'automateFees',
 ];
 
-const MIDDLEWARE = [
-  'isProductAvailable',
-  'setProductContext',
-  'addModifiers',
-  'addToppers',
-];
-
 const READY_FOR_DELIVERY = 'Ready for Delivery';
 
 const STEPS_PREPAID = [
@@ -27,14 +20,15 @@ const STEPS_PREPAID = [
   'Declined',
   'Processing',
   'Under Review',
+  'Awaiting Confirmation',
   'Backordered',
   'Cancelled',
   'Partially Completed without Balance',
-  'Authentication Required',
   'On Hold',
 ];
 
 const STEPS_PAID = [
+  'Prepaid',
   'Paid',
   'Completed',
   'Refunded',
@@ -52,7 +46,6 @@ module.exports = {
   STEPS_PAID,
   READY_FOR_DELIVERY,
   STEPS_PREPAID,
-  MIDDLEWARE,
   STATUS_ENUM: [...STEPS_PREPAID, ...STEPS_PAID],
   INTERFACE_REQUIRED_METHODS,
   INTERFACE_RECOMMENDED_METHODS,

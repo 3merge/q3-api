@@ -1,1 +1,4 @@
-{"uri":"mongodb://127.0.0.1:61104/jest?","name":"jest"}
+{
+  "uri": "mongodb://127.0.0.1:61104/jest?",
+  "name": "jest"
+}
