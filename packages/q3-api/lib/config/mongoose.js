@@ -12,7 +12,6 @@ const { MODEL_NAMES } = require('../constants');
 require('q3-schema-types');
 
 mongoose.pluralize(null);
-mongoose.set('useEnsureIndex', true);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useNewUrlParser', true);

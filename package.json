@@ -52,6 +52,7 @@
     "lodash": "^4.17.15",
     "micromatch": "^4.0.2",
     "moment": "^2.24.0",
+    "mongodb-cron": "^1.7.0",
     "mongoose": "^5.7.1"
   }
 }
