@@ -11,6 +11,7 @@ const INTERFACE_RECOMMENDED_METHODS = [
   'automateItemDiscounts',
   'automateRebates',
   'automateFees',
+  'automateCurrencyConversion',
 ];
 
 const READY_FOR_DELIVERY = 'Ready for Delivery';

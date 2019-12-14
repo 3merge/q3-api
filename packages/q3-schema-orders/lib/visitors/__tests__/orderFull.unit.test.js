@@ -112,24 +112,15 @@ describe('OrderFull visitor', () => {
   });
 
   describe('checkLocale', () => {
-    it('should convert all subtotals into local currency', async () => {
+    it('should set rate', async () => {
       const inst = new VisitorOrderFull();
       const setLocale = jest.fn().mockResolvedValue(1.21);
 
       inst.store.currency = 'CAD';
-      inst.store.items = [
-        { currency: 'USD', subtotal: 11.99 },
-        { currency: 'USD', subtotal: 6.43 },
-        { currency: 'CAD', subtotal: 5.19 },
-      ];
-
       await inst.checkLocale({
         setLocale,
       });
 
-      expect(inst.store.items[0].subtotal).toBe(14.51);
-      expect(inst.store.items[1].subtotal).toBe(7.78);
-      expect(inst.store.items[2].subtotal).toBe(5.19);
       expect(inst.store.rate).toBe(1.21);
     });
   });

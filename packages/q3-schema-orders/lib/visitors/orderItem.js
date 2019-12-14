@@ -51,22 +51,31 @@ module.exports = class OrderItemVisitor extends SchemaVisitorChain {
     );
   }
 
-  getFinalPrice() {
+  getFinalPrice(actions) {
     const {
       store: {
         priceOverride,
         unmodifiedPrice,
         discountBy = BEST,
         discounts = [],
+        bucket,
       },
     } = this;
 
-    this.store.price = priceOverride
+    let preModified = priceOverride
       ? priceOverride.evaluate(unmodifiedPrice)
       : new DynamicDiscounts(
           unmodifiedPrice,
           discountBy,
         ).get(discounts);
+
+    if (actions && actions.automateCurrencyConversion)
+      preModified = actions.automateCurrencyConversion(
+        preModified,
+        bucket.currency,
+      );
+
+    this.store.price = preModified;
   }
 
   calculate() {
