@@ -179,10 +179,6 @@ const plugin = (schema) => {
       type: Boolean,
       default: true,
     },
-    featured: {
-      type: Boolean,
-      default: false,
-    },
   });
 
   schema.set('timestamps', true);
@@ -196,6 +192,14 @@ const plugin = (schema) => {
     virtuals: true,
     getters: true,
   });
+
+  if (schema.options.featured)
+    schema.add({
+      featured: {
+        type: Boolean,
+        default: false,
+      },
+    });
 
   return schema;
 };

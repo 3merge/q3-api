@@ -7,12 +7,17 @@ const childSchema = new mongoose.Schema({
   breed: String,
 });
 
-const pluginSchemaEnabled = new mongoose.Schema({
-  age: { type: Number, default: 10, required: true },
-  friend: mongoose.Types.ObjectId,
-  dogs: [childSchema],
-  name: String,
-});
+const pluginSchemaEnabled = new mongoose.Schema(
+  {
+    age: { type: Number, default: 10, required: true },
+    friend: mongoose.Types.ObjectId,
+    dogs: [childSchema],
+    name: String,
+  },
+  {
+    featured: true,
+  },
+);
 
 const stub = {
   active: true,
