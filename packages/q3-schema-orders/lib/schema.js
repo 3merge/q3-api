@@ -44,6 +44,7 @@ const OrderLineSchema = new Schema({
     default: CURRENCY[0],
     private: true,
   },
+  comments: String,
   unmodifiedPrice: {
     retail: price,
     discounted: price,
@@ -132,6 +133,7 @@ const OrderSchema = new Schema(
     rate: {
       type: Number,
       private: true,
+      default: 1,
     },
     currency: {
       type: String,
@@ -165,6 +167,7 @@ const OrderSchema = new Schema(
         validator: validateStatus,
       },
     },
+    comments: String,
   },
   {
     timestamps: true,

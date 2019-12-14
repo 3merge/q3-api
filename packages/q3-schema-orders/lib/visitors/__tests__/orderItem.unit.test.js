@@ -131,6 +131,25 @@ describe('OrderItem visitor', () => {
         inst.store.discountBy,
       );
     });
+
+    it('should call currency converter', () => {
+      const inst = new VisitorOrderItem();
+      inst.store = {
+        discounts: [],
+        quantity: 12,
+        unmodifiedPrice: 9,
+        discountBy: 'lowest',
+        bucket: {
+          currency: 'CAD'
+        }
+      };
+
+      inst.getFinalPrice({
+        automateCurrencyConversion: v => v * 10
+      });
+
+      expect(inst.store.price).toEqual(90);
+    });
   });
 
   describe('calculate', () => {

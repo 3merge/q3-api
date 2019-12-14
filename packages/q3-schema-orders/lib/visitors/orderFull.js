@@ -76,18 +76,6 @@ module.exports = class OrderFullVisitor extends SchemaVisitorChain {
       exception('Validation')
         .field({ name: 'rate', msg: 'required' })
         .throw();
-
-    if (this.store.items)
-      this.store.items = this.store.items.map((item) =>
-        Object.assign(item, {
-          subtotal: convert(
-            item.subtotal,
-            item.currency,
-            this.store.currency,
-            this.store.rate,
-          ),
-        }),
-      );
   }
 
   calculateSubtotal() {
