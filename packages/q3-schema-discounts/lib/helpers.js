@@ -63,16 +63,16 @@ const splitCommaDelimited = (a) => {
 };
 
 function toFactor(v) {
-  if (isPercent(this.kind))
-    return round(round((100 - v) / 100, 4), 2);
-
+  if (isPercent(this.kind)) return (100 - v) / 100;
   if (isFloat(this.kind)) return clamp(v, 0, 1.5);
   return v;
 }
 
 function fromFactor(v) {
   this.rawFactor = v;
-  return isPercent(this.kind) ? 100 - v * 100 : v;
+  return isPercent(this.kind)
+    ? round(round(100 - v * 100, 4), 2)
+    : v;
 }
 
 const compareValues = (discounts = [], pricing) => {

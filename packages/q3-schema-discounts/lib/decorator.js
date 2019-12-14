@@ -14,16 +14,21 @@ const {
 } = require('./helpers');
 
 module.exports = class DiscountDecorator {
-  evaluate({
-    discounted = 0,
-    retail = 0,
-    volume = 0,
-    msrp = 0,
-  }) {
-    const base = discounted || retail;
-    const { kind, factor, rawFactor } = this;
+  evaluate({ retail = 0, volume = 0, msrp = 0 }) {
+    const base = retail;
+    const {
+      kind,
+      factor,
+      rawFactor,
+      incrementalHistory,
+    } = this;
+
     const num =
       rawFactor !== undefined ? rawFactor : factor;
+
+    const reduced = incrementalHistory
+      ? incrementalHistory.base
+      : retail;
 
     const discount = (() => {
       switch (kind) {
@@ -34,11 +39,11 @@ module.exports = class DiscountDecorator {
         case VOLUME:
           return multiply(num, volume);
         case INCREMENTAL_RETAIL:
-          return increment(num, retail, base);
+          return increment(num, retail, reduced);
         case INCREMENTAL_VOLUME:
-          return increment(num, volume, base);
+          return increment(num, volume, reduced);
         case INCREMENTAL_MSRP:
-          return increment(num, msrp, base);
+          return increment(num, msrp, reduced);
         case CUSTOM:
           return num;
         default:

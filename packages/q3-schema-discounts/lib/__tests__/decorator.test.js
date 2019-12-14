@@ -50,10 +50,10 @@ describe('Decorator', () => {
       const inst = new Decorator();
       inst.kind = INCREMENTAL_MSRP;
       inst.rawFactor = 0.97;
+      inst.incrementalHistory = { base: 19.99 };
 
       expect(
         inst.evaluate({
-          discounted: 19.99,
           retail: 21.99,
           msrp: 23.99,
         }),
@@ -64,10 +64,10 @@ describe('Decorator', () => {
       const inst = new Decorator();
       inst.kind = INCREMENTAL_VOLUME;
       inst.rawFactor = 0.97;
+      inst.incrementalHistory = { base: 19.99 };
 
       expect(
         inst.evaluate({
-          discounted: 19.99,
           retail: 21.99,
           volume: 23.99,
         }),
@@ -80,10 +80,10 @@ describe('Decorator', () => {
       const inst = new Decorator();
       inst.kind = INCREMENTAL_RETAIL;
       inst.rawFactor = 0.34;
+      inst.incrementalHistory = { base: 19.99 };
 
       expect(
         inst.diff({
-          discounted: 19.99,
           retail: 21.99,
         }),
       ).toBe(16.51);

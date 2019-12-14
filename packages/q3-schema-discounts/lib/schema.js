@@ -15,7 +15,6 @@ const PricingSchema = new Schema(
   {
     global: {
       type: Boolean,
-      default: false,
     },
     kind: {
       type: String,
@@ -26,7 +25,6 @@ const PricingSchema = new Schema(
       type: Number,
       get: fromFactor,
       set: toFactor,
-      default: 1,
       min: 0,
     },
     taxonomy: Schema.Types.ObjectId,
@@ -38,6 +36,10 @@ const PricingSchema = new Schema(
     excludeFromRebating: {
       type: Boolean,
       default: false,
+    },
+    incrementalHistory: {
+      base: Number,
+      bucket: Schema.Types.Mixed,
     },
   },
   {
@@ -56,13 +58,13 @@ PricingSchema.virtual('scope').get(function alias() {
 });
 
 PricingSchema.pre('save', async function checkScope() {
-  if (!this.global && !this.vendor && !this.sku)
+  if (!this.global && !this.taxonomy && !this.resource)
     exception('Validation')
       .msg('scope')
       .throw();
 
   if (
-    (this.global || this.vendor) &&
+    (this.global || this.taxonomy) &&
     [
       INCREMENTAL_MSRP,
       INCREMENTAL_RETAIL,
