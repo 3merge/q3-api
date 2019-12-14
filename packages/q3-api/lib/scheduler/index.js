@@ -1,16 +1,35 @@
 const { MongoCron } = require('mongodb-cron');
-const mongoose = require('../config/mongoose');
+const { Schema, model } = require('../config/mongoose');
+const Emitter = require('../events/emitter');
 
-console.log(mongoose.collection);
+const Jobs = model(
+  'Jobs',
+  new Schema(
+    {
+      autoRemove: Boolean,
+      sleepUntil: Date,
+      interval: String,
+    },
+    {
+      restify: 'get delete',
+      collectionNameSingular: 'job',
+      collectionNamePlural: 'jobs',
+      strict: false,
+    },
+  ),
+);
 
-/*
-const collection = mongoose.collection('jobs');
 const cron = new MongoCron({
-  collection, // a collection where jobs are stored
-  onDocument: async (doc) => console.log(doc), // triggered on job processing
-  onError: async (err) => console.log(err), // triggered on error
+  collection: Jobs.collection,
+  onDocument: async (doc) => {
+    Emitter.emit('onJobsInsert', doc);
+  },
+  onError: async (err) => {
+    Emitter.emit('onJobsError', err);
+  },
 });
 
 cron.start();
 
-*/
+// export single mongoose function
+module.exports = (args) => Jobs.create(args);
