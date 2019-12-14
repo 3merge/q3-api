@@ -3,7 +3,6 @@ const accessControl = require('q3-schema-permissions/lib/plugin');
 const Notes = require('q3-schema-notes');
 const mongoose = require('mongoose');
 const unique = require('mongoose-unique-validator');
-const diff = require('mongoose-diff-history/diffHistory');
 const locking = require('mongoose-field-lock');
 const population = require('mongoose-field-populate');
 const Files = require('../models/files');
@@ -19,7 +18,6 @@ mongoose.set('useUnifiedTopology', true);
 
 mongoose.plugin(locking);
 mongoose.plugin(population);
-mongoose.plugin(diff.plugin);
 mongoose.plugin(unique);
 
 mongoose.plugin((schema) => {
