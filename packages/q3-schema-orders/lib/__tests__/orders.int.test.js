@@ -129,9 +129,9 @@ describe('OrderSchema', () => {
       region: 'ON',
       kind: 'Billing',
       country: 'Canada',
-      company: 'Q3'
+      company: 'Q3',
     };
-    
+
     doc.shipping = {
       streetLine1: '123 Fake Street',
       city: 'Toronto',
@@ -142,7 +142,7 @@ describe('OrderSchema', () => {
       region: 'ON',
       kind: 'Shipping',
       country: 'Canada',
-      company: 'Q3'
+      company: 'Q3',
     };
 
     doc.items.push({

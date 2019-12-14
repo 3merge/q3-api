@@ -15,7 +15,6 @@ const {
 
 module.exports = class DiscountDecorator {
   evaluate({ retail = 0, volume = 0, msrp = 0 }) {
-    const base = retail;
     const {
       kind,
       factor,
