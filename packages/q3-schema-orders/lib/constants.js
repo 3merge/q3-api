@@ -27,14 +27,15 @@ const STEPS_PREPAID = [
   'Declined',
   'Processing',
   'Under Review',
+  'Awaiting Confirmation',
   'Backordered',
   'Cancelled',
   'Partially Completed without Balance',
-  'Authentication Required',
   'On Hold',
 ];
 
 const STEPS_PAID = [
+  'Prepaid',
   'Paid',
   'Completed',
   'Refunded',
