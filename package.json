@@ -10,7 +10,7 @@
     "postinstall": "yarnw-sync-deps && yarn-deduplicate",
     "bootstrap": "lerna bootstrap --use-workspaces",
     "lint": "eslint . --ext .js --ignore-pattern node_modules",
-    "test:packages": "jest --runInBand --collectCoverage",
+    "test:packages": "jest --collectCoverage",
     "test:integrations": "jest --runInBand --config tests/integration/jest.config.js",
     "upload": "lerna publish"
   },
