@@ -5,6 +5,7 @@ const { COUNTRIES, REGIONS, KIND } = require('./constants');
 module.exports = new Schema({
   primary: {
     type: Boolean,
+    default: false,
   },
   company: {
     type: String,
@@ -17,8 +18,13 @@ module.exports = new Schema({
   email: Schema.Types.Email,
   branch: {
     type: Boolean,
+    default: false,
   },
   lastName: {
+    type: String,
+    required: true,
+  },
+  streetNumber: {
     type: String,
     required: true,
   },
@@ -35,8 +41,8 @@ module.exports = new Schema({
   },
   kind: {
     type: String,
-    required: true,
     enum: KIND,
+    default: KIND[0],
   },
   region: {
     type: String,

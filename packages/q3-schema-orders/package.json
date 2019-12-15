@@ -4,8 +4,6 @@
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "lodash": "^4.17.15",
-    "moment": "^2.24.0",
     "q3-schema-addresses": "^1.1.8",
     "q3-schema-discounts": "^1.0.8",
     "q3-schema-rates": "^1.0.8",
