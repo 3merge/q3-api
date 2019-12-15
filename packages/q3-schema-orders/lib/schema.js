@@ -3,7 +3,7 @@ const AddressSchema = require('q3-schema-addresses');
 const DiscountSchema = require('q3-schema-discounts');
 const RebateSchema = require('q3-schema-rebates');
 const RateSchema = require('q3-schema-rates');
-const { validateStatus } = require('./utils/helpers');
+const { validateStatus } = require('./helpers');
 const { STATUS_ENUM, CURRENCY } = require('./constants');
 
 const { Schema } = mongoose;
@@ -15,19 +15,8 @@ const price = {
 };
 
 RateSchema.add({ quantity: price });
-RebateSchema.add({
-  applicableTo: {
-    type: [Schema.Types.Mixed],
-    private: true,
-  },
-});
 
 const OrderLineSchema = new Schema({
-  priceOverride: DiscountSchema,
-  via: {
-    type: Schema.Types.Mixed,
-    private: true,
-  },
   bucket: {
     type: Schema.Types.Mixed,
     private: true,
@@ -38,13 +27,6 @@ const OrderLineSchema = new Schema({
     default: 0,
     min: 0,
   },
-  currency: {
-    type: String,
-    enum: CURRENCY,
-    default: CURRENCY[0],
-    private: true,
-  },
-  comments: String,
   unmodifiedPrice: {
     retail: price,
     discounted: price,
@@ -61,14 +43,11 @@ const OrderLineSchema = new Schema({
     required: true,
     min: 0,
   },
-  discounts: {
-    type: [DiscountSchema],
-    private: true,
-  },
   price: {
     ...price,
     private: true,
   },
+  priceOverride: DiscountSchema,
 });
 
 const OrderSchema = new Schema(
@@ -77,22 +56,16 @@ const OrderSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    rebateCodes: {
-      type: [String],
-    },
-    globalDiscount: {
-      type: Number,
-      max: 100,
-      min: 0,
-    },
     rebates: {
       type: [RebateSchema],
       private: true,
+      systemOnly: true,
     },
     items: [OrderLineSchema],
     fees: {
       type: [RateSchema],
       private: true,
+      systemOnly: true,
     },
     po: String,
     transaction: {

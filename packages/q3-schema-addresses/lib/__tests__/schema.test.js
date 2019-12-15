@@ -5,9 +5,10 @@ const stub = {
   company: 'Hooli',
   firstName: 'Richard',
   lastName: 'Hendricks',
+  streetNumber: 12,
   streetLine1: '123 Fake Street',
   city: 'Toronoto',
-  country: 'Canada',
+  country: 'CA',
   region: 'ON',
   phone1: '905-555-9231',
   postal: 'M5K 9R1',
@@ -45,7 +46,7 @@ describe('Address schema', () => {
 
   it('should fail validation if state matched in Canada', () => {
     const { errors } = new Address({
-      country: 'Canada',
+      country: 'CA',
       region: 'ID',
     }).validateSync();
     expect(errors).toHaveProperty('region');
@@ -58,13 +59,13 @@ describe('Address schema', () => {
         'company',
         'firstName',
         'lastName',
+        'streetNumber',
         'streetLine1',
         'city',
         'region',
         'postal',
         'country',
         'phone1',
-        'kind',
       ]),
     );
   });

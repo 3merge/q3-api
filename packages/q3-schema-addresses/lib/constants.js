@@ -79,7 +79,7 @@ const PROVINCES = [
 module.exports = {
   KIND: ['Shipping', 'Billing'],
   REGIONS: [...PROVINCES, ...STATES],
-  COUNTRIES: ['Canada', 'United States'],
+  COUNTRIES: ['CA', 'US'],
   PROVINCES,
   STATES,
 };
