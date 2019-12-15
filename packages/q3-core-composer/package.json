@@ -27,5 +27,6 @@
   },
   "peerDependencies": {
     "mongoose": "^5.7.13"
-  }
+  },
+  "gitHead": "a586228e529bf3829bdc7c34e4fdc9c600037e9e"
 }

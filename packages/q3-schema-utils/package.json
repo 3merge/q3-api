@@ -19,5 +19,6 @@
     "setupFilesAfterEnv": [
       "q3-test-utils/jest-setup.js"
     ]
-  }
+  },
+  "gitHead": "a586228e529bf3829bdc7c34e4fdc9c600037e9e"
 }
