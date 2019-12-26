@@ -10,7 +10,7 @@
   <a href="https://circleci.com/gh/3merge/q3-schema">
     <img src="https://circleci.com/gh/3merge/q3-schema.svg?style=shield" alt="Current CircleCI build status." />
   </a>
-    <a href="https://coveralls.io/github/3merge/q3-client?branch=master"><img src="https://coveralls.io/repos/github/3merge/q3-client/badge.svg?branch=master" alt="Coverage Status" />
+    <a href="https://coveralls.io/github/3merge/q3-api?branch=master"><img src="https://coveralls.io/repos/github/3merge/q3-api/badge.svg?branch=master" alt="Coverage Status" />
     </a>
     <a href="https://bettercodehub.com/">
     <img src="https://bettercodehub.com/edge/badge/3merge/q3-schema?branch=master" alt="Current quality score" />
