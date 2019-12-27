@@ -9,7 +9,7 @@
 <p align="center">
     <img src="https://coveralls.io/repos/github/3merge/q3-api/badge.svg?branch=master" alt="Coverage Status" />
     <img src="https://bettercodehub.com/edge/badge/3merge/q3-api?branch=master" alt="Current quality score" />
-    <img src="https://api.codacy.com/project/badge/Grade/8252c85a3e29449d8298f4b4c090901a"/>
+    <img src="https://api.codacy.com/project/badge/Grade/66c969279405497e9684e8a84557544c"/>
     <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Q3-API is released under the MIT license." />
     <img alt="npm" src="https://img.shields.io/npm/v/q3-api">
     <img alt="npm" src="https://img.shields.io/npm/dw/q3-api">

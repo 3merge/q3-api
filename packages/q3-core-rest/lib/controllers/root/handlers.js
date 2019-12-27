@@ -97,7 +97,14 @@ module.exports = {
       params.resourceID,
     );
 
-    doc.set(body);
+    doc.set(
+      Object.entries(body).reduce((acc, [key, v]) => {
+        if (v !== null && v !== undefined)
+          Object.assign(acc, { [key]: v });
+        return acc;
+      }, {}),
+    );
+
     isFresh(doc.updatedAt);
 
     await doc.save({
