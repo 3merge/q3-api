@@ -37,10 +37,16 @@ module.exports = class SubDocumentControllerCommander extends RestRegistration {
           params: { resourceID },
         } = req;
 
-        const doc = await datasource
-          .findById(resourceID)
-          .select(this.field)
-          .exec();
+        const service = datasource.findById(resourceID);
+
+        if (
+          typeof datasource.schema.options === 'object' &&
+          !datasource.schema.options
+            .disableRestifySelectOnSubdocuments
+        )
+          service.select(this.field);
+
+        const doc = await service.exec();
 
         datasource.verifyOutput(doc);
         req.parent = doc;

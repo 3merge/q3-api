@@ -1,3 +1,6 @@
+const { exception } = require('q3-core-responder');
+const { isSimpleSubDocument } = require('../../utils');
+
 module.exports = {
   async List({ subdocs, fieldName, marshal }, res) {
     res.ok({
@@ -9,6 +12,11 @@ module.exports = {
     { marshal, params, body, t, parent, fieldName },
     res,
   ) {
+    if (isSimpleSubDocument(parent, fieldName))
+      exception('Conflict')
+        .msg('usePutRequest')
+        .throw();
+
     await parent.updateSubDocument(
       fieldName,
       params.fieldID,
@@ -25,6 +33,11 @@ module.exports = {
     { t, body, marshal, files, parent, fieldName },
     res,
   ) {
+    if (isSimpleSubDocument(parent, fieldName))
+      exception('Conflict')
+        .msg('usePutRequest')
+        .throw();
+
     if (!files) {
       await parent.pushSubDocument(fieldName, body);
     } else {
@@ -51,6 +64,7 @@ module.exports = {
       fieldName,
       params.fieldID,
     );
+
     res.acknowledge();
   },
 

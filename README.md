@@ -7,18 +7,10 @@
 </h1>
 
 <p align="center">
-  <a href="https://circleci.com/gh/3merge/q3-schema">
-    <img src="https://circleci.com/gh/3merge/q3-schema.svg?style=shield" alt="Current CircleCI build status." />
-  </a>
-    <a href="https://coveralls.io/github/3merge/q3-api?branch=master"><img src="https://coveralls.io/repos/github/3merge/q3-api/badge.svg?branch=master" alt="Coverage Status" />
-    </a>
-    <a href="https://bettercodehub.com/">
-    <img src="https://bettercodehub.com/edge/badge/3merge/q3-schema?branch=master" alt="Current quality score" />
-    </a>
-    <a href="https://www.codacy.com/gh/3merge/q3-api?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=3merge/q3-api&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/8252c85a3e29449d8298f4b4c090901a"/></a>
-  <a href="https://github.com/3merge/q3-schema/blob/master/LICENSE">
-    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Q3-SCHEMA is released under the MIT license." />
-  </a>
+    <img src="https://coveralls.io/repos/github/3merge/q3-api/badge.svg?branch=master" alt="Coverage Status" />
+    <img src="https://bettercodehub.com/edge/badge/3merge/q3-api?branch=master" alt="Current quality score" />
+    <img src="https://api.codacy.com/project/badge/Grade/8252c85a3e29449d8298f4b4c090901a"/>
+    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Q3-API is released under the MIT license." />
     <img alt="npm" src="https://img.shields.io/npm/v/q3-api">
     <img alt="npm" src="https://img.shields.io/npm/dw/q3-api">
 </p>
