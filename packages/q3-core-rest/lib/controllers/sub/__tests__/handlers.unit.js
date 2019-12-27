@@ -6,6 +6,7 @@ const {
   List,
   Patch,
   Put,
+  Post,
 } = require('../handlers');
 
 let req = {};
@@ -96,6 +97,29 @@ describe('SubController route handlers', () => {
         '1',
         args,
       );
+    });
+  });
+
+  describe('Post', () => {
+    it('should push into the subdocuments', async () => {
+      req.body = {};
+      req.fieldName = 'foo';
+      req.parent.pushSubDocument = jest.fn();
+      await Post(req, res);
+      expect(
+        req.parent.pushSubDocument,
+      ).toHaveBeenCalledWith('foo', {});
+    });
+
+    it('should throw an error', async () => {
+      req.body = {};
+      req.fieldName = 'foo';
+      req.parent.schema.path = jest.fn().mockReturnValue({
+        constructor: { name: 'SingleNestedPath' },
+      });
+
+      await expect(Post(req, res)).rejects.toThrowError();
+      expect(req.parent.schema.path).toHaveBeenCalled();
     });
   });
 });
