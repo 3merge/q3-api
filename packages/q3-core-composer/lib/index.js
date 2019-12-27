@@ -1,11 +1,11 @@
 const connect = require('connect');
 const aa = require('express-async-handler');
 const dep = require('express-validator');
+const validateBody = require('m2e-validator/lib/middlewareHelper');
 const { request, response } = require('./postware');
 const middleware = require('./middleware');
 const isAuthorized = require('./middleware/isAuthorized');
 const isVerified = require('./middleware/isLoggedIn');
-const validateBody = require('./middleware/validate');
 
 const flatten = (a = [], b = []) => {
   const m = connect();
