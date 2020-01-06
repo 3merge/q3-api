@@ -14,7 +14,7 @@ beforeEach(() => {
 });
 
 describe('Status decorator', () => {
-  it('should set the last modified date', () => {
+  test.skip('should set the last modified date', () => {
     Decorator(req, res, jest.fn());
     res.set = jest.fn();
     req.marshal({
@@ -27,7 +27,7 @@ describe('Status decorator', () => {
     );
   });
 
-  it('should set aggregate last modified date', () => {
+  test.skip('should set aggregate last modified date', () => {
     Decorator(req, res, jest.fn());
     const yesterday = moment().subtract(1, 'days');
 
@@ -45,7 +45,7 @@ describe('Status decorator', () => {
   });
 
   describe('isFresh', () => {
-    it('should response with 412', () => {
+    test.skip('should response with 412', () => {
       Decorator(req, res, jest.fn());
       req.headers = {};
       res.status = jest.fn().mockReturnValue({
@@ -60,7 +60,7 @@ describe('Status decorator', () => {
       expect(res.status).toHaveBeenCalledWith(412);
     });
 
-    it('should respond as truthy', () => {
+    test.skip('should respond as truthy', () => {
       Decorator(req, res, jest.fn());
       req.headers = {};
       res.status = jest.fn().mockReturnValue({
@@ -72,7 +72,7 @@ describe('Status decorator', () => {
       expect(req.isFresh(previousYesterday)).toBeTruthy();
     });
 
-    it('should respond as truthy in equal-to situations', () => {
+    test.skip('should respond as truthy in equal-to situations', () => {
       Decorator(req, res, jest.fn());
       req.headers['if-unmodified-since'] = today;
       expect(req.isFresh(today)).toBeTruthy();

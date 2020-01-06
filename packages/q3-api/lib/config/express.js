@@ -10,9 +10,6 @@ require('csv-express');
 
 const server = express();
 
-server.enable('etag');
-server.set('etag', 'strong');
-
 server.enable('trust proxy');
 server.use(helmet());
 server.use(cors());
