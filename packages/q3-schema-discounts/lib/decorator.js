@@ -25,9 +25,10 @@ module.exports = class DiscountDecorator {
     const num =
       rawFactor !== undefined ? rawFactor : factor;
 
-    const reduced = incrementalHistory
-      ? incrementalHistory.base
-      : retail;
+    const reduced =
+      incrementalHistory && incrementalHistory.base
+        ? incrementalHistory.base
+        : retail;
 
     const discount = (() => {
       switch (kind) {
