@@ -5,6 +5,7 @@ let M;
 
 const rebates = [
   {
+    active: true,
     name: 'Without conditions',
     description: 'Used for simple target matching',
     value: 12,
@@ -13,6 +14,7 @@ const rebates = [
     currency: 'CAD',
   },
   {
+    active: true,
     name: 'With conditions',
     description: 'Used for incrementing value',
     value: 8,
@@ -24,6 +26,7 @@ const rebates = [
     currency: 'USD',
   },
   {
+    active: true,
     name: 'With tiers',
     description: 'Used for incrementing value',
     value: 8,
