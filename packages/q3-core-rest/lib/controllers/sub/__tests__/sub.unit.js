@@ -26,8 +26,9 @@ describe('SubController', () => {
       };
 
       req.datasource.findById = jest.fn().mockReturnValue({
-        select: jest.fn(),
-        exec: jest.fn().mockResolvedValue(doc),
+        select: jest.fn().mockReturnValue({
+          exec: jest.fn().mockResolvedValue(doc),
+        }),
       });
 
       Model.verifyOutput = jest.fn();
@@ -41,17 +42,22 @@ describe('SubController', () => {
     it('should not call select if schema option set', async () => {
       const inst = new SubController(Model, 'name');
       const { req, res } = new Api();
+      const select = jest.fn().mockReturnValue({
+        exec: jest.fn().mockResolvedValue({}),
+      });
+
       req.datasource = Model;
-      req.datasource.schema.options = {
-        disableRestifySelectOnSubdocuments: true,
-      };
+
+      req.datasource.findById = jest.fn().mockReturnValue({
+        select,
+      });
 
       Model.exec.mockResolvedValue({ _id: 1 });
       Model.verifyOutput = jest.fn();
 
       inst.addDocumentLookupMiddleware();
       await inst.preRoute[0](req, res, jest.fn());
-      expect(req.datasource.select).not.toHaveBeenCalled();
+      expect(select).toHaveBeenCalledWith('+name');
     });
   });
 });
