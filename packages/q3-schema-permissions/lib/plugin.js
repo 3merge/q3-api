@@ -140,6 +140,8 @@ module.exports = (schema, { getUser, lookup }) => {
   schema.add({
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
+      autopopulate: true,
+      autopopulateSelect: 'id firstName lastName email',
       systemOnly: true,
       private: true,
     },
