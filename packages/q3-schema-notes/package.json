@@ -1,6 +1,6 @@
 {
   "name": "q3-schema-notes",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "main": "lib/index.js",
   "devDependencies": {
     "q3-test-utils": "^1.0.55"
