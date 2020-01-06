@@ -142,6 +142,7 @@ module.exports = (schema, { getUser, lookup }) => {
       type: mongoose.Schema.Types.ObjectId,
       autopopulate: true,
       autopopulateSelect: 'id firstName lastName email',
+      ref: 'q3-api-users',
       systemOnly: true,
       private: true,
     },
