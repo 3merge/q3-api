@@ -29,7 +29,7 @@ exports.withDateRange = (schema) => {
   schema.statics.getDateQuery = function query() {
     const today = new Date();
     return {
-      active: { $ne: true },
+      active: true,
       $and: [
         {
           $or: [
