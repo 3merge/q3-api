@@ -32,9 +32,9 @@ module.exports = {
     const { query: q } = read.parse(originalUrl, true);
 
     const {
-      sort,
       limit = 50,
       projection: select,
+      sort = { createdAt: -1 },
       filter: { search, page, ...where },
     } = aqp(q !== null ? q : {});
 

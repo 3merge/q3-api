@@ -1,3 +1,5 @@
+jest.unmock('express-validator');
+
 const express = require('express');
 const supertest = require('supertest');
 const {
@@ -6,8 +8,6 @@ const {
   redact,
   middleware,
 } = require('..');
-
-jest.unmock('express-validator');
 
 let app;
 let agent;
