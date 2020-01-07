@@ -1,5 +1,4 @@
 /* eslint-disable no-param-reassign */
-const { get } = require('lodash');
 const {
   hasExpired,
   hasNotBegun,
@@ -19,8 +18,8 @@ const {
 } = require('./constants');
 
 module.exports = class DiscountFilter {
-  constructor(doc, pathname) {
-    this.discounts = get(doc, pathname, []);
+  constructor(docs = []) {
+    this.discounts = docs;
   }
 
   $getEligibleDiscounts(done = Boolean) {

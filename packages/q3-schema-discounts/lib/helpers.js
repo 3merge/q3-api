@@ -1,6 +1,6 @@
 const moment = require('moment');
 const micromatch = require('micromatch');
-const { clamp, round } = require('lodash');
+const { clamp, round, compact } = require('lodash');
 const {
   INCREMENTAL_MSRP,
   INCREMENTAL_VOLUME,
@@ -42,7 +42,7 @@ const filterByTaxonomy = (id) => (v) => {
 };
 
 const filterByResourceName = (name) => (v) => {
-  let pattern = v.resource;
+  let pattern = compact(v.resource);
   if (!pattern) pattern = ['!*'];
   if (!name) return false;
 

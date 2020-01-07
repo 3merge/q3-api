@@ -16,10 +16,8 @@ const {
 let Model;
 
 const wrapConstructor = (discounts = []) => {
-  return new DiscountFilter(
-    new Model({ discounts }),
-    'discounts',
-  );
+  const m = new Model({ discounts });
+  return new DiscountFilter(m.discounts);
 };
 
 beforeAll(async () => {
@@ -179,7 +177,20 @@ describe('DiscountFilter', () => {
           factor: 0.21,
           resource,
         },
+        {
+          kind: 'Retail',
+          factor: 0.99,
+          resource: [''],
+        },
+        {
+          kind: 'Retail',
+          factor: 0.99,
+          taxonomy: {
+            id: mongoose.Types.ObjectId(),
+          },
+        },
       ]);
+
       const result = inst.getBlendedDiscount(
         resource,
         mongoose.Types.ObjectId(),
