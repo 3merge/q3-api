@@ -10,10 +10,15 @@ const getRemainder = (a, b, c) => {
 const sofar = (a) => a.reduce((all, curr) => all + curr, 0);
 
 class RebateDecorator {
-  static async findApplicable(couponCode, items) {
+  static async findApplicable(
+    couponCode,
+    items,
+    opts = {},
+  ) {
     const rebates = await this.find({
       ...(couponCode && { couponCode }),
       ...this.getDateQuery(),
+      ...opts,
     }).exec();
 
     return rebates.filter(
