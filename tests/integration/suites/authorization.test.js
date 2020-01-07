@@ -28,4 +28,25 @@ describe('Q3 authentication flow', () => {
       'manufacturerCode',
     );
   });
+
+  it('should redact create request body', async () => {
+    await global.agent
+      .post('/orders')
+      .send()
+      .expect(201);
+
+    await global.agent
+      .post('/orders')
+      .send()
+      .set({ Authorization })
+      .expect(201);
+
+    const { body } = await global.agent
+      .get('/orders')
+      .send()
+      .set({ Authorization })
+      .expect(200);
+
+    expect(body.orders).toHaveLength(1);
+  });
 });

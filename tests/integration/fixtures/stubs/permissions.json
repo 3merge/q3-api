@@ -24,6 +24,20 @@
   },
   {
     "coll": "orders",
+    "fields": "*",
+    "role": "Secretary",
+    "ownership": "Own",
+    "op": "Create"
+  },
+  {
+    "coll": "orders",
+    "fields": "*",
+    "role": "Secretary",
+    "ownership": "Own",
+    "op": "Read"
+  },
+  {
+    "coll": "orders",
     "fields": "items.quantity, items.product, shipping, billing",
     "role": "Public",
     "ownership": "Own",
