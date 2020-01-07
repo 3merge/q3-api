@@ -49,7 +49,7 @@ module.exports = {
       hasNextPage,
       hasPrevPage,
     } = await datasource.paginate(params, {
-      redact: true,
+      options: { redact: true },
       page: page >= 0 ? page + 1 : 1,
       sort,
       select,
