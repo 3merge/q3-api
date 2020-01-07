@@ -1,12 +1,12 @@
 {
   "name": "q3-core-responder",
   "main": "lib/index.js",
-  "version": "1.0.45",
+  "version": "1.0.46",
   "peerDependencies": {
     "express": "^4.17.1"
   },
   "devDependencies": {
-    "q3-test-utils": "^1.0.56",
+    "q3-test-utils": "^1.0.57",
     "supertest": "^4.0.2"
   },
   "dependencies": {
