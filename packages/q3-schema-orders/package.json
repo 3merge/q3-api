@@ -1,14 +1,14 @@
 {
   "name": "q3-schema-orders",
-  "version": "1.1.22",
+  "version": "1.1.23",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "q3-schema-addresses": "^1.1.20",
-    "q3-schema-discounts": "^1.0.20",
-    "q3-schema-rates": "^1.0.20",
-    "q3-schema-rebates": "^1.1.21",
-    "q3-schema-types": "^1.1.20"
+    "q3-schema-addresses": "^1.1.21",
+    "q3-schema-discounts": "^1.0.21",
+    "q3-schema-rates": "^1.0.21",
+    "q3-schema-rebates": "^1.1.22",
+    "q3-schema-types": "^1.1.21"
   },
   "peerDependencies": {
     "mongoose": "^5.7.7",
@@ -17,7 +17,7 @@
     "request-context": "^2.0.0"
   },
   "devDependencies": {
-    "q3-test-utils": "^1.0.60"
+    "q3-test-utils": "^1.0.61"
   },
   "jest": {
     "verbose": true,
