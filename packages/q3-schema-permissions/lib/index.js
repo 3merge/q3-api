@@ -3,7 +3,7 @@ const Decorator = require('./decorators');
 const Schema = require('./schema');
 
 Schema.loadClass(Decorator);
-Schema.pre('save', Decorator.isUnique);
+Schema.pre('save', Decorator.isValid);
 Schema.plugin(plugin);
 
 module.exports = Schema;

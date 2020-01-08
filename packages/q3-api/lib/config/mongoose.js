@@ -2,7 +2,7 @@ const req = require('request-context');
 const accessControl = require('q3-schema-permissions/lib/plugin');
 const Notes = require('q3-schema-notes');
 const mongoose = require('mongoose');
-const unique = require('mongoose-unique-validator');
+const dedupe = require('mongoose-dedupe');
 const locking = require('mongoose-field-lock');
 const population = require('mongoose-field-populate');
 const Files = require('../models/files');
@@ -16,9 +16,12 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
 
-mongoose.plugin(locking);
 mongoose.plugin(population);
-mongoose.plugin(unique);
+mongoose.plugin(locking);
+
+mongoose.plugin(dedupe, {
+  active: true,
+});
 
 mongoose.plugin((schema) => {
   if (schema.options.uploads) schema.add(Notes);

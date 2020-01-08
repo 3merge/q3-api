@@ -4,11 +4,6 @@ const {
   STEPS_PAID,
 } = require('./constants');
 
-const compareObjectIds = (a, b) =>
-  typeof a === 'object' && 'equals' in a
-    ? a.equals(b)
-    : a === b;
-
 function validateStatus(v) {
   if (
     STEPS_PAID.includes(v) &&
@@ -26,24 +21,6 @@ function validateStatus(v) {
   return true;
 }
 
-function mergeDuplicateLineItems() {
-  const { items = [] } = this;
-  this.items = items.reduce((accumulator, current) => {
-    const key = accumulator.findIndex((item) =>
-      compareObjectIds(item.product, current.product),
-    );
-
-    if (key === -1) {
-      accumulator.push(current);
-    } else {
-      accumulator[key].quantity += current.quantity;
-    }
-
-    return accumulator;
-  }, []);
-}
-
 module.exports = {
   validateStatus,
-  mergeDuplicateLineItems,
 };

@@ -53,23 +53,6 @@ describe('model validation', () => {
   });
 });
 
-describe('pre-save integration', () => {
-  const details = {
-    role: 'foo',
-    op: 'Update',
-    fields: '*',
-    coll,
-  };
-
-  it('should return unique document', async () => {
-    const { _id: id } = await Model.create(details);
-    expect(id).toBeDefined();
-    return expect(
-      Model.create(details),
-    ).rejects.toThrowError();
-  });
-});
-
 describe('GetRequiredFields', () => {
   it('should get all required fields', () => {
     expect(Model.getRequiredFields()).toEqual([

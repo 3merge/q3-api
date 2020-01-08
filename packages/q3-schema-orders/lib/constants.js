@@ -1,11 +1,10 @@
 const READY_FOR_DELIVERY = 'Ready for Delivery';
 
 const STEPS_PREPAID = [
-  'Open',
+  'Quote',
   'Declined',
-  'Processing',
+  'Open',
   'Under Review',
-  'Awaiting Confirmation',
   'Backordered',
   'Cancelled',
   'Partially Completed without Balance',

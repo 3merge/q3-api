@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const AddressSchema = require('q3-schema-addresses');
 const DiscountSchema = require('q3-schema-discounts');
-const RebateSchema = require('q3-schema-rebates');
 const RateSchema = require('q3-schema-rates');
 const { validateStatus } = require('./helpers');
 const { STATUS_ENUM, CURRENCY } = require('./constants');
@@ -55,11 +54,6 @@ const OrderSchema = new Schema(
     draft: {
       type: Boolean,
       default: false,
-    },
-    rebates: {
-      type: [RebateSchema],
-      private: true,
-      systemOnly: true,
     },
     items: [OrderLineSchema],
     fees: {

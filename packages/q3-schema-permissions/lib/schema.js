@@ -19,6 +19,7 @@ const PermissionModel = new Schema({
   op: {
     type: String,
     required: true,
+    dedupeWith: true,
     enum: OP_ENUM,
   },
   ownership: {
@@ -30,10 +31,12 @@ const PermissionModel = new Schema({
     type: String,
     required: true,
     searchable: true,
+    dedupeWith: true,
   },
   role: {
     type: String,
     default: 'Public',
+    dedupeWith: true,
   },
   fields: {
     type: String,

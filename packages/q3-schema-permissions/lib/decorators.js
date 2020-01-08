@@ -8,32 +8,29 @@ const { exception } = require('q3-core-responder');
 const getUserRole = (user) => (user ? user.role : 'Public');
 
 module.exports = class PermissionDecorators {
-  static async isUnique(next) {
-    const { role, op, coll, isNew } = this;
+  static isValid(next) {
     let err;
+    const { coll, op, fields = '' } = this;
+    const Ref = get(mongoose, `models.${coll}`);
 
-    try {
-      await this.isValid();
-    } catch (e) {
-      err = e;
-    }
-
-    const doc = await this.constructor
-      .findOne({
-        coll,
-        op,
-        role,
-      })
-      .lean()
-      .setOptions({ system: true })
-      .exec();
-
-    if (doc && isNew)
-      err = exception('Conflict')
-        .msg('duplicate')
+    if (!Ref)
+      err = exception('Validation')
+        .msg('unknownCollection')
         .field('coll')
-        .field('role')
-        .field('op')
+        .boomerang();
+
+    if (
+      op === 'Create' &&
+      !micromatch.every(
+        Ref.getRequiredFields(),
+        fields.split(',').map((i) => i.trim()),
+      )
+    )
+      err = exception('Validation')
+        .msg('fieldPermissions', {
+          fields: Ref.getRequiredFields().join(','),
+        })
+        .field('fields')
         .boomerang();
 
     next(err);
@@ -90,31 +87,6 @@ module.exports = class PermissionDecorators {
     if (!this.fields || this.fields === '!*')
       exception('Authorization')
         .msg('insufficientPermissions')
-        .throw();
-  }
-
-  isValid() {
-    const { coll, op, fields = '' } = this;
-    const Ref = get(mongoose, `models.${coll}`);
-
-    if (!Ref)
-      exception('Validation')
-        .msg('unknownCollection')
-        .field('coll')
-        .throw();
-
-    if (
-      op === 'Create' &&
-      !micromatch.every(
-        Ref.getRequiredFields(),
-        fields.split(',').map((i) => i.trim()),
-      )
-    )
-      exception('Validation')
-        .msg('fieldPermissions', {
-          fields: Ref.getRequiredFields().join(','),
-        })
-        .field('fields')
         .throw();
   }
 

@@ -24,6 +24,7 @@
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "mongodb-cron": "^1.7.0",
+    "mongoose-dedupe": "^1.0.0",
     "mongoose-field-lock": "^1.0.0",
     "mongoose-field-populate": "^1.0.0",
     "mongoose-unique-validator": "^2.0.3",
