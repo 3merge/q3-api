@@ -35,14 +35,18 @@ module.exports = class DiscountDecorator {
         case RETAIL:
           return multiply(num, retail);
         case MSRP:
+          if (!msrp) return retail;
           return multiply(num, msrp);
         case VOLUME:
+          if (!volume) return retail;
           return multiply(num, volume);
         case INCREMENTAL_RETAIL:
           return increment(num, retail, reduced);
         case INCREMENTAL_VOLUME:
+          if (!volume) return retail;
           return increment(num, volume, reduced);
         case INCREMENTAL_MSRP:
+          if (!msrp) return retail;
           return increment(num, msrp, reduced);
         case CUSTOM:
           return num;

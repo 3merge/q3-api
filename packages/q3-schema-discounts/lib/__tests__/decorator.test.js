@@ -38,6 +38,15 @@ describe('Decorator', () => {
       expect(inst.evaluate({ msrp: 21.0 })).toBe(18.69);
     });
 
+    it('should return discounted Retail price as fallback', () => {
+      const inst = new Decorator();
+      inst.kind = MSRP;
+      inst.factor = 0.11;
+      inst.rawFactor = 0.89;
+
+      expect(inst.evaluate({ retail: 21.0 })).toBe(21);
+    });
+
     it('should return custom pricing price', () => {
       const inst = new Decorator();
       inst.kind = CUSTOM;

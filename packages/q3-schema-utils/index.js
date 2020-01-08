@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 const moment = require('moment');
 const micromatch = require('micromatch');
+const { compact } = require('lodash');
 
 /**
  * Drop-in mongoose schemas.
@@ -34,12 +35,14 @@ exports.withDateRange = (schema) => {
           $or: [
             { effectiveFrom: { $lte: today } },
             { effectiveFrom: { $exists: false } },
+            { effectiveFrom: '' },
           ],
         },
         {
           $or: [
             { expiresOn: { $gte: today } },
             { expiresOn: { $exists: false } },
+            { expiresOn: '' },
           ],
         },
       ],
@@ -89,10 +92,15 @@ const compareObjectIds = (a, b) =>
     ? a.equals(b)
     : a === b;
 
-const isMatch = (name, pattern = '*') =>
-  micromatch.isMatch(String(name).toLowerCase(), pattern, {
+const isMatch = (name, resource = '*') => {
+  let pattern = compact(resource);
+  if (!pattern) pattern = ['!*'];
+  if (!name) return false;
+
+  return micromatch.isMatch(name, pattern, {
     nocase: true,
   });
+};
 
 exports.round = toFixed;
 exports.equals = compareObjectIds;

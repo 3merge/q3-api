@@ -16,8 +16,11 @@ module.exports = (root, folder = '/routes') => {
       builder.setContext(dir, name);
       builder.exec(app);
 
-      if (dirent.isDirectory()) {
+      try {
         recursive(join(dir, name));
+      } catch (e) {
+        // noop
+        // @TODO: dirent.isDirectory() UNIX envs
       }
     });
 

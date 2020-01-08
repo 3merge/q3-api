@@ -12,6 +12,8 @@ const rebates = [
     requiredSkus: 'A9D0',
     symbol: '%',
     currency: 'CAD',
+    effectiveFrom: '',
+    expiresOn: '',
   },
   {
     active: true,
@@ -24,6 +26,8 @@ const rebates = [
     conditionalSkuThreshold: 10,
     symbol: '$',
     currency: 'USD',
+    effectiveFrom: '',
+    expiresOn: '',
   },
   {
     active: true,
@@ -37,6 +41,8 @@ const rebates = [
     symbol: '=',
     currency: 'CAD',
     tiers: [{ quantity: 5, value: 7 }],
+    effectiveFrom: '',
+    expiresOn: '',
   },
 ];
 
@@ -130,8 +136,10 @@ describe('RebateDecorator', () => {
       rebate.maximumPerProduct = 3;
 
       return expect(
-        rebate.getMaximumAmounts(makeItems([6, 2, 5])),
-      ).toEqual([3, 2, 3]);
+        rebate.getMaximumAmounts(
+          makeItems([6, 2, 5, 12, 5]),
+        ),
+      ).toEqual([3, 2, 3, 3, 3]);
     });
 
     it('should limit in combination', async () => {
