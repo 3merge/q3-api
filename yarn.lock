@@ -5980,9 +5980,9 @@ mongodb@3.4.1, mongodb@^3.2.7:
     saslprep "^1.0.0"
 
 mongoose-dedupe@^1.0.0:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/mongoose-dedupe/-/mongoose-dedupe-1.0.2.tgz#3cc7c83a4f809d0bc5b74373796d28714809ee7a"
-  integrity sha512-EJkaQlWnIOrjYojt6nAtXUUc2Oq/2WqVQO/kTm5ySnUe9d3GL0klaujQIKmxYps+Fd5WdDy7wllqH95vX7Uvng==
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/mongoose-dedupe/-/mongoose-dedupe-1.0.4.tgz#974b70e2f3734433b832053da64cc0e1219ad9c7"
+  integrity sha512-bAMPA6hzAA9TdJMXLPT8wsmU81KML17pzlHhB9xpi2WVQGSBXK23Mhw+8nYsE3BAShC9XeCOLepFTHZfmo8jqw==
   dependencies:
     mongoose "^5.8.5"
 
