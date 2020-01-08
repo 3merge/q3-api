@@ -1,15 +1,25 @@
+const path = require('path');
+
 const appendID = (str) => `:${str.replace(/-/g, '')}ID`;
 
 const appendIDToLast = (p, i, c) =>
   i === c.length - 1 ? p : `${p}/${appendID(p)}`;
 
 exports.getNestedPath = (sub, name = '') => {
-  const arr = sub.split('\\').map(appendIDToLast);
+  const arr = path
+    .normalize(sub)
+    .replace(/\\/g, '/')
+    .split('/')
+    .map(appendIDToLast);
+
   if (name.includes('.id.')) {
     arr.push(appendID(arr[arr.length - 1]));
   }
 
-  return arr.join('/');
+  return arr
+    .filter((v) => v !== '.')
+    .map((v) => v.trim())
+    .join('/');
 };
 
 exports.getVerb = (name) => {
@@ -30,8 +40,9 @@ exports.sortFiles = (arr = []) =>
     .filter((item) => !item.name.includes('test'))
     .sort((a, b) => {
       if (
-        a.name.includes('index') &&
-        !b.name.includes('index')
+        b.isDirectory() ||
+        (a.name.includes('index') &&
+          !b.name.includes('index'))
       )
         return -1;
       return 0;
