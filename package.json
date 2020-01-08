@@ -54,6 +54,7 @@
     "moment": "^2.24.0",
     "mongodb-cron": "^1.7.0",
     "mongoose": "^5.7.1",
-    "mongoose-dedupe": "^1.0.0"
+    "mongoose-dedupe": "^1.0.0",
+    "mongoose-field-populate": "^1.0.1"
   }
 }
