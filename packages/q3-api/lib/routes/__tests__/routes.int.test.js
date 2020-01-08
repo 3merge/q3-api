@@ -18,7 +18,7 @@ beforeAll(async () => {
   await Q3.connect();
 });
 
-beforeEach(async () => {
+beforeAll(async () => {
   const sup = await Users.create({
     active: true,
     firstName: 'Mike',
@@ -33,7 +33,7 @@ beforeEach(async () => {
   ({ _id: id } = sup);
 });
 
-afterEach(async () => {
+afterAll(async () => {
   await Users.findByIdAndDelete(id);
 });
 

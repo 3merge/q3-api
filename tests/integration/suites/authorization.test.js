@@ -1,6 +1,7 @@
 const { Users } = require('q3-api');
 
 let Authorization;
+
 beforeAll(async () => {
   const doc = await Users.findOne({
     email: 'mary-anne-secret@yahoo.ca',

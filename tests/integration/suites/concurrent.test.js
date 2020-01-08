@@ -34,7 +34,7 @@ test('Handle multiple open sessions', async () => {
   ).toBeTruthy();
 });
 
-test('ETag should handle 304 status', async () => {
+test.skip('ETag should handle 304 status', async () => {
   const { headers, status } = await global.agent
     .get('/profile')
     .set({
@@ -55,7 +55,7 @@ test('ETag should handle 304 status', async () => {
   expect(newStatus).toBe(304);
 });
 
-test('Headers should handle race conditions', async () => {
+test.skip('Headers should handle race conditions', async () => {
   const yesterday = moment()
     .subtract(1, 'days')
     .toISOString();
