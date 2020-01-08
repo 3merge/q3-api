@@ -30,9 +30,8 @@ exports.sortFiles = (arr = []) =>
     .filter((item) => !item.name.includes('test'))
     .sort((a, b) => {
       if (
-        b.isDirectory() ||
-        (a.name.includes('index') &&
-          !b.name.includes('index'))
+        a.name.includes('index') &&
+        !b.name.includes('index')
       )
         return -1;
       return 0;
