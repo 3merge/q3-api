@@ -80,14 +80,17 @@ module.exports = (schema, { getUser, lookup }) => {
 
   async function checkOp(next, options = {}) {
     const createdBy = get(getUser(), '_id', null);
+    let op = options.op || 'Update';
 
     this.__user = createdBy;
     if (this.isNew) this.createdBy = createdBy;
+    if (this.isNew) op = 'Create';
+
+    if (this.modifiedPaths().includes('active'))
+      op = 'Delete';
 
     if (await hasOptions(options))
-      await this.constructor.can(
-        options.op || this.isNew ? 'Create' : 'Update',
-      );
+      await this.constructor.can(op);
   }
 
   async function useQuery() {
