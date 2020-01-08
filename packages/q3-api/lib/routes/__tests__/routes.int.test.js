@@ -7,7 +7,7 @@ let id;
 let password;
 let AuthorizationSuper;
 
-const email = 'developer@gmail.com';
+const email = 'routes_developer@gmail.com';
 
 jest.unmock('request-context');
 
@@ -16,18 +16,25 @@ beforeAll(async () => {
 
   agent = supertest(Q3.$app);
   await Q3.connect();
+});
 
-  const sup = await Users.findOneOrCreate({
-    email,
+beforeEach(async () => {
+  const sup = await Users.create({
+    active: true,
     firstName: 'Mike',
     lastName: 'Ibberson',
     verified: true,
     password: 'Sh!0978ydsn*1',
     role: 'Super',
+    email,
   });
 
   AuthorizationSuper = `Apikey ${await sup.generateApiKey()}`;
   ({ _id: id } = sup);
+});
+
+afterEach(async () => {
+  await Users.findByIdAndDelete(id);
 });
 
 describe('authenticate /GET', () => {
@@ -78,7 +85,7 @@ describe('authenticate /POST', () => {
 });
 
 describe('password-reset /POST', () => {
-  beforeAll(async () => {
+  beforeEach(async () => {
     const doc = await Users.findById(id);
     await doc.setPassword();
   });
@@ -92,7 +99,7 @@ describe('password-reset /POST', () => {
 });
 
 describe('password-change /POST', () => {
-  beforeAll(async () => {
+  beforeEach(async () => {
     const doc = await Users.findById(id);
     password = await doc.setPassword();
   });

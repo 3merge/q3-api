@@ -20,7 +20,9 @@ mongoose.plugin(population);
 mongoose.plugin(locking);
 
 mongoose.plugin(dedupe, {
-  active: true,
+  options: {
+    active: true,
+  },
 });
 
 mongoose.plugin((schema) => {

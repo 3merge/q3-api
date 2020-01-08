@@ -14,20 +14,6 @@ afterAll(async () => {
   await Model.deleteMany({});
 });
 
-describe('Rate uniqueness', () => {
-  it('should catch duplicate fees', async () => {
-    return expect(
-      Model.create(stub),
-    ).rejects.toThrowError();
-  });
-
-  it('should ignore duplicate if threshold is different', async () => {
-    return expect(
-      Model.create({ ...stub, threshold: '==1' }),
-    ).resolves.not.toBeUndefined();
-  });
-});
-
 describe('Rates static finder', () => {
   it('should return match', async () => {
     const doc = await Model.create({

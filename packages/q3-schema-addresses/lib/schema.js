@@ -7,13 +7,12 @@ module.exports = new Schema({
     type: Boolean,
     default: false,
   },
-  company: {
-    type: String,
-    required: true,
-  },
   firstName: {
     type: String,
     required: true,
+  },
+  company: {
+    type: String,
   },
   email: Schema.Types.Email,
   branch: {
@@ -60,7 +59,6 @@ module.exports = new Schema({
   },
   phone1: {
     type: Schema.Types.Tel,
-    required: true,
   },
   phone2: {
     type: Schema.Types.Tel,

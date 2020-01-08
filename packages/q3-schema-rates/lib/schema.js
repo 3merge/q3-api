@@ -6,6 +6,7 @@ const RatesSchema = new Schema(
       type: String,
       required: true,
       searchable: true,
+      dedupe: true,
     },
     value: {
       type: Number,

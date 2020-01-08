@@ -56,7 +56,6 @@ describe('Address schema', () => {
     const { errors } = new Address({}).validateSync();
     expect(Object.keys(errors)).toEqual(
       expect.arrayContaining([
-        'company',
         'firstName',
         'lastName',
         'streetNumber',
@@ -65,7 +64,6 @@ describe('Address schema', () => {
         'region',
         'postal',
         'country',
-        'phone1',
       ]),
     );
   });

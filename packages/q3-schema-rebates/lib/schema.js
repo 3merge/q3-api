@@ -14,8 +14,6 @@ const RebatesSchema = new Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
-    sparse: true,
   },
   description: {
     type: String,
@@ -23,8 +21,7 @@ const RebatesSchema = new Schema({
   },
   couponCode: {
     type: String,
-    unique: true,
-    sparse: true,
+    dedupe: true,
   },
   value: {
     type: Number,
