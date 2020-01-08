@@ -1,16 +1,16 @@
 {
   "name": "q3-schema-rebates",
-  "version": "1.1.18",
+  "version": "1.1.19",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
     "mongoose": "^5.7.1",
-    "q3-core-responder": "^1.0.46",
-    "q3-schema-types": "^1.1.17",
-    "q3-schema-utils": "^1.0.18"
+    "q3-core-responder": "^1.0.47",
+    "q3-schema-types": "^1.1.18",
+    "q3-schema-utils": "^1.0.19"
   },
   "devDependencies": {
-    "q3-test-utils": "^1.0.57"
+    "q3-test-utils": "^1.0.58"
   },
   "jest": {
     "verbose": true,
