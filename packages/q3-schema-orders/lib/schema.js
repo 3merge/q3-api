@@ -127,7 +127,7 @@ const OrderSchema = new Schema(
     tax: price,
     status: {
       type: String,
-      default: 'Open',
+      default: 'Quote',
       enum: STATUS_ENUM,
       systemOnly: true,
       validate: {
