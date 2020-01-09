@@ -41,6 +41,16 @@ module.exports = (schema, { getUser, lookup }) => {
         .throw();
   };
 
+  const meetsDocumentRequirements = (conditions, input) => {
+    if (
+      input &&
+      !new Comparison(conditions).eval(input.toJSON())
+    )
+      exception('Authorization')
+        .msg('ownershipConditions')
+        .throw();
+  };
+
   const getPluralizedCollectionName = (n) =>
     new RegExp(
       `${
@@ -53,7 +63,7 @@ module.exports = (schema, { getUser, lookup }) => {
 
   if (!isConfigured()) return;
 
-  schema.statics.can = async function(op) {
+  schema.statics.can = async function(op, props) {
     const { collectionName } = this.collection;
     const { discriminators } = schema;
 
@@ -75,6 +85,11 @@ module.exports = (schema, { getUser, lookup }) => {
     hasGrant(grant);
     meetsUserRequirements(grant.ownershipConditions);
 
+    meetsDocumentRequirements(
+      grant.documentConditions,
+      props,
+    );
+
     return grant;
   };
 
@@ -90,7 +105,7 @@ module.exports = (schema, { getUser, lookup }) => {
       op = 'Delete';
 
     if (await hasOptions(options))
-      await this.constructor.can(op);
+      await this.constructor.can(op, this);
   }
 
   async function useQuery() {
