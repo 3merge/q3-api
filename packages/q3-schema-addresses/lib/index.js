@@ -1,6 +1,7 @@
 const { exception } = require('q3-core-responder');
 const Schema = require('./schema');
 const { STATES, PROVINCES } = require('./constants');
+const adapters = require('./adapterStrategies');
 
 function ensureSingleBilling(next) {
   let err;
@@ -40,4 +41,6 @@ Schema.path('region').validate(function verifyGeo(v) {
 });
 
 Schema.ensureSingleBilling = ensureSingleBilling;
+Schema.methods.normalize = adapters;
+
 module.exports = Schema;

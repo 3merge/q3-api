@@ -144,7 +144,11 @@ exports.filters = {
   filterByName(name, key = 'resource') {
     return (v) => {
       if (!name || typeof v !== 'object') return false;
-      return isMatch(name, v[key] || ['!*']);
+      const pattern = Array.isArray(v[key])
+        ? v[key]
+        : [v[key] || '!*'];
+
+      return isMatch(name, pattern);
     };
   },
 };
