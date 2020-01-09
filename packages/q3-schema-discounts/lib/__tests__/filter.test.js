@@ -39,6 +39,7 @@ describe('DiscountFilter', () => {
         foo,
         upcoming,
       ]);
+
       const result = inst.$getEligibleDiscounts(Boolean);
       expect(result).toHaveLength(1);
     });
@@ -47,6 +48,7 @@ describe('DiscountFilter', () => {
   describe('getDiscountByResourceName', () => {
     it('should find discounts by name', () => {
       const inst = wrapConstructor([foo, glob]);
+
       const result = inst.$getDiscountByResourceName('FOO');
       expect(result).toHaveLength(1);
     });

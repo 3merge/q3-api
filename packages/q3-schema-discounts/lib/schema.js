@@ -1,5 +1,6 @@
 require('q3-schema-types');
 
+const { withDateRange } = require('q3-schema-utils');
 const { exception } = require('q3-core-responder');
 const { Schema } = require('mongoose');
 const {
@@ -31,12 +32,6 @@ const PricingSchema = new Schema(
     taxonomyRef: String,
     resource: Schema.Types.CommaDelimited,
     comment: String,
-    effective: Date,
-    expiry: Date,
-    excludeFromRebating: {
-      type: Boolean,
-      default: false,
-    },
     incrementalHistory: {
       base: Number,
       bucket: Schema.Types.Mixed,
@@ -78,4 +73,5 @@ PricingSchema.pre('save', async function checkScope() {
       .throw();
 });
 
+PricingSchema.plugin(withDateRange);
 module.exports = PricingSchema;

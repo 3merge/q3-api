@@ -1,7 +1,5 @@
 /* eslint-disable no-param-reassign */
 const {
-  hasExpired,
-  hasNotBegun,
   filterByResourceName,
   filterByTaxonomy,
   returnHeaviestDiscountFromSortedArray,
@@ -24,8 +22,8 @@ module.exports = class DiscountFilter {
 
   $getEligibleDiscounts(done = Boolean) {
     return this.discounts
-      .filter(hasExpired)
-      .filter(hasNotBegun)
+      .filter((v) => !v.hasExpired())
+      .filter((v) => !v.hasNotYetBegun())
       .filter(done);
   }
 

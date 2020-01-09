@@ -28,13 +28,13 @@ exports.cust = (name) => ({
 exports.expired = {
   kind: RETAIL,
   factor: 0.99,
-  expiry: new Date('2010-12-12'),
+  expiresOn: new Date('2010-12-12'),
 };
 
 exports.upcoming = {
   kind: VOLUME,
   factor: 0.87,
-  effective: new Date('2050-12-12'),
+  effectiveFrom: new Date('2050-12-12'),
 };
 
 exports.foo = {

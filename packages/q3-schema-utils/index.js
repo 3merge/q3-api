@@ -14,16 +14,18 @@ exports.withDateRange = (schema) => {
 
   schema.methods.hasNotYetBegun = function isAfter() {
     const { effectiveFrom } = this;
+
     return (
-      !effectiveFrom ||
+      effectiveFrom &&
       moment(effectiveFrom).isAfter(new Date())
     );
   };
 
   schema.methods.hasExpired = function isBefore() {
     const { expiresOn } = this;
+
     return (
-      !expiresOn || moment(expiresOn).isBefore(new Date())
+      expiresOn && moment(expiresOn).isBefore(new Date())
     );
   };
 

@@ -21,14 +21,24 @@ describe('Mongoose plugin schemas', () => {
       Utils.withDateRange({ add, methods, statics });
       expect(
         methods.hasNotYetBegun.call({
-          effectiveFrom: moment().subtract(2, 'days'),
+          effectiveFrom: moment().add(2, 'days'),
+        }),
+      ).toBeTruthy();
+      expect(
+        methods.hasNotYetBegun.call({
+          effectiveFrom: moment(),
         }),
       ).toBeFalsy();
       expect(
         methods.hasExpired.call({
-          effectiveFrom: moment().add(2, 'weeks'),
+          expiresOn: moment().subtract(2, 'weeks'),
         }),
       ).toBeTruthy();
+      expect(
+        methods.hasExpired.call({
+          expiresOn: moment().add(2, 'weeks'),
+        }),
+      ).toBeFalsy();
     });
 
     it('should detect expired documents', () => {

@@ -1,4 +1,3 @@
-const moment = require('moment');
 const micromatch = require('micromatch');
 const { clamp, round, compact } = require('lodash');
 const {
@@ -9,12 +8,6 @@ const {
   VOLUME,
   MSRP,
 } = require('./constants');
-
-const hasNotBegun = (d = {}) =>
-  !d.effective || moment(d.effective).isBefore(new Date());
-
-const hasExpired = (d = {}) =>
-  !d.expiry || moment(d.expiry).isAfter(new Date());
 
 const isFloat = (v) => v === RETAIL || v === VOLUME;
 
@@ -105,8 +98,6 @@ module.exports = {
   splitCommaDelimited,
   toFactor,
   fromFactor,
-  hasNotBegun,
-  hasExpired,
   filterByTaxonomy,
   filterByResourceName,
   returnHeaviestDiscountFromSortedArray,
