@@ -43,6 +43,9 @@ const OrderLineSchema = new Schema({
 
 const OrderSchema = new Schema(
   {
+    tax: price,
+    paymentFee: price,
+    shippingFee: price,
     subtotal: price,
     total: price,
     draft: {
@@ -73,12 +76,8 @@ const OrderSchema = new Schema(
     onModel: {
       type: String,
     },
-    billing: {
-      type: AddressSchema,
-    },
-    shipping: {
-      type: AddressSchema,
-    },
+    billing: AddressSchema,
+    shipping: AddressSchema,
     rate: {
       type: Number,
       private: true,
@@ -90,23 +89,8 @@ const OrderSchema = new Schema(
       private: true,
       lock: true,
     },
-    pst: {
-      type: Number,
-      default: 0,
-    },
-    gst: {
-      type: Number,
-      default: 0,
-    },
-    hst: {
-      type: Number,
-      default: 0,
-    },
     paymentOption: String,
     shippingOption: String,
-    paymentFee: price,
-    shippingFee: price,
-    tax: price,
     status: {
       type: String,
       default: 'Quote',
