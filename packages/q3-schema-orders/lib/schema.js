@@ -10,12 +10,14 @@ const { Schema } = mongoose;
 const price = {
   type: Number,
   private: true,
-  min: 0,
+  systemOnly: true,
+  default: 0,
 };
 
 RateSchema.add({ quantity: price });
 
 const OrderLineSchema = new Schema({
+  priceOverride: DiscountSchema,
   bucket: {
     type: Schema.Types.Mixed,
     private: true,
@@ -24,14 +26,6 @@ const OrderLineSchema = new Schema({
     type: Number,
     private: true,
     default: 0,
-    min: 0,
-  },
-  unmodifiedPrice: {
-    retail: price,
-    discounted: price,
-    msrp: price,
-    map: price,
-    volume: price,
   },
   product: {
     type: mongoose.Schema.Types.ObjectId,
@@ -40,17 +34,17 @@ const OrderLineSchema = new Schema({
   quantity: {
     type: Number,
     required: true,
-    min: 0,
   },
   price: {
     ...price,
     private: true,
   },
-  priceOverride: DiscountSchema,
 });
 
 const OrderSchema = new Schema(
   {
+    subtotal: price,
+    total: price,
     draft: {
       type: Boolean,
       default: false,
@@ -64,18 +58,6 @@ const OrderSchema = new Schema(
     po: String,
     transaction: {
       type: String,
-      private: true,
-    },
-    subtotal: {
-      type: Number,
-      default: 0,
-      min: 0,
-      private: true,
-    },
-    total: {
-      type: Number,
-      default: 0,
-      min: 0,
       private: true,
     },
     invoice: {

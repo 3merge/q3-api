@@ -26,7 +26,6 @@ const PricingSchema = new Schema(
       type: Number,
       get: fromFactor,
       set: toFactor,
-      min: 0,
     },
     taxonomy: Schema.Types.ObjectId,
     taxonomyRef: String,

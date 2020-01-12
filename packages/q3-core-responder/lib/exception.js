@@ -84,6 +84,9 @@ class Exception {
 }
 
 const handleUncaughtExceptions = (err, req, res, next) => {
+  // eslint-disable-next-line
+  if (process.env.DEBUG_CONTROLLER) console.log(err);
+
   const status = err.statusCode || 500;
   const setHeader = (code) =>
     !res._headerSent && !res.headersSent
