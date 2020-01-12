@@ -1,13 +1,13 @@
 {
   "name": "q3-schema-orders",
-  "version": "1.1.26",
+  "version": "1.1.27",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "q3-schema-addresses": "^1.1.24",
-    "q3-schema-discounts": "^1.0.24",
-    "q3-schema-rates": "^1.0.24",
-    "q3-schema-rebates": "^1.1.25",
+    "q3-schema-addresses": "^1.1.25",
+    "q3-schema-discounts": "^1.0.25",
+    "q3-schema-rates": "^1.0.25",
+    "q3-schema-rebates": "^1.1.26",
     "q3-schema-types": "^1.1.24"
   },
   "peerDependencies": {
