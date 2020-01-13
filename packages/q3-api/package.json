@@ -1,6 +1,6 @@
 {
   "name": "q3-api",
-  "version": "1.0.69",
+  "version": "1.0.70",
   "description": "REST api configurations",
   "main": "lib/index.js",
   "license": "MIT",
@@ -28,16 +28,16 @@
     "mongoose-field-lock": "^1.0.0",
     "mongoose-field-populate": "^1.0.1",
     "mongoose-unique-validator": "^2.0.3",
-    "q3-core-composer": "^1.0.45",
+    "q3-core-composer": "^1.0.46",
     "q3-core-mailer": "^1.0.32",
-    "q3-core-responder": "^1.0.55",
-    "q3-core-rest": "^1.0.68",
+    "q3-core-responder": "^1.0.56",
+    "q3-core-rest": "^1.0.69",
     "q3-core-walker": "^1.0.42",
     "q3-locale": "^1.0.3",
-    "q3-schema-notes": "^1.0.25",
-    "q3-schema-permissions": "^1.0.27",
+    "q3-schema-notes": "^1.0.26",
+    "q3-schema-permissions": "^1.0.28",
     "q3-schema-types": "1.0.3",
-    "q3-schema-users": "^1.0.25",
+    "q3-schema-users": "^1.0.26",
     "request-context": "^2.0.0"
   },
   "peerDependencies": {
@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "aws-sdk-mock": "^4.5.0",
-    "q3-test-utils": "^1.0.65",
+    "q3-test-utils": "^1.0.66",
     "supertest": "^4.0.2"
   },
   "jest": {
