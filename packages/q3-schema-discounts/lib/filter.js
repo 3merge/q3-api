@@ -6,13 +6,13 @@ const {
 } = require('./helpers');
 
 const {
-  RETAIL,
+  CUSTOM,
   MSRP,
   VOLUME,
   INCREMENTAL_MSRP,
   INCREMENTAL_VOLUME,
-  INCREMENTAL_RETAIL,
-  CUSTOM,
+  INCREMENTAL_CUSTOM,
+  FIXED_PRICE,
 } = require('./constants');
 
 module.exports = class DiscountFilter {
@@ -53,20 +53,20 @@ module.exports = class DiscountFilter {
   getIncrementalDiscountByResourceName(name) {
     return this.$getDiscountByResourceNameAndKind(name, [
       INCREMENTAL_MSRP,
-      INCREMENTAL_RETAIL,
+      INCREMENTAL_CUSTOM,
       INCREMENTAL_VOLUME,
     ]);
   }
 
-  getCustomDiscountByResourceName(name) {
+  getFixedDiscountByResourceName(name) {
     return this.$getDiscountByResourceNameAndKind(name, [
-      CUSTOM,
+      FIXED_PRICE,
     ]);
   }
 
   getDiscountByResourceName(name) {
     return this.$getDiscountByResourceNameAndKind(name, [
-      RETAIL,
+      CUSTOM,
       VOLUME,
       MSRP,
     ]);
@@ -86,7 +86,7 @@ module.exports = class DiscountFilter {
   getAugmentedDiscount(name, pricing = {}) {
     return returnHeaviestDiscountFromSortedArray(
       [
-        this.getCustomDiscountByResourceName(name),
+        this.getFixedDiscountByResourceName(name),
         this.getIncrementalDiscountByResourceName(name),
       ],
       pricing,

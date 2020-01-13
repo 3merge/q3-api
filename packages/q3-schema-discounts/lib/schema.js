@@ -6,8 +6,8 @@ const { Schema } = require('mongoose');
 const {
   INCREMENTAL_MSRP,
   INCREMENTAL_VOLUME,
-  INCREMENTAL_RETAIL,
-  CUSTOM,
+  INCREMENTAL_CUSTOM,
+  FIXED_PRICE,
   DISCOUNTS,
 } = require('./constants');
 const { toFactor, fromFactor } = require('./helpers');
@@ -61,9 +61,9 @@ PricingSchema.pre('save', async function checkScope() {
     (this.global || this.taxonomy) &&
     [
       INCREMENTAL_MSRP,
-      INCREMENTAL_RETAIL,
+      INCREMENTAL_CUSTOM,
       INCREMENTAL_VOLUME,
-      CUSTOM,
+      FIXED_PRICE,
     ].includes(this.kind)
   )
     exception('Validation')

@@ -3,13 +3,13 @@ const { clamp, round, compact } = require('lodash');
 const {
   INCREMENTAL_MSRP,
   INCREMENTAL_VOLUME,
-  INCREMENTAL_RETAIL,
-  RETAIL,
+  INCREMENTAL_CUSTOM,
+  CUSTOM,
   VOLUME,
   MSRP,
 } = require('./constants');
 
-const isFloat = (v) => v === RETAIL || v === VOLUME;
+const isFloat = (v) => v === CUSTOM || v === VOLUME;
 
 const multiply = (a, b) => a * b;
 const increment = (a, b, c) => c - (1 - a) * b;
@@ -19,7 +19,7 @@ const isPercent = (v) =>
     MSRP,
     INCREMENTAL_MSRP,
     INCREMENTAL_VOLUME,
-    INCREMENTAL_RETAIL,
+    INCREMENTAL_CUSTOM,
   ].includes(v);
 
 const filterByTaxonomy = (id) => (v) => {
@@ -63,6 +63,7 @@ function toFactor(v) {
 
 function fromFactor(v) {
   this.rawFactor = v;
+
   return isPercent(this.kind)
     ? round(round(100 - v * 100, 4), 2)
     : v;

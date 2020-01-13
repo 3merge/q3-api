@@ -8,7 +8,7 @@ describe('Discount helpers', () => {
       ));
 
     it('should leave alone', () =>
-      expect(toFactor.call({ kind: 'Retail' }, 0.91)).toBe(
+      expect(toFactor.call({ kind: 'Custom' }, 0.91)).toBe(
         0.91,
       ));
   });
@@ -21,7 +21,7 @@ describe('Discount helpers', () => {
 
     it('should leave alone', () =>
       expect(
-        fromFactor.call({ kind: 'Retail' }, 0.91),
+        fromFactor.call({ kind: 'Custom' }, 0.91),
       ).toBe(0.91));
   });
 });

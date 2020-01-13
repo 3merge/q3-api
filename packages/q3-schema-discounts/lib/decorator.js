@@ -1,11 +1,11 @@
 const {
-  RETAIL,
+  CUSTOM,
   MSRP,
   VOLUME,
   INCREMENTAL_MSRP,
-  INCREMENTAL_RETAIL,
+  INCREMENTAL_CUSTOM,
   INCREMENTAL_VOLUME,
-  CUSTOM,
+  FIXED_PRICE,
 } = require('./constants');
 const {
   multiply,
@@ -14,7 +14,7 @@ const {
 } = require('./helpers');
 
 module.exports = class DiscountDecorator {
-  evaluate({ retail = 0, volume = 0, msrp = 0 }) {
+  evaluate({ custom = 0, volume = 0, msrp = 0 }) {
     const {
       kind,
       factor,
@@ -28,39 +28,40 @@ module.exports = class DiscountDecorator {
     const reduced =
       incrementalHistory && incrementalHistory.base
         ? incrementalHistory.base
-        : retail;
+        : custom;
 
     const discount = (() => {
       switch (kind) {
-        case RETAIL:
-          return multiply(num, retail);
+        case CUSTOM:
+          return multiply(num, custom);
         case MSRP:
-          if (!msrp) return retail;
+          if (!msrp) return custom;
           return multiply(num, msrp);
         case VOLUME:
-          if (!volume) return retail;
+          if (!volume) return custom;
           return multiply(num, volume);
-        case INCREMENTAL_RETAIL:
-          return increment(num, retail, reduced);
+        case INCREMENTAL_CUSTOM:
+          return increment(num, custom, reduced);
         case INCREMENTAL_VOLUME:
-          if (!volume) return retail;
+          if (!volume) return custom;
           return increment(num, volume, reduced);
         case INCREMENTAL_MSRP:
-          if (!msrp) return retail;
+          if (!msrp) return custom;
           return increment(num, msrp, reduced);
-        case CUSTOM:
+        case FIXED_PRICE:
           return num;
         default:
-          return retail;
+          return custom;
       }
     })();
 
-    return toFixed(discount, retail);
+    return toFixed(discount, custom);
   }
 
   diff(v = {}) {
-    const { retail } = v;
-    const num = retail - this.evaluate(v);
+    const { custom } = v;
+    console.log(custom);
+    const num = custom - this.evaluate(v);
     return toFixed(num, 0);
   }
 };

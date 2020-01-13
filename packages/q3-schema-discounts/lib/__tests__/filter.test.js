@@ -92,7 +92,7 @@ describe('DiscountFilter', () => {
     });
   });
 
-  describe('getCustomDiscountByResourceName', () => {
+  describe('getFixedDiscountByResourceName', () => {
     it('should get active custom discounts', () => {
       const product = 'QUUZ';
       const inst = wrapConstructor([
@@ -101,7 +101,7 @@ describe('DiscountFilter', () => {
         taxonomy(mongoose.Types.ObjectId()),
         cust(product),
       ]);
-      const result = inst.getCustomDiscountByResourceName(
+      const result = inst.getFixedDiscountByResourceName(
         product,
       );
       expect(result).toHaveLength(1);
@@ -113,13 +113,13 @@ describe('DiscountFilter', () => {
       const resource = 'QUUZ';
       const tax = mongoose.Types.ObjectId();
       const inst = wrapConstructor([
-        { kind: 'Retail', factor: 0.98, global: true },
-        { kind: 'Retail', factor: 0.93, resource },
-        { kind: 'Retail', factor: 0.91, taxonomy: tax },
-        { kind: 'Retail', factor: 0.92, resource },
+        { kind: 'Custom', factor: 0.98, global: true },
+        { kind: 'Custom', factor: 0.93, resource },
+        { kind: 'Custom', factor: 0.92, resource },
+        { kind: 'Custom', factor: 0.91, taxonomy: tax },
       ]);
       const result = inst.getBaseDiscount(resource, tax, {
-        retail: 4.99,
+        custom: 4.99,
       });
 
       expect(result).toHaveProperty('factor', 0.92);
@@ -129,13 +129,13 @@ describe('DiscountFilter', () => {
       const resource = 'QUUZ';
       const tax = mongoose.Types.ObjectId();
       const inst = wrapConstructor([
-        { kind: 'Retail', factor: 0.98, global: true },
-        { kind: 'Retail', factor: 0.93, resource: 'NOOP' },
-        { kind: 'Retail', factor: 0.91, taxonomy: tax },
-        { kind: 'Retail', factor: 0.92, resource: 'HEY' },
+        { kind: 'Custom', factor: 0.98, global: true },
+        { kind: 'Custom', factor: 0.93, resource: 'NOOP' },
+        { kind: 'Custom', factor: 0.91, taxonomy: tax },
+        { kind: 'Custom', factor: 0.92, resource: 'HEY' },
       ]);
       const result = inst.getBaseDiscount(resource, tax, {
-        retail: 4.99,
+        custom: 4.99,
       });
 
       expect(result).toHaveProperty('factor', 0.91);
@@ -143,18 +143,18 @@ describe('DiscountFilter', () => {
   });
 
   describe('getAugmentedDiscount', () => {
-    it('should return custom discount', () => {
+    it('should return fixed-price discount', () => {
       const resource = 'QUUZ';
       const inst = wrapConstructor([
         {
           kind: 'Incremental MSRP',
-          factor: 0.87,
+          factor: 13,
           resource,
         },
-        { kind: 'Custom', factor: 3.5, resource },
+        { kind: 'Fixed-Price', factor: 3.5, resource },
       ]);
       const result = inst.getAugmentedDiscount(resource, {
-        retail: 4.99,
+        custom: 4.99,
         discounted: 3.0,
         msrp: 5.99,
       });
@@ -167,7 +167,7 @@ describe('DiscountFilter', () => {
     it('should assign a discount value', () => {
       const resource = 'ADD';
       const pricing = {
-        retail: 4.99,
+        custom: 4.99,
         msrp: 5.99,
         volume: 4.49,
       };
@@ -180,12 +180,12 @@ describe('DiscountFilter', () => {
           resource,
         },
         {
-          kind: 'Retail',
+          kind: 'Custom',
           factor: 0.99,
           resource: [''],
         },
         {
-          kind: 'Retail',
+          kind: 'Custom',
           factor: 0.99,
           taxonomy: {
             id: mongoose.Types.ObjectId(),
@@ -205,7 +205,7 @@ describe('DiscountFilter', () => {
     it('should assign a discount value a falsy value', () => {
       const resource = 'ADD';
       const pricing = {
-        retail: 4.99,
+        custom: 4.99,
         msrp: 5.99,
         volume: 4.49,
       };
@@ -231,7 +231,7 @@ describe('DiscountFilter', () => {
     it('should ignore augmented discounts', () => {
       const tax = mongoose.Types.ObjectId();
       const pricing = {
-        retail: 4.99,
+        custom: 4.99,
         msrp: 5.99,
         volume: 4.49,
       };

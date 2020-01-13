@@ -2,23 +2,23 @@ require('q3-schema-types');
 
 const Decorator = require('../decorator');
 const {
-  RETAIL,
+  CUSTOM,
   MSRP,
   VOLUME,
   INCREMENTAL_MSRP,
-  INCREMENTAL_RETAIL,
+  INCREMENTAL_CUSTOM,
   INCREMENTAL_VOLUME,
-  CUSTOM,
+  FIXED_PRICE,
 } = require('../constants');
 
 describe('Decorator', () => {
   describe('evaluate', () => {
-    it('should return discounted retail price', () => {
+    it('should return discounted custom price', () => {
       const inst = new Decorator();
-      inst.kind = RETAIL;
+      inst.kind = CUSTOM;
       inst.factor = 0.9;
 
-      expect(inst.evaluate({ retail: 11.99 })).toBe(10.79);
+      expect(inst.evaluate({ custom: 11.99 })).toBe(10.79);
     });
 
     it('should return discounted volume price', () => {
@@ -38,18 +38,18 @@ describe('Decorator', () => {
       expect(inst.evaluate({ msrp: 21.0 })).toBe(18.69);
     });
 
-    it('should return discounted Retail price as fallback', () => {
+    it('should return discounted custom price as fallback', () => {
       const inst = new Decorator();
       inst.kind = MSRP;
       inst.factor = 0.11;
       inst.rawFactor = 0.89;
 
-      expect(inst.evaluate({ retail: 21.0 })).toBe(21);
+      expect(inst.evaluate({ custom: 21.0 })).toBe(21);
     });
 
     it('should return custom pricing price', () => {
       const inst = new Decorator();
-      inst.kind = CUSTOM;
+      inst.kind = FIXED_PRICE;
       inst.factor = 21.99;
 
       expect(inst.evaluate({})).toBe(21.99);
@@ -63,7 +63,7 @@ describe('Decorator', () => {
 
       expect(
         inst.evaluate({
-          retail: 21.99,
+          custom: 21.99,
           msrp: 23.99,
         }),
       ).toBe(19.27);
@@ -77,7 +77,7 @@ describe('Decorator', () => {
 
       expect(
         inst.evaluate({
-          retail: 21.99,
+          custom: 21.99,
           volume: 23.99,
         }),
       ).toBe(19.27);
@@ -85,15 +85,15 @@ describe('Decorator', () => {
   });
 
   describe('diff', () => {
-    it('should return the difference between discount and retail', () => {
+    it('should return the difference between discount and custom', () => {
       const inst = new Decorator();
-      inst.kind = INCREMENTAL_RETAIL;
+      inst.kind = INCREMENTAL_CUSTOM;
       inst.rawFactor = 0.34;
       inst.incrementalHistory = { base: 19.99 };
 
       expect(
         inst.diff({
-          retail: 21.99,
+          custom: 21.99,
         }),
       ).toBe(16.51);
     });

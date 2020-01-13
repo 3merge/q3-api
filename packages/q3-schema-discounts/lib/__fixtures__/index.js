@@ -1,10 +1,10 @@
 const {
-  RETAIL,
+  CUSTOM,
   MSRP,
   VOLUME,
   INCREMENTAL_MSRP,
-  INCREMENTAL_RETAIL,
-  CUSTOM,
+  INCREMENTAL_CUSTOM,
+  FIXED_PRICE,
 } = require('../constants');
 
 exports.taxonomy = (id) => ({
@@ -15,18 +15,18 @@ exports.taxonomy = (id) => ({
 
 exports.name = (name) => ({
   resource: name,
-  kind: INCREMENTAL_RETAIL,
+  kind: INCREMENTAL_CUSTOM,
   factor: 0.89,
 });
 
 exports.cust = (name) => ({
   resource: name,
-  kind: CUSTOM,
+  kind: FIXED_PRICE,
   factor: 14.99,
 });
 
 exports.expired = {
-  kind: RETAIL,
+  kind: CUSTOM,
   factor: 0.99,
   expiresOn: new Date('2010-12-12'),
 };
@@ -46,5 +46,5 @@ exports.foo = {
 exports.glob = {
   global: true,
   factor: 0.98,
-  kind: RETAIL,
+  kind: CUSTOM,
 };
