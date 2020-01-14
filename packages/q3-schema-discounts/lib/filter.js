@@ -36,7 +36,7 @@ module.exports = class DiscountFilter {
   $getDiscountByResourceNameAndKind(name, kinds = []) {
     return this.$getDiscountByResourceName(
       name,
-      ({ kind }) => kinds.includes(kind),
+      ({ formula }) => kinds.includes(formula),
     );
   }
 
@@ -52,23 +52,20 @@ module.exports = class DiscountFilter {
 
   getIncrementalDiscountByResourceName(name) {
     return this.$getDiscountByResourceNameAndKind(name, [
-      INCREMENTAL_MSRP,
-      INCREMENTAL_CUSTOM,
-      INCREMENTAL_VOLUME,
+      'Incremental',
+      'Compound',
     ]);
   }
 
   getFixedDiscountByResourceName(name) {
     return this.$getDiscountByResourceNameAndKind(name, [
-      FIXED_PRICE,
+      'Fixed',
     ]);
   }
 
   getDiscountByResourceName(name) {
     return this.$getDiscountByResourceNameAndKind(name, [
-      CUSTOM,
-      VOLUME,
-      MSRP,
+      'Factor',
     ]);
   }
 
@@ -104,11 +101,7 @@ module.exports = class DiscountFilter {
     );
 
     if (a) {
-      a.incrementalHistory = {
-        base: discounted,
-        bucket: b,
-      };
-
+      a.base = discounted;
       return a;
     }
 

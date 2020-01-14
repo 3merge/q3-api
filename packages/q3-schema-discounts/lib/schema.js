@@ -1,32 +1,42 @@
 require('q3-schema-types');
-
 const { withDateRange } = require('q3-schema-utils');
 const { exception } = require('q3-core-responder');
 const { Schema } = require('mongoose');
-const {
-  INCREMENTAL_MSRP,
-  INCREMENTAL_VOLUME,
-  INCREMENTAL_CUSTOM,
-  FIXED_PRICE,
-  DISCOUNTS,
-} = require('./constants');
-const { toFactor, fromFactor } = require('./helpers');
 
 const PricingSchema = new Schema(
   {
     global: {
       type: Boolean,
     },
-    kind: {
+    formula: {
       type: String,
-      enum: DISCOUNTS,
-      required: true,
+      enum: ['Compound', 'Factor', 'Fixed', 'Incremental'],
+      default: 'Factor',
+    },
+    strategy: {
+      type: String,
     },
     factor: {
       type: Number,
-      get: fromFactor,
-      set: toFactor,
+      min: 0,
+      default: 1,
+      max: 1.5,
+      set(v) {
+        this.percentage = 100 - v * 100;
+        return v;
+      },
     },
+    percentage: {
+      type: Number,
+      min: 0,
+      max: 100,
+      default: 100,
+      set(v) {
+        this.factor = (100 - v) / 100;
+        return v;
+      },
+    },
+    base: Number,
     taxonomy: Schema.Types.ObjectId,
     taxonomyRef: String,
     resource: Schema.Types.CommaDelimited,
@@ -43,7 +53,6 @@ const PricingSchema = new Schema(
   },
 );
 
-/** NEEDS TRANSLATING */
 PricingSchema.virtual('scope').get(function alias() {
   if (this.global) return 'Global';
   if (this.taxonomy) return 'Taxonomy';
@@ -51,24 +60,24 @@ PricingSchema.virtual('scope').get(function alias() {
   return 'Unknown';
 });
 
+PricingSchema.pre(
+  'validate',
+  function checkForEmptyResources() {
+    if (
+      (Array.isArray(this.resource) &&
+        !this.resource.filter(Boolean).length) ||
+      this.resource === ''
+    ) {
+      this.global = true;
+      this.resource = null;
+    }
+  },
+);
+
 PricingSchema.pre('save', async function checkScope() {
   if (!this.global && !this.taxonomy && !this.resource)
     exception('Validation')
       .msg('scope')
-      .throw();
-
-  if (
-    (this.global || this.taxonomy) &&
-    [
-      INCREMENTAL_MSRP,
-      INCREMENTAL_CUSTOM,
-      INCREMENTAL_VOLUME,
-      FIXED_PRICE,
-    ].includes(this.kind)
-  )
-    exception('Validation')
-      .msg('scope')
-      .field({ name: 'kind', msg: 'incompatible' })
       .throw();
 });
 

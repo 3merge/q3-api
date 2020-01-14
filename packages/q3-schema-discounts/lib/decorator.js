@@ -1,67 +1,49 @@
 const {
-  CUSTOM,
-  MSRP,
-  VOLUME,
-  INCREMENTAL_MSRP,
-  INCREMENTAL_CUSTOM,
-  INCREMENTAL_VOLUME,
-  FIXED_PRICE,
-} = require('./constants');
-const {
   multiply,
   increment,
   toFixed,
 } = require('./helpers');
 
+const hasKeys = (o) => o && Object.keys(o).length;
+const getKey = (o = {}, key) => o[key] || 0;
+
+const getOptions = (o) =>
+  o && o.constructor && o.constructor.schema
+    ? o.constructor.schema.options
+    : {};
+
 module.exports = class DiscountDecorator {
-  evaluate({ custom = 0, volume = 0, msrp = 0 }) {
-    const {
-      kind,
-      factor,
-      rawFactor,
-      incrementalHistory,
-    } = this;
+  evaluate(pricingScheme) {
+    if (!hasKeys(pricingScheme)) return 0;
 
-    const num =
-      rawFactor !== undefined ? rawFactor : factor;
+    const { base } = getOptions(this);
+    const { factor, formula, strategy } = this;
+    const input = getKey(pricingScheme, strategy);
+    const previous =
+      this.base || getKey(pricingScheme, base);
 
-    const reduced =
-      incrementalHistory && incrementalHistory.base
-        ? incrementalHistory.base
-        : custom;
+    const toFixedIfDefined = (v) =>
+      input ? toFixed(v) : previous;
 
-    const discount = (() => {
-      switch (kind) {
-        case CUSTOM:
-          return multiply(num, custom);
-        case MSRP:
-          if (!msrp) return custom;
-          return multiply(num, msrp);
-        case VOLUME:
-          if (!volume) return custom;
-          return multiply(num, volume);
-        case INCREMENTAL_CUSTOM:
-          return increment(num, custom, reduced);
-        case INCREMENTAL_VOLUME:
-          if (!volume) return custom;
-          return increment(num, volume, reduced);
-        case INCREMENTAL_MSRP:
-          if (!msrp) return custom;
-          return increment(num, msrp, reduced);
-        case FIXED_PRICE:
-          return num;
-        default:
-          return custom;
-      }
-    })();
-
-    return toFixed(discount, custom);
+    switch (formula) {
+      case 'Fixed':
+        return toFixed(factor);
+      case 'Factor':
+        return toFixedIfDefined(multiply(factor, input));
+      case 'Compound':
+        return toFixed(previous - factor);
+      case 'Incremental':
+        return toFixedIfDefined(
+          increment(factor, input, previous),
+        );
+      default:
+        return toFixed(input);
+    }
   }
 
-  diff(v = {}) {
-    const { custom } = v;
-    console.log(custom);
-    const num = custom - this.evaluate(v);
-    return toFixed(num, 0);
+  diff(pricingScheme) {
+    const { base } = getOptions(this);
+    const v = getKey(pricingScheme, base);
+    return toFixed(v - this.evaluate(pricingScheme), 0);
   }
 };

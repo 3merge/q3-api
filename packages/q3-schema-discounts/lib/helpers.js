@@ -1,13 +1,6 @@
 const micromatch = require('micromatch');
-const { clamp, round, compact } = require('lodash');
-const {
-  INCREMENTAL_MSRP,
-  INCREMENTAL_VOLUME,
-  INCREMENTAL_CUSTOM,
-  CUSTOM,
-  VOLUME,
-  MSRP,
-} = require('./constants');
+const { round, compact } = require('lodash');
+const { CUSTOM, VOLUME } = require('./constants');
 
 const isFloat = (v) => v === CUSTOM || v === VOLUME;
 
@@ -15,12 +8,7 @@ const multiply = (a, b) => a * b;
 const increment = (a, b, c) => c - (1 - a) * b;
 
 const isPercent = (v) =>
-  [
-    MSRP,
-    INCREMENTAL_MSRP,
-    INCREMENTAL_VOLUME,
-    INCREMENTAL_CUSTOM,
-  ].includes(v);
+  ['Incremental', 'Factor'].includes(v);
 
 const filterByTaxonomy = (id) => (v) => {
   try {
@@ -55,20 +43,6 @@ const splitCommaDelimited = (a) => {
   return null;
 };
 
-function toFactor(v) {
-  if (isPercent(this.kind)) return (100 - v) / 100;
-  if (isFloat(this.kind)) return clamp(v, 0, 1.5);
-  return v;
-}
-
-function fromFactor(v) {
-  this.rawFactor = v;
-
-  return isPercent(this.kind)
-    ? round(round(100 - v * 100, 4), 2)
-    : v;
-}
-
 const compareValues = (discounts = [], pricing) => {
   return discounts.reduce(
     (prev, next) =>
@@ -97,8 +71,6 @@ module.exports = {
   isFloat,
   isPercent,
   splitCommaDelimited,
-  toFactor,
-  fromFactor,
   filterByTaxonomy,
   filterByResourceName,
   returnHeaviestDiscountFromSortedArray,

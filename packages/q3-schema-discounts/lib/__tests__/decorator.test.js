@@ -1,101 +1,122 @@
 require('q3-schema-types');
 
-const Decorator = require('../decorator');
-const {
-  CUSTOM,
-  MSRP,
-  VOLUME,
-  INCREMENTAL_MSRP,
-  INCREMENTAL_CUSTOM,
-  INCREMENTAL_VOLUME,
-  FIXED_PRICE,
-} = require('../constants');
+const mongoose = require('mongoose');
+const Schema = require('..');
+
+Schema.set('base', 'test');
+const Model = mongoose.model('Discounts', Schema);
 
 describe('Decorator', () => {
   describe('evaluate', () => {
-    it('should return discounted custom price', () => {
-      const inst = new Decorator();
-      inst.kind = CUSTOM;
-      inst.factor = 0.9;
+    it('should return 0 by default', () => {
+      const m = new Model({
+        formula: 'Compound',
+        strategy: 'MSRP',
+        factor: 11,
+      });
 
-      expect(inst.evaluate({ custom: 11.99 })).toBe(10.79);
+      expect(m.evaluate()).toBe(0);
     });
 
-    it('should return discounted volume price', () => {
-      const inst = new Decorator();
-      inst.kind = VOLUME;
-      inst.factor = 0.87;
+    it('should use fallback pricing', () => {
+      const m = new Model({
+        formula: 'Incremental',
+        strategy: 'MSRP',
+        factor: 0.88,
+      });
 
-      expect(inst.evaluate({ volume: 11.99 })).toBe(10.43);
+      expect(m.evaluate({ MSRP: 45.99, test: 28.11 })).toBe(
+        22.59,
+      );
     });
 
-    it('should return discounted MSRP price', () => {
-      const inst = new Decorator();
-      inst.kind = MSRP;
-      inst.factor = 0.11;
-      inst.rawFactor = 0.89;
+    it('should return Factor-discounted price', () => {
+      const m = new Model({
+        formula: 'Factor',
+        strategy: 'test',
+        factor: 0.88,
+      });
 
-      expect(inst.evaluate({ msrp: 21.0 })).toBe(18.69);
+      expect(m.evaluate({ test: 11.99 })).toBe(10.55);
     });
 
-    it('should return discounted custom price as fallback', () => {
-      const inst = new Decorator();
-      inst.kind = MSRP;
-      inst.factor = 0.11;
-      inst.rawFactor = 0.89;
-
-      expect(inst.evaluate({ custom: 21.0 })).toBe(21);
-    });
-
-    it('should return custom pricing price', () => {
-      const inst = new Decorator();
-      inst.kind = FIXED_PRICE;
-      inst.factor = 21.99;
-
-      expect(inst.evaluate({})).toBe(21.99);
-    });
-
-    it('should return incremented MSRP', () => {
-      const inst = new Decorator();
-      inst.kind = INCREMENTAL_MSRP;
-      inst.rawFactor = 0.97;
-      inst.incrementalHistory = { base: 19.99 };
+    it('should return Compound-discount price', () => {
+      const m = new Model({
+        formula: 'Compound',
+        strategy: 'MSRP',
+        factor: 11,
+        base: 22.22,
+      });
 
       expect(
-        inst.evaluate({
-          custom: 21.99,
-          msrp: 23.99,
+        m.evaluate({
+          test: 20,
+          MSRP: 11.99,
         }),
-      ).toBe(19.27);
+      ).toBe(11.22);
     });
 
-    it('should return incremented Volume', () => {
-      const inst = new Decorator();
-      inst.kind = INCREMENTAL_VOLUME;
-      inst.rawFactor = 0.97;
-      inst.incrementalHistory = { base: 19.99 };
+    it('should return Compound-discount without base', () => {
+      const m = new Model({
+        formula: 'Compound',
+        factor: 11,
+      });
 
       expect(
-        inst.evaluate({
-          custom: 21.99,
-          volume: 23.99,
+        m.evaluate({
+          test: 20,
         }),
-      ).toBe(19.27);
+      ).toBe(9);
+    });
+
+    it('should return Incremental-discounted price', () => {
+      const m = new Model({
+        formula: 'Incremental',
+        strategy: 'MSRP',
+        factor: 0.12,
+      });
+
+      expect(
+        m.evaluate({
+          test: 20,
+          MSRP: 11.99,
+        }),
+      ).toBe(9.45);
+    });
+
+    it('should return Fixed-discounted price', () => {
+      const m = new Model({
+        formula: 'Fixed',
+        factor: 8.99,
+      });
+
+      expect(
+        m.evaluate({
+          test: 20,
+          MSRP: 11.99,
+        }),
+      ).toBe(8.99);
     });
   });
 
   describe('diff', () => {
-    it('should return the difference between discount and custom', () => {
-      const inst = new Decorator();
-      inst.kind = INCREMENTAL_CUSTOM;
-      inst.rawFactor = 0.34;
-      inst.incrementalHistory = { base: 19.99 };
+    it('should calculate the difference between input and outout', () => {
+      const m = new Model({
+        formula: 'Fixed',
+        factor: 4.99,
+      });
 
-      expect(
-        inst.diff({
-          custom: 21.99,
-        }),
-      ).toBe(16.51);
+      expect(m.diff({ test: 20 })).toBe(15.01);
+    });
+
+    it('should calculate the incremented difference between input and outout', () => {
+      const m = new Model({
+        formula: 'Compound',
+        factor: 8.99,
+        base: 11.99,
+      });
+
+      expect(m.diff({ test: 19.99 })).toBe(16.99);
     });
   });
 });

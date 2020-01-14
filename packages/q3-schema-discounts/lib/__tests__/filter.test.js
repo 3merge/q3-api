@@ -21,6 +21,7 @@ const wrapConstructor = (discounts = []) => {
 };
 
 beforeAll(async () => {
+  DiscountSchema.set('base', 'custom');
   Model = mongoose.model(
     'DISCOUNTING',
     new mongoose.Schema({
@@ -88,6 +89,7 @@ describe('DiscountFilter', () => {
       const result = inst.getIncrementalDiscountByResourceName(
         product,
       );
+
       expect(result).toHaveLength(1);
     });
   });
@@ -113,10 +115,30 @@ describe('DiscountFilter', () => {
       const resource = 'QUUZ';
       const tax = mongoose.Types.ObjectId();
       const inst = wrapConstructor([
-        { kind: 'Custom', factor: 0.98, global: true },
-        { kind: 'Custom', factor: 0.93, resource },
-        { kind: 'Custom', factor: 0.92, resource },
-        { kind: 'Custom', factor: 0.91, taxonomy: tax },
+        {
+          formula: 'Factor',
+          strategy: 'custom',
+          factor: 0.98,
+          global: true,
+        },
+        {
+          formula: 'Factor',
+          strategy: 'custom',
+          factor: 0.93,
+          resource,
+        },
+        {
+          formula: 'Factor',
+          strategy: 'custom',
+          factor: 0.92,
+          resource,
+        },
+        {
+          formula: 'Factor',
+          strategy: 'custom',
+          factor: 0.91,
+          taxonomy: tax,
+        },
       ]);
       const result = inst.getBaseDiscount(resource, tax, {
         custom: 4.99,
@@ -129,11 +151,32 @@ describe('DiscountFilter', () => {
       const resource = 'QUUZ';
       const tax = mongoose.Types.ObjectId();
       const inst = wrapConstructor([
-        { kind: 'Custom', factor: 0.98, global: true },
-        { kind: 'Custom', factor: 0.93, resource: 'NOOP' },
-        { kind: 'Custom', factor: 0.91, taxonomy: tax },
-        { kind: 'Custom', factor: 0.92, resource: 'HEY' },
+        {
+          formula: 'Factor',
+          strategy: 'custom',
+          factor: 0.98,
+          global: true,
+        },
+        {
+          formula: 'Factor',
+          strategy: 'custom',
+          factor: 0.93,
+          resource: 'NOOP',
+        },
+        {
+          formula: 'Factor',
+          strategy: 'custom',
+          factor: 0.91,
+          taxonomy: tax,
+        },
+        {
+          formula: 'Factor',
+          strategy: 'custom',
+          factor: 0.92,
+          resource: 'HEY',
+        },
       ]);
+
       const result = inst.getBaseDiscount(resource, tax, {
         custom: 4.99,
       });
@@ -147,12 +190,14 @@ describe('DiscountFilter', () => {
       const resource = 'QUUZ';
       const inst = wrapConstructor([
         {
-          kind: 'Incremental MSRP',
+          formula: 'Incremental',
           factor: 13,
           resource,
+          strategy: 'msrp',
         },
-        { kind: 'Fixed-Price', factor: 3.5, resource },
+        { formula: 'Fixed', factor: 3.5, resource },
       ]);
+
       const result = inst.getAugmentedDiscount(resource, {
         custom: 4.99,
         discounted: 3.0,
@@ -173,20 +218,28 @@ describe('DiscountFilter', () => {
       };
 
       const inst = wrapConstructor([
-        { kind: 'Volume', factor: 0.87, resource },
         {
-          kind: 'Incremental MSRP',
+          formula: 'Factor',
+          strategy: 'volume',
+          factor: 0.87,
+          resource,
+        },
+        {
+          formula: 'Incremental',
+          strategy: 'msrp',
           factor: 0.21,
           resource,
         },
         {
-          kind: 'Custom',
+          formula: 'Factor',
+          strategy: 'custom',
           factor: 0.99,
           resource: [''],
         },
         {
-          kind: 'Custom',
+          formula: 'Factor',
           factor: 0.99,
+          strategy: 'Custom',
           taxonomy: {
             id: mongoose.Types.ObjectId(),
           },
@@ -198,6 +251,7 @@ describe('DiscountFilter', () => {
         mongoose.Types.ObjectId(),
         pricing,
       );
+
       expect(pricing).toHaveProperty('discounted', 3.91);
       expect(result).toHaveProperty('factor', 0.21);
     });
@@ -211,13 +265,20 @@ describe('DiscountFilter', () => {
       };
 
       const inst = wrapConstructor([
-        { kind: 'Volume', factor: 0.87, resource: 'NOOP' },
         {
-          kind: 'Incremental MSRP',
+          strategy: 'volume',
+          factor: 0.87,
+          resource: 'NOOP',
+          formula: 'Factor',
+        },
+        {
+          formula: 'Incremental',
+          strategy: 'msrp',
           factor: 25,
           resource,
         },
       ]);
+
       const result = inst.getBlendedDiscount(
         resource,
         mongoose.Types.ObjectId(),
@@ -238,8 +299,14 @@ describe('DiscountFilter', () => {
 
       const inst = wrapConstructor([
         foo,
-        { kind: 'Volume', factor: 0.91, taxonomy: tax },
+        {
+          strategy: 'volume',
+          formula: 'Factor',
+          factor: 0.91,
+          taxonomy: tax,
+        },
       ]);
+
       const result = inst.getBlendedDiscount(
         'BAR',
         tax,
