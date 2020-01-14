@@ -20,7 +20,6 @@ const PricingSchema = new Schema(
       type: Number,
       min: 0,
       default: 1,
-      max: 1.5,
       set(v) {
         this.percentage = 100 - v * 100;
         return v;
@@ -29,7 +28,6 @@ const PricingSchema = new Schema(
     percentage: {
       type: Number,
       min: 0,
-      max: 100,
       default: 100,
       set(v) {
         this.factor = (100 - v) / 100;
@@ -64,7 +62,8 @@ PricingSchema.pre(
   'validate',
   function checkForEmptyResources() {
     if (
-      (Array.isArray(this.resource) &&
+      (!this.taxonomy &&
+        Array.isArray(this.resource) &&
         !this.resource.filter(Boolean).length) ||
       this.resource === ''
     ) {
