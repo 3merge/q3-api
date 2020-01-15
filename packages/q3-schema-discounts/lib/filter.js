@@ -66,6 +66,7 @@ module.exports = class DiscountFilter {
   getDiscountByResourceName(name) {
     return this.$getDiscountByResourceNameAndKind(name, [
       'Factor',
+      'Percent',
     ]);
   }
 
