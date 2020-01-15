@@ -1,17 +1,17 @@
 {
   "name": "integration",
   "private": true,
-  "version": "1.0.35",
+  "version": "1.0.36",
   "dependencies": {
     "express": "^4.17.1",
     "i18next": "^19.0.1",
     "moment": "^2.24.0",
     "mongoose": "^5.7.1",
-    "q3-api": "^1.0.74",
-    "q3-core-responder": "^1.0.59",
-    "q3-schema-orders": "^1.1.33",
-    "q3-schema-rates": "^1.0.30",
-    "q3-test-utils": "^1.0.69"
+    "q3-api": "^1.0.75",
+    "q3-core-responder": "^1.0.60",
+    "q3-schema-orders": "^1.1.34",
+    "q3-schema-rates": "^1.0.31",
+    "q3-test-utils": "^1.0.70"
   },
   "devDependencies": {
     "supertest": "^4.0.2"
