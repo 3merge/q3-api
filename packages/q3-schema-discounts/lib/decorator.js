@@ -36,7 +36,7 @@ module.exports = class DiscountDecorator {
         return toFixed(previous - factor);
       case 'Incremental':
         return toFixedIfDefined(
-          increment(factor, input, previous),
+          increment(1 - factor / 100, input, previous),
         );
       default:
         return toFixed(input);

@@ -22,7 +22,7 @@ describe('Decorator', () => {
       const m = new Model({
         formula: 'Incremental',
         strategy: 'MSRP',
-        factor: 0.88,
+        factor: 12,
       });
 
       expect(m.evaluate({ MSRP: 45.99, test: 28.11 })).toBe(
@@ -101,7 +101,7 @@ describe('Decorator', () => {
       const m = new Model({
         formula: 'Incremental',
         strategy: 'MSRP',
-        factor: 0.12,
+        factor: 88,
       });
 
       expect(
