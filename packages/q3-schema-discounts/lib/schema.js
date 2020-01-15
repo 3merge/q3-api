@@ -18,18 +18,18 @@ const PricingSchema = new Schema(
     },
     factor: {
       type: Number,
-      min: 0,
       default: 1,
       set(v) {
+        if (this.formula === 'Fixed') return v;
         this.percentage = 100 - v * 100;
         return v;
       },
     },
     percentage: {
       type: Number,
-      min: 0,
       default: 100,
       set(v) {
+        if (this.formula === 'Fixed') return 0;
         this.factor = (100 - v) / 100;
         return v;
       },
