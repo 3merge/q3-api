@@ -10,7 +10,13 @@ const PricingSchema = new Schema(
     },
     formula: {
       type: String,
-      enum: ['Compound', 'Factor', 'Fixed', 'Incremental'],
+      enum: [
+        'Compound',
+        'Factor',
+        'Percent',
+        'Fixed',
+        'Incremental',
+      ],
       default: 'Factor',
     },
     strategy: {
@@ -22,15 +28,6 @@ const PricingSchema = new Schema(
       set(v) {
         if (this.formula === 'Fixed') return v;
         this.percentage = 100 - v * 100;
-        return v;
-      },
-    },
-    percentage: {
-      type: Number,
-      default: 100,
-      set(v) {
-        if (this.formula === 'Fixed') return 0;
-        this.factor = (100 - v) / 100;
         return v;
       },
     },

@@ -69,6 +69,34 @@ describe('Decorator', () => {
       ).toBe(9);
     });
 
+    it('should return Percent-discount as off', () => {
+      const m = new Model({
+        formula: 'Percent',
+        factor: 10,
+        strategy: 'test',
+      });
+
+      expect(
+        m.evaluate({
+          test: 20,
+        }),
+      ).toBe(18);
+    });
+
+    it('should return negative value for percent off', () => {
+      const m = new Model({
+        formula: 'Percent',
+        factor: 110,
+        strategy: 'test',
+      });
+
+      expect(
+        m.evaluate({
+          test: 20,
+        }),
+      ).toBe(-2);
+    });
+
     it('should return Incremental-discounted price', () => {
       const m = new Model({
         formula: 'Incremental',

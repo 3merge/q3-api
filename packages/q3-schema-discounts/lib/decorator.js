@@ -30,6 +30,8 @@ module.exports = class DiscountDecorator {
         return toFixed(factor);
       case 'Factor':
         return toFixedIfDefined(multiply(factor, input));
+      case 'Percent':
+        return toFixedIfDefined(input * (1 - factor / 100));
       case 'Compound':
         return toFixed(previous - factor);
       case 'Incremental':
