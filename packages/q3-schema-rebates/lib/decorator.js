@@ -9,6 +9,11 @@ const getRemainder = (a, b, c) => {
 
 const sofar = (a) => a.reduce((all, curr) => all + curr, 0);
 
+const compact = (a) => a.filter((v) => v && v !== '');
+
+const hasLength = (a) =>
+  Array.isArray(a) && compact(a).length;
+
 class RebateDecorator {
   static async findApplicable(
     couponCode,
@@ -68,17 +73,17 @@ class RebateDecorator {
   }
 
   hasRequiredSkus(items) {
-    return this.requiredSkus
+    return hasLength(this.requiredSkus)
       ? items.some(this.matchItemSku.bind(this))
       : true;
   }
 
   hasConditionalSkus(items) {
-    if (!this.conditionalSkus) return true;
+    if (!hasLength(this.conditionalSkus)) return true;
 
     const total = items.reduce(
       (acc, { sku, quantity }) =>
-        Utils.isMatch(sku, this.conditionalSkus)
+        Utils.isMatch(sku, compact(this.conditionalSkus))
           ? acc + quantity
           : acc,
       0,
@@ -91,7 +96,10 @@ class RebateDecorator {
   }
 
   matchItemSku(item) {
-    return Utils.isMatch(item.sku, this.requiredSkus);
+    return Utils.isMatch(
+      item.sku,
+      compact(this.requiredSkus),
+    );
   }
 
   redactItems(items) {
