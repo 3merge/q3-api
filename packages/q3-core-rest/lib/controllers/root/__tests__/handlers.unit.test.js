@@ -105,7 +105,7 @@ describe('Handlers', () => {
           hello: 'world',
         }),
         expect.objectContaining({
-          limit: 50,
+          limit: 25,
           page: 1,
         }),
       );
