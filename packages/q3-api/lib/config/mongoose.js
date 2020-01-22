@@ -5,7 +5,7 @@ const Notes = require('q3-schema-notes');
 const mongoose = require('mongoose');
 const dedupe = require('mongoose-dedupe');
 const locking = require('mongoose-field-lock');
-const population = require('mongoose-field-populate');
+const { autopopulate } = require('mongoose-field-populate');
 const Files = require('../models/files');
 const { MODEL_NAMES } = require('../constants');
 
@@ -18,7 +18,7 @@ mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
 
 mongoose.plugin(context);
-mongoose.plugin(population);
+mongoose.plugin(autopopulate);
 mongoose.plugin(locking);
 
 mongoose.plugin(dedupe, {

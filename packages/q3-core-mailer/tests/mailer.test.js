@@ -33,7 +33,8 @@ describe('Email chain', () => {
     ).toThrowError();
   });
 
-  it('should configure email meta', async (done) => {
+  it.skip('should configure email meta', async (done) => {
+    process.env.PREVIEW_EMAIL = true;
     const args = {
       title: 'Password reset',
       body:
@@ -49,10 +50,6 @@ describe('Email chain', () => {
         },
       ],
     };
-
-    mailer.listen(() => {
-      done();
-    });
 
     mailer.config({
       logo:
@@ -70,5 +67,6 @@ describe('Email chain', () => {
     expect(msg.meta.subject).toMatch('Hey there!');
     expect(msg.data).toMatchObject(args);
     await msg.send();
+    done();
   });
 });
