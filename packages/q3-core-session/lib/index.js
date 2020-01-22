@@ -16,9 +16,28 @@ module.exports = {
 
   middleware: (req, res, next) =>
     ns.run(() => {
-      ns.set(SESSION_KEY, req.user);
+      ns.set(
+        SESSION_KEY,
+        typeof req === 'object' && req !== null
+          ? req.user
+          : undefined,
+      );
+
       next();
     }),
+
+  nx: (keyName, value) => {
+    const exists = ns.get(keyName);
+    if (exists) return exists;
+    if (value instanceof Promise)
+      return value.then((res) => {
+        ns.set(keyName, res);
+        return res;
+      });
+
+    ns.set(keyName, value);
+    return value;
+  },
 
   kill: () => {
     ns.set(SESSION_KEY, undefined);

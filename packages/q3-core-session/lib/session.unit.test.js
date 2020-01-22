@@ -26,4 +26,24 @@ describe('Session', () => {
       fn();
     });
   });
+
+  it('should return existing value', (done) => {
+    session.middleware(null, null, () => {
+      const v = 'FOO';
+      session.nx(v, 1);
+      session.nx(v, 2);
+      expect(session.get(v)).toBe(1);
+      done();
+    });
+  });
+
+  it('should resolve function', (done) => {
+    session.middleware(null, null, async () => {
+      const v = 'FOO';
+      await session.nx(v, Promise.resolve(1));
+      session.nx(v, 2);
+      expect(session.get(v)).toBe(1);
+      done();
+    });
+  });
 });
