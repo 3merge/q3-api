@@ -8,7 +8,22 @@ const {
   SESSION_KEY,
 } = require('./constants');
 
+const ev = {};
 const ns = createNamespace(SESSION_NAMESPACE);
+
+const clearNs = (key) => ns.set(key, undefined);
+const isObject = (v) => typeof v === 'object' && v !== null;
+
+const execMap = (d) =>
+  Object.entries(ev).map(async ([key, fn]) =>
+    ns.set(key, await fn(d)),
+  );
+
+const clearMap = () =>
+  Object.keys(ev).map(async (key) => {
+    clearNs(key);
+    delete ev[key];
+  });
 
 module.exports = {
   get: ns.get.bind(ns),
@@ -18,12 +33,12 @@ module.exports = {
     ns.run(() => {
       ns.set(
         SESSION_KEY,
-        typeof req === 'object' && req !== null
-          ? req.user
-          : undefined,
+        isObject(req) ? req.user : undefined,
       );
 
-      next();
+      Promise.all(execMap(req)).then(() => {
+        next();
+      });
     }),
 
   nx: (keyName, value) => {
@@ -40,7 +55,16 @@ module.exports = {
   },
 
   kill: () => {
-    ns.set(SESSION_KEY, undefined);
-    destroyNamespace(SESSION_NAMESPACE);
+    try {
+      clearMap();
+      clearNs(SESSION_KEY);
+      destroyNamespace(SESSION_NAMESPACE);
+    } catch (e) {
+      // noop
+    }
+  },
+
+  intercept: (keyName, fn) => {
+    ev[keyName] = fn;
   },
 };
