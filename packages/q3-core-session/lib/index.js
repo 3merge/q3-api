@@ -54,6 +54,17 @@ module.exports = {
     return value;
   },
 
+  getAll: () =>
+    Object.keys(ev)
+      .concat(SESSION_KEY)
+      .reduce(
+        (curr, key) =>
+          Object.assign(curr, {
+            [key]: ns.get(key),
+          }),
+        {},
+      ),
+
   kill: () => {
     try {
       clearMap();

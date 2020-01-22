@@ -33,6 +33,7 @@
     "q3-core-responder": "^1.0.62",
     "q3-core-rest": "^1.0.75",
     "q3-core-walker": "^1.0.42",
+    "q3-core-session": "^1.0.0",
     "q3-locale": "^1.0.3",
     "q3-schema-notes": "^1.0.32",
     "q3-schema-permissions": "^1.0.34",
