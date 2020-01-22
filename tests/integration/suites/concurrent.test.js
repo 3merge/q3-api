@@ -1,10 +1,22 @@
-const { Users } = require('q3-api');
-const moment = require('moment');
+const mongoose = require('mongoose');
+const { $app, Users, setModel } = require('q3-api');
+// eslint-disable-next-line
+const { compose } = require('q3-core-composer');
+const { get, intercept } = require('q3-core-session');
 
-let key;
+const Schema = new mongoose.Schema({
+  name: String,
+});
+// eslint-disable-next-line
+Schema.post('find', function() {
+  // eslint-disable-next-line
+  console.log(this.__$q3);
+});
 
 const bulkOp = (users, method) =>
   Promise.all(users.map((user) => user[method]()));
+
+const M = setModel('FOR_TESTING', Schema);
 
 test('Handle multiple open sessions', async () => {
   const users = await Users.find().exec();
@@ -12,7 +24,6 @@ test('Handle multiple open sessions', async () => {
   const emails = users.map((user) => user.email);
 
   const keys = await bulkOp(users, 'generateApiKey');
-  [key] = keys;
   const results = await Promise.all(
     keys.map((k) =>
       global.agent.get('/profile').set({
@@ -34,56 +45,53 @@ test('Handle multiple open sessions', async () => {
   ).toBeTruthy();
 });
 
-test.skip('ETag should handle 304 status', async () => {
-  const { headers, status } = await global.agent
-    .get('/profile')
-    .set({
-      Authorization: `Apikey ${key}`,
+describe('API session', () => {
+  it('session should be reachable from within externals', async () => {
+    const key = 'TEST';
+    const verifySession = () => {
+      expect(get(key)).toMatchObject({
+        test: true,
+      });
+    };
+
+    intercept(key, (req) => {
+      return req.headers;
     });
 
-  const { etag } = headers;
-  expect(status).toBe(200);
+    $app.get(
+      '/foo',
+      compose((req, res) => {
+        verifySession();
+        res.ok();
+      }),
+    );
 
-  const { status: newStatus } = await global.agent
-    .get('/profile')
-    .set({
-      Authorization: `Apikey ${key}`,
-      'If-None-Match': etag,
-      'Cache-Control': 'private',
+    await global.agent.get('/foo').set({ test: true });
+    expect(get(key)).toBeUndefined();
+  });
+
+  it.only('session should be reachable from within mongo middleware', async (done) => {
+    const key = 'TEST';
+
+    await M.create({
+      name: 'Bob',
     });
 
-  expect(newStatus).toBe(304);
-});
-
-test.skip('Headers should handle race conditions', async () => {
-  const yesterday = moment()
-    .subtract(1, 'days')
-    .toISOString();
-  const { status, headers } = await global.agent
-    .patch('/profile')
-    .send({ firstName: 'Mike' })
-    .set({
-      Authorization: `Apikey ${key}`,
+    intercept(key, () => {
+      return 'Retained';
     });
 
-  expect(status).toBe(200);
+    $app.get(
+      '/async',
+      compose(async (req, res) => {
+        await M.find().exec();
+        res.ok();
+      }),
+    );
 
-  const { status: staleStatus } = await global.agent
-    .patch('/profile')
-    .send({ firstName: 'Mike' })
-    .set({
-      Authorization: `Apikey ${key}`,
-      'If-Unmodified-Since': yesterday,
+    return global.agent.get('/async').then(() => {
+      expect(get(key)).toBeUndefined();
+      done();
     });
-
-  const { status: okStatus } = await global.agent
-    .patch('/profile')
-    .send({ firstName: 'Mike' })
-    .set({
-      Authorization: `Apikey ${key}`,
-      'If-Unmodified-Since': headers['last-modified'],
-    });
-
-  expect(staleStatus).toBe(412);
-  expect(okStatus).toBe(200);
+  });
 });

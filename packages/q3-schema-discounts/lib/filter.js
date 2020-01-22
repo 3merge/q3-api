@@ -5,16 +5,6 @@ const {
   returnHeaviestDiscountFromSortedArray,
 } = require('./helpers');
 
-const {
-  CUSTOM,
-  MSRP,
-  VOLUME,
-  INCREMENTAL_MSRP,
-  INCREMENTAL_VOLUME,
-  INCREMENTAL_CUSTOM,
-  FIXED_PRICE,
-} = require('./constants');
-
 module.exports = class DiscountFilter {
   constructor(docs = []) {
     this.discounts = docs;

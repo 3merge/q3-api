@@ -26,7 +26,7 @@ beforeAll(() => {
 describe('compose', () => {
   it('should stack middleware', () => {
     const obj = () => null;
-    expect(compose(obj).stack).toHaveLength(4);
+    expect(compose(obj).stack).toHaveLength(5);
     expect(compose(obj).root).toEqual(expect.any(Function));
   });
 

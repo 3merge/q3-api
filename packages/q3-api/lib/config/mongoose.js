@@ -1,4 +1,5 @@
 const req = require('request-context');
+const context = require('q3-core-session/lib/plugin');
 const accessControl = require('q3-schema-permissions/lib/plugin');
 const Notes = require('q3-schema-notes');
 const mongoose = require('mongoose');
@@ -16,6 +17,7 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
 
+mongoose.plugin(context);
 mongoose.plugin(population);
 mongoose.plugin(locking);
 
