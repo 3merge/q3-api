@@ -1,4 +1,7 @@
 const connect = require('connect');
+const {
+  middleware: sessionMiddleware,
+} = require('q3-core-session');
 const aa = require('express-async-handler');
 const dep = require('express-validator');
 const validateBody = require('m2e-validator/lib/middlewareHelper');
@@ -36,6 +39,7 @@ const compose = (ctr) =>
       request,
       response,
     ]),
+    sessionMiddleware,
     ...(ctr.postAuthorization ? ctr.postAuthorization : []),
     aa(ctr),
     ctr,
