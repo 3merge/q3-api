@@ -1,13 +1,13 @@
 {
   "name": "q3-schema-addresses",
-  "version": "1.1.33",
+  "version": "1.1.34",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
     "mongoose": "^5.7.1",
-    "q3-core-responder": "^1.0.62",
-    "q3-schema-types": "^1.1.32",
-    "q3-test-utils": "^1.0.72"
+    "q3-core-responder": "^1.0.63",
+    "q3-schema-types": "^1.1.33",
+    "q3-test-utils": "^1.0.73"
   },
   "jest": {
     "verbose": true,
