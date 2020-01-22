@@ -56,5 +56,19 @@
     "role": "Public",
     "ownership": "Own",
     "op": "Read"
+  },
+  {
+    "coll": "publics",
+    "fields": "*",
+    "role": "Public",
+    "ownership": "Any",
+    "op": "Delete"
+  },
+  {
+    "coll": "publics",
+    "fields": "*",
+    "role": "Public",
+    "ownership": "Any",
+    "op": "Read"
   }
 ]

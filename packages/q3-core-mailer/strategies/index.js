@@ -2,14 +2,14 @@
 const nodemailer = require('nodemailer');
 
 const forTestingPurposesOnly = async () => {
-  const testAccount = await nodemailer.createTestAccount();
+  const account = await nodemailer.createTestAccount();
   return nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
-    secure: false,
+    host: account.smtp.host,
+    port: account.smtp.port,
+    secure: account.smtp.secure,
     auth: {
-      user: testAccount.user,
-      pass: testAccount.pass,
+      user: account.user,
+      pass: account.pass,
     },
   });
 };
@@ -22,6 +22,8 @@ module.exports = async (strat, args) => {
         : await require(`./${strat}`)(nodemailer);
 
     const info = await transporter.sendMail(args);
+    console.log('here?');
+
     if (process.env.PREVIEW_EMAIL)
       console.log(
         'Preview URL: %s',
