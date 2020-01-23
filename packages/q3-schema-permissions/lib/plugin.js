@@ -4,20 +4,34 @@ const mongoose = require('mongoose');
 const { exception } = require('q3-core-responder');
 const Comparison = require('comparisons');
 
-module.exports = (schema, { getUser, lookup }) => {
+const getPluralizedCollectionName = (n) =>
+  new RegExp(
+    `^${
+      n.charAt(n.length - 1) === 's'
+        ? n.substring(0, n.length - 1)
+        : n
+    }+(s?)$`,
+    'i',
+  );
+
+const hasCollection = (name) =>
+  new Promise((resolve) =>
+    mongoose.connection.db
+      .listCollections()
+      .toArray(function(err, v) {
+        resolve(
+          !err
+            ? v.findIndex((c) => c.name === name) !== -1
+            : false,
+        );
+      }),
+  );
+
+const plugin = (schema, { getUser, lookup }) => {
   const isConfigured = () =>
     getUser &&
     typeof getUser === 'function' &&
     typeof lookup === 'string';
-
-  const hasCollection = (name) =>
-    new Promise((resolve) =>
-      mongoose.connection.db
-        .listCollections({ name })
-        .toArray(function(err) {
-          resolve(!err);
-        }),
-    );
 
   const hasOptions = async (d) =>
     (await hasCollection(lookup)) && 'options' in d
@@ -51,16 +65,6 @@ module.exports = (schema, { getUser, lookup }) => {
         .throw();
   };
 
-  const getPluralizedCollectionName = (n) =>
-    new RegExp(
-      `${
-        n.charAt(n.length - 1) === 's'
-          ? n.substring(0, n.length - 1)
-          : n
-      }+(s?)$`,
-      'i',
-    );
-
   if (!isConfigured()) return;
 
   schema.statics.can = async function(op, props) {
@@ -75,6 +79,7 @@ module.exports = (schema, { getUser, lookup }) => {
     const grant = await mongoose
       .model(lookup)
       .findOne({
+        active: true,
         role: get(getUser(), 'role', 'Public'),
         coll: coll.map(getPluralizedCollectionName),
         op,
@@ -163,3 +168,7 @@ module.exports = (schema, { getUser, lookup }) => {
     },
   });
 };
+
+plugin.getPluralizedCollectionName = getPluralizedCollectionName;
+plugin.hasCollection = hasCollection;
+module.exports = plugin;
