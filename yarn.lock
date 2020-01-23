@@ -1066,6 +1066,13 @@
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
   integrity sha512-shAmDyaQC4H92APFoIaVDHCx5bStIocgvbwQyxPRrbUY20V1EYTbSDchWbuwlMG3V17cprZhA6+78JfB+3DTPw==
 
+"@octokit/auth-token@^2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@octokit/auth-token/-/auth-token-2.4.0.tgz#b64178975218b99e4dfe948253f0673cbbb59d9f"
+  integrity sha512-eoOVMjILna7FVQf96iWc3+ZtE/ZT6y8ob8ZzcqKY1ibSQCnu4O/B7pJvzMx5cyZ/RjAff6DAdEb0O0Cjcxidkg==
+  dependencies:
+    "@octokit/types" "^2.0.0"
+
 "@octokit/endpoint@^5.5.0":
   version "5.5.1"
   resolved "https://registry.yarnpkg.com/@octokit/endpoint/-/endpoint-5.5.1.tgz#2eea81e110ca754ff2de11c79154ccab4ae16b3f"
@@ -1104,10 +1111,11 @@
     universal-user-agent "^4.0.0"
 
 "@octokit/rest@^16.28.4":
-  version "16.37.0"
-  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-16.37.0.tgz#e08501c471199cb4942587f2425a7990b34a49eb"
-  integrity sha512-qLPK9FOCK4iVpn6ghknNuv/gDDxXQG6+JBQvoCwWjQESyis9uemakjzN36nvvp8SCny7JuzHI2RV8ChbV5mYdQ==
+  version "16.38.1"
+  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-16.38.1.tgz#be24e0faa7d0bdb9459fbc089ec866ed11774b72"
+  integrity sha512-zyNFx+/Bd1EXt7LQjfrc6H4wryBQ/oDuZeZhGMBSFr1eMPFDmpEweFQR3R25zjKwBQpDY7L5GQO6A3XSaOfV1w==
   dependencies:
+    "@octokit/auth-token" "^2.4.0"
     "@octokit/request" "^5.2.0"
     "@octokit/request-error" "^1.0.2"
     atob-lite "^2.0.0"
@@ -6105,6 +6113,15 @@ mongoose-field-lock@^1.0.0:
   resolved "https://registry.yarnpkg.com/mongoose-field-lock/-/mongoose-field-lock-1.0.0.tgz#90630880d7b0926053fd2cd1bd28a3184cfeabc6"
   integrity sha512-z4z/zJb//CbgxLCaJFDZVQ9EojKeKDL8FfjtAhcbk4eAH1lXNVzPKF/7Wv+OtISPub0oJcSR4aIHSpLtta7Zkw==
 
+mongoose-field-populate@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/mongoose-field-populate/-/mongoose-field-populate-2.0.1.tgz#182ea04aaf1e48229362fedae1bf35b2168006e1"
+  integrity sha512-7gcYxj2ITw0BKkvP1kWxl740P2eunHETb5GmXXGgqh8sHHeh96Cmjk/2mBqDNn+eMTgF9FiCgkasEmBnI9d3KQ==
+  dependencies:
+    cachegoose "^8.0.0"
+    lodash.get "^4.4.2"
+    mongoose "^5.7.12"
+
 mongoose-field-populate@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/mongoose-field-populate/-/mongoose-field-populate-1.0.2.tgz#5dd3f2545a86f17817d7c61ed9577414d4595f42"
@@ -6124,10 +6141,10 @@ mongoose-paginate-v2@^1.3.52:
   resolved "https://registry.yarnpkg.com/mongoose-paginate-v2/-/mongoose-paginate-v2-1.3.52.tgz#e7e6ad89d57b8afaddbf3d81ceea1b72a3096142"
   integrity sha512-jFlmFfnQFC4/PEu8YbvM5dqa98caUdFESqyiuHjzmxCtb90HR7DtDImTS4ZdZHAwS4p9zDhtBOm69P04zXVSLQ==
 
-mongoose-partial-search@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/mongoose-partial-search/-/mongoose-partial-search-1.0.0.tgz#eb9a983ae9c21edd5cefb7a86c6c716c3f595186"
-  integrity sha512-MaPAp79PDkB/f1Ps41fB0D+3sfazzd5UBUu4IRd11jbFgK4PmkkUFNzgz3Sajgq7hoC/bGjJc54ide2XRHBd8w==
+mongoose-partial-search@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/mongoose-partial-search/-/mongoose-partial-search-1.0.1.tgz#008cb112df010ba4a3b75423b973924c1a43bb83"
+  integrity sha512-ewGmDuI2gZmZ+cga7py8lN2twMzMplCWnn9Sl2RVuDhqJm7ykBf8uxgpIfbBNZaTZyNHYsJf7S91NagBm/cpGg==
 
 mongoose-unique-validator@^2.0.3:
   version "2.0.3"
@@ -6355,22 +6372,6 @@ node-notifier@^5.4.2:
     shellwords "^0.1.1"
     which "^1.3.0"
 
-node-pre-gyp@*:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/node-pre-gyp/-/node-pre-gyp-0.14.0.tgz#9a0596533b877289bcad4e143982ca3d904ddc83"
-  integrity sha512-+CvDC7ZttU/sSt9rFjix/P05iS43qHCOOGzcr3Ry99bXG7VX953+vFyEuph/tfqoYu8dttBkE86JSKBO2OzcxA==
-  dependencies:
-    detect-libc "^1.0.2"
-    mkdirp "^0.5.1"
-    needle "^2.2.1"
-    nopt "^4.0.1"
-    npm-packlist "^1.1.6"
-    npmlog "^4.0.2"
-    rc "^1.2.7"
-    rimraf "^2.6.1"
-    semver "^5.3.0"
-    tar "^4.4.2"
-
 node-pre-gyp@0.13.0:
   version "0.13.0"
   resolved "https://registry.yarnpkg.com/node-pre-gyp/-/node-pre-gyp-0.13.0.tgz#df9ab7b68dd6498137717838e4f92a33fc9daa42"
@@ -6471,12 +6472,13 @@ npm-normalize-package-bin@^1.0.0, npm-normalize-package-bin@^1.0.1:
     validate-npm-package-name "^3.0.0"
 
 npm-packlist@^1.1.6, npm-packlist@^1.4.4:
-  version "1.4.7"
-  resolved "https://registry.yarnpkg.com/npm-packlist/-/npm-packlist-1.4.7.tgz#9e954365a06b80b18111ea900945af4f88ed4848"
-  integrity sha512-vAj7dIkp5NhieaGZxBJB8fF4R0078rqsmhJcAfXZ6O7JJhjhPK96n5Ry1oZcfLXgfun0GWTZPOxaEyqv8GBykQ==
+  version "1.4.8"
+  resolved "https://registry.yarnpkg.com/npm-packlist/-/npm-packlist-1.4.8.tgz#56ee6cc135b9f98ad3d51c1c95da22bbb9b2ef3e"
+  integrity sha512-5+AZgwru5IevF5ZdnFglB5wNlHG1AOOuw28WhUq8/8emhBmLv6jX5by4WJCh7lW0uSYZYS6DXqIsyZVIXRZU9A==
   dependencies:
     ignore-walk "^3.0.1"
     npm-bundled "^1.0.1"
+    npm-normalize-package-bin "^1.0.1"
 
 npm-pick-manifest@^3.0.0:
   version "3.0.2"
@@ -8375,7 +8377,7 @@ tar-stream@^1.5.2:
     to-buffer "^1.1.1"
     xtend "^4.0.0"
 
-tar@^4, tar@^4.4.10, tar@^4.4.12, tar@^4.4.2, tar@^4.4.8:
+tar@^4, tar@^4.4.10, tar@^4.4.12, tar@^4.4.8:
   version "4.4.13"
   resolved "https://registry.yarnpkg.com/tar/-/tar-4.4.13.tgz#43b364bc52888d555298637b10d60790254ab525"
   integrity sha512-w2VwSrBoHa5BsSyH+KxEqeQBAllHhccyMFVHtGtdMpF4W7IRWfZjFiQceJPChOeTsSDVUpER2T8FA93pr0L+QA==

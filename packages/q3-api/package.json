@@ -26,7 +26,7 @@
     "mongodb-cron": "^1.7.0",
     "mongoose-dedupe": "^1.0.0",
     "mongoose-field-lock": "^1.0.0",
-    "mongoose-field-populate": "^1.0.1",
+    "mongoose-field-populate": "2.0.1",
     "mongoose-unique-validator": "^2.0.3",
     "q3-core-composer": "^1.0.54",
     "q3-core-mailer": "^1.0.33",

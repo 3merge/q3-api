@@ -22,7 +22,6 @@ module.exports = async (strat, args) => {
         : await require(`./${strat}`)(nodemailer);
 
     const info = await transporter.sendMail(args);
-    console.log('here?');
 
     if (process.env.PREVIEW_EMAIL)
       console.log(
@@ -32,7 +31,6 @@ module.exports = async (strat, args) => {
 
     return info;
   } catch (err) {
-    console.log(err);
     throw new Error('Unknown strategy');
   }
 };
