@@ -25,9 +25,21 @@ const clearMap = () =>
     delete ev[key];
   });
 
+const getIn = (obj, v) =>
+  isObject(obj) && typeof v === 'string'
+    ? v.split('.').reduce((curr, next) => {
+        return isObject(curr) ? curr[next] : obj;
+      }, obj)
+    : obj;
+
 module.exports = {
-  get: ns.get.bind(ns),
   set: ns.set.bind(ns),
+
+  get: (keyName, propertyPath, defaultValue) => {
+    const v = ns.get(keyName);
+    if (!v) return defaultValue;
+    return getIn(v, propertyPath);
+  },
 
   middleware: (req, res, next) =>
     ns.run(() => {
@@ -66,13 +78,8 @@ module.exports = {
       ),
 
   kill: () => {
-    try {
-      clearMap();
-      clearNs(SESSION_KEY);
-      destroyNamespace(SESSION_NAMESPACE);
-    } catch (e) {
-      // noop
-    }
+    clearMap();
+    clearNs(SESSION_KEY);
   },
 
   intercept: (keyName, fn) => {
