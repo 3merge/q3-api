@@ -3,7 +3,7 @@ const { SESSION_KEY } = require('./constants');
 
 describe('Session', () => {
   describe('"get"', () => {
-    it('it should set namespace with user ID', (done) => {
+    it('it should get namespace with user ID', (done) => {
       session.middleware({ user: 1 }, null, () => {
         expect(session.get(SESSION_KEY)).toBe(1);
         done();
@@ -12,10 +12,26 @@ describe('Session', () => {
 
     it('it clear namespace after request', (done) => {
       session.middleware({ user: 1 }, null, () => {
+        expect(session.get(SESSION_KEY)).toBeDefined();
         session.kill();
         expect(session.get(SESSION_KEY)).toBeUndefined();
         done();
       });
+    });
+
+    it('it should get attribute of namespace', (done) => {
+      session.middleware(
+        { user: { id: 1, name: { sur: 'foo' } } },
+        null,
+        () => {
+          expect(session.get(SESSION_KEY, 'id')).toBe(1);
+          expect(session.get(SESSION_KEY, 'name.sur')).toBe(
+            'foo',
+          );
+
+          done();
+        },
+      );
     });
   });
 
