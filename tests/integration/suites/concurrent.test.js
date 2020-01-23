@@ -1,17 +1,10 @@
-const mongoose = require('mongoose');
 const { $app, Users, setModel } = require('q3-api');
 // eslint-disable-next-line
 const { compose } = require('q3-core-composer');
 const { get, intercept } = require('q3-core-session');
+const Schema = require('./sample');
 
-const Schema = new mongoose.Schema({
-  name: String,
-});
-// eslint-disable-next-line
-Schema.post('find', function() {
-  // eslint-disable-next-line
-  console.log(this.__$q3);
-});
+const { key } = Schema;
 
 const bulkOp = (users, method) =>
   Promise.all(users.map((user) => user[method]()));
@@ -47,7 +40,6 @@ test('Handle multiple open sessions', async () => {
 
 describe('API session', () => {
   it('session should be reachable from within externals', async () => {
-    const key = 'TEST';
     const verifySession = () => {
       expect(get(key)).toMatchObject({
         test: true,
@@ -70,9 +62,7 @@ describe('API session', () => {
     expect(get(key)).toBeUndefined();
   });
 
-  it.only('session should be reachable from within mongo middleware', async (done) => {
-    const key = 'TEST';
-
+  it('session should be reachable from within mongo middleware', async (done) => {
     await M.create({
       name: 'Bob',
     });
