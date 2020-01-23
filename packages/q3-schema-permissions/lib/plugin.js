@@ -53,7 +53,7 @@ module.exports = (schema, { getUser, lookup }) => {
 
   const getPluralizedCollectionName = (n) =>
     new RegExp(
-      `${
+      `^${
         n.charAt(n.length - 1) === 's'
           ? n.substring(0, n.length - 1)
           : n
@@ -75,6 +75,7 @@ module.exports = (schema, { getUser, lookup }) => {
     const grant = await mongoose
       .model(lookup)
       .findOne({
+        active: true,
         role: get(getUser(), 'role', 'Public'),
         coll: coll.map(getPluralizedCollectionName),
         op,
