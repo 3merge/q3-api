@@ -22,7 +22,6 @@ const execMap = (d) =>
 const clearMap = () =>
   Object.keys(ev).map(async (key) => {
     clearNs(key);
-    delete ev[key];
   });
 
 const getIn = (obj, v) =>
