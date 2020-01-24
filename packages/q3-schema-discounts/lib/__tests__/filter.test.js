@@ -252,7 +252,7 @@ describe('DiscountFilter', () => {
         pricing,
       );
 
-      expect(pricing).toHaveProperty('discounted', 3.91);
+      expect(pricing).toHaveProperty('discounted', 3.9063);
       expect(result).toHaveProperty('factor', 0.21);
     });
 
@@ -313,7 +313,7 @@ describe('DiscountFilter', () => {
         pricing,
       );
 
-      expect(pricing).toHaveProperty('discounted', 4.09);
+      expect(pricing).toHaveProperty('discounted', 4.0859);
       expect(result).toHaveProperty('factor', 0.91);
     });
   });

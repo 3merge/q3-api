@@ -1,7 +1,9 @@
 const {
   multiply,
   increment,
-  toFixed,
+  toFactorOfOne,
+  reduceBy,
+  asNumber,
 } = require('./helpers');
 
 const hasKeys = (o) => o && Object.keys(o).length;
@@ -22,30 +24,34 @@ module.exports = class DiscountDecorator {
     const previous =
       this.base || getKey(pricingScheme, base);
 
-    const toFixedIfDefined = (v) =>
-      input ? toFixed(v) : previous;
+    const asNumberIfDefined = (v) =>
+      input ? asNumber(v) : previous;
 
     switch (formula) {
       case 'Fixed':
-        return toFixed(factor);
+        return asNumber(factor);
       case 'Factor':
-        return toFixedIfDefined(multiply(factor, input));
+        return asNumberIfDefined(multiply(factor, input));
       case 'Percent':
-        return toFixedIfDefined(input * (1 - factor / 100));
+        return asNumberIfDefined(
+          multiply(input, toFactorOfOne(factor)),
+        );
       case 'Compound':
-        return toFixed(previous - factor);
+        return asNumberIfDefined(
+          reduceBy(previous, factor),
+        );
       case 'Incremental':
-        return toFixedIfDefined(
-          increment(1 - factor / 100, input, previous),
+        return asNumberIfDefined(
+          increment(toFactorOfOne(factor), input, previous),
         );
       default:
-        return toFixed(input);
+        return asNumber(input);
     }
   }
 
   diff(pricingScheme) {
     const { base } = getOptions(this);
     const v = getKey(pricingScheme, base);
-    return toFixed(v - this.evaluate(pricingScheme), 0);
+    return asNumber(v - this.evaluate(pricingScheme), 0);
   }
 };

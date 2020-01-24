@@ -26,7 +26,7 @@ describe('Decorator', () => {
       });
 
       expect(m.evaluate({ MSRP: 45.99, test: 28.11 })).toBe(
-        22.59,
+        22.5912,
       );
     });
 
@@ -37,7 +37,7 @@ describe('Decorator', () => {
         factor: 0.88,
       });
 
-      expect(m.evaluate({ test: 11.99 })).toBe(10.55);
+      expect(m.evaluate({ test: 11.99 })).toBe(10.5512);
     });
 
     it('should return Compound-discount price', () => {
@@ -59,6 +59,7 @@ describe('Decorator', () => {
     it('should return Compound-discount without base', () => {
       const m = new Model({
         formula: 'Compound',
+        strategy: 'test',
         factor: 11,
       });
 
@@ -109,7 +110,7 @@ describe('Decorator', () => {
           test: 20,
           MSRP: 11.99,
         }),
-      ).toBe(9.45);
+      ).toBe(9.4488);
     });
 
     it('should return Fixed-discounted price', () => {
@@ -140,6 +141,7 @@ describe('Decorator', () => {
     it('should calculate the incremented difference between input and outout', () => {
       const m = new Model({
         formula: 'Compound',
+        strategy: 'test',
         factor: 8.99,
         base: 11.99,
       });
