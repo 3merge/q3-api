@@ -1,14 +1,36 @@
 const micromatch = require('micromatch');
-const { round, compact } = require('lodash');
+const BigNumber = require('bignumber.js');
+const { compact } = require('lodash');
 const { CUSTOM, VOLUME } = require('./constants');
 
 const isFloat = (v) => v === CUSTOM || v === VOLUME;
 
-const multiply = (a, b) => a * b;
-const increment = (a, b, c) => c - (1 - a) * b;
+const multiply = (a, b) =>
+  new BigNumber(a).multipliedBy(b).toNumber();
+
+const toFactor = (a) =>
+  new BigNumber(a).dividedBy(100).toNumber();
+
+const reduceBy = (a, b) =>
+  new BigNumber(a).minus(b).toNumber();
+
+const toFactorOfOne = (a) => reduceBy(1, toFactor(a));
+
+const increment = (a, b, c) =>
+  new BigNumber(c)
+    .minus(
+      new BigNumber(1)
+        .minus(a)
+        .multipliedBy(b)
+        .toNumber(),
+    )
+    .toNumber();
 
 const isPercent = (v) =>
   ['Incremental', 'Factor'].includes(v);
+
+const asNumber = (num, fb) =>
+  Number.isNaN(num) ? fb : num;
 
 const filterByTaxonomy = (id) => (v) => {
   try {
@@ -64,9 +86,6 @@ const returnHeaviestDiscountFromSortedArray = (
     .filter(Boolean)
     .shift();
 
-const toFixed = (num, fb) =>
-  round(Number.isNaN(num) ? fb : num, 2);
-
 module.exports = {
   isFloat,
   isPercent,
@@ -77,5 +96,7 @@ module.exports = {
   compareValues,
   multiply,
   increment,
-  toFixed,
+  asNumber,
+  toFactorOfOne,
+  reduceBy,
 };

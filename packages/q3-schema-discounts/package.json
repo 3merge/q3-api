@@ -3,6 +3,7 @@
   "main": "lib/index.js",
   "version": "1.0.39",
   "dependencies": {
+    "bignumber.js": "^9.0.0",
     "lodash": "^4.17.15",
     "micromatch": "^4.0.2",
     "moment": "^2.24.0",
