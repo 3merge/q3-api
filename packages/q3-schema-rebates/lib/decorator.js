@@ -33,28 +33,42 @@ class RebateDecorator {
     );
   }
 
-  static async reduceQualifiedRebates(couponCode, items) {
+  static async reduceQualifiedRebates(
+    couponCode,
+    items,
+    opts,
+    interceptor,
+  ) {
     const rebates = await this.findApplicable(
       couponCode,
       items,
+      opts,
     );
 
-    return rebates.map((rebate) => {
-      const redact = rebate.redactItems(items);
-      const sorted = rebate.greatestPotentialValue(redact);
-      const amounts = rebate.getMaximumAmounts(sorted);
-      const values = rebate.getPriceValues(sorted);
+    return rebates
+      .map((rebate) =>
+        typeof interceptor === 'function'
+          ? interceptor(rebate)
+          : rebate,
+      )
+      .map((rebate) => {
+        const redact = rebate.redactItems(items);
+        const sorted = rebate.greatestPotentialValue(
+          redact,
+        );
+        const amounts = rebate.getMaximumAmounts(sorted);
+        const values = rebate.getPriceValues(sorted);
 
-      // eslint-disable-next-line
+        // eslint-disable-next-line
       const output = rebate.toJSON();
-      output.applicableTo = sorted.map((item, i) => ({
-        id: item.id,
-        value: values[i],
-        amount: amounts[i],
-      }));
+        output.applicableTo = sorted.map((item, i) => ({
+          id: item.id,
+          value: values[i],
+          amount: amounts[i],
+        }));
 
-      return output;
-    });
+        return output;
+      });
   }
 
   reduceItems(items) {
@@ -150,8 +164,8 @@ class RebateDecorator {
     return items.sort((a, b) => multiply(b) - multiply(a));
   }
 
-  evaluate({ price, quantity, currency: defaultCurrency }) {
-    const { currency, exchangeRate = 1, tiers = [] } = this;
+  evaluate({ price, quantity }) {
+    const { tiers = [] } = this;
     let { value } = this;
     let sum = price;
 
@@ -162,13 +176,6 @@ class RebateDecorator {
     if (this.symbol === '%') {
       sum = price * (value / 100);
     } else {
-      value = this.convert(
-        value,
-        currency,
-        defaultCurrency,
-        exchangeRate,
-      );
-
       if (this.symbol === '=') sum = price - value;
       if (this.symbol === '$') sum = value;
     }
