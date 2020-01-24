@@ -1,7 +1,4 @@
-const {
-  createNamespace,
-  destroyNamespace,
-} = require('cls-hooked');
+const { createNamespace } = require('cls-hooked');
 
 const {
   SESSION_NAMESPACE,
@@ -84,4 +81,23 @@ module.exports = {
   intercept: (keyName, fn) => {
     ev[keyName] = fn;
   },
+
+  hydrate: (ctx = {}, done) =>
+    new Promise((resolve, reject) => {
+      ns.run(async () => {
+        try {
+          if ('__$q3' in ctx && isObject(ctx.__$q3))
+            Object.entries(ctx.__$q3).forEach(
+              ([key, value]) => {
+                ns.set(key, value);
+              },
+            );
+
+          await done();
+          resolve();
+        } catch (e) {
+          reject();
+        }
+      });
+    }),
 };
