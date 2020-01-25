@@ -96,14 +96,14 @@ describe('Commons plugin', () => {
     it('should set document active property to false', async () => {
       const { _id: id } = await Model.create(stub);
       await Model.archive(id);
-      await expectInactive(id);
+      return expectInactive(id);
     });
 
     it('should set multiple documents to inactive', async () => {
       const resp = await Model.create([stub, stub, stub]);
       const ids = getIds(resp);
       await Model.archiveMany(ids);
-      await expectInactive(ids[0]);
+      return expectInactive(ids[0]);
     });
   });
 
@@ -132,12 +132,12 @@ describe('Commons plugin', () => {
   describe('pushSubDocument', () => {
     it('should add a new sub document', async () => {
       const resp = await Model.create(stub);
-      await countDogsAfterPush(resp, 4);
+      return countDogsAfterPush(resp, 4);
     });
 
     it('should insert first sub document', async () => {
       const resp = await Model.create({ name: 'Test' });
-      await countDogsAfterPush(resp, 1);
+      return countDogsAfterPush(resp, 1);
     });
   });
 
@@ -147,12 +147,12 @@ describe('Commons plugin', () => {
       const {
         dogs: [{ _id: id }],
       } = resp;
-      await countDogsAfterDeletion(resp, id, 2);
+      return countDogsAfterDeletion(resp, id, 2);
     });
 
     it('should remove all subdocument', async () => {
       const resp = await Model.create(stub);
-      await countDogsAfterDeletion(
+      return countDogsAfterDeletion(
         resp,
         getIds(resp.dogs),
         0,
@@ -172,7 +172,7 @@ describe('Commons plugin', () => {
         id,
         { breed },
       );
-      expect(dogs[0].breed).toBe(breed);
+      return expect(dogs[0].breed).toBe(breed);
     });
   });
 
@@ -181,22 +181,22 @@ describe('Commons plugin', () => {
       const args = { name: 'John', age: 26 };
       const doc = await Model.findOneOrCreate(args);
       const doc2 = await Model.findOneOrCreate(args);
-      expect(doc._id.equals(doc2._id)).toBeTruthy();
+      return expect(doc._id.equals(doc2._id)).toBeTruthy();
     });
   });
 
   describe('schema helpers', () => {
-    it('should return all ObjectIds', async () => {
+    it('should return all ObjectIds', () => {
       expect(Model.getReferentialPaths()).toEqual([
         'friend',
       ]);
     });
 
-    it('should return all required fields', async () => {
+    it('should return all required fields', () => {
       expect(Model.getRequiredFields()).toEqual(['age']);
     });
 
-    it('should return all fields', async () => {
+    it('should return all fields', () => {
       expect(Model.getAllFields()).toEqual(
         expect.arrayContaining([
           'name',

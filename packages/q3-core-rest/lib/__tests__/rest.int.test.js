@@ -41,6 +41,7 @@ const SubChild = new Schema({
 
 const Child = new Schema({
   isChild: Boolean,
+  term: String,
   subs: [SubChild],
 });
 
@@ -207,5 +208,37 @@ describe('Rester', () => {
     expect(status).toBe(200);
     expect(body).toHaveProperty('foo');
     expect(body.foo.age).toBe(22);
+  });
+
+  describe('Sub-controllers', () => {
+    let id;
+
+    beforeAll(async () => {
+      ({ id } = await Foo.create({
+        active: true,
+        name: 'SubRouting',
+        children: [
+          { isChild: true, term: 'Hello' },
+          { isChild: true, term: 'World' },
+          { isChild: false },
+        ],
+      }));
+    });
+
+    it('should fetch sub-documents', async () => {
+      const { body, status } = await request.get(
+        `/foos/${id}/children`,
+      );
+
+      expect(body.children).toHaveLength(3);
+    });
+
+    it('should query sub-documents', async () => {
+      const { body, status } = await request.get(
+        `/foos/${id}/children?isChild=true&term=/hello/gi&sort=term`,
+      );
+
+      expect(body.children).toHaveLength(1);
+    });
   });
 });

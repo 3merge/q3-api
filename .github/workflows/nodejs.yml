@@ -15,7 +15,9 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '12.x'
-    - name: yarn lint and publish
+    - name: install and lint
       run: |
         yarn install
         yarn lint
+
+      

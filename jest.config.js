@@ -11,8 +11,6 @@ module.exports = {
     '<rootDir>/packages/*/node_modules/*',
     '<rootDir>/node_modules',
   ],
-  notify: true,
-  verbose: true,
   roots: [
     '<rootDir>',
     ...glob
