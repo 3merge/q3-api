@@ -225,13 +225,10 @@ describe('RebateDecorator', () => {
       const r = await M.create({
         value: 10,
         symbol: '=',
-        currency: 'USD',
         name: '10 dollars off',
         description: 'Req',
         tiers: [{ value: 8, quantity: 5 }],
       });
-
-      r.setRate(1.11);
 
       expect(
         r.evaluate({
@@ -239,7 +236,7 @@ describe('RebateDecorator', () => {
           currency: 'CAD',
           quantity: 10,
         }),
-      ).toBe(91.12);
+      ).toBe(92);
     });
   });
 });

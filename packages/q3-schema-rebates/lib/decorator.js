@@ -213,11 +213,6 @@ class RebateDecorator {
     );
   }
 
-  setRate(v) {
-    this.exchangeRate = v;
-    return this;
-  }
-
   async setHistoricalCount() {
     if (
       this.historicalCount ||

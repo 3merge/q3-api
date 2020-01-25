@@ -14,7 +14,8 @@
     "mongoose-partial-search": "^1.0.1",
     "q3-core-composer": "^1.0.59",
     "q3-core-responder": "^1.0.67",
-    "q3-schema-utils": "^1.0.39"
+    "q3-schema-utils": "^1.0.39",
+    "sift": "^11.0.10"
   },
   "peerDependencies": {
     "express": "^4.17.1",

@@ -1,5 +1,4 @@
 const NodeEnvironment = require('jest-environment-node');
-const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('fs');
 
@@ -18,7 +17,6 @@ module.exports = class MongoEnvironment extends NodeEnvironment {
   }
 
   async teardown(done) {
-    mongoose.connection.close();
     await super.teardown();
     done();
   }
