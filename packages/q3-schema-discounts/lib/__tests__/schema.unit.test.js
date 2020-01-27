@@ -11,6 +11,10 @@ beforeAll(async () => {
   await mongoose.connect(process.env.CONNECTION);
 });
 
+afterAll(async () => {
+  await mongoose.disconnect();
+});
+
 describe('Discount Schema', () => {
   describe('Validation', () => {
     it('should save resource-less as global', async () => {

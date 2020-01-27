@@ -32,6 +32,10 @@ beforeAll(async () => {
   await mongoose.connect(process.env.CONNECTION);
 });
 
+afterAll(async () => {
+  await mongoose.disconnect();
+});
+
 describe('DiscountFilter', () => {
   describe('getEligibleDiscounts', () => {
     it('should filter out expired and upcoming discounts', () => {

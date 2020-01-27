@@ -5,6 +5,10 @@ beforeAll(async () => {
   await mongoose.connect(process.env.CONNECTION);
 });
 
+afterAll(async () => {
+  await mongoose.disconnect();
+});
+
 describe('OrderSchema smoke', () => {
   it('should save with items', async () => {
     const Model = mongoose.model('orders', OrderSchema);

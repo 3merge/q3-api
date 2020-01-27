@@ -1,4 +1,5 @@
 const supertest = require('supertest');
+const mongoose = require('mongoose');
 const Q3 = require('../..');
 const { Users, Permissions } = require('../../models');
 
@@ -16,9 +17,7 @@ beforeAll(async () => {
 
   agent = supertest(Q3.$app);
   await Q3.connect();
-});
 
-beforeAll(async () => {
   const sup = await Users.create({
     active: true,
     firstName: 'Mike',
@@ -35,6 +34,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await Users.findByIdAndDelete(id);
+  await mongoose.disconnect();
 });
 
 describe('authenticate /GET', () => {

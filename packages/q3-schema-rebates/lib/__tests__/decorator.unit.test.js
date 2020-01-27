@@ -1,4 +1,4 @@
-const { model, connect } = require('mongoose');
+const { model, connect, disconnect } = require('mongoose');
 const Schema = require('..');
 
 let M;
@@ -52,6 +52,10 @@ const makeItems = (vals) =>
 beforeAll(async () => {
   M = await model('Rebate_Deco', Schema);
   connect(process.env.CONNECTION);
+});
+
+afterAll(async () => {
+  await disconnect();
 });
 
 describe('RebateDecorator', () => {

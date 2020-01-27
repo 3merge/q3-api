@@ -115,6 +115,10 @@ beforeAll(async () => {
   });
 });
 
+afterAll(async () => {
+  await mongoose.disconnect();
+});
+
 describe('Rester', () => {
   it('should list documents in the collection', async () => {
     const {

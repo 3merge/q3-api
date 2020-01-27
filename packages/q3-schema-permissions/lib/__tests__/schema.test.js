@@ -11,6 +11,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await Model.deleteMany({});
+  await mongoose.disconnect();
 });
 
 describe('model validation', () => {
