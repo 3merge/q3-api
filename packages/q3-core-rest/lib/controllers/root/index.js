@@ -103,7 +103,10 @@ module.exports = class DocumentControllerCommander extends RestRegistration {
   }
 
   getDeleteController(path) {
-    Remove.authorization = [redact(this.collectionName)];
+    Remove.authorization = [
+      redact(this.collectionName).done(),
+    ];
+
     return this.makeDelete(path, Remove);
   }
 

@@ -1,4 +1,5 @@
 const supertest = require('supertest');
+const mongoose = require('mongoose');
 
 const getSuperAgent = async (Q3) => {
   const passport = await Q3.User.create({
@@ -18,6 +19,10 @@ const getSuperAgent = async (Q3) => {
   const agent = supertest(Q3.$app);
   return { agent, Authorization };
 };
+
+afterAll(async () => {
+  await mongoose.disconnect();
+});
 
 const destroySuperAgent = async (Q3) => {
   await Q3.User.findOneAndDelete({

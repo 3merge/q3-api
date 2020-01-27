@@ -1,5 +1,6 @@
 require('.');
 const Q3 = require('q3-api');
+const mongoose = require('mongoose');
 const supertest = require('supertest');
 const { seed, destroy } = require('./fixtures/stubs');
 
@@ -12,5 +13,6 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  await mongoose.disconnect();
   await destroy();
 });

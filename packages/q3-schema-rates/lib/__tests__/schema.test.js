@@ -1,4 +1,4 @@
-const { connect, model } = require('mongoose');
+const { connect, model, disconnect } = require('mongoose');
 const Schema = require('..');
 
 let Model;
@@ -12,6 +12,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await Model.deleteMany({});
+  await disconnect();
 });
 
 describe('Rates static finder', () => {

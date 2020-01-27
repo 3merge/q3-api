@@ -45,6 +45,10 @@ beforeAll(async () => {
   }));
 });
 
+afterAll(async () => {
+  await mongoose.disconnect();
+});
+
 describe('AccessControlPlugin configuration', () => {
   it('it should run access on save if options is set', () =>
     expect(

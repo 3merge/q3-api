@@ -65,6 +65,7 @@ beforeAll(async () => {
 
 afterEach(async () => {
   await Model.deleteMany({});
+  await mongoose.disconnect();
 });
 
 describe('Commons plugin', () => {

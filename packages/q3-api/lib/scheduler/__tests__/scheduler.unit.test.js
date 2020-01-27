@@ -8,6 +8,10 @@ beforeAll(async () => {
   await mongoose.connect(process.env.CONNECTION);
 });
 
+afterAll(async () => {
+  await mongoose.disconnect();
+});
+
 describe('Scheduler', () => {
   it.skip('should add new job', async (done) => {
     await Scheduler({

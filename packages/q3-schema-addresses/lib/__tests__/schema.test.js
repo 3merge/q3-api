@@ -1,4 +1,9 @@
-const { Schema, model, connect } = require('mongoose');
+const {
+  Schema,
+  model,
+  connect,
+  disconnect,
+} = require('mongoose');
 const AddressSchema = require('..');
 
 const stub = {
@@ -33,6 +38,10 @@ describe('Address schema', () => {
     Embed = model('mock-address-embed', EmbeddedSchema);
 
     await connect(process.env.CONNECTION);
+  });
+
+  afterAll(async () => {
+    await disconnect();
   });
 
   it('should fail validation without locale enums', () => {
