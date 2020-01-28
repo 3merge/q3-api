@@ -7,11 +7,11 @@ const aqp = require('api-query-params');
 const mongoose = require('../../config/mongoose');
 
 const SearchParams = async (
-  { query: { coll, fields, ...rest } },
+  { query: { collectionName, fields, ...rest } },
   res,
 ) => {
   try {
-    const model = mongoose.model(coll);
+    const model = mongoose.model(collectionName);
 
     const {
       filter: { search, ...where },
@@ -30,7 +30,7 @@ const SearchParams = async (
     );
 
     res.ok({
-      coll,
+      collectionName,
       total: await model.countDocuments(params).exec(),
       fields: fields.reduce((a, c, i) => {
         const val = values[i];
@@ -47,7 +47,7 @@ const SearchParams = async (
 };
 
 SearchParams.validation = [
-  query('coll').isString(),
+  query('collectionName').isString(),
   query('fields').isArray(),
 ];
 

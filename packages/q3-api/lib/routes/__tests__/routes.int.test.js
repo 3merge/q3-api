@@ -173,7 +173,7 @@ describe('Search', () => {
 
     const { body } = await agent
       .get(
-        '/search?coll=q3-api-permissions&fields[]=coll&fields[]=role',
+        '/search?collectionName=q3-api-permissions&fields[]=coll&fields[]=role',
       )
       .set({ Authorization: AuthorizationSuper })
       .expect(200);
@@ -184,7 +184,7 @@ describe('Search', () => {
 
     const { body: filtered } = await agent
       .get(
-        '/search?coll=q3-api-permissions&fields[]=coll&fields[]=role&role=Dev',
+        '/search?collectionName=q3-api-permissions&fields[]=coll&fields[]=role&role=Dev',
       )
       .set({ Authorization: AuthorizationSuper })
       .expect(200);
