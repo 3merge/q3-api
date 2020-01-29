@@ -4,6 +4,7 @@ const {
   getColumnsHeadersFromPayload,
   populateEmptyObjectKeys,
   transformArraysInDotNotation,
+  castObjectIds,
 } = require('../../utils');
 
 module.exports = {
@@ -39,9 +40,13 @@ module.exports = {
     } = aqp(q !== null ? q : {});
 
     const regex = datasource.searchBuilder(search) || {};
-    const params = Object.assign(regex, where, {
-      active: true,
-    });
+    const params = Object.assign(
+      regex,
+      castObjectIds(where),
+      {
+        active: true,
+      },
+    );
 
     const {
       docs,

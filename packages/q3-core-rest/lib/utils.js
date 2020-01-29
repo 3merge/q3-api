@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const flatten = require('flat');
 
 exports.getColumnsHeadersFromPayload = (o) =>
@@ -44,3 +45,16 @@ exports.isSimpleSubDocument = (parent, fieldName) => {
     meta && meta.constructor.name === 'SingleNestedPath'
   );
 };
+
+exports.castObjectIds = (v) =>
+  Object.entries(v).reduce((acc, [key, val]) => {
+    if (val && /ObjectId/.test(val)) {
+      acc[key] = mongoose.Types.ObjectId(
+        val.replace(new RegExp(/^ObjectId\(|\)/, 'gi'), ''),
+      );
+    } else {
+      acc[key] = val;
+    }
+
+    return acc;
+  }, {});

@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Controller = require('../utils');
 
 describe('Utility functions', () => {
@@ -55,5 +56,21 @@ describe('Utility functions', () => {
         Controller.pick({ foo: 1, bar: 1 }, ['foo']),
       ).toMatchObject({ foo: 1 });
     });
+  });
+
+  describe('isObjectId', () => {
+    it('should return unmodified', () =>
+      expect(
+        Controller.castObjectIds({ foo: 'Bar' }),
+      ).toMatchObject({ foo: 'Bar' }));
+
+    it('should return modified', () =>
+      expect(
+        Controller.castObjectIds({
+          foo: `ObjectId(${mongoose.Types.ObjectId().toString()})`,
+        }),
+      ).toMatchObject({
+        foo: expect.any(Object),
+      }));
   });
 });
