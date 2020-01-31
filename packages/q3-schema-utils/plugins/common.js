@@ -72,11 +72,22 @@ const plugin = (schema) => {
     field,
     args,
   ) {
+    let preValidationResult;
     if (Array.isArray(this[field])) {
       this[field].push(args);
     } else {
       this[field] = [args];
     }
+
+    try {
+      preValidationResult = this[field][
+        this[field].length - 1
+      ].validateSync();
+    } catch (e) {
+      // noop
+    }
+
+    if (preValidationResult) throw preValidationResult;
 
     return this.save({
       redact: true,
@@ -111,6 +122,9 @@ const plugin = (schema) => {
   ) {
     const subdoc = await this.getSubDocument(field, id);
     subdoc.set(args);
+    const e = subdoc.validateSync();
+    if (e) throw e;
+
     return this.save({
       redact: true,
       op: 'Update',

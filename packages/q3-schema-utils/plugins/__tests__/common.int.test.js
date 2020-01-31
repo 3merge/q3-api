@@ -65,7 +65,7 @@ beforeAll(async () => {
 
 afterEach(async () => {
   await Model.deleteMany({});
-  await mongoose.disconnect();
+  // await mongoose.disconnect();
 });
 
 describe('Commons plugin', () => {
@@ -79,15 +79,14 @@ describe('Commons plugin', () => {
   });
 
   describe('findStrictly', () => {
-    it('should throw', async () => {
+    it('should throw', () =>
       expect(
         Model.findStrictly(mongoose.Types.ObjectId()),
-      ).rejects.toThrowError();
-    });
+      ).rejects.toThrowError());
 
     it('should return single result with virtuals', async () => {
       const { _id: id } = await Model.create(stub);
-      expect(
+      return expect(
         Model.findStrictly(id),
       ).resolves.toHaveProperty('id');
     });
@@ -140,6 +139,21 @@ describe('Commons plugin', () => {
       const resp = await Model.create({ name: 'Test' });
       return countDogsAfterPush(resp, 1);
     });
+
+    it('should catch error before validating the parent', async () => {
+      const resp = await Model.create({ name: 'Test' });
+      return expect(
+        resp.pushSubDocument('dogs', {
+          breed: {
+            type: 'Corgi',
+          },
+        }),
+      ).rejects.toMatchObject({
+        errors: expect.objectContaining({
+          breed: expect.any(Object),
+        }),
+      });
+    });
   });
 
   describe('removeSubDocument', () => {
@@ -175,6 +189,21 @@ describe('Commons plugin', () => {
       );
       return expect(dogs[0].breed).toBe(breed);
     });
+
+    it('should catch validation errors early', async () => {
+      const resp = await Model.create(stub);
+      const {
+        dogs: [{ _id: id }],
+      } = resp;
+      const breed = { type: 'Boston' };
+      return expect(
+        resp.updateSubDocument('dogs', id, { breed }),
+      ).rejects.toMatchObject({
+        errors: expect.objectContaining({
+          breed: expect.any(Object),
+        }),
+      });
+    });
   });
 
   describe('findOrCreate', () => {
@@ -187,15 +216,13 @@ describe('Commons plugin', () => {
   });
 
   describe('schema helpers', () => {
-    it('should return all ObjectIds', () => {
+    it('should return all ObjectIds', () =>
       expect(Model.getReferentialPaths()).toEqual([
         'friend',
-      ]);
-    });
+      ]));
 
-    it('should return all required fields', () => {
-      expect(Model.getRequiredFields()).toEqual(['age']);
-    });
+    it('should return all required fields', () =>
+      expect(Model.getRequiredFields()).toEqual(['age']));
 
     it('should return all fields', () => {
       expect(Model.getAllFields()).toEqual(
