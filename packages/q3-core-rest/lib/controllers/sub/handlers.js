@@ -1,6 +1,5 @@
 const { exception } = require('q3-core-responder');
 const aqp = require('api-query-params');
-const { sortBy } = require('lodash');
 const sift = require('sift');
 const { isSimpleSubDocument } = require('../../utils');
 
@@ -9,12 +8,7 @@ module.exports = {
     const { filter } = aqp(query !== null ? query : {});
 
     res.ok({
-      [fieldName]: marshal(
-        sortBy(
-          subdocs.filter(sift(filter)),
-          (o) => o.updatedAt,
-        ),
-      ),
+      [fieldName]: marshal(subdocs.filter(sift(filter))),
     });
   },
 
