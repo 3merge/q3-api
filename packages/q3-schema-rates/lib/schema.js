@@ -11,6 +11,7 @@ const RatesSchema = new Schema(
     value: {
       type: Number,
       required: true,
+      default: 0,
     },
     threshold: String,
     label: String,
