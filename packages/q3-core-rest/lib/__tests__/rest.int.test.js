@@ -181,10 +181,14 @@ describe('Rester', () => {
     const { status, body } = await request
       .post('/foos')
       .send({
-        name: 'Colin',
+        name: "What's in a name",
       });
     expect(status).toBe(201);
     expect(body).toHaveProperty('foo');
+    expect(body.foo).toHaveProperty(
+      'name',
+      "What's in a name",
+    );
   });
 
   it('should fail to make a new resource', async () => {
