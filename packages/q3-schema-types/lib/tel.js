@@ -4,22 +4,10 @@ function Tel(key, options) {
   mongoose.SchemaTypes.String.call(this, key, options);
 }
 
-Tel.prototype = Object.create(
-  mongoose.SchemaType.prototype,
-);
-
-Tel.prototype.cast = function sanitize(val = '') {
-  if (!val.length) return val;
-
-  const [num, ext] = val.split('x');
-  const cleaned = `${num}`.replace(/\W|\D|\s/g, '');
-  const match = cleaned.match(
-    /^([+]?\d{1,2}[.-\s]?)?(\d{3})(\d{3})(\d{4})$/,
-  );
-
-  if (!match)
+function printTel(parts, ext) {
+  if (!parts)
     throw new Error(
-      `Tel: ${val} is not a valid North American phone number`,
+      'Value is not a valid North American phone number',
     );
 
   const [
@@ -28,16 +16,33 @@ Tel.prototype.cast = function sanitize(val = '') {
     areaCode,
     officeCode,
     stationCode,
-  ] = match;
+  ] = parts;
 
   let formatted = '';
+
   if (countryCode) formatted += `+${countryCode} `;
   if (areaCode) formatted += `(${areaCode}) `;
   if (officeCode) formatted += `${officeCode}-`;
   if (stationCode) formatted += `${stationCode}`;
   if (ext) formatted += ` x${ext}`;
-
   return formatted;
+}
+
+function validateTel(num) {
+  const cleaned = `${num}`.replace(/\W|\D|\s/g, '');
+  return cleaned.match(
+    /^([+]?\d{1,2}[.-\s]?)?(\d{3})(\d{3})(\d{4})$/,
+  );
+}
+
+Tel.prototype = Object.create(
+  mongoose.SchemaType.prototype,
+);
+
+Tel.prototype.cast = function sanitize(val = '') {
+  if (!val.length) return val;
+  const [num, ext] = val.split('x');
+  return printTel(validateTel(num), ext);
 };
 
 Tel.prototype.castForQuery = function forward(val = '') {
