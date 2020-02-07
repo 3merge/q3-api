@@ -11,7 +11,7 @@
     "bootstrap": "lerna bootstrap --use-workspaces",
     "lint": "eslint . --ext .js --ignore-pattern node_modules",
     "test:packages": "jest \"^(.*?)\\.unit.test.js\" --collectCoverage",
-    "test:integrations": "jest --runInBand --config tests/integration/jest.config.js",
+    "test:integrations": "jest \"^(.*?)\\.int.test.js\" --collectCoverage",
     "upload": "lerna publish"
   },
   "workspaces": [
