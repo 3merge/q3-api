@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const AddressSchema = require('q3-schema-addresses');
 const DiscountSchema = require('q3-schema-discounts');
 const RateSchema = require('q3-schema-rates');
-const { validateStatus } = require('./helpers');
 const { STATUS_ENUM, CURRENCY } = require('./constants');
 
 const { Schema } = mongoose;
@@ -59,10 +58,7 @@ const OrderSchema = new Schema(
       systemOnly: true,
     },
     po: String,
-    transaction: {
-      type: String,
-      private: true,
-    },
+    transactionReceipt: Schema.Types.Mixed,
     invoice: {
       type: String,
       unique: true,
@@ -95,10 +91,6 @@ const OrderSchema = new Schema(
       type: String,
       default: 'Quote',
       enum: STATUS_ENUM,
-      systemOnly: true,
-      validate: {
-        validator: validateStatus,
-      },
     },
     comments: String,
   },

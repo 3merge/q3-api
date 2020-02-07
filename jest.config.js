@@ -1,20 +1,16 @@
-const glob = require('glob');
-
 module.exports = {
   watchPlugins: [
     'jest-watch-yarn-workspaces',
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname',
   ],
-  projects: ['<rootDir>/packages/*'],
+  projects: ['<rootDir>/packages/*', '<rootDir>/tests'],
   watchPathIgnorePatterns: [
     '<rootDir>/packages/*/node_modules/*',
     '<rootDir>/node_modules',
   ],
-  roots: [
-    '<rootDir>',
-    ...glob
-      .sync('./packages/*')
-      .map((p) => p.replace(/^\./, '<rootDir>')),
-  ],
+  verbose: true,
+  testEnvironment: 'node',
+  preset: 'q3-test-utils',
+  setupFilesAfterEnv: ['q3-test-utils/jest-setup.js'],
 };
