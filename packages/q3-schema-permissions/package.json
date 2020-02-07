@@ -1,6 +1,6 @@
 {
   "name": "q3-schema-permissions",
-  "version": "1.0.48",
+  "version": "1.0.49",
   "main": "lib/index.js",
   "dependencies": {
     "comparisons": "2.2.1",
