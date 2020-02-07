@@ -43,7 +43,7 @@
     "bambora-node": "^1.0.0",
     "body-parser": "^1.19.0",
     "cls-hooked": "^4.2.2",
-    "comparisons": "2.2.0",
+    "comparisons": "2.2.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.2.0",

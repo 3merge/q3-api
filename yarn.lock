@@ -2367,10 +2367,10 @@ compare-func@^1.3.1:
     array-ify "^1.0.0"
     dot-prop "^3.0.0"
 
-comparisons@2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/comparisons/-/comparisons-2.2.0.tgz#cff857b262c650f9c3ed2e38206bd2eca9b0898e"
-  integrity sha512-0sgQq2jYo2t2PS9roa5wX+EsKnChBwnYgv9l3w0KO5eG7TyLS2nT9LT2HSuOS9M4nGjwaHJHBwUADhQJvQsDhA==
+comparisons@2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/comparisons/-/comparisons-2.2.1.tgz#d58cf1f234a5f8bd0e0bf358e519d635b4fb9fe5"
+  integrity sha512-rEUB5Zzp7x6nP2kX9V8qZR+Bmbk/POYvIxO+sXBDQ7zb2RcoBsNrytXlH7oC36AGEHPcDtgL6jGoBe+KX07vtw==
   dependencies:
     flat "^5.0.0"
     moment "^2.24.0"
