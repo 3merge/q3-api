@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 require('dotenv').config();
 
 const { getToken } = require('bambora-node/lib/utils');
