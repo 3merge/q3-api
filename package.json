@@ -13,7 +13,7 @@
     "test:packages": "jest \"^(.*?)\\.unit.test.js\" --collectCoverage --coverageDirectory coverage/coverage_units",
     "test:integrations": "jest \"^(.*?)\\.int.test.js\" --collectCoverage --coverageDirectory coverage/coverage_integrations",
     "test": "yarn test:packages && yarn test:integrations",
-    "coverage": "./node_modules/.bin/lcov-result-merger coverage/coverage_*/lcov.info | ./node_modules/.bin/coveralls",
+    "coverage": "lcov-result-merger coverage/coverage_*/lcov.info | coveralls",
     "upload": "lerna publish"
   },
   "workspaces": [
