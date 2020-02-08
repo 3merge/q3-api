@@ -1,4 +1,7 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable import/no-extraneous-dependencies, no-unused-vars */
+jest.unmock('request-context');
+jest.unmock('express-validator');
+
 const mongoose = require('mongoose');
 const express = require('express');
 const i18next = require('i18next');
@@ -6,7 +9,7 @@ const supertest = require('supertest');
 const i18nextMiddleware = require('i18next-express-middleware');
 const parser = require('body-parser');
 const { middleware } = require('q3-core-composer');
-const rester = require('..');
+const rester = require('q3-core-rest');
 
 const config = middleware(
   {

@@ -9,8 +9,8 @@ module.exports = {
     '<rootDir>/packages/*/node_modules/*',
     '<rootDir>/node_modules',
   ],
-  verbose: true,
   testEnvironment: 'node',
   preset: 'q3-test-utils',
   setupFilesAfterEnv: ['q3-test-utils/jest-setup.js'],
+  coverageReporters: ['lcov'],
 };

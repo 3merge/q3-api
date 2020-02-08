@@ -1,5 +1,5 @@
 const { compose } = require('q3-core-composer');
-const emitter = require('../../events/emitter');
+const { emit } = require('q3-core-mailer');
 const { Users } = require('../../models');
 const { checkEmail } = require('../../utils');
 
@@ -11,7 +11,7 @@ const resetPassword = async (
     const doc = await Users.findVerifiedByEmail(email);
     const password = await doc.setPassword();
 
-    emitter.emit('onPasswordReset', {
+    emit('onPasswordReset', {
       ...doc.toJSON(),
       password,
     });

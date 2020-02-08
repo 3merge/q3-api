@@ -3,7 +3,7 @@ const { Users } = require('../../models');
 
 const CreateAPIKeyController = async ({ query }, res) => {
   const user = await Users.findStrictly(query.id);
-  await user.setSecret();
+  await user.setSecret().save();
   res.acknowledge();
 };
 

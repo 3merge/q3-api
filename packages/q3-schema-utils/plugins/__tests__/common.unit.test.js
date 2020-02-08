@@ -56,16 +56,15 @@ const countDogsAfterDeletion = async (
 beforeAll(async () => {
   mongoose.plugin(plugin);
   Model = mongoose.model(
-    'CommonsModel',
+    `CommonsModel=${new Date().toISOString()}`,
     pluginSchemaEnabled,
   );
 
   await mongoose.connect(process.env.CONNECTION);
 });
 
-afterEach(async () => {
-  await Model.deleteMany({});
-  // await mongoose.disconnect();
+afterAll(async () => {
+  await mongoose.disconnect();
 });
 
 describe('Commons plugin', () => {

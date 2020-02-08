@@ -1,6 +1,6 @@
 const { MongoCron } = require('mongodb-cron');
+const { emit } = require('q3-core-mailer');
 const { Schema, model } = require('../config/mongoose');
-const Emitter = require('../events/emitter');
 
 const Jobs = model(
   'Jobs',
@@ -22,10 +22,10 @@ const Jobs = model(
 const cron = new MongoCron({
   collection: Jobs.collection,
   onDocument: async (doc) => {
-    Emitter.emit('onJobsInsert', doc);
+    emit('onJobsInsert', doc);
   },
   onError: async (err) => {
-    Emitter.emit('onJobsError', err);
+    emit('onJobsError', err);
   },
 });
 

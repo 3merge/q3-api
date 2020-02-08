@@ -7,6 +7,7 @@
     "generate-password": "^1.4.2",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
+    "q3-core-mailer": "1.0.34",
     "q3-core-responder": "^1.0.75"
   },
   "devDependencies": {
