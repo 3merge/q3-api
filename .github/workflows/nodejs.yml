@@ -24,6 +24,8 @@ jobs:
         yarn install
         yarn lint
         yarn test
+    - name: Lcov
+      run: yarn lcov
     - name: Coveralls 
       uses: coverallsapp/github-action@v1.0.1
       with:
