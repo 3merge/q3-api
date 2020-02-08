@@ -16,6 +16,10 @@ jobs:
       with:
         node-version: '12.x'
     - name: CI
+      env:
+        BAMBORA_API_KEY: ${{ secrets.BAMBORA_API_KEY }}
+        MAILGUN_ACCESS_TOKEN: ${{ secrets.MAILGUN_ACCESS_TOKEN }}
+        MAILGUN_DOMAIN: ${{ secrets.MAILGUN_DOMAIN }}
       run: |
         yarn install
         yarn lint
