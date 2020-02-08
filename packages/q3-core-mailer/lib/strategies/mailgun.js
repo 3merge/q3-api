@@ -4,7 +4,7 @@ module.exports = () => {
   const mg = mailgun({
     apiKey: process.env.MAILGUN_ACCESS_TOKEN,
     domain: process.env.MAILGUN_DOMAIN,
-    testMode: process.env.MAILGUN_DEGUB,
+    testMode: process.env.MAILGUN_DEBUG,
   });
 
   return {

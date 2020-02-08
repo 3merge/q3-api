@@ -23,6 +23,10 @@ module.exports = class Mailer {
     Emitter.emit(...params);
   }
 
+  static get() {
+    return Emitter.eventNames();
+  }
+
   to(addresses, cc = false, bcc = false) {
     let key = 'to';
     if (cc) key = 'cc';
