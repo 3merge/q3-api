@@ -28,10 +28,10 @@ jobs:
     - name: Merge Lcov
       run: yarn lcov
     - name: Upload Lcov
-        uses: actions/upload-artifact@v1
-        with:
-          name: lcov.info
-          path: ./coverage/lcov.info
+      uses: actions/upload-artifact@v1
+      with:
+        name: lcov.info
+        path: ./coverage/lcov.info
     - name: Coveralls 
       uses: coverallsapp/github-action@v1.0.1
       with:
