@@ -25,6 +25,7 @@ jobs:
         yarn lint
         yarn test
     - name: Lcov
+      uses: actions/upload-artifact@v1
       run: yarn lcov
     - name: Coveralls 
       uses: coverallsapp/github-action@v1.0.1
