@@ -15,18 +15,23 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '12.x'
-    - name: CI
+    - name: Lint
+      run: |
+        yarn install
+        yarn lint
+    - name: Test
       env:
         BAMBORA_API_KEY: ${{ secrets.BAMBORA_API_KEY }}
         MAILGUN_ACCESS_TOKEN: ${{ secrets.MAILGUN_ACCESS_TOKEN }}
         MAILGUN_DOMAIN: ${{ secrets.MAILGUN_DOMAIN }}
-      run: |
-        yarn install
-        yarn lint
-        yarn test
-    - name: Lcov
-      uses: actions/upload-artifact@v1
+      run: yarn test
+    - name: Merge Lcov
       run: yarn lcov
+    - name: Upload Lcov
+        uses: actions/upload-artifact@v1
+        with:
+          name: lcov.info
+          path: ./coverage/lcov.info
     - name: Coveralls 
       uses: coverallsapp/github-action@v1.0.1
       with:
