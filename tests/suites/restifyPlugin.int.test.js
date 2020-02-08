@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable import/no-extraneous-dependencies, no-unused-vars */
 jest.unmock('request-context');
 jest.unmock('express-validator');
 
