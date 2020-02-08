@@ -26,6 +26,7 @@ jobs:
         MAILGUN_DOMAIN: ${{ secrets.MAILGUN_DOMAIN }}
       run: yarn test
     - name: Merge Lcov
+      working-directory: ./
       run: yarn lcov
     - name: Upload Lcov
       uses: actions/upload-artifact@v1
