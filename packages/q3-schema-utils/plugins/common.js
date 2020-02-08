@@ -171,12 +171,11 @@ const plugin = (schema) => {
     args,
     options,
   ) {
-    const Self = this;
-    const doc = await Self.findOne(args)
+    const doc = await this.findOne(args)
       .setOptions(options)
       .exec();
 
-    return doc || Self.create(args);
+    return doc || this.create(args);
   };
 
   schema.statics.verifyOutput = function(d) {

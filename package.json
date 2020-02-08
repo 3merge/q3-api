@@ -10,8 +10,9 @@
     "postinstall": "yarnw-sync-deps && yarn-deduplicate",
     "bootstrap": "lerna bootstrap --use-workspaces",
     "lint": "eslint . --ext .js --ignore-pattern node_modules",
-    "test:packages": "jest \"^(.*?)\\.unit.test.js\" --collectCoverage",
-    "test:integrations": "jest \"^(.*?)\\.int.test.js\" --collectCoverage",
+    "test:packages": "jest \"^(.*?)\\.unit.test.js\" --collectCoverage --coverageDirectory coverage/coverage_units",
+    "test:integrations": "jest \"^(.*?)\\.int.test.js\" --collectCoverage --coverageDirectory coverage/coverage_integrations",
+    "test": "yarn test:packages && yarn test:integrations && ./node_modules/.bin/lcov-result-merger coverage/coverage_*/*.info coverage/lcov.info",
     "upload": "lerna publish"
   },
   "workspaces": [
@@ -32,6 +33,7 @@
     "jest-resolve": "^24.9.0",
     "jest-watch-typeahead": "^0.4.0",
     "jest-watch-yarn-workspaces": "^1.1.0",
+    "lcov-result-merger": "^3.1.0",
     "lerna": "^3.16.4",
     "prettier": "^1.18.2",
     "supertest": "^4.0.2",

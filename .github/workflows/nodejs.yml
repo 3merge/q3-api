@@ -20,3 +20,4 @@ jobs:
         yarn install
         yarn lint
         yarn test:packages
+        yarn test:integrations
