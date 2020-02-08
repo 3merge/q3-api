@@ -134,10 +134,8 @@ describe('static find abstractions', () => {
 
 test('setSecret should save a random string', async () => {
   const cls = new Decorator();
-  Object.assign(cls, { save });
   await cls.setSecret();
   expect(cls.secret).toBe('shh!');
-  expect(save).toHaveBeenCalled();
 });
 
 test('setPassword should hash the string and reset login count', async () => {

@@ -112,11 +112,11 @@ module.exports = class UserAuthDecorator {
     });
   }
 
-  async setSecret(skipSave) {
+  async setSecret() {
     this.secret = generateRandomSecret();
     this.secretIssuedOn = new Date();
     this.apiKeys = [];
-    return skipSave ? this : this.save();
+    return this;
   }
 
   async setPassword(s) {

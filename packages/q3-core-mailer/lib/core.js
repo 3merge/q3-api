@@ -1,4 +1,3 @@
-const Emitter = require('./emitter');
 const mailer = require('./strategies');
 const utils = require('./utils');
 
@@ -17,14 +16,6 @@ module.exports = class Mailer {
 
   static config(options = {}) {
     Object.assign(settings, options);
-  }
-
-  static emit(...params) {
-    Emitter.emit(...params);
-  }
-
-  static get() {
-    return Emitter.eventNames();
   }
 
   to(addresses, cc = false, bcc = false) {

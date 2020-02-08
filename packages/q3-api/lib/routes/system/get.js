@@ -1,6 +1,6 @@
 const { get } = require('lodash');
 const { compose, verify } = require('q3-core-composer');
-const events = require('../../events/emitter');
+const Mailer = require('q3-core-mailer');
 const mongoose = require('../../config/mongoose');
 
 const SystemInformationController = async (req, res) => {
@@ -24,7 +24,7 @@ const SystemInformationController = async (req, res) => {
 
   res.ok({
     ...get(req, 'app.locals.authorization', {}),
-    events: events.eventNames(),
+    events: Mailer.get(),
     collections,
   });
 };

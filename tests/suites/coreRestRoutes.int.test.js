@@ -1,7 +1,11 @@
+jest.unmock('request-context');
+jest.unmock('express-validator');
+
 const supertest = require('supertest');
 const mongoose = require('mongoose');
-const Q3 = require('../..');
-const { Users, Permissions } = require('../../models');
+const Q3 = require('q3-api');
+
+const { Users, Permissions } = Q3;
 
 let agent;
 let id;
@@ -10,11 +14,8 @@ let AuthorizationSuper;
 
 const email = 'routes_developer@gmail.com';
 
-jest.unmock('request-context');
-
 beforeAll(async () => {
   Q3.routes();
-
   agent = supertest(Q3.$app);
   await Q3.connect();
 
@@ -33,28 +34,28 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await Users.findByIdAndDelete(id);
+  await Users.deleteMany({});
   await mongoose.disconnect();
 });
 
 describe('authenticate /GET', () => {
-  it('should return 422', async () =>
+  it('should return 422', () =>
     agent.get('/authenticate?email=foo').expect(422));
 
-  it('should return 400', async () =>
+  it('should return 400', () =>
     agent
       .get('/authenticate?email=foo@bar.net')
       .expect(400));
 
-  it('should return 204', async () =>
+  it('should return 204', () =>
     agent.get(`/authenticate?email=${email}`).expect(204));
 });
 
 describe('authenticate /POST', () => {
-  it('should return 422', async () =>
+  it('should return 422', () =>
     agent.post('/authenticate').expect(422));
 
-  it('should return 401', async () =>
+  it('should return 401', () =>
     agent
       .post('/authenticate')
       .send({ email, password: 'noop' })
@@ -63,7 +64,7 @@ describe('authenticate /POST', () => {
   it('should return 401', async () => {
     const doc = await Users.findOne({ email });
     await doc.setPassword();
-    await agent
+    return agent
       .post('/authenticate')
       .send({ email, password: 'noop' })
       .expect(401);
@@ -77,7 +78,7 @@ describe('authenticate /POST', () => {
       verified: true,
     });
     await doc.save();
-    await agent
+    return agent
       .post('/authenticate')
       .send({ email, password: 'noop' })
       .expect(403);
@@ -87,15 +88,14 @@ describe('authenticate /POST', () => {
 describe('password-reset /POST', () => {
   beforeEach(async () => {
     const doc = await Users.findById(id);
-    await doc.setPassword();
+    return doc.setPassword();
   });
 
-  it('should return 200', async () => {
-    await agent
+  it('should return 200', () =>
+    agent
       .post('/password-reset')
       .send({ email })
-      .expect(200);
-  });
+      .expect(200));
 });
 
 describe('password-change /POST', () => {
@@ -104,11 +104,11 @@ describe('password-change /POST', () => {
     password = await doc.setPassword();
   });
 
-  it('should return 422', async () =>
+  it('should return 422', () =>
     agent.post('/password-change').expect(422));
 
-  it('should return 204', async () => {
-    await agent
+  it('should return 204', () =>
+    agent
       .post('/password-change')
       .send({
         previousPassword: password,
@@ -116,10 +116,9 @@ describe('password-change /POST', () => {
         confirmNewPassword: 'Th345iS)(*&(NJKSF!',
       })
       .set({ Authorization: AuthorizationSuper })
-      .expect(204);
-  });
+      .expect(204));
 
-  it('should return 401', async () =>
+  it('should return 401', () =>
     agent
       .post('/password-change')
       .send({
@@ -131,10 +130,10 @@ describe('password-change /POST', () => {
 });
 
 describe('profile /GET', () => {
-  it('should return 401', async () =>
+  it('should return 401', () =>
     agent.get('/profile').expect(401));
 
-  it('should return 200', async () =>
+  it('should return 200', () =>
     agent
       .get('/profile')
       .set({ Authorization: AuthorizationSuper })
@@ -196,7 +195,7 @@ describe('Search', () => {
 });
 
 describe('reverify /POST', () => {
-  it('should return 400', async () =>
+  it('should return 400', () =>
     agent
       .post('/reverify')
       .send({ email })
@@ -207,7 +206,7 @@ describe('reverify /POST', () => {
     doc.verified = false;
     doc.password = null;
     await doc.save();
-    await agent
+    return agent
       .post('/reverify')
       .send({ email })
       .expect(204);
