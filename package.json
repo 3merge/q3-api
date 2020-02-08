@@ -13,7 +13,7 @@
     "test:packages": "jest \"^(.*?)\\.unit.test.js\" --collectCoverage --coverageDirectory coverage/coverage_units",
     "test:integrations": "jest \"^(.*?)\\.int.test.js\" --collectCoverage --coverageDirectory coverage/coverage_integrations",
     "test": "yarn test:packages && yarn test:integrations",
-    "lcov": "./node_modules/.bin/lcov-result-merger ./coverage/coverage_*/*.info ./coverage/lcov.info",
+    "coverage": "./node_modules/.bin/lcov-result-merger coverage/coverage_*/lcov.info | ./node_modules/.bin/coveralls",
     "upload": "lerna publish"
   },
   "workspaces": [
@@ -22,6 +22,7 @@
   "devDependencies": {
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
+    "coveralls": "^3.0.9",
     "eslint": "^6.4.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-node-3merge": "^1.0.1",
