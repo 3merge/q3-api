@@ -63,6 +63,10 @@ beforeAll(async () => {
   await mongoose.connect(process.env.CONNECTION);
 });
 
+afterAll(async () => {
+  await mongoose.disconnect();
+});
+
 describe('Commons plugin', () => {
   describe('Configuration', () => {
     it('schema configure options and paths', () => {

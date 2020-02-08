@@ -15,9 +15,13 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '12.x'
-    - name: lint and test
+    - name: CI
       run: |
         yarn install
         yarn lint
-        yarn test:packages
-        yarn test:integrations
+        yarn test
+    - name: Coveralls 
+      uses: coverallsapp/github-action@v1.0.1
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        
