@@ -1,7 +1,7 @@
 {
   "name": "q3-core-mailer",
   "main": "lib/index.js",
-  "version": "1.0.34",
+  "version": "1.0.35",
   "dependencies": {
     "dotenv": "^8.2.0",
     "mailgun-js": "^0.22.0"
