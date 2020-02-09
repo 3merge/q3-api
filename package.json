@@ -23,7 +23,6 @@
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
     "codecov": "^3.6.5",
-    "coveralls": "^3.0.9",
     "eslint": "^6.4.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-node-3merge": "^1.0.1",
