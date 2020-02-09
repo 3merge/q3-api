@@ -25,3 +25,7 @@ jobs:
         MAILGUN_ACCESS_TOKEN: ${{ secrets.MAILGUN_ACCESS_TOKEN }}
         MAILGUN_DOMAIN: ${{ secrets.MAILGUN_DOMAIN }}
       run: yarn test
+    - name: Coverage
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      run: yarn coverage
