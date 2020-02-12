@@ -59,16 +59,10 @@ const OrderSchema = new Schema(
     transactionReceipt: Schema.Types.Mixed,
     invoice: {
       type: String,
+      searchable: true,
       unique: true,
       sparse: true,
       lock: true,
-    },
-    belongsTo: {
-      type: Schema.Types.ObjectId,
-      lock: true,
-    },
-    onModel: {
-      type: String,
     },
     billing: AddressSchema,
     shipping: AddressSchema,
@@ -83,14 +77,20 @@ const OrderSchema = new Schema(
       private: true,
       lock: true,
     },
-    paymentOption: String,
+    paymentOption: {
+      type: String,
+      searchable: true,
+    },
     shippingOption: String,
     status: {
       type: String,
       default: 'Quote',
       enum: STATUS_ENUM,
     },
-    comments: String,
+    comments: {
+      type: String,
+      searchable: true,
+    },
   },
   {
     timestamps: true,
