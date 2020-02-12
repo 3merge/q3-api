@@ -34,11 +34,6 @@ const RebatesSchema = new Schema({
   conditionalSkus: Schema.Types.CommaDelimited,
   conditionalSkuThreshold: Number,
   tiers: [RebateTierSchema],
-  location: {
-    type: String,
-    enum: ['Product', 'Order'],
-    default: 'Product',
-  },
   symbol: {
     type: String,
     default: '$',
