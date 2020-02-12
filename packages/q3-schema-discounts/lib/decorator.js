@@ -18,11 +18,10 @@ module.exports = class DiscountDecorator {
   evaluate(pricingScheme) {
     if (!hasKeys(pricingScheme)) return 0;
 
-    const { base } = getOptions(this);
     const { factor, formula, strategy } = this;
     const input = getKey(pricingScheme, strategy);
     const previous =
-      this.base || getKey(pricingScheme, base);
+      this.base || getKey(pricingScheme, strategy);
 
     const asNumberIfDefined = (v) =>
       input ? asNumber(v) : previous;
