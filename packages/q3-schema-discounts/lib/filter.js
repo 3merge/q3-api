@@ -98,7 +98,7 @@ module.exports = class DiscountFilter {
 
     if (a) {
       a.base = discounted;
-      if (verbose) a.trail = [discounted];
+      if (verbose) a.trail = [b];
       return a;
     }
 
