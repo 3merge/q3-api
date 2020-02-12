@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const AddressSchema = require('q3-schema-addresses');
-const DiscountSchema = require('q3-schema-discounts');
 const RateSchema = require('q3-schema-rates');
 const { STATUS_ENUM, CURRENCY } = require('./constants');
 
@@ -16,7 +15,6 @@ const price = {
 RateSchema.add({ quantity: price });
 
 const OrderLineSchema = new Schema({
-  priceOverride: DiscountSchema,
   bucket: {
     type: Schema.Types.Mixed,
     private: true,
