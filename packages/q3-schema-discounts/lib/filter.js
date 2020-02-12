@@ -81,7 +81,12 @@ module.exports = class DiscountFilter {
     );
   }
 
-  getBlendedDiscount(name, taxonomy, pricing = {}) {
+  getBlendedDiscount(
+    name,
+    taxonomy,
+    pricing = {},
+    verbose = false,
+  ) {
     const b = this.getBaseDiscount(name, taxonomy, pricing);
     const discounted = b ? b.evaluate(pricing) : null;
     const a = this.getAugmentedDiscount(
@@ -93,6 +98,7 @@ module.exports = class DiscountFilter {
 
     if (a) {
       a.base = discounted;
+      if (verbose) a.trail = [discounted];
       return a;
     }
 

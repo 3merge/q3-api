@@ -18,16 +18,14 @@ describe('Decorator', () => {
       expect(m.evaluate()).toBe(0);
     });
 
-    it('should use fallback pricing', () => {
+    it('should use a straight discount if incremental base unavailable', () => {
       const m = new Model({
         formula: 'Incremental',
         strategy: 'MSRP',
         factor: 12,
       });
 
-      expect(m.evaluate({ MSRP: 45.99, test: 28.11 })).toBe(
-        22.5912,
-      );
+      expect(m.evaluate({ MSRP: 45.99 })).toBe(40.4712);
     });
 
     it('should return Factor-discounted price', () => {
@@ -105,9 +103,10 @@ describe('Decorator', () => {
         factor: 88,
       });
 
+      m.base = 20;
+
       expect(
         m.evaluate({
-          test: 20,
           MSRP: 11.99,
         }),
       ).toBe(9.4488);

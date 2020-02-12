@@ -50,7 +50,10 @@ const makeItems = (vals) =>
   vals.map((val, i) => ({ id: i, quantity: val }));
 
 beforeAll(async () => {
-  M = await model('Rebate_Deco', Schema);
+  M = await model(
+    `Rebate_Deco_${new Date().toISOString()}`,
+    Schema,
+  );
   connect(process.env.CONNECTION);
 });
 
@@ -61,10 +64,6 @@ afterAll(async () => {
 describe('RebateDecorator', () => {
   beforeAll(async () => {
     await M.create(rebates);
-  });
-
-  afterAll(async () => {
-    await M.deleteMany({});
   });
 
   describe('findApplicable', () => {

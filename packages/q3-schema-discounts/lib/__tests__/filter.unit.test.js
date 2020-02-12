@@ -260,6 +260,42 @@ describe('DiscountFilter', () => {
       expect(result).toHaveProperty('factor', 0.21);
     });
 
+    it('should save discount object to schema', () => {
+      const resource = 'VERBOSE';
+      const pricing = {
+        custom: 10,
+        msrp: 12,
+      };
+
+      const inst = wrapConstructor([
+        {
+          formula: 'Factor',
+          strategy: 'custom',
+          factor: 0.9,
+          resource,
+        },
+        {
+          formula: 'Incremental',
+          strategy: 'msrp',
+          factor: 0.21,
+          resource,
+        },
+      ]);
+
+      const result = inst.getBlendedDiscount(
+        resource,
+        null,
+        pricing,
+        true,
+      );
+
+      expect(result).toHaveProperty('base', 9);
+      expect(result).toHaveProperty(
+        'trail',
+        expect.any(Array),
+      );
+    });
+
     it('should assign a discount value a falsy value', () => {
       const resource = 'ADD';
       const pricing = {
