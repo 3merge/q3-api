@@ -1,6 +1,6 @@
 {
   "name": "q3-core-composer",
-  "version": "1.0.69",
+  "version": "1.0.70",
   "main": "lib/index.js",
   "dependencies": {
     "connect": "^3.7.0",
@@ -16,7 +16,7 @@
     "q3-core-session": "^1.0.4"
   },
   "devDependencies": {
-    "q3-test-utils": "^1.0.87",
+    "q3-test-utils": "^1.0.88",
     "supertest": "^4.0.2"
   },
   "jest": {
