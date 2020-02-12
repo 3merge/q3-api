@@ -1,15 +1,15 @@
 {
   "name": "q3-schema-rates",
-  "version": "1.0.47",
+  "version": "1.0.48",
   "main": "lib/index.js",
   "peerDependencies": {
     "mongoose": "^5.7.12"
   },
   "dependencies": {
-    "q3-core-responder": "^1.0.76"
+    "q3-core-responder": "^1.0.77"
   },
   "devDependencies": {
-    "q3-test-utils": "^1.0.86"
+    "q3-test-utils": "^1.0.87"
   },
   "jest": {
     "verbose": true,
