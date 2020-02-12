@@ -48,6 +48,8 @@ const PricingSchema = new Schema(
   },
 );
 
+PricingSchema.virtual('trail');
+
 PricingSchema.virtual('scope').get(function alias() {
   if (this.global) return 'Global';
   if (this.taxonomy) return 'Taxonomy';
