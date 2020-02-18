@@ -6,10 +6,12 @@ const { MODEL_NAMES } = require('../constants');
 UserModel.set('restify', '*');
 UserModel.set('collectionSingularName', 'user');
 UserModel.set('collectionPluralName', 'users');
+UserModel.set('withVersioning', true);
 
 PermissionModel.set('restify', '*');
 PermissionModel.set('collectionSingularName', 'permission');
 PermissionModel.set('collectionPluralName', 'permissions');
+PermissionModel.set('withVersioning', true);
 
 const Users = mongoose.model(MODEL_NAMES.USERS, UserModel);
 
