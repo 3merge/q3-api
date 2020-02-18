@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const { Users, Permissions } = require('q3-api');
 const { getUserBase } = require('../fixtures/user');
 const {

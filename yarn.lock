@@ -6308,17 +6308,6 @@ mongodb-memory-server@^6.0.2:
   dependencies:
     mongodb-memory-server-core "6.2.4"
 
-mongodb@3.4.1:
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-3.4.1.tgz#0d15e57e0ea0fc85b7a4fb9291b374c2e71652dc"
-  integrity sha512-juqt5/Z42J4DcE7tG7UdVaTKmUC6zinF4yioPfpeOSNBieWSK6qCY+0tfGQcHLKrauWPDdMZVROHJOa8q2pWsA==
-  dependencies:
-    bson "^1.1.1"
-    require_optional "^1.0.1"
-    safe-buffer "^5.1.2"
-  optionalDependencies:
-    saslprep "^1.0.0"
-
 mongodb@3.5.3, mongodb@^3.2.7:
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-3.5.3.tgz#f2c7ce9b5fc9a13da116ff1b6e816f6256010a86"
@@ -6376,7 +6365,7 @@ mongoose-unique-validator@^2.0.3:
     lodash.foreach "^4.1.0"
     lodash.get "^4.0.2"
 
-mongoose@^5.7.1, mongoose@^5.7.12, mongoose@^5.7.7, mongoose@^5.8.5, mongoose@^5.9.1:
+mongoose@^5.7.1, mongoose@^5.7.12, mongoose@^5.7.7, mongoose@^5.8.5:
   version "5.9.1"
   resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.9.1.tgz#48a5fafe6bc7b57d6b41b12ebf55fa5f609518d6"
   integrity sha512-qgS31/nZ63vpr8yBg6w8vaV8ITxwrF2ioNW5AakXmqvVBaOsI0xpDd5QBowESy2InDTk+iDaN5SNgSxGG6GntQ==
