@@ -28,7 +28,7 @@ mongoose.plugin(dedupe, {
 });
 
 mongoose.plugin((schema) => {
-  if (schema.options.uploads) schema.add(Notes);
+  if (schema.options.notes) schema.add(Notes);
   if (schema.options.uploads) schema.add(Files);
 });
 
