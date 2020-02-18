@@ -1,0 +1,8 @@
+{
+  "name": "q3-core-version",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "dependencies": {
+    "mongoose": "^5.7.1"
+  }
+}

@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const dedupe = require('mongoose-dedupe');
 const locking = require('mongoose-field-lock');
 const { autopopulate } = require('mongoose-field-populate');
+const version = require('q3-core-version');
 const Files = require('../models/files');
 const { MODEL_NAMES } = require('../constants');
 
@@ -31,6 +32,7 @@ mongoose.plugin(dedupe, {
 mongoose.plugin((schema) => {
   if (schema.options.withNotes) schema.add(Notes);
   if (schema.options.withUploads) schema.add(Files);
+  if (schema.options.withVersioning) schema.plugin(version);
 });
 
 mongoose.plugin(accessControl, {
