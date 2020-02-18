@@ -1,6 +1,7 @@
 require('dotenv').config();
 require('q3-locale');
 const ctx = require('request-context');
+const session = require('q3-core-session');
 const { get } = require('lodash');
 const walker = require('q3-core-walker');
 const {

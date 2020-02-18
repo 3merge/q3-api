@@ -165,6 +165,9 @@ const plugin = (schema, { getUser, lookup }) => {
       type: mongoose.Schema.Types.ObjectId,
       systemOnly: true,
       private: true,
+      autopopulate: true,
+      autopopulateSelect: 'id firstName lastName email',
+      ref: 'q3-api-users',
     },
   });
 };

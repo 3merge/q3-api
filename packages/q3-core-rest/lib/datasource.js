@@ -87,15 +87,19 @@ module.exports = class RestRegistrationModule {
   }
 
   getResourcePathName() {
-    return `/${this.collectionName}/:resourceID`;
+    return `${this.getPathName()}/:resourceID`;
   }
 
   getNestedPathName() {
-    return `/${this.collectionName}/:resourceID/${this.field}`;
+    return `${this.getPathName()}/:resourceID/${
+      this.field
+    }`;
   }
 
   getNestedResourcePathName() {
-    return `/${this.collectionName}/:resourceID/${this.field}/:fieldID`;
+    return `${this.getPathName()}/:resourceID/${
+      this.field
+    }/:fieldID`;
   }
 
   isRestEnabled(verb) {
