@@ -7,9 +7,7 @@
 </h1>
 
 <p align="center">
-    <a href="https://codecov.io/gh/3merge/q3-api">
-      <img src="https://codecov.io/gh/3merge/q3-api/branch/master/graph/badge.svg" />
-    </a>
+   
     <img src="https://bettercodehub.com/edge/badge/3merge/q3-api?branch=master" alt="Current quality score" />
     <img src="https://api.codacy.com/project/badge/Grade/66c969279405497e9684e8a84557544c"/>
     <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Q3-API is released under the MIT license." />
