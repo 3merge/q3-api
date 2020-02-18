@@ -32,7 +32,8 @@ mongoose.plugin(dedupe, {
 mongoose.plugin((schema) => {
   if (schema.options.withNotes) schema.add(Notes);
   if (schema.options.withUploads) schema.add(Files);
-  if (schema.options.withVersioning) schema.plugin(version);
+  if (schema.options.withVersioning)
+    schema.plugin(version, mongoose);
 });
 
 mongoose.plugin(accessControl, {
