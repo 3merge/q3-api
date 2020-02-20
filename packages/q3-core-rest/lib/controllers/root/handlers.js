@@ -98,8 +98,10 @@ module.exports = {
     },
     res,
   ) {
+    // @NOTE - otherwise it picks up on READ permissions
     const doc = await datasource.findStrictly(
       params.resourceID,
+      { redact: false },
     );
 
     doc.set(
