@@ -151,7 +151,9 @@ describe('Handlers', () => {
       req.params.resourceID = 1;
       req.body = args;
       await Patch(req, res);
-      expect(Model.findStrictly).toHaveBeenCalledWith(1);
+      expect(Model.findStrictly).toHaveBeenCalledWith(1, {
+        redact: false,
+      });
       expect(set).toHaveBeenCalledWith(args);
       expect(res.update).toHaveBeenCalled();
     });
