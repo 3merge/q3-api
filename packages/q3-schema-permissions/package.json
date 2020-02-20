@@ -1,16 +1,16 @@
 {
   "name": "q3-schema-permissions",
-  "version": "1.0.56",
+  "version": "1.0.57",
   "main": "lib/index.js",
   "dependencies": {
     "comparisons": "2.2.1",
     "lodash": "^4.17.15",
     "micromatch": "^4.0.2",
-    "q3-core-responder": "^1.0.81",
-    "q3-schema-utils": "^1.0.53"
+    "q3-core-responder": "^1.0.82",
+    "q3-schema-utils": "^1.0.54"
   },
   "devDependencies": {
-    "q3-test-utils": "^1.0.91"
+    "q3-test-utils": "^1.0.92"
   },
   "peerDependencies": {
     "mongoose": "^5.7.1"

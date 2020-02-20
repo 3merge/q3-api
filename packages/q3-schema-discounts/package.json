@@ -1,19 +1,19 @@
 {
   "name": "q3-schema-discounts",
   "main": "lib/index.js",
-  "version": "1.0.54",
+  "version": "1.0.55",
   "dependencies": {
     "bignumber.js": "^9.0.0",
     "lodash": "^4.17.15",
     "micromatch": "^4.0.2",
     "moment": "^2.24.0",
     "mongoose": "^5.7.1",
-    "q3-core-responder": "^1.0.81",
-    "q3-schema-types": "^1.1.51",
-    "q3-schema-utils": "^1.0.53"
+    "q3-core-responder": "^1.0.82",
+    "q3-schema-types": "^1.1.52",
+    "q3-schema-utils": "^1.0.54"
   },
   "devDependencies": {
-    "q3-test-utils": "^1.0.91"
+    "q3-test-utils": "^1.0.92"
   },
   "jest": {
     "verbose": true,
