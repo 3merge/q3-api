@@ -80,31 +80,38 @@ describe('AccessControlPlugin integration', () => {
     ).rejects.toThrowError();
   });
 
-  it('it should check document conditions', async () => {
+  it.only('it should check document conditions', async () => {
     const name = 'DocumentConditions';
-    const doc = await Model.create({
-      name,
-      specialCondition: 6,
-    });
+    await Model.create([
+      {
+        name,
+        specialCondition: 6,
+      },
+      {
+        name: 'SomethingElse',
+        specialCondition: 1,
+      },
+      {
+        name,
+        specialCondition: 1,
+      },
+    ]);
     await PermissionModel.findByIdAndUpdate(id, {
       ownershipConditions: [],
-      documentConditions: ['specialCondition>4'],
+      documentConditions: [
+        'specialCondition>4',
+        'name=SomethingElse',
+      ],
     });
-    await expect(
-      Model.findOne({ name })
-        .setOptions({ redact: true })
-        .exec(),
-    ).resolves.toHaveProperty('_id');
 
-    await doc.update({ specialCondition: 1 });
     await expect(
-      Model.findOne({ name })
+      Model.find()
         .setOptions({ redact: true })
         .exec(),
-    ).resolves.toBeNull();
+    ).resolves.toHaveLength(2);
   });
 
-  it.only('it should check document conditions on create', async () => {
+  it('it should check document conditions on create', async () => {
     await PermissionModel.findByIdAndUpdate(id, {
       documentConditions: ['specialCondition>4'],
       op: 'Create',

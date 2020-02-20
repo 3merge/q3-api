@@ -21,7 +21,11 @@ const hasCollection = (name) =>
       .toArray(function(err, v) {
         resolve(
           !err
-            ? v.findIndex((c) => c.name === name) !== -1
+            ? v.findIndex(
+                (c) =>
+                  c.name.toLowerCase() ===
+                  name.toLowerCase(),
+              ) !== -1
             : false,
         );
       }),
@@ -33,10 +37,11 @@ const plugin = (schema, { getUser, lookup }) => {
     typeof getUser === 'function' &&
     typeof lookup === 'string';
 
-  const hasOptions = async (d) =>
-    (await hasCollection(lookup)) && 'options' in d
+  const hasOptions = async (d) => {
+    return (await hasCollection(lookup)) && 'options' in d
       ? d.options.redact
       : d.redact;
+  };
 
   const hasGrant = (grant) => {
     if (!grant)
