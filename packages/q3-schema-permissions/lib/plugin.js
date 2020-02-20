@@ -166,7 +166,7 @@ const plugin = (schema, { getUser, lookup }) => {
       systemOnly: true,
       private: true,
       autopopulate: true,
-      autopopulateSelect: 'id firstName lastName email',
+      autopopulateSelect: 'id _id firstName lastName email',
       ref: 'q3-api-users',
     },
   });
