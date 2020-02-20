@@ -129,7 +129,8 @@ const plugin = (schema, { getUser, lookup }) => {
       documentConditions,
     ).query();
 
-    if ($and.length) this.and($and);
+    // @note should change in core comparisons lib
+    if ($and.length) this.or($and);
 
     if (ownership !== 'Any') {
       const aliases = ownershipAliases.map(
