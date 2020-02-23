@@ -1,7 +1,7 @@
 const Utils = require('q3-schema-utils');
 
 const getRemainder = (a, b, c) => {
-  if (a < b && a < c) return a;
+  if (a <= b && a < c) return a;
   if (a > b && b < c) return b;
   if (!b && a < c) return a;
   return c;
@@ -127,10 +127,13 @@ class RebateDecorator {
     return items.reduce(
       (accumulator, next) =>
         accumulator.concat(
-          getRemainder(
-            redeemable - sofar(accumulator),
-            maximumPerProduct,
-            next.quantity,
+          Math.max(
+            0,
+            getRemainder(
+              redeemable - sofar(accumulator),
+              maximumPerProduct,
+              next.quantity,
+            ),
           ),
         ),
       [],

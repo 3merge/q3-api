@@ -134,6 +134,15 @@ describe('RebateDecorator', () => {
       ).toEqual([5, 0, 0]);
     });
 
+    it('should limit by sum despite product line being equal', async () => {
+      const rebate = await M.findOne();
+      rebate.maximumPerOrder = 5;
+      rebate.maximumPerProduct = 5;
+      return expect(
+        rebate.getMaximumAmounts(makeItems([6, 2, 5])),
+      ).toEqual([5, 0, 0]);
+    });
+
     it('should limit by line', async () => {
       const rebate = await M.findOne();
       rebate.maximumPerProduct = 3;
@@ -143,6 +152,18 @@ describe('RebateDecorator', () => {
           makeItems([6, 2, 5, 12, 5]),
         ),
       ).toEqual([3, 2, 3, 3, 3]);
+    });
+
+    it('should throttle line limit if order sum is lower', async () => {
+      const rebate = await M.findOne();
+      rebate.maximumPerProduct = 3;
+      rebate.maximumPerOrder = 2;
+
+      return expect(
+        rebate.getMaximumAmounts(
+          makeItems([6, 2, 5, 12, 5]),
+        ),
+      ).toEqual([2, 0, 0, 0, 0]);
     });
 
     it('should limit in combination', async () => {
