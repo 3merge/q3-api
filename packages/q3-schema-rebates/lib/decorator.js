@@ -1,7 +1,8 @@
 const Utils = require('q3-schema-utils');
 
 const getRemainder = (a, b, c) => {
-  if (a < b && a < c) return a;
+  // console.log(a, b, c);
+  if (a <= b && a < c) return a;
   if (a > b && b < c) return b;
   if (!b && a < c) return a;
   return c;
