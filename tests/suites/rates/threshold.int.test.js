@@ -8,7 +8,21 @@ const stub = { name: 'Foo', value: 1.1 };
 beforeAll(async () => {
   Model = model('RATES_FOO', Schema);
   await connect(process.env.CONNECTION);
-  await Model.create(stub);
+  await Model.create([
+    stub,
+    {
+      name: 'Lowest value',
+      value: 0,
+      threshold: '>10',
+      label: 'Test',
+    },
+    {
+      name: 'Highest value',
+      value: 200,
+      threshold: '>10',
+      label: 'Test',
+    },
+  ]);
 });
 
 afterAll(async () => {
@@ -37,5 +51,27 @@ describe('Rates static finder', () => {
 
     expect(doc.meetsThreshold(142.2)).toBeTruthy();
     expect(doc.meetsThreshold(142.1)).toBeFalsy();
+  });
+
+  it('should get highest value', async () => {
+    const v = await Model.findAndReduceByThresholdDesc(
+      {
+        label: 'Test',
+      },
+      200,
+    );
+
+    expect(v).toEqual(200);
+  });
+
+  it('should get lowest value', async () => {
+    const v = await Model.findAndReduceByThresholdAsc(
+      {
+        label: 'Test',
+      },
+      200,
+    );
+
+    expect(v).toEqual(0);
   });
 });
