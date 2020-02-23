@@ -1,11 +1,11 @@
 {
   "name": "q3-test-utils",
-  "version": "1.0.92",
+  "version": "1.0.93",
   "main": "jest-preset.js",
   "dependencies": {
     "jest-environment-node": "^24.9.0",
     "mongodb-memory-server": "^6.0.2",
-    "q3-schema-types": "^1.1.52",
+    "q3-schema-types": "^1.1.53",
     "supertest": "^4.0.2"
   },
   "jest": {
