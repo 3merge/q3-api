@@ -11,18 +11,13 @@ const getPathsRecursively = ([key, v]) => {
 };
 
 async function archive(id) {
-  const doc = await this.findById(id).exec();
+  const doc = await this.findById(id)
+    .setOptions({ redact: true, op: 'Delete' })
+    .exec();
   if (!doc) return null;
 
-  return doc.updateOne(
-    {
-      active: false,
-    },
-    {
-      redact: true,
-      op: 'Delete',
-    },
-  );
+  doc.set({ active: false });
+  return doc.save();
 }
 
 async function archiveMany(ids) {
