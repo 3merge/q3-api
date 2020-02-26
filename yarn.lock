@@ -6365,7 +6365,7 @@ mongoose-unique-validator@^2.0.3:
     lodash.foreach "^4.1.0"
     lodash.get "^4.0.2"
 
-mongoose@^5.7.1, mongoose@^5.7.12, mongoose@^5.7.7, mongoose@^5.8.5:
+mongoose@^5.7.1, mongoose@^5.7.12, mongoose@^5.8.5:
   version "5.9.1"
   resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.9.1.tgz#48a5fafe6bc7b57d6b41b12ebf55fa5f609518d6"
   integrity sha512-qgS31/nZ63vpr8yBg6w8vaV8ITxwrF2ioNW5AakXmqvVBaOsI0xpDd5QBowESy2InDTk+iDaN5SNgSxGG6GntQ==
@@ -7423,14 +7423,6 @@ punycode@^2.1.0, punycode@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
-
-q3-schema-types@1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/q3-schema-types/-/q3-schema-types-1.0.3.tgz#1d9b0478e4235c1fcd994bf8fe878cf7bb5cda92"
-  integrity sha512-mfBnMt/u0RInCvlxd+BHy84IxuAb1KbmfDcgvSnZrSp6ZFXlxNqTzHqqpz/vqK+15PndxDtP7+MKKI7I699GBg==
-  dependencies:
-    is-glob "^4.0.1"
-    mongoose "^5.7.7"
 
 q@^1.5.1:
   version "1.5.1"

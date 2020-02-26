@@ -38,7 +38,7 @@
     "q3-locale": "^1.1.1",
     "q3-schema-notes": "^1.0.55",
     "q3-schema-permissions": "^1.0.60",
-    "q3-schema-types": "1.0.3",
+    "q3-schema-types": "^1.1.55",
     "q3-schema-users": "^1.0.55",
     "request-context": "^2.0.0"
   },
