@@ -25,7 +25,6 @@ module.exports = new Schema({
   },
   streetNumber: {
     type: String,
-    required: true,
   },
   streetLine1: {
     type: String,
