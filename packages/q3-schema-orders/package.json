@@ -1,11 +1,11 @@
 {
   "name": "q3-schema-orders",
-  "version": "1.1.61",
+  "version": "1.1.62",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
     "bambora-node": "^1.0.0",
-    "q3-schema-addresses": "^1.1.56",
+    "q3-schema-addresses": "^1.1.57",
     "q3-schema-discounts": "^1.0.58",
     "q3-schema-rates": "^1.0.56",
     "q3-schema-rebates": "^1.1.58",
