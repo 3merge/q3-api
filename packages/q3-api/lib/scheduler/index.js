@@ -1,5 +1,5 @@
-const { MongoCron } = require('mongodb-cron');
-const { emit } = require('q3-core-mailer');
+// const { MongoCron } = require('mongodb-cron');
+// const { emit } = require('q3-core-mailer');
 const { Schema, model } = require('../config/mongoose');
 
 const Jobs = model(
@@ -18,7 +18,7 @@ const Jobs = model(
     },
   ),
 );
-
+/*
 const cron = new MongoCron({
   collection: Jobs.collection,
   onDocument: async (doc) => {
@@ -29,7 +29,8 @@ const cron = new MongoCron({
   },
 });
 
-cron.start();
 
+cron.start();
+*/
 // export single mongoose function
 module.exports = (args) => Jobs.create(args);
