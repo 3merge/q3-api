@@ -176,6 +176,13 @@ describe('RebateDecorator', () => {
         rebate.getMaximumAmounts(makeItems([6, 2, 4, 5])),
       ).toEqual([5, 2, 4, 1]);
     });
+
+    it('should return full quantities without maximums', () => {
+      const rebate = new M({});
+      return expect(
+        rebate.getMaximumAmounts(makeItems([12, 10])),
+      ).toEqual([12, 10]);
+    });
   });
 
   describe('greatestPotentialValue', () => {
@@ -261,6 +268,37 @@ describe('RebateDecorator', () => {
           quantity: 10,
         }),
       ).toBe(92);
+    });
+  });
+
+  describe('"hasConditionalSkus"', () => {
+    let conditionalFixture;
+    const sku = 'ABC';
+
+    const getItem = (quantity) => ({
+      sku,
+      quantity,
+    });
+
+    beforeEach(() => {
+      conditionalFixture = new M({
+        conditionalSkus: [sku],
+        conditionalSkuThreshold: 12,
+      });
+    });
+
+    it('should return truthy on equal to', () => {
+      expect(
+        conditionalFixture.hasConditionalSkus([
+          getItem(12),
+        ]),
+      ).toBeTruthy();
+    });
+
+    it('should return falsy on less than', () => {
+      expect(
+        conditionalFixture.hasConditionalSkus([getItem(5)]),
+      ).toBeFalsy();
     });
   });
 });

@@ -105,7 +105,7 @@ class RebateDecorator {
 
     return (
       (!this.conditionalSkuThreshold && total.length) ||
-      this.conditionalSkuThreshold < total
+      this.conditionalSkuThreshold <= total
     );
   }
 

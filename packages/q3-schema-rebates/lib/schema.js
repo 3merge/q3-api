@@ -14,14 +14,17 @@ const RebatesSchema = new Schema({
   name: {
     type: String,
     required: true,
+    searchable: true,
   },
   description: {
     type: String,
     required: true,
+    searchable: true,
   },
   couponCode: {
     type: String,
     dedupe: true,
+    searchable: true,
   },
   value: {
     type: Number,
@@ -30,7 +33,10 @@ const RebatesSchema = new Schema({
   maximumPerOrder: Number,
   maximumPerProduct: Number,
   maximumPerHistory: Number,
-  requiredSkus: Schema.Types.CommaDelimited,
+  requiredSkus: {
+    type: Schema.Types.CommaDelimited,
+    searchable: true,
+  },
   conditionalSkus: Schema.Types.CommaDelimited,
   conditionalSkuThreshold: Number,
   tiers: [RebateTierSchema],
