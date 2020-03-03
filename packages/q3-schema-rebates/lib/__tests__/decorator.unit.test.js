@@ -176,6 +176,13 @@ describe('RebateDecorator', () => {
         rebate.getMaximumAmounts(makeItems([6, 2, 4, 5])),
       ).toEqual([5, 2, 4, 1]);
     });
+
+    it('should return full quantities without maximums', () => {
+      const rebate = new M({});
+      return expect(
+        rebate.getMaximumAmounts(makeItems([12, 10])),
+      ).toEqual([12, 10]);
+    });
   });
 
   describe('greatestPotentialValue', () => {
