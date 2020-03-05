@@ -26,7 +26,6 @@ module.exports = new Schema({
     type: Boolean,
     default: false,
   },
-
   streetNumber: {
     type: String,
     searchable: true,
