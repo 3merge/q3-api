@@ -41,7 +41,10 @@ describe('Mailer core', () => {
   describe('"props"', () => {
     it('should assign template variables', () => {
       inst.props({ foo: 1 });
-      expect(inst.meta).toHaveProperty('v:foo');
+      expect(inst.meta).toHaveProperty(
+        'h:X-Mailgun-Variables',
+        expect.any(String),
+      );
     });
   });
 

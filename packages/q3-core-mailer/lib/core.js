@@ -36,7 +36,15 @@ module.exports = class Mailer {
   }
 
   props(args = {}) {
-    Object.assign(this.meta, utils.prefix(args));
+    /**
+     * @NOTE
+     * This needs to be implemented on the strategy level.
+     * Too specific to mailgun.
+     */
+    Object.assign(this.meta, {
+      'h:X-Mailgun-Variables': JSON.stringify(args),
+    });
+
     return this;
   }
 
