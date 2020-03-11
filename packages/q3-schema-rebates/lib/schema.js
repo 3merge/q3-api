@@ -1,5 +1,4 @@
 require('q3-schema-types');
-const { exception } = require('q3-core-responder');
 const { Schema } = require('mongoose');
 const {
   withNorthAmericanCurrency,
