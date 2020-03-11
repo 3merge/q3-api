@@ -11,7 +11,7 @@
     "**/.DS_Store": true,
     "**/.jest-cache": true,
     "**/.jest-coverage": true,
-    //   "**/node_modules/": true,
+    "**/node_modules/": true,
     "**/packages/*/node_modules/": true,
   },
   "editor.codeActionsOnSave": {
