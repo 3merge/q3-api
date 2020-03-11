@@ -36,4 +36,24 @@ describe('Rebate validation', () => {
     expect(err.errors).toHaveProperty('symbol');
     expect(err.errors).toHaveProperty('currency');
   });
+
+  it('should reject conditional threshold without a sku', () => {
+    const s = new M({ conditionalSkuThreshold: 1 });
+    const err = s.validateSync();
+    expect(err.errors).toBeDefined();
+    expect(err.errors).toHaveProperty(
+      'conditionalSkuThreshold',
+    );
+  });
+
+  it('should allow conditional threshold with a sku', () => {
+    const s = new M({
+      conditionalSkuThreshold: 1,
+      conditionalSkus: 'One,Two',
+    });
+    const err = s.validateSync();
+    expect(err.errors).not.toHaveProperty(
+      'conditionalSkuThreshold',
+    );
+  });
 });

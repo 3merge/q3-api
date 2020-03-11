@@ -4,6 +4,7 @@ const {
   withNorthAmericanCurrency,
   withDateRange,
 } = require('q3-schema-utils');
+const { conditionalSkuThreshold } = require('./validation');
 
 const RebateTierSchema = new Schema({
   quantity: Number,
@@ -38,7 +39,10 @@ const RebatesSchema = new Schema({
     searchable: true,
   },
   conditionalSkus: Schema.Types.CommaDelimited,
-  conditionalSkuThreshold: Number,
+  conditionalSkuThreshold: {
+    validate: conditionalSkuThreshold,
+    type: Number,
+  },
   tiers: [RebateTierSchema],
   symbol: {
     type: String,

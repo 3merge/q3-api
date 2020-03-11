@@ -13,5 +13,6 @@
   "prohibited": "Account has been blocked due to suspicious activity",
   "fieldPermissions": "Insufficient field-level permissions on this role type",
   "credentials": "Bad access credentials",
-  "codeOrSku": "Must provide either a coupon code or required sku but not both."
+  "codeOrSku": "Must provide either a coupon code or required sku but not both.",
+  "requiresConditionalSkus": "Requires at least one conditional sku"
 }

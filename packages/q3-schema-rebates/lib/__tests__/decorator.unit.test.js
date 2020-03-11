@@ -37,7 +37,6 @@ const rebates = [
     maximum: 5,
     couponCode: 'HELLO',
     requiredSkus: 'AB89',
-    conditionalSkuThreshold: 10,
     symbol: '=',
     currency: 'CAD',
     tiers: [{ quantity: 5, value: 7 }],
