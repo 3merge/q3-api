@@ -1,7 +1,8 @@
 require('dotenv').config();
 require('q3-locale');
 const ctx = require('request-context');
-const { get } = require('lodash');
+const session = require('q3-core-session');
+const { get, invoke } = require('lodash');
 const walker = require('q3-core-walker');
 const {
   handleUncaughtExceptions,
@@ -16,6 +17,7 @@ const jobScheduler = require('./scheduler');
 const Q3 = {
   config(args = {}) {
     Object.assign(app.locals, args);
+    return this;
   },
 
   routes(routes) {
@@ -23,9 +25,17 @@ const Q3 = {
       middleware(
         models.Users,
         models.Permissions,
-        ({ user, grant }) => {
+        (req) => {
+          const { user, grant } = req;
           ctx.set('q3-session:user', user);
           ctx.set('q3-session:grant', grant);
+
+          invoke(
+            app,
+            'locals.postAuthentication',
+            req,
+            session.getAll(),
+          );
         },
       ),
     );
