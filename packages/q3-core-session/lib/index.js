@@ -60,10 +60,11 @@ module.exports = {
       ns.set(SESSION_KEY, getFromReq('user'));
 
       Promise.all(execMap(setInReq())).then(() => {
-        if (typeof getFromReq('onSession') === 'function')
-          req.onSession(req, res, req.session);
-
-        next();
+        if (typeof getFromReq('onSession') === 'function') {
+          req.onSession(req, res, next);
+        } else {
+          next();
+        }
       });
     }),
 
