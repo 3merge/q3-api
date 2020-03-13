@@ -12,9 +12,15 @@ const clearNs = (key) => ns.set(key, undefined);
 const isObject = (v) => typeof v === 'object' && v !== null;
 
 const execMap = (d) =>
-  Object.entries(ev).map(async ([key, fn]) =>
-    ns.set(key, await fn(d)),
-  );
+  Object.entries(ev).map(async ([key, fn]) => {
+    const val = await fn(d);
+
+    if (isObject(d) && isObject(d.session))
+      // eslint-disable-next-line
+      d.session[key] = val;
+
+    return ns.set(key, val);
+  });
 
 const clearMap = () =>
   Object.keys(ev).map(async (key) => {
@@ -39,12 +45,24 @@ module.exports = {
 
   middleware: (req, res, next) =>
     ns.run(() => {
-      ns.set(
-        SESSION_KEY,
-        isObject(req) ? req.user : undefined,
-      );
+      const getFromReq = (path) =>
+        isObject(req) ? req[path] : undefined;
 
-      Promise.all(execMap(req)).then(() => {
+      const setInReq = (path, value) => {
+        if (isObject(req)) {
+          req[path] = value;
+          return req;
+        }
+
+        return { [path]: value };
+      };
+
+      ns.set(SESSION_KEY, getFromReq('user'));
+
+      Promise.all(execMap(setInReq())).then(() => {
+        if (typeof getFromReq('onSession') === 'function')
+          req.onSession(req, res, req.session);
+
         next();
       });
     }),

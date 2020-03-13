@@ -42,7 +42,6 @@ const compose = (ctr) =>
     sessionMiddleware,
     ...(ctr.postAuthorization ? ctr.postAuthorization : []),
     aa(ctr),
-    ctr,
   ]);
 
 module.exports = {

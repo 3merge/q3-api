@@ -1,8 +1,7 @@
 require('dotenv').config();
 require('q3-locale');
 const ctx = require('request-context');
-const session = require('q3-core-session');
-const { get, invoke } = require('lodash');
+const { get } = require('lodash');
 const walker = require('q3-core-walker');
 const {
   handleUncaughtExceptions,
@@ -29,13 +28,6 @@ const Q3 = {
           const { user, grant } = req;
           ctx.set('q3-session:user', user);
           ctx.set('q3-session:grant', grant);
-
-          invoke(
-            app,
-            'locals.postAuthentication',
-            req,
-            session.getAll(),
-          );
         },
       ),
     );

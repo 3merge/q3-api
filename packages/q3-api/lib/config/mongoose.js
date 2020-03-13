@@ -2,7 +2,6 @@ const req = require('request-context');
 const context = require('q3-core-session/lib/plugin');
 const accessControl = require('q3-schema-permissions/lib/plugin');
 const Notes = require('q3-schema-notes');
-const session = require('q3-core-session/lib/plugin');
 const mongoose = require('mongoose');
 const dedupe = require('mongoose-dedupe');
 const locking = require('mongoose-field-lock');
@@ -40,7 +39,5 @@ mongoose.plugin(accessControl, {
   getUser: () => req.get('q3-session:user'),
   lookup: MODEL_NAMES.PERMISSIONS,
 });
-
-mongoose.plugin(session);
 
 module.exports = mongoose;
