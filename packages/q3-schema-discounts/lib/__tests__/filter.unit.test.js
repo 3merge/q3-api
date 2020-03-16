@@ -134,21 +134,21 @@ describe('DiscountFilter', () => {
         {
           formula: 'Factor',
           strategy: 'custom',
-          factor: 0.92,
-          resource,
+          factor: 0.91,
+          taxonomy: tax,
         },
         {
           formula: 'Factor',
           strategy: 'custom',
-          factor: 0.91,
-          taxonomy: tax,
+          factor: 0.92,
+          resource,
         },
       ]);
       const result = inst.getBaseDiscount(resource, tax, {
         custom: 4.99,
       });
 
-      expect(result).toHaveProperty('factor', 0.92);
+      expect(result).toHaveProperty('factor', 0.91);
     });
 
     it('should return best value taxonomy', () => {
