@@ -2,7 +2,7 @@
 const {
   filterByResourceName,
   filterByTaxonomy,
-  returnHeaviestDiscountFromSortedArray,
+  compareValues,
 } = require('./helpers');
 
 module.exports = class DiscountFilter {
@@ -61,21 +61,21 @@ module.exports = class DiscountFilter {
   }
 
   getBaseDiscount(name, taxonomy, pricing = {}) {
-    return returnHeaviestDiscountFromSortedArray(
+    return compareValues(
       [
-        this.getDiscountByResourceName(name),
-        this.getDiscountByTaxonomy(taxonomy),
-        this.getGlobalDiscount(),
+        ...this.getDiscountByResourceName(name),
+        ...this.getDiscountByTaxonomy(taxonomy),
+        ...this.getGlobalDiscount(),
       ],
       pricing,
     );
   }
 
   getAugmentedDiscount(name, pricing = {}) {
-    return returnHeaviestDiscountFromSortedArray(
+    return compareValues(
       [
-        this.getFixedDiscountByResourceName(name),
-        this.getIncrementalDiscountByResourceName(name),
+        ...this.getFixedDiscountByResourceName(name),
+        ...this.getIncrementalDiscountByResourceName(name),
       ],
       pricing,
     );
