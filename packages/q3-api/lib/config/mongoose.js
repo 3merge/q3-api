@@ -1,6 +1,7 @@
 const req = require('request-context');
 const context = require('q3-core-session/lib/plugin');
 const accessControl = require('q3-schema-permissions/lib/plugin');
+const mongooseLeanVirtuals = require('mongoose-lean-virtuals');
 const Notes = require('q3-schema-notes');
 const mongoose = require('mongoose');
 const dedupe = require('mongoose-dedupe');
@@ -18,6 +19,7 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
 
+mongoose.plugin(mongooseLeanVirtuals);
 mongoose.plugin(context);
 mongoose.plugin(autopopulate);
 mongoose.plugin(locking);
