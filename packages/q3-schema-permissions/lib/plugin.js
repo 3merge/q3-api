@@ -158,6 +158,8 @@ const plugin = (schema, { getUser, lookup }) => {
     }
   }
 
+  if (schema.options.disableOwnership) return;
+
   schema.pre('save', checkOp);
   schema.pre('find', useQuery);
   schema.pre('findOne', useQuery);
