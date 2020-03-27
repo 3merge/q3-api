@@ -19,7 +19,6 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
 
-mongoose.plugin(mongooseLeanVirtuals);
 mongoose.plugin(context);
 mongoose.plugin(autopopulate);
 mongoose.plugin(locking);
@@ -33,6 +32,10 @@ mongoose.plugin(dedupe, {
 mongoose.plugin((schema) => {
   if (schema.options.withNotes) schema.add(Notes);
   if (schema.options.withUploads) schema.add(Files);
+
+  if (schema.options.withVirtuals)
+    mongoose.plugin(mongooseLeanVirtuals);
+
   if (schema.options.withVersioning)
     schema.plugin(version, mongoose);
 });
