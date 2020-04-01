@@ -1,11 +1,11 @@
 const moment = require('moment');
-const generatePsw = require('generate-password');
 const { exception } = require('q3-core-responder');
 const {
   compareWithHash,
   createHash,
   generateRandomSecret,
   verifyToken,
+  getPassword,
 } = require('./helpers');
 
 const isVerifiedQuery = {
@@ -127,16 +127,7 @@ module.exports = class UserAuthDecorator {
         .throw();
     }
 
-    const password =
-      s ||
-      generatePsw.generate({
-        length: 20,
-        numbers: true,
-        symbols: true,
-        uppercase: true,
-        excludeSimilarCharacters: true,
-        exclude: '`,\'".',
-      });
+    const password = s || getPassword();
 
     this.set({
       password: await createHash(password),
