@@ -1,9 +1,9 @@
 {
   "name": "q3-schema-notes",
-  "version": "1.0.63",
+  "version": "1.0.64",
   "main": "lib/index.js",
   "devDependencies": {
-    "q3-test-utils": "^1.0.103"
+    "q3-test-utils": "^1.0.104"
   },
   "peerDependencies": {
     "mongoose": "^5.7.1"
