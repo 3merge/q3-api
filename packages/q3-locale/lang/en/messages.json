@@ -27,5 +27,8 @@
   "onReverify": "New verification token generated",
   "account": "Unknown account email",
   "noPermission": "Account cannot perform this operation",
-  "insufficientPermissions": "Account requires a greater permission level to complete this operation"
+  "insufficientPermissions": "Account requires a greater permission level to complete this operation",
+  "credentials": "Bad credentials. Please try again.",
+  "prohibited": "This account has been blocked due to suspicious activity",
+  "incorrectPassword": "Bad credentials. Please try again."
 }

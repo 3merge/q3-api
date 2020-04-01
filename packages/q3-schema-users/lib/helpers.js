@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const generatePsw = require('generate-password');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
@@ -14,6 +15,17 @@ const createHash = async (str) => {
 const compareWithHash = (a, b) => {
   return bcrypt.compareSync(a, b);
 };
+
+const getPassword = () =>
+  generatePsw.generate({
+    length: 20,
+    numbers: true,
+    symbols: true,
+    uppercase: true,
+    excludeSimilarCharacters: true,
+    exclude: ' ;:+=-(),\'".^{}[]<>/\\|_~',
+    strict: true,
+  });
 
 const generateIDToken = async (id, code, audience) => {
   if (!id)
@@ -67,4 +79,5 @@ module.exports = {
   compareWithHash,
   generateIDToken,
   verifyToken,
+  getPassword,
 };
