@@ -9,6 +9,9 @@ const getProfile = async ({ user, marshal }, res) => {
     .lean()
     .exec();
 
+  if (typeof user.loadProfile === 'function')
+    await user.loadProfile();
+
   res.ok({
     profile: marshal(user.obfuscatePrivateFields()),
     permissions,

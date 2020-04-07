@@ -48,18 +48,10 @@ module.exports = {
       const getFromReq = (path) =>
         isObject(req) ? req[path] : undefined;
 
-      const setInReq = (path, value) => {
-        if (isObject(req)) {
-          req[path] = value;
-          return req;
-        }
-
-        return { [path]: value };
-      };
-
       ns.set(SESSION_KEY, getFromReq('user'));
+      if (req && !req.session) req.session = {};
 
-      Promise.all(execMap(setInReq())).then(() => {
+      Promise.all(execMap(req)).then(() => {
         if (typeof getFromReq('onSession') === 'function') {
           req.onSession(req, res, next);
         } else {

@@ -2,6 +2,15 @@
 const { invoke, get } = require('lodash');
 const { exception } = require('q3-core-responder');
 
+const removeEmpty = (obj) => {
+  Object.keys(obj).forEach((key) => {
+    if (obj[key] && typeof obj[key] === 'object')
+      removeEmpty(obj[key]);
+    else if (obj[key] === undefined) delete obj[key];
+  });
+  return obj;
+};
+
 const getPathsRecursively = ([key, v]) => {
   if (v.schema)
     return Object.entries(v.schema.paths)
@@ -108,7 +117,7 @@ async function removeSubDocument(field, id) {
 
 async function updateSubDocument(field, id, args) {
   const subdoc = await this.getSubDocument(field, id);
-  subdoc.set(args);
+  subdoc.set(removeEmpty(args));
   const e = subdoc.validateSync();
   if (e) throw e;
 
