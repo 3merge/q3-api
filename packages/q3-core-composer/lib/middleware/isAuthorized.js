@@ -4,7 +4,7 @@ const hasField = require('./hasField');
 
 const splitter = (s) =>
   String(s)
-    .split(',')
+    .split(', ')
     .map((i) => i.trim());
 
 const getFields = (grant) =>

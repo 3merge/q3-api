@@ -1,18 +1,26 @@
-const {
-  compose,
-  query,
-  verify,
-} = require('q3-core-composer');
+const { compose, query } = require('q3-core-composer');
 const aqp = require('api-query-params');
+const { exception } = require('q3-core-responder');
 const mongoose = require('../../config/mongoose');
+const { Permissions } = require('../../models');
 
 const SearchParams = async (
-  { query: { collectionName, fields, ...rest } },
+  { user, query: { collectionName, fields, ...rest } },
   res,
 ) => {
+  if (
+    !(await Permissions.hasGrant(
+      collectionName,
+      'Read',
+      user,
+    ))
+  )
+    exception('Authorization')
+      .msg('missingReadGrandOnCollection')
+      .throw();
+
   try {
     const model = mongoose.model(collectionName);
-
     const {
       filter: { search, ...where },
     } = aqp(rest);
@@ -51,5 +59,4 @@ SearchParams.validation = [
   query('fields').isArray(),
 ];
 
-SearchParams.authorization = [verify];
 module.exports = compose(SearchParams);

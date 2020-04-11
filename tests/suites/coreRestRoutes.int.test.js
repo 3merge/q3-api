@@ -35,7 +35,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await Users.deleteMany({});
+  // await Users.deleteMany({});
   await mongoose.disconnect();
 });
 
@@ -157,7 +157,7 @@ describe('history /GET', () => {
 });
 
 describe('Search', () => {
-  it('should yield distinct valuess', async () => {
+  it.only('should yield distinct values', async () => {
     await Permissions.create([
       {
         coll: 'q3-api-users',
@@ -177,7 +177,7 @@ describe('Search', () => {
       {
         coll: 'q3-api-permissions',
         op: 'Read',
-        role: 'Dev',
+        role: 'Super',
       },
       {
         coll: 'q3-api-permissions',
@@ -205,7 +205,7 @@ describe('Search', () => {
 
     expect(filtered.fields.coll).toHaveLength(2);
     expect(filtered.fields.role).toHaveLength(1);
-    expect(filtered.total).toBe(3);
+    expect(filtered.total).toBe(2);
   });
 });
 
