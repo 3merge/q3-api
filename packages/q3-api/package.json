@@ -26,7 +26,7 @@
     "mongodb-cron": "^1.7.0",
     "mongoose-dedupe": "^1.0.0",
     "mongoose-field-lock": "^1.0.0",
-    "mongoose-field-populate": "^1.0.1",
+    "mongoose-field-populate": "^2.1.2",
     "mongoose-lean-virtuals-v2": "^0.7.0",
     "mongoose-unique-validator": "^2.0.3",
     "q3-core-composer": "^1.0.89",
@@ -48,7 +48,7 @@
     "mongoose": "^5.7.1"
   },
   "devDependencies": {
-    "aws-sdk-mock": "^4.5.0",
+    "aws-sdk-mock": "^5.1.0",
     "q3-test-utils": "^1.0.107",
     "supertest": "^4.0.2"
   },

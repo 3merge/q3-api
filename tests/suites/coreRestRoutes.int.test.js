@@ -2,9 +2,9 @@
 jest.unmock('request-context');
 jest.unmock('express-validator');
 
-const supertest = require('supertest');
-const mongoose = require('mongoose');
 const Q3 = require('q3-api');
+const supertest = require('supertest');
+// const mongoose = require('mongoose');
 
 const { Users, Permissions } = Q3;
 
@@ -36,7 +36,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   // await Users.deleteMany({});
-  await mongoose.disconnect();
+  // await mongoose.disconnect();
 });
 
 describe('authenticate /GET', () => {
@@ -157,7 +157,7 @@ describe('history /GET', () => {
 });
 
 describe('Search', () => {
-  it.only('should yield distinct values', async () => {
+  it('should yield distinct values', async () => {
     await Permissions.create([
       {
         coll: 'q3-api-users',

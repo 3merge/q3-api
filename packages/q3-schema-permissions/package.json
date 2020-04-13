@@ -3,7 +3,7 @@
   "version": "1.0.72",
   "main": "lib/index.js",
   "dependencies": {
-    "comparisons": "2.2.1",
+    "comparisons": "2.2.4",
     "lodash": "^4.17.15",
     "micromatch": "^4.0.2",
     "q3-core-responder": "^1.0.97",
