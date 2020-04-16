@@ -74,9 +74,7 @@ PricingSchema.pre(
 
 PricingSchema.pre('save', async function checkScope() {
   if (!this.global && !this.taxonomy && !this.resource)
-    exception('Validation')
-      .msg('scope')
-      .throw();
+    exception('Validation').msg('scope').throw();
 });
 
 PricingSchema.plugin(withDateRange);

@@ -16,7 +16,7 @@
     "q3-core-composer": "^1.0.90",
     "q3-core-responder": "^1.0.98",
     "q3-schema-utils": "^1.0.70",
-    "sift": "^11.1.2"
+    "sift": "^12.0.0"
   },
   "peerDependencies": {
     "express": "^4.17.1",

@@ -19,10 +19,7 @@ const toFactorOfOne = (a) => reduceBy(1, toFactor(a));
 const increment = (a, b, c) =>
   new BigNumber(c)
     .minus(
-      new BigNumber(1)
-        .minus(a)
-        .multipliedBy(b)
-        .toNumber(),
+      new BigNumber(1).minus(a).multipliedBy(b).toNumber(),
     )
     .toNumber();
 

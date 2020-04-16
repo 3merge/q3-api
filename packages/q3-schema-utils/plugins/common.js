@@ -57,9 +57,7 @@ async function findStrictly(id, options = {}) {
     .exec();
 
   if (!doc)
-    exception('ResourceNotFound')
-      .msg('missing')
-      .throw();
+    exception('ResourceNotFound').msg('missing').throw();
 
   return doc;
 }
@@ -173,9 +171,7 @@ async function findOneOrCreate(args, options) {
 
 function verifyOutput(d) {
   if (!d)
-    exception('ResourceNotFound')
-      .msg('notFound')
-      .throw();
+    exception('ResourceNotFound').msg('notFound').throw();
 
   return d;
 }

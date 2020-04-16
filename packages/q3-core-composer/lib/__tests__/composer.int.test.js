@@ -37,10 +37,7 @@ describe('compose', () => {
         res.send();
       }),
     );
-    agent
-      .get('/')
-      .expect(200)
-      .end(done);
+    agent.get('/').expect(200).end(done);
   });
 
   it('should run validation', async () => {
@@ -67,9 +64,7 @@ describe('compose', () => {
     };
 
     route.authorization = [
-      redact('Foo')
-        .inResponse('mono')
-        .done(),
+      redact('Foo').inResponse('mono').done(),
     ];
 
     app.get(

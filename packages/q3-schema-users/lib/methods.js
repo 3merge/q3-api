@@ -68,9 +68,7 @@ module.exports = class UserAuthDecorator {
       .exec();
 
     if (!doc)
-      exception('BadRequest')
-        .msg('account')
-        .throw();
+      exception('BadRequest').msg('account').throw();
 
     return doc;
   }
@@ -122,9 +120,7 @@ module.exports = class UserAuthDecorator {
   async setPassword(s) {
     const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
     if (s && !re.test(s)) {
-      exception('Validation')
-        .field('password')
-        .throw();
+      exception('Validation').field('password').throw();
     }
 
     const password = s || getPassword();

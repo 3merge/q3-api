@@ -18,7 +18,7 @@ const hasCollection = (name) =>
   new Promise((resolve) =>
     mongoose.connection.db
       .listCollections()
-      .toArray(function(err, v) {
+      .toArray(function (err, v) {
         resolve(
           !err
             ? v.findIndex(
@@ -72,7 +72,7 @@ const plugin = (schema, { getUser, lookup }) => {
 
   if (!isConfigured()) return;
 
-  schema.statics.can = async function(op, props) {
+  schema.statics.can = async function (op, props) {
     const { collectionName } = this.collection;
     const { discriminators } = schema;
 

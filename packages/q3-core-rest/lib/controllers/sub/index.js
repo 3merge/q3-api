@@ -64,9 +64,7 @@ module.exports = class SubDocumentControllerCommander extends RestRegistration {
     ];
 
     List.validation = [
-      check('resourceID')
-        .isMongoId()
-        .respondsWith('mongo'),
+      check('resourceID').isMongoId().respondsWith('mongo'),
     ];
 
     return this.makeGet(path, List);

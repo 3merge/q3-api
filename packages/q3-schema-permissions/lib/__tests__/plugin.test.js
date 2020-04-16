@@ -60,9 +60,7 @@ describe('AccessControlPlugin configuration', () => {
 
   it('it should run access on find if set', async () =>
     expect(
-      Model.find()
-        .setOptions({ redact: true })
-        .exec(),
+      Model.find().setOptions({ redact: true }).exec(),
     ).resolves.toBeDefined());
 });
 
@@ -105,9 +103,7 @@ describe('AccessControlPlugin integration', () => {
     });
 
     await expect(
-      Model.find()
-        .setOptions({ redact: true })
-        .exec(),
+      Model.find().setOptions({ redact: true }).exec(),
     ).resolves.toHaveLength(2);
   });
 

@@ -80,9 +80,7 @@ describe('handleUncaughtExceptions', () => {
 
   it('should correct 500 response if error payload present', () => {
     handleUncaughtExceptions(
-      exception('Unknown')
-        .field('hey')
-        .boomerang(),
+      exception('Unknown').field('hey').boomerang(),
       { t: jest.fn() },
       res,
       jest.fn(),

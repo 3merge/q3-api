@@ -2,7 +2,7 @@
 const Schema = require('./schema');
 const Decorator = require('./decorator');
 
-Schema.path('value').set(function(v) {
+Schema.path('value').set(function (v) {
   this.$lastValue = this.value;
   return v;
 });

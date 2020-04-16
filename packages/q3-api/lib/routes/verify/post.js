@@ -27,9 +27,7 @@ const verify = async (
 
 verify.validation = [
   checkNewPassword,
-  check('id')
-    .isMongoId()
-    .respondsWith('mongoID'),
+  check('id').isMongoId().respondsWith('mongoID'),
   check('verificationCode')
     .isString()
     .respondsWith('verificationCode'),

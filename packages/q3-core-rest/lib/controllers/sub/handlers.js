@@ -17,9 +17,7 @@ module.exports = {
     res,
   ) {
     if (isSimpleSubDocument(parent, fieldName))
-      exception('Conflict')
-        .msg('usePutRequest')
-        .throw();
+      exception('Conflict').msg('usePutRequest').throw();
 
     await parent.updateSubDocument(
       fieldName,
@@ -38,9 +36,7 @@ module.exports = {
     res,
   ) {
     if (isSimpleSubDocument(parent, fieldName))
-      exception('Conflict')
-        .msg('usePutRequest')
-        .throw();
+      exception('Conflict').msg('usePutRequest').throw();
 
     if (!files) {
       await parent.pushSubDocument(fieldName, body);

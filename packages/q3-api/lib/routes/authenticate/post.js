@@ -12,9 +12,7 @@ const LoginIntoAccount = async (
 ) => {
   const userResult = await Users.findVerifiedByEmail(email);
   if (!userResult.isPermitted)
-    exception('Authorization')
-      .msg('prohibited')
-      .throw();
+    exception('Authorization').msg('prohibited').throw();
 
   await userResult.verifyPassword(password, true);
 

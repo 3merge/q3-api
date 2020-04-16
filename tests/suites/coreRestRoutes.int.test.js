@@ -211,10 +211,7 @@ describe('Search', () => {
 
 describe('reverify /POST', () => {
   it('should return 400', () =>
-    agent
-      .post('/reverify')
-      .send({ email })
-      .expect(400));
+    agent.post('/reverify').send({ email }).expect(400));
 
   it('should return 204', async () => {
     const doc = await Users.findById(id);
