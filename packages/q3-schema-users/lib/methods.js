@@ -62,10 +62,9 @@ module.exports = class UserAuthDecorator {
   }
 
   static async $findOneStrictly(args) {
-    if (args.email)
+    if (typeof args.email === 'string')
       Object.assign(args, {
-        // allow for case-insensitive logins
-        email: new RegExp(args.email, 'gi'),
+        email: args.email.toLowerCase(),
       });
 
     const doc = await this.findOne(args)
