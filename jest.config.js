@@ -4,7 +4,7 @@ module.exports = {
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname',
   ],
-  projects: ['<rootDir>/packages/*', '<rootDir>/tests'],
+  // projects: ['<rootDir>/packages/*', '<rootDir>/tests'],
   watchPathIgnorePatterns: [
     '<rootDir>/packages/*/node_modules/*',
     '<rootDir>/node_modules',

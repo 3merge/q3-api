@@ -45,7 +45,7 @@ describe('authenticate /GET', () => {
 
   it('should return 400', () =>
     agent
-      .get('/authenticate?email=foo@bar.net')
+      .get('/authenticate?email=FOO@bar.net')
       .expect(400));
 
   it('should return 204', () =>

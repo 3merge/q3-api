@@ -62,6 +62,12 @@ module.exports = class UserAuthDecorator {
   }
 
   static async $findOneStrictly(args) {
+    if (args.email)
+      Object.assign(args, {
+        // allow for case-insensitive logins
+        email: new RegExp(args.email, 'gi'),
+      });
+
     const doc = await this.findOne(args)
       .select('+apiKeys')
       .setOptions({ bypassAuthorization: true })

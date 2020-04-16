@@ -102,13 +102,13 @@ describe('static find abstractions', () => {
     });
   });
 
-  it('should query verified users by email', async () => {
+  it.only('should query verified users by email', async () => {
     await Decorator.findVerifiedByEmail.call(inst, email);
     expect(findOne).toHaveBeenCalledWith({
       password: { $exists: true },
+      email,
       verified: true,
       active: true,
-      email,
     });
   });
 

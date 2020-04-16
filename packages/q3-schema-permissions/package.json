@@ -17,7 +17,6 @@
   },
   "jest": {
     "verbose": true,
-    "rootDir": "lib",
     "testEnvironment": "node",
     "preset": "q3-test-utils",
     "setupFilesAfterEnv": [
