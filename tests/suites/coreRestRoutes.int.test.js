@@ -143,6 +143,12 @@ describe('profile /GET', () => {
 
 describe('history /GET', () => {
   it('should return 200', async () => {
+    await agent
+      .patch('/profile')
+      .set({ Authorization: AuthorizationSuper })
+      .send({ firstName: 'Michael' })
+      .expect(200);
+
     const {
       body: { versions },
     } = await agent

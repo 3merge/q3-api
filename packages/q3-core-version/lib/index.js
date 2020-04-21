@@ -5,7 +5,23 @@ const {
   getFromPatchHistory,
   getUserMeta,
   getCollectionName,
+  hasKeys,
 } = require('./helpers');
+
+const removeSensitiveProperties = (a) =>
+  a.filter(
+    (path) =>
+      ![
+        '_id',
+        'id',
+        '__v',
+        '__t',
+        'code',
+        'secret',
+        'password',
+        'transaction',
+      ].includes(path),
+  );
 
 module.exports = (schema, instance) => {
   schema.add({
@@ -13,6 +29,14 @@ module.exports = (schema, instance) => {
   });
 
   schema.pre('save', async function markModified() {
+    const modifiedBy = getUserMeta(this);
+    const paths = invoke(this, 'modifiedPaths');
+
+    const modified = pick(
+      this.toJSON(),
+      removeSensitiveProperties(paths),
+    );
+
     set(this, '$locals.patch', {
       /**
        * @NOTE
@@ -20,15 +44,16 @@ module.exports = (schema, instance) => {
        * When enabled, it injects variables into __$q3.
        */
       modifiedOn: new Date().toISOString(),
-      modifiedBy: getUserMeta(this),
-      modified: pick(
-        this.toJSON(),
-        invoke(this, 'modifiedPaths'),
-      ),
+      modified,
+      modifiedBy,
     });
 
-    if (!this.isNew) {
-      this.lastModifiedBy = this.$locals.patch.modifiedBy;
+    if (
+      !this.isNew &&
+      hasKeys(modifiedBy) &&
+      hasKeys(modified)
+    ) {
+      this.lastModifiedBy = modifiedBy;
 
       await insertToPatchHistory(
         instance,

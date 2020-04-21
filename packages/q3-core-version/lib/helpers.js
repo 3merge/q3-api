@@ -18,6 +18,12 @@ exports.getUserMeta = (v) => {
   ]);
 };
 
+exports.hasKeys = (o) =>
+  o !== null &&
+  o !== undefined &&
+  typeof o === 'object' &&
+  Object.keys(o).length > 0;
+
 exports.insertToPatchHistory = (
   inst,
   collectionName,
