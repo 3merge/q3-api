@@ -11,7 +11,7 @@ const runner = require('./config');
 const app = require('./config/express');
 const mongoose = require('./config/mongoose');
 const models = require('./models');
-const jobScheduler = require('./scheduler');
+// const jobScheduler = require('./scheduler');
 
 const Q3 = {
   config(args = {}) {
@@ -72,7 +72,7 @@ const Q3 = {
 
 Q3.$app = app;
 Q3.$mongoose = mongoose;
-Q3.schedule = jobScheduler;
+// Q3.schedule = jobScheduler;
 Q3.session = ctx;
 
 Object.assign(Q3, models);

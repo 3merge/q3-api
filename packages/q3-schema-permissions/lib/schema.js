@@ -12,37 +12,42 @@ const Alias = new Schema({
   },
 });
 
-const PermissionModel = new Schema({
-  ownershipAliases: [Alias],
-  ownershipConditions: [String],
-  documentConditions: [String],
-  op: {
-    type: String,
-    required: true,
-    dedupeWith: true,
-    enum: OP_ENUM,
+const PermissionModel = new Schema(
+  {
+    ownershipAliases: [Alias],
+    ownershipConditions: [String],
+    documentConditions: [String],
+    op: {
+      type: String,
+      required: true,
+      dedupeWith: true,
+      enum: OP_ENUM,
+    },
+    ownership: {
+      type: String,
+      default: 'Own',
+      enum: OWNERSHIP_ENUM,
+    },
+    coll: {
+      type: String,
+      required: true,
+      searchable: true,
+      dedupeWith: true,
+    },
+    role: {
+      type: String,
+      default: 'Public',
+      dedupeWith: true,
+    },
+    fields: {
+      type: String,
+      default: '*',
+      searchable: true,
+    },
   },
-  ownership: {
-    type: String,
-    default: 'Own',
-    enum: OWNERSHIP_ENUM,
+  {
+    withVersioning: true,
   },
-  coll: {
-    type: String,
-    required: true,
-    searchable: true,
-    dedupeWith: true,
-  },
-  role: {
-    type: String,
-    default: 'Public',
-    dedupeWith: true,
-  },
-  fields: {
-    type: String,
-    default: '*',
-    searchable: true,
-  },
-});
+);
 
 module.exports = PermissionModel;

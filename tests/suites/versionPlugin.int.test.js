@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const versionPlugin = require('q3-core-version');
 
 mongoose.plugin(versionPlugin, mongoose);
+// just like q3-api config
+mongoose.set('applyPluginsToChildSchemas', false);
 
 let M;
 
@@ -14,6 +16,12 @@ describe('UserModel integrations', () => {
       new mongoose.Schema({
         stock: Number,
         cost: Number,
+        __$q3: mongoose.Schema.Types.Mixed,
+        sub: [
+          new mongoose.Schema({
+            name: String,
+          }),
+        ],
       }),
     );
   });
@@ -26,12 +34,30 @@ describe('UserModel integrations', () => {
     const d = await M.create({
       cost: 1,
       stock: 0,
+      sub: [
+        {
+          name: 'Jon',
+        },
+      ],
     });
 
     d.cost = 2;
+    d.sub[0].name = 'Alex';
+
+    d.set('__$q3', {
+      USER: {
+        firstName: 'Mike',
+      },
+    });
+
     await d.save();
-    const [{ modified }] = await d.getHistory();
+    const [{ modified, modifiedBy }] = await d.getHistory();
     expect(modified).toHaveProperty('cost', 2);
+    expect(modifiedBy).toHaveProperty('firstName', 'Mike');
+    expect(d.lastModifiedBy).toHaveProperty(
+      'firstName',
+      'Mike',
+    );
     done();
   });
 });

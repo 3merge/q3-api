@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const { invoke, pick, set } = require('lodash');
 const {
   insertToPatchHistory,
@@ -7,6 +8,10 @@ const {
 } = require('./helpers');
 
 module.exports = (schema, instance) => {
+  schema.add({
+    lastModifiedBy: mongoose.SchemaTypes.Mixed,
+  });
+
   schema.pre('save', async function markModified() {
     set(this, '$locals.patch', {
       /**
@@ -14,19 +19,23 @@ module.exports = (schema, instance) => {
        * Ref to q3-core-session.
        * When enabled, it injects variables into __$q3.
        */
-      user: getUserMeta(this),
+      modifiedOn: new Date().toISOString(),
+      modifiedBy: getUserMeta(this),
       modified: pick(
         this.toJSON(),
         invoke(this, 'modifiedPaths'),
       ),
     });
 
-    if (!this.isNew)
+    if (!this.isNew) {
+      this.lastModifiedBy = this.$locals.patch.modifiedBy;
+
       await insertToPatchHistory(
         instance,
         getCollectionName(this),
         this.$locals.patch,
       );
+    }
   });
 
   // eslint-disable-next-line

@@ -7,7 +7,7 @@ const {
 describe('Version helpers', () => {
   describe('"getUserMeta"', () => {
     it('should return null', () =>
-      expect(getUserMeta()).toBeNull());
+      expect(getUserMeta()).toEqual({}));
 
     it('should return first/last name', () =>
       expect(
@@ -16,7 +16,10 @@ describe('Version helpers', () => {
             USER: { firstName: 'Joe', lastName: 'Doe' },
           },
         }),
-      ).toMatch('Joe Doe'));
+      ).toMatchObject({
+        firstName: 'Joe',
+        lastName: 'Doe',
+      }));
   });
 
   describe('"getCollectionName"', () => {
@@ -31,8 +34,8 @@ describe('Version helpers', () => {
   });
 
   describe('"insertToPatchHistory"', () => {
-    it('should name', () => {
-      const insert = jest.fn();
+    it('should create a new collection', () => {
+      const insertOne = jest.fn();
       const collection = jest.fn();
 
       insertToPatchHistory(
@@ -40,7 +43,7 @@ describe('Version helpers', () => {
           connection: {
             db: {
               collection: collection.mockReturnValue({
-                insert,
+                insertOne,
               }),
             },
           },
@@ -49,7 +52,7 @@ describe('Version helpers', () => {
         { op: 1 },
       );
 
-      expect(insert).toHaveBeenCalledWith({ op: 1 });
+      expect(insertOne).toHaveBeenCalledWith({ op: 1 });
       expect(collection).toHaveBeenCalledWith(
         'foo-patch-history',
       );

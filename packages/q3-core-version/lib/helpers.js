@@ -1,4 +1,4 @@
-const { get } = require('lodash');
+const { get, pick } = require('lodash');
 
 const prefixCollectionName = (name) =>
   `${name}-patch-history`;
@@ -10,9 +10,12 @@ exports.getCollectionName = (inst) =>
   get(inst, 'constructor.collection.collectionName');
 
 exports.getUserMeta = (v) => {
-  const u = get(v, '__$q3.USER', null);
-  if (!u) return null;
-  return `${u.firstName} ${u.lastName}`;
+  return pick(get(v, '__$q3.USER', {}), [
+    'id',
+    'firstName',
+    'lastName',
+    'email',
+  ]);
 };
 
 exports.insertToPatchHistory = (
@@ -23,7 +26,7 @@ exports.insertToPatchHistory = (
   try {
     return inst.connection.db
       .collection(prefixCollectionName(collectionName))
-      .insert(op);
+      .insertOne(op);
   } catch (e) {
     return null;
   }
