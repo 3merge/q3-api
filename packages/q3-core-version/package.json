@@ -1,6 +1,6 @@
 {
   "name": "q3-core-version",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "lib/index.js",
   "dependencies": {
     "flat": "^5.0.0",
