@@ -6,6 +6,7 @@ const {
   getUserMeta,
   getCollectionName,
   hasKeys,
+  diff,
 } = require('./helpers');
 
 const removeSensitiveProperties = (a) =>
@@ -13,9 +14,10 @@ const removeSensitiveProperties = (a) =>
     (path) =>
       ![
         '_id',
-        'id',
         '__v',
         '__t',
+        '__$q3',
+        'id',
         'code',
         'secret',
         'password',
@@ -29,11 +31,16 @@ module.exports = (schema, instance) => {
   });
 
   schema.pre('save', async function markModified() {
+    const original = await this.constructor
+      .findById(this._id)
+      .lean()
+      .exec();
+
     const modifiedBy = getUserMeta(this);
     const paths = invoke(this, 'modifiedPaths');
 
     const modified = pick(
-      this.toJSON(),
+      diff(this.toJSON(), original),
       removeSensitiveProperties(paths),
     );
 

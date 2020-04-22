@@ -1,4 +1,11 @@
-const { get, pick } = require('lodash');
+const {
+  get,
+  pick,
+  isEqual,
+  reduce,
+  isPlainObject,
+} = require('lodash');
+const flat = require('flat');
 
 const prefixCollectionName = (name) =>
   `${name}-patch-history`;
@@ -56,3 +63,29 @@ exports.getFromPatchHistory = (
     }
   });
 };
+
+const diff = (a, b) => {
+  if (!a || !b) return {};
+  const inner = flat(a, { safe: true });
+  const out = flat(b, { safe: true });
+
+  const output = reduce(
+    inner,
+    (result, value, key) => {
+      if (!isEqual(value, out[key])) {
+        // eslint-disable-next-line
+        result[key] =
+          isPlainObject(value) && isPlainObject(out[key])
+            ? diff(value, out[key])
+            : value;
+      }
+
+      return result;
+    },
+    {},
+  );
+
+  return flat.unflatten(output);
+};
+
+exports.diff = diff;

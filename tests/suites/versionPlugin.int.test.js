@@ -15,6 +15,7 @@ describe('UserModel integrations', () => {
       'versioning',
       new mongoose.Schema({
         stock: Number,
+        password: String,
         cost: Number,
         __$q3: mongoose.Schema.Types.Mixed,
         sub: [
@@ -34,6 +35,7 @@ describe('UserModel integrations', () => {
     const d = await M.create({
       cost: 1,
       stock: 0,
+      password: 'safe',
       sub: [
         {
           name: 'Jon',
@@ -43,6 +45,7 @@ describe('UserModel integrations', () => {
 
     d.cost = 2;
     d.sub[0].name = 'Alex';
+    d.password = 'changed';
 
     d.set('__$q3', {
       USER: {
@@ -53,6 +56,7 @@ describe('UserModel integrations', () => {
     await d.save();
     const [{ modified, modifiedBy }] = await d.getHistory();
     expect(modified).toHaveProperty('cost', 2);
+    expect(modified).not.toHaveProperty('password');
     expect(modifiedBy).toHaveProperty('firstName', 'Mike');
     expect(d.lastModifiedBy).toHaveProperty(
       'firstName',
