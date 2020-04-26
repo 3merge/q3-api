@@ -1,5 +1,4 @@
 /* eslint-disable import/no-extraneous-dependencies */
-jest.unmock('request-context');
 jest.unmock('express-validator');
 
 const Q3 = require('q3-api');
@@ -14,6 +13,15 @@ let password;
 let AuthorizationSuper;
 
 const email = 'routes_developer@gmail.com';
+
+const getSource = async (userId) => {
+  const { source } = await Users.findById(userId)
+    .select('source')
+    .lean()
+    .exec();
+
+  return source;
+};
 
 beforeAll(async () => {
   Q3.routes();
@@ -69,6 +77,34 @@ describe('authenticate /POST', () => {
       .post('/authenticate')
       .send({ email, password: 'noop' })
       .expect(401);
+  });
+
+  it.skip('should return 200', async () => {
+    const doc = await Users.findOne({ email });
+    const p = await doc.setPassword();
+    const { body } = await agent
+      .post('/authenticate')
+      .send({ email, password: p })
+      .expect(201);
+
+    expect(body).toHaveProperty('token');
+    expect(body).toHaveProperty('nonce');
+  });
+
+  it.skip('should track devices', async () => {
+    const doc = await Users.findOne({ email });
+    const p = await doc.setPassword();
+    await agent
+      .post('/authenticate')
+      .send({ email, password: p });
+
+    expect(getSource(doc.id)).resolves.toHaveLength(1);
+
+    await agent
+      .post('/authenticate')
+      .send({ email, password: p });
+
+    expect(getSource(doc.id)).resolves.toHaveLength(1);
   });
 
   it('should return 403', async () => {

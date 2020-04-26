@@ -1,5 +1,5 @@
-const req = require('request-context');
 const context = require('q3-core-session/lib/plugin');
+const session = require('q3-core-session');
 const accessControl = require('q3-schema-permissions/lib/plugin');
 const mongooseLeanVirtuals = require('mongoose-lean-virtuals-v2');
 const Notes = require('q3-schema-notes');
@@ -41,8 +41,8 @@ mongoose.plugin((schema) => {
 });
 
 mongoose.plugin(accessControl, {
-  getUser: () => req.get('q3-session:user'),
   lookup: MODEL_NAMES.PERMISSIONS,
+  getUser: () => session.get('USER'),
 });
 
 module.exports = mongoose;

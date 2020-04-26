@@ -15,23 +15,40 @@ const verifyMerchantName = (v) => {
       .throw();
 };
 
+const getTraceDetails = (transactionReceipt) => {
+  if (!transactionReceipt.trace) return transactionReceipt;
+  const {
+    status,
+    statusText,
+    data,
+  } = transactionReceipt.trace.response;
+  return {
+    ...data,
+    statusText,
+    status,
+  };
+};
+
+const getStatus = (transactionReceipt) =>
+  isApproved(transactionReceipt.approved)
+    ? 'Paid'
+    : 'Declined';
+
 Schema.methods.pay = async function connectToGateway(
   merchant,
   token,
 ) {
   verifyMerchantName(merchant);
-
   const fn = MERCHANTS[merchant];
-  const { approved, ...rest } = await fn(this, token);
+  const resp = await fn(this, token);
 
-  if (isApproved(approved)) {
-    this.markModified('transactionReceipt');
-    this.set('transactionReceipt', rest);
-    this.set('status', 'Paid');
-  } else {
-    this.set('status', 'Declined');
-  }
+  this.set({
+    status: getStatus(resp),
+    transactionReceipt: getTraceDetails(resp),
+  });
 
+  // need to do this for Mixed schema types
+  this.markModified('transactionReceipt');
   return this.save();
 };
 

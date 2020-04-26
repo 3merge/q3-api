@@ -16,7 +16,6 @@
     "lodash": "^4.17.15"
   },
   "peerDependencies": {
-    "mongoose": "^5.7.7",
-    "request-context": "^2.0.0"
+    "mongoose": "^5.7.7"
   }
 }

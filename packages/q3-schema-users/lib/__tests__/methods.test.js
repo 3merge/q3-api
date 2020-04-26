@@ -102,7 +102,7 @@ describe('static find abstractions', () => {
     });
   });
 
-  it.only('should query verified users by email', async () => {
+  it('should query verified users by email', async () => {
     await Decorator.findVerifiedByEmail.call(inst, email);
     expect(findOne).toHaveBeenCalledWith({
       password: { $exists: true },
@@ -217,7 +217,7 @@ describe('hasExpired getter', () => {
   it('should return truthy', () => {
     const cls = new Decorator();
     Object.assign(cls, {
-      secretIssuedOn: moment().subtract(2, 'days'),
+      secretIssuedOn: moment().subtract(7, 'days'),
     });
     expect(cls.hasExpired).toBeTruthy();
   });

@@ -38,11 +38,13 @@ describe('Q3 Schema Orders', () => {
     const order = await getOrderStub({ total: 90 });
     const output = await runBamboraGateway(order);
     expect(output).toHaveProperty('status', 'Paid');
+    expect(output).toHaveProperty('transactionReceipt');
   });
 
   it('should decline transactions over 100', async () => {
     const order = await getOrderStub({ total: 110 });
     const output = await runBamboraGateway(order);
     expect(output).toHaveProperty('status', 'Declined');
+    expect(output).toHaveProperty('transactionReceipt');
   });
 });

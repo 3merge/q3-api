@@ -3,18 +3,13 @@ const { emit } = require('q3-core-mailer');
 const { Users } = require('../../models');
 const { checkEmail } = require('../../utils');
 
-const resetPassword = async (
-  { body: { email }, t },
-  res,
-) => {
+const resetPassword = async ({ body, t }, res) => {
   try {
-    const doc = await Users.findVerifiedByEmail(email);
-    const password = await doc.setPassword();
+    const doc = await Users.findVerifiedByEmail(body.email);
+    await doc.setPasswordResetToken();
+    await doc.save();
 
-    emit('onPasswordReset', {
-      ...doc.toJSON(),
-      password,
-    });
+    emit('onPasswordReset', doc);
   } catch (err) {
     // noop
   } finally {
@@ -26,4 +21,7 @@ const resetPassword = async (
 
 resetPassword.validation = [checkEmail];
 
-module.exports = compose(resetPassword);
+const Ctrl = compose(resetPassword);
+Ctrl.$og = resetPassword;
+
+module.exports = Ctrl;
