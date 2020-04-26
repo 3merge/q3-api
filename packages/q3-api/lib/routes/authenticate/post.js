@@ -8,6 +8,30 @@ const {
 const { Users } = require('../../models');
 const { checkEmail } = require('../../utils');
 
+const getDeviceInfo = (useragent, user) => {
+  try {
+    const source = get(useragent, 'source', null);
+
+    if (!source || get(user, 'source', []).includes(source))
+      throw new Error(
+        'Device info not available or applicable',
+      );
+
+    emit('onNewDevice', {
+      useragent,
+      user,
+    });
+
+    return {
+      $addToSet: {
+        source,
+      },
+    };
+  } catch (e) {
+    return {};
+  }
+};
+
 const LoginIntoAccount = async (
   {
     body: { email, password },
@@ -16,7 +40,6 @@ const LoginIntoAccount = async (
   },
   res,
 ) => {
-  const source = get(useragent, 'source', null);
   const userResult = await Users.findVerifiedByEmail(email);
   if (!userResult.isPermitted)
     exception('Authorization').msg('prohibited').throw();
@@ -26,22 +49,10 @@ const LoginIntoAccount = async (
   const { _id: id, secret } = userResult;
   const tokens = await generateIDToken(id, secret, host);
 
-  if (
-    source &&
-    !get(userResult, 'source', []).includes(source)
-  ) {
-    emit('onNewDevice', {
-      user: userResult,
-      useragent,
-    });
-
-    await userResult.update({
-      lastLoggedIn: new Date(),
-      $addToSet: {
-        source,
-      },
-    });
-  }
+  await userResult.update({
+    lastLoggedIn: new Date(),
+    ...getDeviceInfo(useragent, userResult),
+  });
 
   res.create(tokens);
 };

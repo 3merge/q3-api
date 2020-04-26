@@ -14,6 +14,15 @@ let AuthorizationSuper;
 
 const email = 'routes_developer@gmail.com';
 
+const getSource = async (userId) => {
+  const { source } = await Users.findById(userId)
+    .select('source')
+    .lean()
+    .exec();
+
+  return source;
+};
+
 beforeAll(async () => {
   Q3.routes();
   agent = supertest(Q3.$app);
@@ -81,15 +90,6 @@ describe('authenticate /POST', () => {
     expect(body).toHaveProperty('token');
     expect(body).toHaveProperty('nonce');
   });
-
-  const getSource = async (userId) => {
-    const { source } = await Users.findById(userId)
-      .select('source')
-      .lean()
-      .exec();
-
-    return source;
-  };
 
   it('should track devices', async () => {
     const doc = await Users.findOne({ email });
