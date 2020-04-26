@@ -14,6 +14,33 @@ const isVerifiedQuery = {
   active: true,
 };
 
+const SECRET_EXPIRATION_IN_HRS = 120;
+
+const isWithinSecretExpirationHrsWindow = (
+  lastUpdatedOnDateStamp,
+) => {
+  const distanceBetweenLastUpdatedAndToday = moment().diff(
+    lastUpdatedOnDateStamp,
+  );
+  const differenceHelper = moment.duration(
+    distanceBetweenLastUpdatedAndToday,
+  );
+
+  return (
+    differenceHelper.asHours() > SECRET_EXPIRATION_IN_HRS
+  );
+};
+
+const issueTokensAndStamps = (
+  target,
+  tokenPropertyName,
+  tokenIssuedOnPropertyName,
+) =>
+  Object.assign(target, {
+    [tokenPropertyName]: generateRandomSecret(),
+    [tokenIssuedOnPropertyName]: new Date(),
+  });
+
 module.exports = class UserAuthDecorator {
   get isBlocked() {
     return 5 - this.loginAttempts <= 0;
@@ -28,10 +55,24 @@ module.exports = class UserAuthDecorator {
     );
   }
 
+  get name() {
+    const output = [];
+    if (this.firstName) output.push(this.firstName);
+    if (this.lastName) output.push(this.lastName);
+
+    return output.join(' ');
+  }
+
   get hasExpired() {
-    const updatedAt = moment().diff(this.secretIssuedOn);
-    const diff = moment.duration(updatedAt);
-    return diff.asHours() > 24;
+    return isWithinSecretExpirationHrsWindow(
+      this.secretIssuedOn,
+    );
+  }
+
+  get cannotResetPassword() {
+    return isWithinSecretExpirationHrsWindow(
+      this.passwordResetTokenIssuedOn,
+    );
   }
 
   static async isListeningFor(listens = '') {
@@ -115,11 +156,21 @@ module.exports = class UserAuthDecorator {
     });
   }
 
-  async setSecret() {
-    this.secret = generateRandomSecret();
-    this.secretIssuedOn = new Date();
+  setSecret() {
     this.apiKeys = [];
-    return this;
+    return issueTokensAndStamps(
+      this,
+      'secret',
+      'secretIssuedOn',
+    );
+  }
+
+  setPasswordResetToken() {
+    return issueTokensAndStamps(
+      this,
+      'passwordResetToken',
+      'passwordResetTokenIssuedOn',
+    );
   }
 
   async setPassword(s) {

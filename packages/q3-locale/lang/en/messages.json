@@ -30,5 +30,7 @@
   "insufficientPermissions": "Account requires a greater permission level to complete this operation",
   "credentials": "Bad credentials. Please try again.",
   "prohibited": "This account has been blocked due to suspicious activity",
-  "incorrectPassword": "Bad credentials. Please try again."
+  "incorrectPassword": "Bad credentials. Please try again.",
+  "validation": "The request failed validation. Please check your data and try again.",
+  "expired": "The information used in this request has expired"
 }

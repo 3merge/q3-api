@@ -19,6 +19,14 @@ const BaseUserModel = new Schema(
       type: Date,
       private: true,
     },
+    passwordResetToken: {
+      type: String,
+      private: true,
+    },
+    passwordResetTokenIssuedOn: {
+      type: Date,
+      private: true,
+    },
     firstName: {
       type: String,
       required: true,
