@@ -1,6 +1,7 @@
 /* eslint-disable func-names, no-param-reassign */
 const { invoke, get } = require('lodash');
 const { exception } = require('q3-core-responder');
+const { executeOn } = require('..');
 
 const removeEmpty = (obj) => {
   Object.keys(obj).forEach((key) => {
@@ -101,16 +102,21 @@ async function removeSubDocument(field, id) {
     subdoc.remove();
   };
 
-  if (Array.isArray(id)) {
-    id.map(removeChild);
-  } else {
-    removeChild(id);
-  }
+  executeOn(id, removeChild);
 
   return this.save({
     redact: true,
     op: 'Delete',
   });
+}
+
+async function updateSubDocuments(field, ids, args) {
+  ids.map((id) => {
+    const d = invoke(get(this, field), 'id', id);
+    return d ? d.set(args) : null;
+  });
+
+  return this.save();
 }
 
 async function updateSubDocument(field, id, args) {
@@ -184,6 +190,7 @@ const plugin = (schema) => {
   schema.methods.pushSubDocument = pushSubDocument;
   schema.methods.removeSubDocument = removeSubDocument;
   schema.methods.updateSubDocument = updateSubDocument;
+  schema.methods.updateSubDocuments = updateSubDocuments;
   schema.statics.getAllFields = getAllFields;
   schema.statics.getReferentialPaths = getReferentialPaths;
   schema.statics.getRequiredFields = getRequiredFields;

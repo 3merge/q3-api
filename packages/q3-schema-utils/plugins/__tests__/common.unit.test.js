@@ -205,6 +205,25 @@ describe('Commons plugin', () => {
     });
   });
 
+  describe('updateSubDocuments', () => {
+    it.only('should update a single document', async () => {
+      const resp = await Model.create(stub);
+      const {
+        dogs: [{ _id: id1 }, { _id: id2 }],
+      } = resp;
+      const breed = 'Boston';
+      const { dogs } = await resp.updateSubDocuments(
+        'dogs',
+        [id1, id2],
+        { breed },
+      );
+
+      expect(dogs[0].breed).toBe(breed);
+      expect(dogs[1].breed).toBe(breed);
+      expect(dogs[2].breed).not.toBe(breed);
+    });
+  });
+
   describe('findOrCreate', () => {
     it('should create then return duplicate document', async () => {
       const args = { name: 'John', age: 26 };
