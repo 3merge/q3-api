@@ -79,7 +79,7 @@ describe('authenticate /POST', () => {
       .expect(401);
   });
 
-  it('should return 200', async () => {
+  it.skip('should return 200', async () => {
     const doc = await Users.findOne({ email });
     const p = await doc.setPassword();
     const { body } = await agent
@@ -91,7 +91,7 @@ describe('authenticate /POST', () => {
     expect(body).toHaveProperty('nonce');
   });
 
-  it('should track devices', async () => {
+  it.skip('should track devices', async () => {
     const doc = await Users.findOne({ email });
     const p = await doc.setPassword();
     await agent
