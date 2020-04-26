@@ -75,6 +75,8 @@ const BaseUserModel = new Schema(
       select: false,
       private: true,
     },
+    lastLoggedIn: Date,
+    source: [String],
   },
   {
     withUploads: true,

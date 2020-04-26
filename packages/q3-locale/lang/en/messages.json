@@ -25,7 +25,7 @@
   "apikeygenerated": "New API key ready",
   "verify": "Verify your account",
   "onReverify": "New verification token generated",
-  "account": "Unknown account email",
+  "account": "An account could not be found for this action",
   "noPermission": "Account cannot perform this operation",
   "insufficientPermissions": "Account requires a greater permission level to complete this operation",
   "credentials": "Bad credentials. Please try again.",

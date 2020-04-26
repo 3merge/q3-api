@@ -70,6 +70,43 @@ describe('authenticate /POST', () => {
       .expect(401);
   });
 
+  it('should return 200', async () => {
+    const doc = await Users.findOne({ email });
+    const p = await doc.setPassword();
+    const { body } = await agent
+      .post('/authenticate')
+      .send({ email, password: p })
+      .expect(201);
+
+    expect(body).toHaveProperty('token');
+    expect(body).toHaveProperty('nonce');
+  });
+
+  const getSource = async (userId) => {
+    const { source } = await Users.findById(userId)
+      .select('source')
+      .lean()
+      .exec();
+
+    return source;
+  };
+
+  it('should track devices', async () => {
+    const doc = await Users.findOne({ email });
+    const p = await doc.setPassword();
+    await agent
+      .post('/authenticate')
+      .send({ email, password: p });
+
+    expect(getSource(doc.id)).resolves.toHaveLength(1);
+
+    await agent
+      .post('/authenticate')
+      .send({ email, password: p });
+
+    expect(getSource(doc.id)).resolves.toHaveLength(1);
+  });
+
   it('should return 403', async () => {
     const doc = await Users.findOne({ email });
     doc.set({
