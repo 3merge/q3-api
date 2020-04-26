@@ -56,6 +56,7 @@ module.exports = {
     } = await datasource.paginate(params, {
       options: { redact: true },
       page: page >= 0 ? page + 1 : 1,
+      collation: { locale: 'en' },
       lean: { virtuals: true },
       sort,
       select,
