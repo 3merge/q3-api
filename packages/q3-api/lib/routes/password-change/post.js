@@ -3,6 +3,7 @@ const {
   check,
   verify,
 } = require('q3-core-composer');
+const { emit } = require('q3-core-mailer');
 const { exception } = require('q3-core-responder');
 const { Users } = require('../../models');
 
@@ -11,6 +12,8 @@ const updatePassword = async ({ body, user }, res) => {
   const doc = await Users.findVerifiedById(user.id);
   await doc.verifyPassword(previousPassword, true);
   await doc.setPassword(newPassword);
+
+  emit('onPasswordChange', doc.toJSON());
   res.acknowledge();
 };
 
