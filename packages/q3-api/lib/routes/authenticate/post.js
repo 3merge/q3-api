@@ -16,7 +16,7 @@ const LoginIntoAccount = async (
   },
   res,
 ) => {
-  const { source } = useragent;
+  const source = get(useragent, 'source', null);
   const userResult = await Users.findVerifiedByEmail(email);
   if (!userResult.isPermitted)
     exception('Authorization').msg('prohibited').throw();
@@ -26,10 +26,13 @@ const LoginIntoAccount = async (
   const { _id: id, secret } = userResult;
   const tokens = await generateIDToken(id, secret, host);
 
-  if (!get(userResult, 'source', []).includes(source)) {
+  if (
+    source &&
+    !get(userResult, 'source', []).includes(source)
+  ) {
     emit('onNewDevice', {
+      user: userResult,
       useragent,
-      ...userResult.toJSON(),
     });
 
     await userResult.update({
