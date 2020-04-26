@@ -12,6 +12,7 @@ const Model = {};
   'removeSubDocument',
   'getSubDocument',
   'updateSubDocument',
+  'updateSubDocuments',
   'exec',
   'find',
   'findOne',

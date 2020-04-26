@@ -250,5 +250,22 @@ describe('Rester', () => {
 
       expect(body.children).toHaveLength(1);
     });
+
+    it('should update multiple sub-documents', async () => {
+      const doc = await Foo.findById(id).exec();
+      const ids = doc.children.map((c) => c.id);
+      const term = 'Updated!';
+
+      const { body, status } = await request
+        .patch(`/foos/${id}/children?ids=${ids}`)
+        .send({
+          term,
+        });
+
+      expect(status).toBe(200);
+      expect(
+        body.children.every((c) => c.term === term),
+      ).toBeTruthy();
+    });
   });
 });

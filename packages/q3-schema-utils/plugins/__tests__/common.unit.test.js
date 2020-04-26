@@ -206,7 +206,7 @@ describe('Commons plugin', () => {
   });
 
   describe('updateSubDocuments', () => {
-    it.only('should update a single document', async () => {
+    it('should update a single document', async () => {
       const resp = await Model.create(stub);
       const {
         dogs: [{ _id: id1 }, { _id: id2 }],
