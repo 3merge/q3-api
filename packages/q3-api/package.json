@@ -16,6 +16,7 @@
     "deep-diff": "^1.0.2",
     "dotenv": "^8.2.0",
     "etag": "^1.8.1",
+    "express-device": "^0.4.2",
     "express-fileupload": "^1.1.7-alpha.3",
     "express-rate-limit": "^5.0.0",
     "flat": "^5.0.0",
@@ -40,8 +41,7 @@
     "q3-schema-notes": "^1.0.73",
     "q3-schema-permissions": "^1.0.78",
     "q3-schema-types": "^1.1.73",
-    "q3-schema-users": "^1.0.73",
-    "request-context": "^2.0.0"
+    "q3-schema-users": "^1.0.73"
   },
   "peerDependencies": {
     "express": "^4.17.1",

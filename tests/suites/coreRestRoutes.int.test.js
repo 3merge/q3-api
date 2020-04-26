@@ -1,5 +1,4 @@
 /* eslint-disable import/no-extraneous-dependencies */
-jest.unmock('request-context');
 jest.unmock('express-validator');
 
 const Q3 = require('q3-api');

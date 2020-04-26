@@ -14,8 +14,7 @@
   "peerDependencies": {
     "mongoose": "^5.7.7",
     "q3-api": "^1.0.30",
-    "q3-core-responder": "^1.0.21",
-    "request-context": "^2.0.0"
+    "q3-core-responder": "^1.0.21"
   },
   "devDependencies": {
     "q3-test-utils": "^1.0.113"

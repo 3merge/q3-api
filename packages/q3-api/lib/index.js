@@ -1,6 +1,6 @@
 require('dotenv').config();
 require('q3-locale');
-const ctx = require('request-context');
+
 const { get } = require('lodash');
 const walker = require('q3-core-walker');
 const {
@@ -11,7 +11,6 @@ const runner = require('./config');
 const app = require('./config/express');
 const mongoose = require('./config/mongoose');
 const models = require('./models');
-// const jobScheduler = require('./scheduler');
 
 const Q3 = {
   config(args = {}) {
@@ -20,17 +19,7 @@ const Q3 = {
   },
 
   routes(routes) {
-    app.use(
-      middleware(
-        models.Users,
-        models.Permissions,
-        (req) => {
-          const { user, grant } = req;
-          ctx.set('q3-session:user', user);
-          ctx.set('q3-session:grant', grant);
-        },
-      ),
-    );
+    app.use(middleware(models.Users, models.Permissions));
 
     runner();
     app.use(walker(__dirname));
@@ -48,10 +37,6 @@ const Q3 = {
 
   setModel(name, Schema) {
     return mongoose.model(name, Schema);
-  },
-
-  getSessionUser() {
-    return ctx.get('q3-session:user');
   },
 
   async connect() {
@@ -72,8 +57,6 @@ const Q3 = {
 
 Q3.$app = app;
 Q3.$mongoose = mongoose;
-// Q3.schedule = jobScheduler;
-Q3.session = ctx;
 
 Object.assign(Q3, models);
 module.exports = Q3;

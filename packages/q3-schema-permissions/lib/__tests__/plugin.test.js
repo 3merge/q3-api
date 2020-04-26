@@ -3,8 +3,6 @@ const mongoose = require('mongoose');
 const plugin = require('../plugin');
 const PermissionSchema = require('..');
 
-jest.unmock('request-context');
-
 const userID = mongoose.Types.ObjectId();
 
 const coll = 'AccessControlPlugin';
