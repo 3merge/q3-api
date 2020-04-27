@@ -1,39 +1,10 @@
 const { exectuteOnAsync } = require('q3-schema-utils');
 const MailerCore = require('./core');
-
-const langCode = (v) =>
-  typeof v === 'string'
-    ? v.toLowerCase().split('-')[0]
-    : 'en';
-
-const isFn = (v) => typeof v === 'function';
-
-const runAsFn = (v, args) => (isFn(v) ? v(args) : v);
-
-const getTemplate = (lang, eventName, templateName) =>
-  `${langCode(lang)}-${templateName || eventName}`;
-
-const appendFilterFnToUserModel = (promise, filterFn) =>
-  promise
-    .select('role email firstName lastName lang __t')
-    .lean()
-    .then((res) =>
-      isFn(filterFn) ? res.filter(filterFn) : res,
-    );
-
-const reduceListenersByLang = (users = [], getUrl) =>
-  users.reduce((acc, user) => {
-    const l = langCode(user.lang);
-    if (!acc[l]) acc[l] = [];
-
-    acc[l].push({
-      url: runAsFn(getUrl, user.role),
-      to: user.email,
-      ...user,
-    });
-
-    return acc;
-  }, {});
+const {
+  appendFilterFnToUserModel,
+  reduceListenersByLang,
+  getTemplate,
+} = require('./utils');
 
 /**
  * @NOTE
