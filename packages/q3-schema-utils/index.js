@@ -6,10 +6,12 @@ const { compact } = require('lodash');
 /**
  * Useful for post-middleware as the first parameters varies depending on op.
  */
-exports.executeOnAsync = async (target, next) =>
-  Array.isArray(target)
+exports.executeOnAsync = async (target, next) => {
+  if (!target) return null;
+  return Array.isArray(target)
     ? Promise.all(target.map(next))
     : next(target);
+};
 
 exports.executeOn = (target, next) =>
   Array.isArray(target) ? target.map(next) : next(target);

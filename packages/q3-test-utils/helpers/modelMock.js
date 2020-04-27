@@ -28,8 +28,12 @@ const Model = {};
 
 Model.reset = () =>
   Object.values(Model).forEach((method) => {
-    if (typeof method === 'object' && 'mockReset' in method)
-      method.mockReset();
+    if (
+      (typeof method === 'object' ||
+        typeof method === 'function') &&
+      'mockReset' in method
+    )
+      method.mockClear();
   });
 
 Model.collection = {
