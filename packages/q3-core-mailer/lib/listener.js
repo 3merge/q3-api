@@ -1,3 +1,4 @@
+const { exectuteOnAsync } = require('q3-schema-utils');
 const MailerCore = require('./core');
 
 const langCode = (v) =>
@@ -5,11 +6,34 @@ const langCode = (v) =>
     ? v.toLowerCase().split('-')[0]
     : 'en';
 
-const runAsFn = (v, args) =>
-  typeof v === 'function' ? v(args) : v;
+const isFn = (v) => typeof v === 'function';
 
-const getTemplate = (lang, templateName) =>
-  `${langCode(lang)}-${templateName}`;
+const runAsFn = (v, args) => (isFn(v) ? v(args) : v);
+
+const getTemplate = (lang, eventName, templateName) =>
+  `${langCode(lang)}-${templateName || eventName}`;
+
+const appendFilterFnToUserModel = (promise, filterFn) =>
+  promise
+    .select('role email firstName lastName lang __t')
+    .lean()
+    .then((res) =>
+      isFn(filterFn) ? res.filter(filterFn) : res,
+    );
+
+const reduceListenersByLang = (users = [], getUrl) =>
+  users.reduce((acc, user) => {
+    const l = langCode(user.lang);
+    if (!acc[l]) acc[l] = [];
+
+    acc[l].push({
+      url: runAsFn(getUrl, user.role),
+      to: user.email,
+      ...user,
+    });
+
+    return acc;
+  }, {});
 
 /**
  * @NOTE
@@ -23,37 +47,21 @@ module.exports = (UserModel, url, subjects) => async (
   filterFn,
   templateName,
 ) => {
-  const users = await UserModel.find({
-    listens: eventName,
-    verified: true,
-    active: true,
-  })
-    .select('role email firstName lastName lang __t')
-    .lean()
-    .exec();
-
-  const listeners = await users
-    .filter((user) => runAsFn(filterFn, user))
-    .reduce((acc, user) => {
-      const l = langCode(user.lang);
-      if (!acc[l]) acc[l] = [];
-
-      acc[l].push({
-        url: runAsFn(url, user.role),
-        to: user.email,
-        ...user,
-      });
-
-      return acc;
-    }, {});
-
-  const entries = Object.entries(listeners);
+  const listeners = await reduceListenersByLang(
+    await appendFilterFnToUserModel(
+      UserModel.find({
+        listens: eventName,
+        verified: true,
+        active: true,
+      }),
+      filterFn,
+    ),
+    url,
+  );
 
   return (context) => {
     const sender = (lang, user) =>
-      MailerCore(
-        getTemplate(lang, templateName || eventName),
-      )
+      MailerCore(getTemplate(lang, eventName, templateName))
         .to([user.to])
         .subject(subjects[eventName][lang])
         .props({
@@ -62,10 +70,12 @@ module.exports = (UserModel, url, subjects) => async (
         })
         .send();
 
-    const messages = entries.map(async ([lang, to]) => {
-      Promise.all(to.map((user) => sender(lang, user)));
-    });
-
-    return Promise.all(messages);
+    return exectuteOnAsync(
+      Object.entries(listeners),
+      async ([lang, to]) =>
+        exectuteOnAsync(to, async (user) =>
+          sender(lang, user),
+        ),
+    );
   };
 };

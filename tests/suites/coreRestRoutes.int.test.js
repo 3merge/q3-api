@@ -24,6 +24,11 @@ const getSource = async (userId) => {
 };
 
 beforeAll(async () => {
+  Q3.config({
+    charts: {
+      '123': ['Super'],
+    },
+  });
   Q3.routes();
   agent = supertest(Q3.$app);
   await Q3.connect();
@@ -40,6 +45,11 @@ beforeAll(async () => {
 
   AuthorizationSuper = `Apikey ${await sup.generateApiKey()}`;
   ({ _id: id } = sup);
+
+  await Permissions.create({
+    coll: 'q3-api-users',
+    op: 'Read',
+  });
 });
 
 afterAll(async () => {
@@ -248,6 +258,39 @@ describe('Search', () => {
     expect(filtered.fields.coll).toHaveLength(2);
     expect(filtered.fields.role).toHaveLength(1);
     expect(filtered.total).toBe(2);
+  });
+});
+
+describe('charts /GET', () => {
+  beforeEach(() => {
+    process.env.MONGODB_EMBEDDING_KEY = '123';
+    process.env.MONGODB_EMBEDDING_BASE =
+      'https://mongodb.com/charts';
+  });
+
+  it('should return 200', async () => {
+    const {
+      body: { url },
+    } = await agent
+      .get('/charts?id=123&branch')
+      .set({ Authorization: AuthorizationSuper })
+      .expect(200);
+
+    expect(url).toMatch('mongodb.com');
+    expect(url).toMatch('id=123');
+    expect(url).toMatch('filter=');
+  });
+});
+
+describe('statistics /GET', () => {
+  it('should return 200', async () => {
+    const { body } = await agent
+      .get('/statistics?collectionName=q3-api-users')
+      .set({ Authorization: AuthorizationSuper })
+      .expect(200);
+
+    expect(body).toHaveProperty('latest');
+    expect(body).toHaveProperty('previous');
   });
 });
 
