@@ -23,6 +23,8 @@ const {
   filterByEmailValidity,
   prefix,
   discoverEmailListenersInDir,
+  getTemplate,
+  reduceListenersByLang,
 } = require('../utils');
 
 describe('Mailer utils', () => {
@@ -65,6 +67,65 @@ describe('Mailer utils', () => {
       basename.mockReturnValue('onEvent');
       discoverEmailListenersInDir();
       expect(on).toHaveBeenCalled();
+    });
+  });
+
+  describe('"getTemplate"', () => {
+    it('should use template name', () =>
+      expect(
+        getTemplate('en-CA', 'event', 'subscribe'),
+      ).toMatch('en-subscribe'));
+
+    it('should use event name', () =>
+      expect(getTemplate('en-CA', 'event')).toMatch(
+        'en-event',
+      ));
+  });
+
+  describe('"getTemplate"', () => {
+    it('should use template name', () =>
+      expect(
+        getTemplate('en-CA', 'event', 'subscribe'),
+      ).toMatch('en-subscribe'));
+
+    it('should use event name', () =>
+      expect(getTemplate('en-CA', 'event')).toMatch(
+        'en-event',
+      ));
+  });
+
+  describe('"reduceListenersByLang"', () => {
+    const users = [
+      {
+        lang: 'en-CA',
+        role: 'Admin',
+        email: 'mibberson@3merge.ca',
+      },
+      {
+        lang: 'fr-CA',
+        role: 'Dev',
+        email: 'mibberson@3merge.ca',
+      },
+    ];
+
+    it('should group by lang', () => {
+      const grouped = reduceListenersByLang(users);
+      expect(grouped).toHaveProperty('en');
+      expect(grouped).toHaveProperty('fr');
+    });
+
+    it('should assign URL', () => {
+      const grouped = reduceListenersByLang(users, '/www');
+      expect(grouped.en[0]).toHaveProperty('url', '/www');
+    });
+
+    it('should assign dynamic URL', () => {
+      const grouped = reduceListenersByLang(users, (r) =>
+        r === 'Admin' ? '/admin' : '/dev',
+      );
+
+      expect(grouped.en[0]).toHaveProperty('url', '/admin');
+      expect(grouped.fr[0]).toHaveProperty('url', '/dev');
     });
   });
 });

@@ -7,6 +7,15 @@ const isValidEmailAddress = (v) =>
     String(v).toLowerCase(),
   );
 
+const langCode = (v) =>
+  typeof v === 'string'
+    ? v.toLowerCase().split('-')[0]
+    : 'en';
+
+const isFn = (v) => typeof v === 'function';
+
+const runAsFn = (v, args) => (isFn(v) ? v(args) : v);
+
 exports.filterByEmailValidity = (a = []) =>
   a
     .map((v) => v.trim())
@@ -28,3 +37,28 @@ exports.discoverEmailListenersInDir = (dir) => {
       Emitter.on(f, require(path.join(dir, dirent)));
   });
 };
+
+exports.getTemplate = (lang, eventName, templateName) =>
+  `${langCode(lang)}-${templateName || eventName}`;
+
+exports.appendFilterFnToUserModel = (promise, filterFn) =>
+  promise
+    .select('role email firstName lastName lang __t')
+    .lean()
+    .then((res) =>
+      isFn(filterFn) ? res.filter(filterFn) : res,
+    );
+
+exports.reduceListenersByLang = (users = [], getUrl) =>
+  users.reduce((acc, user) => {
+    const l = langCode(user.lang);
+    if (!acc[l]) acc[l] = [];
+
+    acc[l].push({
+      url: runAsFn(getUrl, user.role),
+      to: user.email,
+      ...user,
+    });
+
+    return acc;
+  }, {});

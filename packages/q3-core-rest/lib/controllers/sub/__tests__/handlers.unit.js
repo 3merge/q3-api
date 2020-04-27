@@ -5,6 +5,7 @@ const {
   RemoveMany,
   List,
   Patch,
+  PatchMany,
   Put,
   Post,
 } = require('../handlers');
@@ -95,6 +96,22 @@ describe('SubController route handlers', () => {
       expect(Model.updateSubDocument).toHaveBeenCalledWith(
         'friends',
         '1',
+        args,
+      );
+    });
+  });
+
+  describe('PatchMany', () => {
+    it('should set the property', async () => {
+      const args = { name: 'Jon' };
+      req.query = { ids: ['1', '2'] };
+      req.body = args;
+      req.fieldName = 'friends';
+      await PatchMany(req, res);
+      expect(res.update).toHaveBeenCalled();
+      expect(Model.updateSubDocuments).toHaveBeenCalledWith(
+        'friends',
+        ['1', '2'],
         args,
       );
     });

@@ -9,9 +9,16 @@ const {
   Put,
   Post,
   Patch,
+  PatchMany,
   Remove,
   RemoveMany,
 } = require('./handlers');
+
+const appendValidationForMultiOp = (ctrl) => {
+  // eslint-disable-next-line
+  ctrl.validation = [query('ids').isString()];
+  return ctrl;
+};
 
 module.exports = class SubDocumentControllerCommander extends RestRegistration {
   exec() {
@@ -21,9 +28,10 @@ module.exports = class SubDocumentControllerCommander extends RestRegistration {
 
     this.getListController(rootPath);
     this.getDeleteManyController(rootPath);
+    this.getPatchManyController(rootPath);
+
     this.getPutController(rootPath);
     this.getPostController(rootPath);
-
     this.getPatchController(resourcePath);
     this.getDeleteController(resourcePath);
     return this.app;
@@ -112,6 +120,20 @@ module.exports = class SubDocumentControllerCommander extends RestRegistration {
     return this.makePatch(path, Patch);
   }
 
+  getPatchManyController(path) {
+    PatchMany.authorization = [
+      redact(this.collectionName)
+        .requireField(this.field)
+        .inRequest('body')
+        .inResponse(this.field)
+        .withPrefix(this.field)
+        .done(),
+    ];
+
+    appendValidationForMultiOp(PatchMany);
+    return this.makePatch(path, PatchMany);
+  }
+
   getDeleteController(path) {
     Remove.authorization = [
       redact(this.collectionName).done(),
@@ -124,8 +146,8 @@ module.exports = class SubDocumentControllerCommander extends RestRegistration {
     RemoveMany.authorization = [
       redact(this.collectionName).done(),
     ];
-    RemoveMany.validation = [query('ids').isArray()];
 
+    appendValidationForMultiOp(RemoveMany);
     return this.makeDelete(path, RemoveMany);
   }
 };

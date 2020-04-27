@@ -70,5 +70,36 @@ module.exports = () => {
         ),
       );
     },
+
+    /**
+     * @TODO
+     * Refactor with above methods.
+     * This was brought in temporarily from a separate project.
+     */
+    getFrom(Key) {
+      return s3
+        .getObject({
+          Bucket: process.env.PRIVATE_BUCKET,
+          Key,
+        })
+        .createReadStream();
+    },
+
+    add(Key, data) {
+      return new Promise((resolve, reject) =>
+        s3.putObject(
+          {
+            ServerSideEncryption: 'AES256',
+            Bucket: process.env.PRIVATE_BUCKET,
+            Body: Buffer.from(data),
+            Key,
+          },
+          (err) => {
+            if (err) reject(err);
+            resolve();
+          },
+        ),
+      );
+    },
   };
 };

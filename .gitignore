@@ -9,6 +9,7 @@ yarn-error.log*
 build/
 dist/
 schema/
+sample/
 
 # Coverage directory used by tools like istanbul
 coverage
