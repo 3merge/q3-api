@@ -12,7 +12,7 @@ const getRange = (d) => ({
 });
 
 const GetStats = async (
-  { query: { collectionName } },
+  { query: { collectionName }, body },
   res,
 ) => {
   if (
@@ -32,9 +32,11 @@ const GetStats = async (
   res.ok({
     latest: await Model.countDocuments({
       createdAt: getRange(),
+      ...body,
     }),
     previous: await Model.countDocuments({
       createdAt: getRange(moment().subtract('1', 'months')),
+      ...body,
     }),
   });
 };
