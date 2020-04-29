@@ -14,7 +14,7 @@ const sanitizeQueryIds = (ids) =>
     typeof v === 'string'
       ? v.split(',').map((item) => item.trim())
       : v,
-  );
+  ).flat();
 
 module.exports = {
   async List({ subdocs, fieldName, marshal, query }, res) {

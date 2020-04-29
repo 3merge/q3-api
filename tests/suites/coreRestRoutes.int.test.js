@@ -164,16 +164,6 @@ describe('password-change /POST', () => {
       })
       .set({ Authorization: AuthorizationSuper })
       .expect(204));
-
-  it('should return 401', () =>
-    agent
-      .post('/password-change')
-      .send({
-        previousPassword: 'hey',
-        newPassword: 'pass!',
-        confirmNewPassword: 'pass!',
-      })
-      .expect(401));
 });
 
 describe('profile /GET', () => {

@@ -64,6 +64,7 @@ describe('Version helpers', () => {
     it('should serve nested key differences', () => {
       const output = diff(
         {
+          id: 1,
           foo: 2,
           bar: {
             quuz: 1,
@@ -76,6 +77,7 @@ describe('Version helpers', () => {
           },
         },
         {
+          id: 2,
           foo: 1,
           bar: {
             quuz: 1,
@@ -87,9 +89,11 @@ describe('Version helpers', () => {
             },
           },
         },
+        ['*id*'],
       );
 
       expect(output).toHaveProperty('foo', 2);
+      expect(output).not.toHaveProperty('id');
       expect(output.bar).not.toHaveProperty('quuz');
       expect(output.bar.thunk).toHaveLength(2);
       expect(output.bar.deeper.truthy).toBeFalsy();

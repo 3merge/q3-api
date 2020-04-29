@@ -253,11 +253,13 @@ describe('Rester', () => {
 
     it('should update multiple sub-documents', async () => {
       const doc = await Foo.findById(id).exec();
-      const ids = doc.children.map((c) => c.id);
+      const ids = doc.children
+        .map((c) => `ids[]=${c.id}`)
+        .join('&');
       const term = 'Updated!';
 
       const { body, status } = await request
-        .patch(`/foos/${id}/children?ids=${ids}`)
+        .patch(`/foos/${id}/children?${ids}`)
         .send({
           term,
         });

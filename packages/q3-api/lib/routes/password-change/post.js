@@ -62,8 +62,6 @@ updatePassword.validation = [
     .withMessage((v, { req }) => req.t.val('newPassword')),
 ];
 
-updatePassword.authorization = [verify];
-
 const Ctrl = compose(updatePassword);
 Ctrl.matchesConfirmNewPasswordField = matchesConfirmNewPasswordField;
 Ctrl.$og = updatePassword;

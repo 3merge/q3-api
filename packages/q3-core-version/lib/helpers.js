@@ -6,6 +6,7 @@ const {
   isPlainObject,
 } = require('lodash');
 const flat = require('flat');
+const micromatch = require('micromatch');
 
 const prefixCollectionName = (name) =>
   `${name}-patch-history`;
@@ -55,6 +56,7 @@ exports.getFromPatchHistory = (
       return inst.connection.db
         .collection(prefixCollectionName(collectionName))
         .find(op)
+        .sort({ modifiedOn: -1 })
         .toArray((err, docs) =>
           resolve(err ? null : mapWithoutIds(docs)),
         );
@@ -64,7 +66,7 @@ exports.getFromPatchHistory = (
   });
 };
 
-const diff = (a, b) => {
+const diff = (a, b, fields = []) => {
   if (!a || !b) return {};
   const inner = flat(a, { safe: true });
   const out = flat(b, { safe: true });
@@ -84,6 +86,10 @@ const diff = (a, b) => {
     },
     {},
   );
+
+  micromatch(Object.keys(output), fields).forEach((key) => {
+    delete output[key];
+  });
 
   return flat.unflatten(output);
 };

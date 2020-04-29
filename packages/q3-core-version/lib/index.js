@@ -9,39 +9,37 @@ const {
   diff,
 } = require('./helpers');
 
-const removeSensitiveProperties = (a) =>
-  a.filter(
-    (path) =>
-      ![
-        '_id',
-        '__v',
-        '__t',
-        '__$q3',
-        'id',
-        'code',
-        'secret',
-        'password',
-        'transaction',
-      ].includes(path),
-  );
-
 module.exports = (schema, instance) => {
   schema.add({
     lastModifiedBy: mongoose.SchemaTypes.Mixed,
   });
 
   schema.pre('save', async function markModified() {
+    if (this.isNew) return;
+
     const original = await this.constructor
       .findById(this._id)
-      .lean()
       .exec();
 
-    const modifiedBy = getUserMeta(this);
-    const paths = invoke(this, 'modifiedPaths');
+    if (!original) return;
 
-    const modified = pick(
-      diff(this.toJSON(), original),
-      removeSensitiveProperties(paths),
+    const modifiedBy = getUserMeta(this);
+    const modified = diff(
+      this.toJSON(),
+      original.toJSON(),
+      [
+        '*_id*',
+        '*__v*',
+        '*__t*',
+        '__$q3',
+        '*id*',
+        'code',
+        'secret',
+        'password',
+        'transaction',
+        '*updatedAt*',
+        '*createdBy*',
+      ],
     );
 
     set(this, '$locals.patch', {
@@ -50,16 +48,13 @@ module.exports = (schema, instance) => {
        * Ref to q3-core-session.
        * When enabled, it injects variables into __$q3.
        */
+      ref: this._id,
       modifiedOn: new Date().toISOString(),
       modified,
       modifiedBy,
     });
 
-    if (
-      !this.isNew &&
-      hasKeys(modifiedBy) &&
-      hasKeys(modified)
-    ) {
+    if (hasKeys(modifiedBy) && hasKeys(modified)) {
       this.lastModifiedBy = modifiedBy;
 
       await insertToPatchHistory(
@@ -75,6 +70,9 @@ module.exports = (schema, instance) => {
     return getFromPatchHistory(
       instance,
       getCollectionName(this),
+      {
+        ref: this._id,
+      },
     );
   };
 };

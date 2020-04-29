@@ -16,7 +16,7 @@ const {
 
 const appendValidationForMultiOp = (ctrl) => {
   // eslint-disable-next-line
-  ctrl.validation = [query('ids').isString()];
+  ctrl.validation = [query('ids').isArray()];
   return ctrl;
 };
 

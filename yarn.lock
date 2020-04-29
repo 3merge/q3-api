@@ -6758,7 +6758,7 @@ mongoose-unique-validator@^2.0.3:
     lodash.foreach "^4.1.0"
     lodash.get "^4.0.2"
 
-mongoose@^5.7.1, mongoose@^5.7.12, mongoose@^5.8.5, mongoose@^5.9.10:
+mongoose@^5.7.1, mongoose@^5.7.12, mongoose@^5.8.5:
   version "5.9.10"
   resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.9.10.tgz#e0f0e5e2f14fac1fe219123515630eba165f27bc"
   integrity sha512-w1HNukfJzzDLfcI1f79h2Wj4ogVbf+X8hRkyFgqlcjK7OnDlAgahjDMIsT+mCS9jKojrMhjSsZIs9FiRPkLqMg==
