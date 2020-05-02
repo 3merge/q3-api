@@ -11,12 +11,13 @@ require('csv-express');
 
 const server = express();
 
+server.all(session.middleware);
+
 server.enable('trust proxy');
 server.use(helmet());
 server.use(cors());
 server.use(compression());
 server.use(bodyParser.json());
-server.use(session.middleware);
 server.use(useragent.express());
 
 server.use(

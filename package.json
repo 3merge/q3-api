@@ -12,13 +12,15 @@
     "lint": "eslint . --ext .js --ignore-pattern node_modules",
     "test:packages": "jest \"^(.*?)\\.unit.test.js\" --collectCoverage --coverageDirectory coverage/coverage_units",
     "test:integrations": "jest \"^(.*?)\\.int.test.js\" --runInBand --detectOpenHandles --forceExit --collectCoverage --coverageDirectory coverage/coverage_integrations",
+    "test:e2e": "yarn workspace e2e-tests test",
     "test": "yarn test:packages && yarn test:integrations",
     "coverage": "lcov-result-merger coverage/coverage_*/lcov.info | codecov --pipe",
     "upload": "lerna publish",
     "demo": "nodemon demo"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "e2e-tests"
   ],
   "devDependencies": {
     "babel-eslint": "^10.0.3",
