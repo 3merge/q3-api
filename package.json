@@ -10,7 +10,7 @@
     "postinstall": "yarnw-sync-deps && yarn-deduplicate",
     "bootstrap": "lerna bootstrap --use-workspaces",
     "lint": "eslint . --ext .js --ignore-pattern node_modules",
-    "test:packages": "jest \"^(.*?)\\.unit.test.js\" --collectCoverage --coverageDirectory coverage/coverage_units",
+    "test:packages": "jest \"^(.*?)\\.unit.test.js\"  --detectOpenHandles --forceExit --collectCoverage --coverageDirectory coverage/coverage_units",
     "test:integrations": "jest \"^(.*?)\\.int.test.js\" --runInBand --detectOpenHandles --forceExit --collectCoverage --coverageDirectory coverage/coverage_integrations",
     "test:e2e": "yarn workspace e2e-tests test",
     "test": "yarn test:packages && yarn test:e2e",
