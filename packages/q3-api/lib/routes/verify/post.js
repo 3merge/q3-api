@@ -13,15 +13,20 @@ const verify = async (
     verificationCode,
   );
 
-  if (doc.hasExpired)
+  if (doc.verified)
     exception('Conflict')
+      .msg('alreadyVerified')
+      .field('id')
+      .throw();
+
+  if (doc.hasExpired)
+    exception('Gone')
       .msg('expired')
       .field('verificationCode')
       .throw();
 
   await doc.setPassword(newPassword);
   emit('onVerify', doc);
-
   res.acknowledge();
 };
 

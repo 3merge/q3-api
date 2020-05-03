@@ -18,10 +18,11 @@ module.exports = (app) => (Model) => {
       'restify',
     ].every(Model.schema.get.bind(schema))
   ) {
-    // eslint-disable-next-line
-    console.warn(
-      `${Model.collection.collectionName} not added to REST`,
-    );
+    if (process.env.DEBUG)
+      // eslint-disable-next-line
+      console.warn(
+        `${Model.collection.collectionName} not added to REST`,
+      );
     return;
   }
 

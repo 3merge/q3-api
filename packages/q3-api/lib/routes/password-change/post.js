@@ -1,8 +1,4 @@
-const {
-  compose,
-  check,
-  verify,
-} = require('q3-core-composer');
+const { compose, check } = require('q3-core-composer');
 const { emit } = require('q3-core-mailer');
 const { exception } = require('q3-core-responder');
 const { Users } = require('../../models');
@@ -47,7 +43,17 @@ const updatePassword = async (
       .msg('previousPasswordOrTokenRequired')
       .throw();
 
+  if (await doc.verifyPassword(newPassword))
+    exception('Validation')
+      .msg('passwordHasBeenUsedBefore')
+      .field('newPassword')
+      .throw();
+
   await doc.setPassword(newPassword);
+
+  // force logout on other devices
+  await doc.setSecret();
+
   emit('onPasswordChange', doc);
   res.acknowledge();
 };

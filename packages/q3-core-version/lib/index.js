@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { invoke, pick, set } = require('lodash');
+const { set } = require('lodash');
 const {
   insertToPatchHistory,
   getFromPatchHistory,

@@ -14,29 +14,34 @@ const price = {
 
 RateSchema.add({ quantity: price });
 
-const OrderLineSchema = new Schema({
-  bucket: {
-    type: Schema.Types.Mixed,
-    private: true,
+const OrderLineSchema = new Schema(
+  {
+    bucket: {
+      type: Schema.Types.Mixed,
+      private: true,
+    },
+    subtotal: {
+      type: Number,
+      private: true,
+      default: 0,
+    },
+    product: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+    },
+    quantity: {
+      type: Number,
+      required: true,
+    },
+    price: {
+      ...price,
+      private: true,
+    },
   },
-  subtotal: {
-    type: Number,
-    private: true,
-    default: 0,
+  {
+    disableOwnership: true,
   },
-  product: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-  },
-  quantity: {
-    type: Number,
-    required: true,
-  },
-  price: {
-    ...price,
-    private: true,
-  },
-});
+);
 
 const OrderSchema = new Schema(
   {
