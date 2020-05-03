@@ -1,8 +1,4 @@
-const {
-  compose,
-  check,
-  verify,
-} = require('q3-core-composer');
+const { compose, check } = require('q3-core-composer');
 const { emit } = require('q3-core-mailer');
 const { exception } = require('q3-core-responder');
 const { Users } = require('../../models');
