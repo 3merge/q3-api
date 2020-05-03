@@ -47,7 +47,17 @@ const updatePassword = async (
       .msg('previousPasswordOrTokenRequired')
       .throw();
 
+  if (await doc.verifyPassword(newPassword))
+    exception('Validation')
+      .msg('passwordHasBeenUsedBefore')
+      .field('newPassword')
+      .throw();
+
   await doc.setPassword(newPassword);
+
+  // force logout on other devices
+  await doc.setSecret();
+
   emit('onPasswordChange', doc);
   res.acknowledge();
 };

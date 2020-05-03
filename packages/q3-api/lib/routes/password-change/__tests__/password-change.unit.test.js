@@ -50,7 +50,11 @@ describe('PasswordResetCtrl', () => {
       const acknowledge = jest.fn();
 
       Users.findVerifiedById.mockResolvedValue({
-        verifyPassword: jest.fn().mockReturnValue(true),
+        verifyPassword: jest
+          .fn()
+          .mockResolvedValueOnce(true)
+          .mockResolvedValueOnce(false),
+        setSecret: jest.fn(),
         setPassword,
       });
 
@@ -75,7 +79,8 @@ describe('PasswordResetCtrl', () => {
       const acknowledge = jest.fn();
 
       Users.findVerifiedByEmail.mockResolvedValue({
-        verifyPassword: jest.fn().mockReturnValue(true),
+        verifyPassword: jest.fn().mockResolvedValue(false),
+        setSecret: jest.fn(),
         setPassword,
       });
 
@@ -99,7 +104,7 @@ describe('PasswordResetCtrl', () => {
       const acknowledge = jest.fn();
 
       Users.findVerifiedByEmail.mockResolvedValue({
-        verifyPassword: jest.fn().mockReturnValue(true),
+        verifyPassword: jest.fn().mockResolvedValue(false),
         cannotResetPassword: true,
         setPassword,
       });

@@ -9,6 +9,8 @@ let agent;
 let user;
 
 beforeAll(async () => {
+  process.env.SECRET = 'SECRET';
+
   Q3.routes();
   await Q3.connect();
 
@@ -21,6 +23,7 @@ afterAll(async () => {
 });
 
 const verificationCode = 'Shh!';
+const newPassword = 'Strong!12';
 
 const getActiveSecret = () => ({
   secretIssuedOn: moment().subtract('1', 'day'),
@@ -33,8 +36,8 @@ const getExpiredSecret = () => ({
 });
 
 const getStrongPasswordPair = () => ({
-  newPassword: 'Strong!12',
   confirmNewPassword: 'Strong!12',
+  newPassword,
 });
 
 const getVerificationPayload = (rest) => ({
@@ -118,5 +121,79 @@ describe('User authentication flow', () => {
           }),
         )
         .expect(400));
+  });
+
+  describe('/password-reset', () => {
+    it('should issue a token', async () => {
+      const confirm = hasEventBeenCalled('onPasswordReset');
+      await agent
+        .post('/password-reset')
+        .send({
+          email: user.email,
+        })
+        .expect(200);
+
+      return confirm();
+    });
+
+    describe('/password-change', () => {
+      let passwordResetToken;
+      const confirmNewPassword = 'N3tN2w!123';
+
+      beforeAll(async () => {
+        ({ passwordResetToken } = await Q3.Users.findById(
+          user.id,
+        )
+          .lean()
+          .exec());
+      });
+
+      it('should fail if used previously', async () =>
+        agent
+          .post('/password-change')
+          .send({
+            email: user.email,
+            passwordResetToken,
+            confirmNewPassword: newPassword,
+            newPassword,
+          })
+          .expect(422));
+
+      it('should change the password', async () => {
+        const confirm = hasEventBeenCalled(
+          'onPasswordChange',
+        );
+
+        await agent
+          .post('/password-change')
+          .send({
+            email: user.email,
+            passwordResetToken,
+            newPassword: confirmNewPassword,
+            confirmNewPassword,
+          })
+          .expect(204);
+
+        return confirm();
+      });
+    });
+
+    describe('/authenticate', () => {
+      it('should alert on new sign-in', async () => {
+        const confirm = hasEventBeenCalled('onNewDevice');
+        const confirmNewPassword = 'N3tN2w!123';
+        const { body } = await agent
+          .post('/authenticate')
+          .send({
+            email: user.email,
+            password: confirmNewPassword,
+          })
+          .expect(201);
+
+        expect(body).toHaveProperty('token');
+        expect(body).toHaveProperty('nonce');
+        return confirm();
+      });
+    });
   });
 });
