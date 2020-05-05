@@ -19,6 +19,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  await Q3.Users.deleteMany({});
   await mongoose.disconnect();
 });
 

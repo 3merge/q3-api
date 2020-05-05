@@ -81,6 +81,9 @@ function middleware(UserModel, PermissionModel, callback) {
 
     req.authorize = async (name) => {
       identity.setOperation();
+
+      console.log(req.app.locals);
+
       req.grant = await identity.getPermission(
         PermissionModel,
         name,

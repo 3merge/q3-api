@@ -25,7 +25,7 @@ module.exports = (schema, instance) => {
 
     const modifiedBy = getUserMeta(this);
     const modified = diff(
-      this.toJSON(),
+      this.$locals.$raw,
       original.toJSON(),
       [
         '*_id*',
