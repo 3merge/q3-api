@@ -21,7 +21,6 @@
   "workspaces": [
     "demo",
     "e2e-tests",
-    "integration-tests",
     "packages/*"
   ],
   "devDependencies": {

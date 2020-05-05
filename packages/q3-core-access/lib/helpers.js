@@ -6,58 +6,72 @@ const invokeJSON = (v) =>
 
 const runComparisonEvaluation = (test = [], value) =>
   test.length
-    ? value && !new Comparison(test).eval(invokeJSON(value))
+    ? value && new Comparison(test).eval(invokeJSON(value))
     : true;
 
 const filterBy = (propertyName, propertyValue) => (
   grants,
-) =>
-  grants.filter(
-    (grant) => grant[propertyName] === propertyValue,
-  );
+) => {
+  return grants.filter((grant) => {
+    if (!grant[propertyName]) return false;
 
-exports.hasOptions = async (d) => {
-  return 'options' in d ? d.options.redact : d.redact;
+    try {
+      return grant[propertyName].test(propertyValue);
+    } catch (e) {
+      return (
+        String(grant[propertyName]).toLowerCase() ===
+        String(propertyValue).toLowerCase()
+      );
+    }
+  });
 };
+exports.hasOptions = (d) =>
+  'options' in d ? d.options.redact : d.redact;
 
 exports.hasFields = ({ fields }) =>
   fields && fields !== '!*';
 
+exports.extractUser = (ctx) => {
+  try {
+    return ctx.__$q3.USER;
+  } catch (e) {
+    return null;
+  }
+};
+
+const getPluralizedCollectionName = (n) =>
+  new RegExp(
+    `^${
+      n.charAt(n.length - 1) === 's'
+        ? n.substring(0, n.length - 1)
+        : n
+    }+(s?)$`,
+    'i',
+  );
+
 exports.meetsUserRequirements = (
   { ownershipConditions = [] },
   userInput,
-) => {
-  if (
-    runComparisonEvaluation(ownershipConditions, userInput)
-  )
-    exception('Authorization')
-      .msg('ownershipConditions')
-      .throw();
-};
+) =>
+  runComparisonEvaluation(ownershipConditions, userInput);
 
 exports.meetsDocumentRequirements = (
   { documentConditions = [] },
   doc,
-) => {
-  if (runComparisonEvaluation(documentConditions, doc))
-    exception('Authorization')
-      .msg('documentConditions')
-      .throw();
-};
+) => runComparisonEvaluation(documentConditions, doc);
 
-exports.meetsDocumentRequirements = (
-  { documentConditions = [] },
-  doc,
-) => {
-  if (runComparisonEvaluation(documentConditions, doc))
-    exception('Authorization')
-      .msg('documentConditions')
-      .throw();
-};
+exports.filterByColl = (a, value) =>
+  filterBy(
+    'coll',
+    value,
+  )(
+    a.map((v) => ({
+      ...v,
+      coll: getPluralizedCollectionName(v.coll),
+    })),
+  );
 
-exports.filterByColl = (value) => filterBy('coll', value);
+exports.filterByOp = (a, value) => filterBy('op', value)(a);
 
-exports.filterByOp = (value) => filterBy('op', value);
-
-exports.filterByRoleType = (value) =>
-  filterBy('role', value);
+exports.filterByRoleType = (a, value) =>
+  filterBy('role', value)(a);

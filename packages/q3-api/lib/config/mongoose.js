@@ -1,6 +1,5 @@
 const context = require('q3-core-session/lib/plugin');
-const session = require('q3-core-session');
-const accessControl = require('q3-schema-permissions/lib/plugin');
+const accessControl = require('q3-core-access/lib/plugin');
 const mongooseLeanVirtuals = require('mongoose-lean-virtuals-v2');
 const Notes = require('q3-schema-notes');
 const mongoose = require('mongoose');
@@ -9,7 +8,6 @@ const locking = require('mongoose-field-lock');
 const { autopopulate } = require('mongoose-field-populate');
 const version = require('q3-core-version');
 const Files = require('../models/files');
-const { MODEL_NAMES } = require('../constants');
 
 require('q3-schema-types');
 
@@ -40,9 +38,6 @@ mongoose.plugin((schema) => {
     schema.plugin(version, mongoose);
 });
 
-mongoose.plugin(accessControl, {
-  lookup: MODEL_NAMES.PERMISSIONS,
-  getUser: () => session.get('USER'),
-});
+mongoose.plugin(accessControl);
 
 module.exports = mongoose;

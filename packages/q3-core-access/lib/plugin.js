@@ -6,10 +6,17 @@ const { exception } = require('q3-core-responder');
 const Grant = require('./core/grant');
 const { hasOptions, extractUser } = require('./helpers');
 
+const reportAccessLevelFailure = (condition) => {
+  if (condition)
+    exception('Authorization')
+      .msg('insufficientAccessLevels')
+      .throw();
+};
+
 module.exports = (schema) => {
   async function checkOp(next, options = {}) {
-    const { collectionName } = this.collection;
     const user = extractUser(this);
+    const { collectionName } = this.collection;
     let op = options.op || 'Update';
 
     if (this.isNew) this.createdBy = user;
@@ -18,28 +25,36 @@ module.exports = (schema) => {
     if (this.modifiedPaths().includes('active'))
       op = 'Delete';
 
-    if (
+    reportAccessLevelFailure(
       hasOptions(options) &&
-      !Grant(user)
-        .can(op)
-        .on(collectionName)
-        .test(this.toJSON())
-    )
-      exception().throw();
+        !new Grant(user)
+          .can(op)
+          .on(collectionName)
+          .test(this.toJSON()),
+    );
   }
 
   async function useQuery() {
     if (!hasOptions(this)) return;
 
-    const { collectionName } = this.collection;
+    const {
+      collection: { collectionName },
+    } = this.model;
     const user = extractUser(this);
     const createdBy = get(user, '_id', null);
+
+    const doc = new Grant(user)
+      .can('Read')
+      .on(collectionName)
+      .first();
+
+    reportAccessLevelFailure(!doc);
 
     const {
       ownership = 'Own',
       ownershipAliases = [],
       documentConditions = [],
-    } = Grant(user).can('Read').on(collectionName).first();
+    } = doc;
 
     const { $and } = new Comparison(
       documentConditions,

@@ -16,7 +16,12 @@ module.exports = {
         ...seed,
       }));
 
-    Object.freeze(AccessControl);
+    if (process.env.NODE_ENV !== 'test')
+      Object.freeze(AccessControl);
+  },
+
+  purge() {
+    AccessControl.grants = [];
   },
 
   get(roleType) {

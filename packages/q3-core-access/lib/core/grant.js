@@ -11,8 +11,13 @@ module.exports = class Grant {
   constructor(user) {
     this.$user = user;
     this.$records = AC.get(user ? user.role : 'Public');
+
     this.hasCheckedColl = true;
     this.hasCheckedOp = false;
+  }
+
+  first() {
+    return this.$records[0];
   }
 
   can(op) {
@@ -27,24 +32,21 @@ module.exports = class Grant {
     return this;
   }
 
-  first() {
-    return this.$records.pop();
-  }
-
   test(doc) {
     if (!this.hasCheckedColl)
       throw new Error('Grant must first check collection');
     if (!this.hasCheckedOp)
       throw new Error('Grant must first check operation');
 
-    return this.$records
+    this.$records = this.$records
       .filter(hasFields)
       .filter((grant) =>
         meetsUserRequirements(grant, this.$user),
       )
       .filter((grant) =>
         meetsDocumentRequirements(grant, doc),
-      )
-      .pop();
+      );
+
+    return this.first();
   }
 };

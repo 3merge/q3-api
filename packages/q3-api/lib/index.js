@@ -3,6 +3,7 @@ require('q3-locale');
 
 const { get } = require('lodash');
 const walker = require('q3-core-walker');
+const { AccessControl } = require('q3-core-access');
 const {
   handleUncaughtExceptions,
 } = require('q3-core-responder');
@@ -13,19 +14,23 @@ const mongoose = require('./config/mongoose');
 const models = require('./models');
 
 const Q3 = {
+  protect(grants = []) {
+    AccessControl.init(grants);
+    return this;
+  },
+
   config(args = {}) {
     Object.assign(app.locals, args);
     return this;
   },
 
   routes(routes) {
-    app.use(middleware(models.Users, models.Permissions));
-
+    app.use(middleware(models.Users));
     runner();
-    app.use(walker(__dirname));
 
+    app.use(walker(__dirname));
     if (routes) app.use(routes);
-    return app;
+    return this;
   },
 
   model(name) {

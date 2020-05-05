@@ -9,15 +9,24 @@ let Authorization;
 let agent;
 
 beforeAll(async () => {
-  Q3.config({
-    grants: [
+  Q3.config({})
+    .protect([
       {
+        role: 'Developer',
         coll: 'students',
+        op: 'Create',
+        ownership: 'Any',
+        fields: '*',
       },
-    ],
-  });
-
-  Q3.routes();
+      {
+        role: 'Developer',
+        coll: 'students',
+        op: 'Read',
+        ownership: 'Any',
+        fields: '*',
+      },
+    ])
+    .routes();
 
   await mongoose.connect(process.env.CONNECTION);
 
@@ -39,7 +48,7 @@ afterAll(async () => {
 
 describe('Version control plugin', () => {
   it('should ignore automated field changes', async () => {
-    const d = await agent
+    await agent
       .post('/students')
       .send({ name: 'George' })
       .set({ Authorization })

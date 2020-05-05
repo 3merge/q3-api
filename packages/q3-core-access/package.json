@@ -6,7 +6,7 @@
     "comparisons": "2.2.5",
     "lodash": "^4.17.15",
     "micromatch": "^4.0.2",
-    "mongoose": "^5.9.12",
+    "mongoose": "^5.7.1",
     "q3-core-responder": "^1.0.107"
   },
   "devDependencies": {
