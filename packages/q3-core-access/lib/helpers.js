@@ -29,7 +29,7 @@ exports.hasOptions = (d) =>
   'options' in d ? d.options.redact : d.redact;
 
 exports.hasFields = ({ fields }) =>
-  fields && fields !== '!*';
+  fields && !fields.includes('!*');
 
 exports.extractUser = (ctx) => {
   try {

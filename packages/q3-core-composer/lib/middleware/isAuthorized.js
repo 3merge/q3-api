@@ -3,17 +3,6 @@ const { set } = require('lodash');
 const { exception } = require('q3-core-responder');
 const hasField = require('./hasField');
 
-const splitter = (s) =>
-  String(s)
-    .split(', ')
-    .map((i) => i.trim());
-
-const getFields = (grant) =>
-  splitter(grant && grant.fields ? grant.fields : '!*');
-
-const getReadOnly = (grant) =>
-  splitter(grant && grant.readOnly ? grant.readOnly : '!*');
-
 class IsAuthorizedInLocationRef {
   constructor(modelName) {
     this.source = modelName;
@@ -31,8 +20,7 @@ class IsAuthorizedInLocationRef {
     try {
       const m = this.source;
       const grant = req.authorize(m);
-      const fields = getFields(grant);
-      const readOnly = getReadOnly(grant);
+      const { fields, readOnly } = grant;
 
       if (!this.meetsFieldRequirements(fields))
         throw new Error('Failed field authorization');
@@ -43,6 +31,7 @@ class IsAuthorizedInLocationRef {
         fields,
       });
 
+      req.grant = grant;
       next();
     } catch (err) {
       next(exception('Authorization').boomerang());

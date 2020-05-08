@@ -1,57 +1,70 @@
-require('../fixtures/student');
-
 const Q3 = require('q3-api');
 const supertest = require('supertest');
-const mongoose = require('mongoose');
-const { genUser } = require('../fixtures');
+const setup = require('../fixtures');
 
 let Authorization;
 let agent;
 
 beforeAll(async () => {
-  Q3.config({})
-    .protect([
-      {
-        role: 'Developer',
-        coll: 'students',
-        op: 'Create',
-        ownership: 'Any',
-        fields: '*',
-      },
-      {
-        role: 'Developer',
-        coll: 'students',
-        op: 'Read',
-        ownership: 'Any',
-        fields: '*',
-      },
-    ])
-    .routes();
+  const user = await setup();
 
-  await mongoose.connect(process.env.CONNECTION);
-
-  const d = await genUser();
-  await d
+  await user
     .set({
       secret: 'Shh!',
       verified: true,
     })
     .setPassword();
 
-  Authorization = `Apikey ${await d.generateApiKey()}`;
+  Authorization = `Apikey ${await user.generateApiKey()}`;
   agent = supertest(Q3.$app);
 });
 
-afterAll(async () => {
-  await mongoose.disconnect();
-});
-
 describe('Version control plugin', () => {
-  it('should ignore automated field changes', async () => {
-    await agent
+  let id;
+
+  const getStudentVersion = async () => {
+    const {
+      body: { versions },
+    } = await agent
+      .get(
+        `/history?collectionName=students&documentId=${id}`,
+      )
+      .set({ Authorization })
+      .expect(200);
+
+    return versions;
+  };
+
+  it('should ignore on create payloads', async () => {
+    ({
+      body: {
+        student: { id },
+      },
+    } = await agent
       .post('/students')
       .send({ name: 'George' })
       .set({ Authorization })
+      .expect(201));
+
+    return expect(
+      getStudentVersion(),
+    ).resolves.toHaveLength(0);
+  });
+
+  it('should ignore automated data changes', async () => {
+    await agent
+      .post(`/students/${id}/friends`)
+      .send({ name: 'Barrie' })
+      .set({ Authorization })
       .expect(201);
+
+    const v = await getStudentVersion();
+
+    expect(v).toHaveLength(1);
+    expect(v[0].modified.friends).not.toHaveProperty(
+      'createdAt',
+    );
+
+    expect(v[0].modified.friends).not.toHaveProperty('id');
   });
 });

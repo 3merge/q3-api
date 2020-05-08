@@ -5,7 +5,31 @@ const paginate = require('mongoose-paginate-v2');
 const partialSearch = require('mongoose-partial-search');
 const commonUtils = require('q3-schema-utils/plugins/common');
 const { statusHelpers } = require('q3-core-responder');
+const { get } = require('lodash');
 const addControllersToRest = require('./controllers');
+
+const customMessageDispatcherMiddleware = (app) => (
+  req,
+  res,
+  next,
+) => {
+  res.say = (key) => {
+    const verb = req.method.toLowerCase();
+    const locale = get(app, 'locals.messages', {});
+    const namespace = get(
+      locale,
+      [req.collectionPluralName, req.fieldName, verb]
+        .filter(Boolean)
+        .join('.'),
+    );
+
+    return namespace
+      ? req.t(`messages:${namespace}`)
+      : req.t(`messages:${key}`);
+  };
+
+  next();
+};
 
 module.exports = (app, mongoose) => ({
   init() {
@@ -16,6 +40,8 @@ module.exports = (app, mongoose) => ({
     );
 
     app.use(statusHelpers);
+    app.use(customMessageDispatcherMiddleware(app));
+
     mongoose.plugin(commonUtils);
     mongoose.plugin(partialSearch);
     mongoose.plugin(validatorAdapter);

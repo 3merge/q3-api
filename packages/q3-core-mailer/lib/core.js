@@ -1,5 +1,6 @@
 const mailer = require('./strategies');
 const utils = require('./utils');
+const walker = require('./walker');
 
 const settings = {
   from: '3merge <donotreply@3merge.ca>',
@@ -16,6 +17,7 @@ module.exports = class Mailer {
 
   static config(options = {}) {
     Object.assign(settings, options);
+    return { walk: walker };
   }
 
   to(addresses, cc = false, bcc = false) {

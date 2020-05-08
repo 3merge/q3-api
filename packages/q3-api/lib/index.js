@@ -7,11 +7,59 @@ const { AccessControl } = require('q3-core-access');
 const {
   handleUncaughtExceptions,
 } = require('q3-core-responder');
+
 const { middleware } = require('q3-core-composer');
+const { config } = require('q3-core-mailer');
+const path = require('path');
+const locale = require('q3-locale');
 const runner = require('./config');
 const app = require('./config/express');
 const mongoose = require('./config/mongoose');
 const models = require('./models');
+
+/**
+ * When testing, frameworks like supertest attach listeners.
+ */
+const connectToDB = (res, rej) => (err) => {
+  if (err) return rej(err);
+  app.use(handleUncaughtExceptions);
+  if (process.env.NODE_ENV !== 'test')
+    app.listen(process.env.PORT);
+
+  return res(null);
+};
+
+const registerLocale = ({ location }) => () =>
+  new Promise((resolve) => {
+    try {
+      locale(location);
+    } catch (e) {
+      // noop
+    }
+
+    resolve();
+  });
+
+/**
+ * See q3-core-mailer for more details.
+ * Essentially, it uses the location to register event handlers by the file system architecture.
+ */
+const registerChores = ({ location, chores }) => () =>
+  chores && location ? config(chores).walk(location) : null;
+
+/**
+ * Uses the package.json file to locate app index.
+ */
+const locate = () => {
+  try {
+    const root = process.cwd();
+    // eslint-disable-next-line
+    const r = require(path.resolve(root, './package.json'));
+    return path.parse(path.resolve(root, r.main)).dir;
+  } catch (e) {
+    return null;
+  }
+};
 
 const Q3 = {
   protect(grants = []) {
@@ -20,16 +68,29 @@ const Q3 = {
   },
 
   config(args = {}) {
-    Object.assign(app.locals, args);
+    const location = locate();
+
+    if (!location && !args.location)
+      throw new Error('App requires a location');
+
+    Object.assign(
+      app.locals,
+      {
+        location,
+      },
+      args,
+    );
+
     return this;
   },
 
-  routes(routes) {
+  routes() {
+    const { location } = app.locals;
     app.use(middleware(models.Users));
     runner();
 
     app.use(walker(__dirname));
-    if (routes) app.use(routes);
+    app.use(walker(location));
     return this;
   },
 
@@ -44,20 +105,19 @@ const Q3 = {
     return mongoose.model(name, Schema);
   },
 
-  async connect() {
-    return new Promise((resolve) => {
-      const { CONNECTION, PORT } = process.env;
-      mongoose.connect(CONNECTION, (err) => {
-        if (err) throw err;
-        app.use(handleUncaughtExceptions);
+  connect: async () =>
+    new Promise((resolve, reject) => {
+      mongoose.connect(
+        process.env.CONNECTION,
+        connectToDB(resolve, reject),
+      );
+    })
+      .then(registerLocale(app.locals))
+      .then(registerChores(app.locals))
 
-        if (process.env.NODE_ENV !== 'test')
-          app.listen(PORT);
-
-        resolve(null);
-      });
-    });
-  },
+      .catch(() => {
+        process.exit(0);
+      }),
 };
 
 Q3.$app = app;

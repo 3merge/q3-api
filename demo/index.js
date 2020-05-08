@@ -1,14 +1,21 @@
-require('dotenv').config();
 const Q3 = require('q3-api');
-const walker = require('q3-core-walker');
-const { Scheduler } = require('q3-core-mailer');
+const access = require('./access.json');
+const messages = require('./messages.json');
+require('./models');
 
-require('./events');
+process.env.CONNECTION = 'mongodb://localhost:27017/q3';
+process.env.PORT = 9000;
 
-Q3.config().routes(walker(__dirname));
-Q3.connect()
-  .then(() => Scheduler.add('onRoutine', '*/10 * * * * *'))
-  .then(() => Scheduler.init())
+Q3.config({
+  messages,
+  chores: {
+    from: 'support@3merge.ca',
+    strategy: 'Mailgun',
+  },
+})
+  .protect(access)
+  .routes()
+  .connect()
   .then(() =>
     Q3.Users.findOneAndUpdate(
       { email: 'mibberson@3merge.ca' },
@@ -24,6 +31,10 @@ Q3.connect()
   )
   .then(() => {
     // noop
+  })
+  .catch((e) => {
+    // eslint-disable-next-line
+    console.log(e);
   });
 
 module.exports = Q3.$app;

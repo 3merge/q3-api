@@ -34,7 +34,7 @@ mongoose.plugin((schema) => {
   if (schema.options.withVirtuals)
     mongoose.plugin(mongooseLeanVirtuals);
 
-  if (schema.options.withVersioning)
+  if (schema.options.restify)
     schema.plugin(version, mongoose);
 });
 

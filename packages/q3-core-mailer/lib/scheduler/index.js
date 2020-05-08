@@ -11,17 +11,16 @@ module.exports = {
   $model: Scheduler,
 
   add: async (event, interval) => {
-    const exists = await Scheduler.findOne({ event })
-      .lean()
-      .exec();
+    const exists = await Scheduler.findOne({
+      event,
+    }).exec();
 
-    return (
-      exists ||
-      Scheduler.create({
-        event,
-        interval,
-      })
-    );
+    return exists
+      ? exists.set({ interval }).save()
+      : Scheduler.create({
+          event,
+          interval,
+        });
   },
 
   remove: (event) =>
@@ -37,13 +36,15 @@ module.exports = {
     ),
 
   init: () =>
-    Scheduler.update({
+    Scheduler.updateMany({
       running: false,
     })
-      .then(() => {
-        cron.schedule('* * * * * *', async () => {
+      .then((r) => {
+        cron.schedule('* * * * *', async () => {
           await Scheduler.registerTasks();
         });
+
+        return r.nModified;
       })
       .catch((e) => {
         // eslint-disable-next-line

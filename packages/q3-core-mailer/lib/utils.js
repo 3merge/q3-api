@@ -1,7 +1,3 @@
-const { readdirSync } = require('fs');
-const path = require('path');
-const Emitter = require('./emitter');
-
 const isValidEmailAddress = (v) =>
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
     String(v).toLowerCase(),
@@ -28,15 +24,6 @@ exports.prefix = (args) =>
       Object.assign(acc, { [`v:${key}`]: value }),
     {},
   );
-
-exports.discoverEmailListenersInDir = (dir) => {
-  readdirSync(dir).forEach((dirent) => {
-    const f = path.basename(dirent, path.extname(dirent));
-    if (f.startsWith('on'))
-      // eslint-disable-next-line
-      Emitter.on(f, require(path.join(dir, dirent)));
-  });
-};
 
 exports.getTemplate = (lang, eventName, templateName) =>
   `${langCode(lang)}-${templateName || eventName}`;

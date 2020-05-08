@@ -66,6 +66,30 @@ module.exports = (schema, instance) => {
   });
 
   // eslint-disable-next-line
+  schema.methods.snapshotChange = function (body) {
+    try {
+      this.$locals.$raw = body;
+      return this.set(body);
+    } catch (e) {
+      return this.set(body);
+    }
+  };
+
+  // eslint-disable-next-line
+  schema.methods.snapshotChangeOnSubdocument = function (field, body) {
+    try {
+      if (!this.$locals.$raw) this.$locals.$raw = {};
+      if (!this.$locals.$raw[field])
+        this.$locals.$raw[field] = [];
+
+      this.$locals.$raw[field].push(body);
+      return this;
+    } catch (e) {
+      return this;
+    }
+  };
+
+  // eslint-disable-next-line
   schema.methods.getHistory = async function () {
     return getFromPatchHistory(
       instance,

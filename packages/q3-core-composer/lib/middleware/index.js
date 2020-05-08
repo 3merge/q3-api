@@ -32,6 +32,8 @@ class Session {
       default:
         throw new Error('Method not allowed');
     }
+
+    return this;
   }
 
   getPermission(collectionName, sessionUser) {
@@ -48,7 +50,9 @@ class Session {
      * @NOTE
      * Used to redact responses on non-read operations.
      */
-    if (primary) primary.readOnly = secondary;
+    if (primary && secondary)
+      primary.readOnly = secondary.fields;
+
     return primary;
   }
 }
@@ -82,10 +86,10 @@ function middleware(UserModel) {
         host,
       );
 
-    req.authorize = (name) => {
-      identity.setOperation();
-      return identity.getPermission(name, req.user);
-    };
+    req.authorize = (collectionName) =>
+      identity
+        .setOperation()
+        .getPermission(collectionName, req.user);
 
     next();
   };

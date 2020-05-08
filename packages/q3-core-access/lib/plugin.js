@@ -6,24 +6,29 @@ const { exception } = require('q3-core-responder');
 const Grant = require('./core/grant');
 const { hasOptions, extractUser } = require('./helpers');
 
-const reportAccessLevelFailure = (condition) => {
-  if (condition)
-    exception('Authorization')
-      .msg('insufficientAccessLevels')
-      .throw();
+const reportAccessLevelFailure = (condition = true) =>
+  condition
+    ? exception('Authorization')
+        .msg('insufficientAccessLevels')
+        .throw()
+    : null;
+
+const getOp = (ctx, options) => {
+  if (ctx.isNew) return 'Create';
+  if (ctx.modifiedPaths().includes('active'))
+    return 'Delete';
+
+  if (options.op) return options.op;
+  return 'Updated';
 };
 
 module.exports = (schema) => {
-  async function checkOp(next, options = {}) {
+  function checkOp(options = {}) {
     const user = extractUser(this);
     const { collectionName } = this.collection;
-    let op = options.op || 'Update';
+    const op = getOp(this, options);
 
-    if (this.isNew) this.createdBy = user;
-    if (this.isNew) op = 'Create';
-
-    if (this.modifiedPaths().includes('active'))
-      op = 'Delete';
+    if (this.isNew && user) this.createdBy = user._id;
 
     reportAccessLevelFailure(
       hasOptions(options) &&
@@ -34,7 +39,7 @@ module.exports = (schema) => {
     );
   }
 
-  async function useQuery() {
+  function useQuery() {
     if (!hasOptions(this)) return;
 
     const {

@@ -10,5 +10,6 @@ exports.request = (req, res, next) => {
 exports.response = mung.json((body, req) => {
   runRedaction(req, body, 'response');
   kill();
+
   return body;
 });
