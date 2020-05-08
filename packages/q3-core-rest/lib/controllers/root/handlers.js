@@ -95,7 +95,6 @@ module.exports = {
       datasource,
       marshal,
       params,
-      t,
       isFresh,
     },
     res,
@@ -106,7 +105,7 @@ module.exports = {
       { redact: false },
     );
 
-    doc.set(
+    doc.snapshotChange(
       Object.entries(body).reduce((acc, [key, v]) => {
         if (v !== null && v !== undefined)
           Object.assign(acc, { [key]: v });
@@ -122,26 +121,21 @@ module.exports = {
     });
 
     res.update({
-      message: t('messages:resourceUpdated'),
+      message: res.say('resourceUpdated'),
       [collectionSingularName]: marshal(doc),
     });
   },
 
   async Post(
-    {
-      body,
-      collectionSingularName,
-      datasource,
-      marshal,
-      t,
-    },
+    { body, collectionSingularName, datasource, marshal },
     res,
   ) {
     const doc = await datasource.create([body], {
       redact: true,
     });
+
     res.create({
-      message: t('messages:resourceCreated'),
+      message: res.say('resourceCreated'),
       [collectionSingularName]: marshal(
         Array.isArray(doc) ? doc.pop() : doc,
       ),

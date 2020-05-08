@@ -1,0 +1,23 @@
+[
+  {
+    "coll": "characters",
+    "op": "Read",
+    "role": "Public",
+    "ownership": "Any",
+    "fields": "*"
+  },
+  {
+    "coll": "characters",
+    "op": "Create",
+    "role": "Public",
+    "ownership": "Any",
+    "fields": "*"
+  },
+  {
+    "coll": "characters",
+    "op": "Update",
+    "role": "Public",
+    "ownership": "Any",
+    "fields": "*"
+  }
+]

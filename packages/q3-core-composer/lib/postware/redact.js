@@ -34,6 +34,7 @@ class Redact {
 
   $filter(doc = {}) {
     const flat = flatten(doc);
+
     const match = micromatch(
       Object.keys(flat),
       this.fields,

@@ -16,13 +16,9 @@ jest.mock('../emitter', () => ({
   on: jest.fn(),
 }));
 
-const { basename } = require('path');
-const { on } = require('../emitter');
-
 const {
   filterByEmailValidity,
   prefix,
-  discoverEmailListenersInDir,
   getTemplate,
   reduceListenersByLang,
 } = require('../utils');
@@ -53,20 +49,6 @@ describe('Mailer utils', () => {
         'v:foo': 1,
         'v:bar': 1,
       });
-    });
-  });
-
-  describe('"discoverEmailListenersInDir"', () => {
-    it('should not register event listeners for non-prefixed files', () => {
-      basename.mockReturnValue('foo');
-      discoverEmailListenersInDir();
-      expect(on).not.toHaveBeenCalled();
-    });
-
-    it('should register event listeners for all files starting with "on"', () => {
-      basename.mockReturnValue('onEvent');
-      discoverEmailListenersInDir();
-      expect(on).toHaveBeenCalled();
     });
   });
 

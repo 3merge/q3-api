@@ -1,29 +1,7 @@
 const micromatch = require('micromatch');
 const { set } = require('lodash');
+const { exception } = require('q3-core-responder');
 const hasField = require('./hasField');
-
-const splitter = (s) =>
-  String(s)
-    .split(', ')
-    .map((i) => i.trim());
-
-const getFields = (grant) =>
-  splitter(grant || !grant.fields ? grant.fields : '!*');
-
-const getReadOnly = (grant) =>
-  splitter(
-    grant || !grant.readOnly ? grant.readOnly : '!*',
-  );
-
-const makeAuthorizationError = (t) => {
-  const e = new Error();
-  e.name = 'Authorization';
-  e.message = t
-    ? t('messages:fieldPermissions')
-    : 'Insufficent field-level permissions';
-
-  return e;
-};
 
 class IsAuthorizedInLocationRef {
   constructor(modelName) {
@@ -38,17 +16,14 @@ class IsAuthorizedInLocationRef {
     return this.middleware.bind(this);
   }
 
-  async middleware(req, res, next) {
+  middleware(req, res, next) {
     try {
       const m = this.source;
-      const grant = await req.authorize(m);
-      const fields = getFields(grant);
-      const readOnly = getReadOnly(grant);
+      const grant = req.authorize(m);
+      const { fields, readOnly } = grant;
 
-      const forNext = this.meetsFieldRequirements(
-        makeAuthorizationError(req.t),
-        fields,
-      );
+      if (!this.meetsFieldRequirements(fields))
+        throw new Error('Failed field authorization');
 
       set(req, `redactions.${m}`, {
         locations: this.locations,
@@ -56,9 +31,10 @@ class IsAuthorizedInLocationRef {
         fields,
       });
 
-      next(forNext);
+      req.grant = grant;
+      next();
     } catch (err) {
-      next(err);
+      next(exception('Authorization').boomerang());
     }
   }
 
@@ -82,16 +58,14 @@ class IsAuthorizedInLocationRef {
     return this;
   }
 
-  meetsFieldRequirements(resp, fields) {
+  meetsFieldRequirements(fields) {
     const { required } = this.locations;
-    if (!required) return undefined;
+    if (!required) return true;
 
-    const outcome = Array.isArray(required)
+    return Array.isArray(required)
       ? micromatch(required, fields).length ===
-        required.length
+          required.length
       : micromatch.isMatch(this.locations.required, fields);
-
-    return !outcome ? resp : undefined;
   }
 }
 

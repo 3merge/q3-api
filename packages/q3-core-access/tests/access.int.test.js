@@ -1,12 +1,9 @@
-const globalizedPlugin = require('q3-schema-utils/plugins/common');
 const mongoose = require('mongoose');
-const plugin = require('../plugin');
-const PermissionSchema = require('..');
+const { AccessControl, plugin } = require('../lib');
 
 const userID = mongoose.Types.ObjectId();
 
 const coll = 'AccessControlPlugin';
-const lookup = 'Permissions';
 const role = 'Dev';
 const firstName = 'John';
 
@@ -17,31 +14,32 @@ const Schema = new mongoose.Schema({
   name: String,
 });
 
-mongoose.plugin(globalizedPlugin);
-Schema.plugin(plugin, {
-  lookup,
-  getUser: () => ({
-    _id: userID,
-    isReady: false,
-    firstName,
-    role,
-  }),
+/**
+ * @NOTE
+ * EMULATES Q3-core-session, which is REQUIRED.
+ */
+Schema.plugin((s) => {
+  const copyToContext = function markPrivateContext() {
+    this.__$q3 = {
+      USER: {
+        _id: userID,
+        firstName: 'John',
+        role,
+      },
+    };
+  };
+
+  s.pre('find', copyToContext);
+  s.pre('findOne', copyToContext);
+  s.pre('count', copyToContext);
+  s.pre('countDocuments', copyToContext);
+  s.pre('distinct', copyToContext);
+  s.pre('save', copyToContext);
 });
 
-const Model = mongoose.model('AccessControlPlugin', Schema);
-const PermissionModel = mongoose.model(
-  lookup,
-  PermissionSchema,
-);
+Schema.plugin(plugin);
 
-const genPermission = async (props) =>
-  PermissionModel.create({
-    op: 'Read',
-    fields: '*',
-    coll,
-    role,
-    ...props,
-  });
+const Model = mongoose.model('AccessControlPlugin', Schema);
 
 const expectProhibitied = (docId) =>
   expect(
@@ -57,53 +55,87 @@ const expectAllowed = (docId) =>
       .exec(),
   ).resolves.toBeDefined();
 
+const genPermission = (props) =>
+  AccessControl.init(
+    props.map((p) => ({
+      fields: '*',
+      coll,
+      role,
+      ...p,
+    })),
+  );
+
 beforeAll(async () => {
   await mongoose.connect(process.env.CONNECTION);
 });
 
-afterEach(async () => {
-  await PermissionModel.deleteMany({});
-});
-
 afterAll(async () => {
+  AccessControl.purge();
   await mongoose.disconnect();
 });
 
 describe('AccessControlPlugin configuration', () => {
-  it('it should run access on save if options is set', () =>
-    expect(
+  it('it should run access on save if options is set', () => {
+    genPermission([
+      {
+        op: 'Read',
+      },
+    ]);
+
+    return expect(
       Model.create(
         [{ op: 'Create', fields: '*', coll, role }],
         { redact: true },
       ),
-    ).rejects.toThrowError());
+    ).rejects.toThrowError();
+  });
 
-  it('it should run access on find if set', async () =>
-    expect(
+  it('it should run access on find if set', async () => {
+    genPermission([
+      {
+        op: 'Read',
+      },
+    ]);
+
+    return expect(
       Model.find().setOptions({ redact: true }).exec(),
-    ).resolves.toBeDefined());
+    ).resolves.toBeDefined();
+  });
 });
 
 describe('AccessControlPlugin integration', () => {
   it('it should merge conflicting rules', async () => {
-    const target = await Model.create({
-      name: firstName,
-      specialCondition: 4,
-      active: true,
-      featured: false,
-      belongs: userID,
-    });
+    genPermission([
+      {
+        ownership: 'Own',
+        documentConditions: ['featured=false', 'name=John'],
+        ownershipAliases: [
+          {
+            local: 'belongs',
+            foreign: '_id',
+          },
+        ],
+        op: 'Create',
+      },
+      {
+        op: 'Read',
+      },
+    ]);
 
-    await genPermission({
-      ownership: 'Own',
-      documentConditions: ['featured=false', 'name=John'],
-      ownershipAliases: [
+    const [target] = await Model.create(
+      [
         {
-          local: 'belongs',
-          foreign: '_id',
+          name: firstName,
+          specialCondition: 4,
+          active: true,
+          featured: false,
+          belongs: userID,
         },
       ],
-    });
+      {
+        redact: true,
+      },
+    );
 
     return expectAllowed(target.id);
   });
@@ -111,14 +143,28 @@ describe('AccessControlPlugin integration', () => {
   it('it should check user conditions', async () => {
     const name = 'OwnershipConditions';
     const target = await Model.create({ name });
-    await genPermission({
-      ownershipConditions: ['isReady=true'],
-    });
+    genPermission([
+      {
+        ownershipConditions: ['isReady=true'],
+        op: 'Create',
+      },
+    ]);
 
     return expectProhibitied(target.id);
   });
 
   it('it should check document conditions', async () => {
+    genPermission([
+      {
+        ownershipConditions: [],
+        documentConditions: [
+          'specialCondition>4',
+          'name=SomethingElse',
+        ],
+        op: 'Read',
+      },
+    ]);
+
     const name = 'DocumentConditions';
     const target = await Model.create([
       {
@@ -135,22 +181,16 @@ describe('AccessControlPlugin integration', () => {
       },
     ]);
 
-    await genPermission({
-      ownershipConditions: [],
-      documentConditions: [
-        'specialCondition>4',
-        'name=SomethingElse',
-      ],
-    });
-
     return expectAllowed(target.id);
   });
 
   it('it should check document conditions on create', async () => {
-    await genPermission({
-      documentConditions: ['specialCondition>4'],
-      op: 'Create',
-    });
+    genPermission([
+      {
+        documentConditions: ['specialCondition>4'],
+        op: 'Create',
+      },
+    ]);
 
     await expect(
       Model.create([{ specialCondition: 2 }], {

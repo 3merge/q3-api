@@ -1,19 +1,16 @@
 {
-  "name": "q3-schema-permissions",
-  "version": "1.0.82",
+  "name": "q3-core-access",
+  "version": "1.0.0",
   "main": "lib/index.js",
   "dependencies": {
     "comparisons": "2.2.5",
     "lodash": "^4.17.15",
     "micromatch": "^4.0.2",
-    "q3-core-responder": "^1.0.107",
-    "q3-schema-utils": "^1.0.79"
+    "mongoose": "^5.7.1",
+    "q3-core-responder": "^1.0.107"
   },
   "devDependencies": {
     "q3-test-utils": "^1.0.117"
-  },
-  "peerDependencies": {
-    "mongoose": "^5.7.1"
   },
   "jest": {
     "verbose": true,
@@ -22,6 +19,5 @@
     "setupFilesAfterEnv": [
       "q3-test-utils/jest-setup.js"
     ]
-  },
-  "gitHead": "a586228e529bf3829bdc7c34e4fdc9c600037e9e"
+  }
 }

@@ -26,25 +26,26 @@ module.exports = {
   },
 
   async Patch(
-    { marshal, params, body, t, parent, fieldName },
+    { marshal, params, body, parent, fieldName },
     res,
   ) {
     suggestPutRequest(parent, fieldName);
 
-    await parent.updateSubDocument(
-      fieldName,
-      params.fieldID,
-      body,
-    );
+    await parent
+      .snapshotChangeOnSubdocument(fieldName, {
+        id: params.fieldID,
+        ...body,
+      })
+      .updateSubDocument(fieldName, params.fieldID, body);
 
     res.update({
-      message: t('messages:subResourceUpdated'),
+      message: res.say('subResourceUpdated'),
       [fieldName]: marshal(parent[fieldName]),
     });
   },
 
   async PatchMany(
-    { marshal, query, body, t, parent, fieldName },
+    { marshal, query, body, parent, fieldName },
     res,
   ) {
     suggestPutRequest(parent, fieldName);
@@ -59,38 +60,47 @@ module.exports = {
         .field('ids')
         .throw();
 
-    await parent.updateSubDocuments(fieldName, ids, body);
+    await parent
+      .snapshotChangeOnSubdocument(fieldName, {
+        ...body,
+        ids,
+      })
+      .updateSubDocuments(fieldName, ids, body);
 
     res.update({
-      message: t('messages:subResourceUpdated'),
+      message: res.say('subResourceUpdated'),
       [fieldName]: marshal(parent[fieldName]),
     });
   },
 
   async Post(
-    { t, body, marshal, files, parent, fieldName },
+    { body, marshal, files, parent, fieldName },
     res,
   ) {
     if (isSimpleSubDocument(parent, fieldName))
       exception('Conflict').msg('usePutRequest').throw();
 
     if (!files) {
-      await parent.pushSubDocument(fieldName, body);
+      await parent
+        .snapshotChangeOnSubdocument(fieldName, body)
+        .pushSubDocument(fieldName, body);
     } else {
       await parent.handleUpload({ files, ...body });
     }
 
     res.create({
-      message: t('messages:newSubResourceAdded'),
+      message: res.say('newSubResourceAdded'),
       [fieldName]: marshal(parent[fieldName]),
     });
   },
 
-  async Put({ t, body, marshal, fieldName, parent }, res) {
-    await parent.set({ [fieldName]: body }).save();
+  async Put({ body, marshal, fieldName, parent }, res) {
+    await parent
+      .snapshotChange({ [fieldName]: body })
+      .save();
 
     res.create({
-      message: t('messages:newSubResourceAdded'),
+      message: res.say('newSubResourceAdded'),
       [fieldName]: marshal(parent[fieldName]),
     });
   },

@@ -1,0 +1,20 @@
+[
+  {
+    "role": "Developer",
+    "coll": "students",
+    "op": "Create",
+    "ownership": "Any",
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "role": "Developer",
+    "coll": "students",
+    "op": "Read",
+    "ownership": "Any",
+    "fields": [
+      "*"
+    ]
+  }
+]

@@ -1,3 +1,5 @@
+const { Grant } = require('q3-core-access');
+
 class Session {
   constructor(req) {
     this.method = req.method;
@@ -30,35 +32,40 @@ class Session {
       default:
         throw new Error('Method not allowed');
     }
+
+    return this;
   }
 
-  async getPermission(Model, collectionName, sessionUser) {
-    if (!('hasGrant' in Model)) return null;
-    return Model.hasGrant(
-      collectionName,
-      this.op,
-      sessionUser,
-    );
+  getPermission(collectionName, sessionUser) {
+    const gen = (op) =>
+      new Grant(sessionUser)
+        .can(op)
+        .on(collectionName)
+        .first();
+
+    const primary = gen(this.op);
+    const secondary = gen('Read');
+
+    /**
+     * @NOTE
+     * Used to redact responses on non-read operations.
+     */
+    if (primary && secondary)
+      primary.readOnly = secondary.fields;
+
+    return primary;
   }
 }
 
-function middleware(UserModel, PermissionModel, callback) {
-  if (!UserModel || !PermissionModel)
+function middleware(UserModel) {
+  if (!UserModel)
     throw new Error(
-      'Cannot run middleware without User and Permission models',
+      'Cannot run middleware without User models',
     );
 
   return async (req, res, next) => {
     const hasMethod = (method) =>
       method in UserModel && !req.user;
-
-    const passDataBack = (r) =>
-      typeof callback === 'function'
-        ? callback({
-            user: r.user,
-            grant: r.grant,
-          })
-        : undefined;
 
     const identity = new Session(req);
     const token = identity.getToken();
@@ -79,19 +86,11 @@ function middleware(UserModel, PermissionModel, callback) {
         host,
       );
 
-    req.authorize = async (name) => {
-      identity.setOperation();
-      req.grant = await identity.getPermission(
-        PermissionModel,
-        name,
-        req.user,
-      );
+    req.authorize = (collectionName) =>
+      identity
+        .setOperation()
+        .getPermission(collectionName, req.user);
 
-      passDataBack(req);
-      return req.grant;
-    };
-
-    passDataBack(req);
     next();
   };
 }

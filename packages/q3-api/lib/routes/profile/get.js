@@ -1,20 +1,13 @@
 const { compose, verify } = require('q3-core-composer');
-const { Permissions } = require('../../models');
+const { AccessControl } = require('q3-core-access');
 
 const getProfile = async ({ user, marshal }, res) => {
-  const permissions = await Permissions.find({
-    role: user.role,
-    active: true,
-  })
-    .lean()
-    .exec();
-
   if (typeof user.loadProfile === 'function')
     await user.loadProfile();
 
   res.ok({
     profile: marshal(user.obfuscatePrivateFields()),
-    permissions,
+    permissions: AccessControl.get(user.role),
   });
 };
 

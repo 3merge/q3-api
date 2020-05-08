@@ -1,8 +1,7 @@
 const { compose, verify } = require('q3-core-composer');
 const moment = require('moment');
 const mongoose = require('mongoose');
-const { exception } = require('q3-core-responder');
-const { Permissions } = require('../../models');
+// const { exception } = require('q3-core-responder');
 
 const getRange = (d) => ({
   $gte: moment(d)
@@ -15,7 +14,7 @@ const GetStats = async (
   { query: { collectionName }, body },
   res,
 ) => {
-  if (
+  /* if (
     !(await Permissions.findOne({
       coll: collectionName,
       op: 'Read',
@@ -25,7 +24,7 @@ const GetStats = async (
   )
     exception('Authorization')
       .msg('requiresGrantForThisStatistic')
-      .throw();
+      .throw(); */
 
   const Model = mongoose.models[collectionName];
 

@@ -3,7 +3,28 @@ const path = require('path');
 const i18next = require('i18next');
 const middleware = require('i18next-express-middleware');
 
-const dir = path.join(__dirname, 'lang');
+const walk = (dir) => {
+  const root = path.join(dir, './lang');
+
+  fs.readdirSync(root).forEach((lang) => {
+    const folder = path.join(root, lang);
+    fs.readdirSync(folder).forEach((ns) => {
+      const { name } = path.parse(ns);
+      const json = fs.readFileSync(
+        `${folder}/${ns}`,
+        'utf8',
+      );
+
+      i18next.addResourceBundle(
+        lang,
+        name,
+        JSON.parse(json),
+        true,
+        true,
+      );
+    });
+  });
+};
 
 i18next.use(middleware.LanguageDetector).init({
   lng: 'en',
@@ -17,18 +38,5 @@ i18next.use(middleware.LanguageDetector).init({
   },
 });
 
-fs.readdirSync(dir).forEach((lang) => {
-  const folder = path.join(dir, lang);
-  fs.readdirSync(folder).forEach((ns) => {
-    const { name } = path.parse(ns);
-    const json = fs.readFileSync(`${folder}/${ns}`, 'utf8');
-
-    if (ns.includes('handlebars')) {
-      i18next.addResources(lang, 'emails', {
-        [name]: json,
-      });
-    } else {
-      i18next.addResources(lang, name, JSON.parse(json));
-    }
-  });
-});
+walk(__dirname);
+module.exports = walk;

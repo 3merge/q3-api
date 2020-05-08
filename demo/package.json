@@ -25,7 +25,6 @@
     "q3-schema-inventory": "*",
     "q3-schema-notes": "^1.0.77",
     "q3-schema-orders": "^1.1.85",
-    "q3-schema-permissions": "^1.0.82",
     "q3-schema-rates": "^1.0.78",
     "q3-schema-rebates": "^1.1.80",
     "q3-schema-types": "^1.1.77",
