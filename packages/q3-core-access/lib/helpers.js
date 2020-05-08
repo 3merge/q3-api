@@ -1,5 +1,4 @@
 const Comparison = require('comparisons');
-const { exception } = require('q3-core-responder');
 
 const invokeJSON = (v) =>
   v && 'toJSON' in v ? v.toJSON() : v;

@@ -1,4 +1,4 @@
-exports.assignSocialStatus = function () {
+exports.assignSocialStatus = function measureHowManyFriends() {
   const { length } = this.friends;
 
   switch (length) {

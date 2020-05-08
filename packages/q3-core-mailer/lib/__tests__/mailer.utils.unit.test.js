@@ -16,13 +16,9 @@ jest.mock('../emitter', () => ({
   on: jest.fn(),
 }));
 
-const { basename } = require('path');
-const { on } = require('../emitter');
-
 const {
   filterByEmailValidity,
   prefix,
-  discoverEmailListenersInDir,
   getTemplate,
   reduceListenersByLang,
 } = require('../utils');
