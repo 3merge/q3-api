@@ -6,12 +6,11 @@ const { Users } = Q3;
 
 module.exports = () =>
   Q3.config({
-    locale: './locale',
-    triggers: './triggers',
+    location: __dirname,
   })
     .protect(access)
     .routes()
-    .connect(process.env.CONNECTION)
+    .connect()
     .then(() =>
       Users.create({
         firstName: 'Mike',

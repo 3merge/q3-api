@@ -79,7 +79,7 @@ describe('SubController route handlers', () => {
 
       await Put(req, res);
       expect(res.create).toHaveBeenCalled();
-      expect(Model.set).toHaveBeenCalledWith({
+      expect(Model.snapshotChange).toHaveBeenCalledWith({
         friends: args,
       });
     });
@@ -93,11 +93,12 @@ describe('SubController route handlers', () => {
       req.params.fieldID = '1';
       await Patch(req, res);
       expect(res.update).toHaveBeenCalled();
-      expect(Model.updateSubDocument).toHaveBeenCalledWith(
-        'friends',
-        '1',
-        args,
-      );
+      expect(
+        Model.snapshotChangeOnSubdocument,
+      ).toHaveBeenCalledWith('friends', {
+        id: '1',
+        ...args,
+      });
     });
   });
 
@@ -109,22 +110,22 @@ describe('SubController route handlers', () => {
       req.fieldName = 'friends';
       await PatchMany(req, res);
       expect(res.update).toHaveBeenCalled();
-      expect(Model.updateSubDocuments).toHaveBeenCalledWith(
-        'friends',
-        ['1', '2'],
-        args,
-      );
+      expect(
+        Model.snapshotChangeOnSubdocument,
+      ).toHaveBeenCalledWith('friends', {
+        ids: ['1', '2'],
+        ...args,
+      });
     });
   });
 
   describe('Post', () => {
-    it('should push into the subdocuments', async () => {
+    it.only('should push into the subdocuments', async () => {
       req.body = {};
       req.fieldName = 'foo';
-      req.parent.pushSubDocument = jest.fn();
       await Post(req, res);
       expect(
-        req.parent.pushSubDocument,
+        Model.snapshotChangeOnSubdocument,
       ).toHaveBeenCalledWith('foo', {});
     });
 

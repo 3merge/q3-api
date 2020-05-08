@@ -1,5 +1,6 @@
 /* eslint-disable class-methods-use-this */
 const mongoose = require('mongoose');
+const { Grant } = require('q3-core-access');
 const middleware = require('..');
 
 const findbyBearerToken = jest.fn();
@@ -12,6 +13,16 @@ const req = {
   get: jest.fn().mockReturnValue('Bearer 123'),
   header: jest.fn(),
 };
+
+jest.mock('q3-core-access', () => ({
+  Grant: jest.fn().mockReturnValue({
+    can: jest.fn().mockReturnValue({
+      on: jest.fn().mockReturnValue({
+        first: jest.fn(),
+      }),
+    }),
+  }),
+}));
 
 class Decorators {
   static findbyBearerToken(a) {
@@ -70,10 +81,8 @@ describe('Middleware', () => {
     );
     await fn(req, {}, next);
     await req.authorize('Foo');
-    expect(getPermission).toHaveBeenCalledWith(
-      'Foo',
-      'Read',
-      { _id: 123 },
-    );
+    expect(Grant).toHaveBeenCalledWith({
+      _id: 123,
+    });
   });
 });

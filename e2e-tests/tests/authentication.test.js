@@ -3,19 +3,15 @@ const moment = require('moment');
 const supertest = require('supertest');
 const mongoose = require('mongoose');
 const { hasEventBeenCalled } = require('../helpers');
-const { genUser } = require('../fixtures');
+const setup = require('../fixtures');
 
 let agent;
 let user;
 
 beforeAll(async () => {
   process.env.SECRET = 'SECRET';
-
-  Q3.routes();
-  await Q3.connect();
-
+  user = await setup();
   agent = supertest(Q3.$app);
-  user = await genUser();
 });
 
 afterAll(async () => {

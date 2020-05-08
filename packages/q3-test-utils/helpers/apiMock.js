@@ -38,6 +38,7 @@ module.exports = class ControllerMock {
       update: jest.fn(),
       create: jest.fn(),
       csv: jest.fn(),
+      say: jest.fn(),
     };
   }
 
