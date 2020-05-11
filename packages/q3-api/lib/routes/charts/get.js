@@ -6,7 +6,6 @@ const {
 const crypto = require('crypto');
 const exception = require('q3-core-responder');
 const { get } = require('lodash');
-const aqp = require('api-query-params');
 const app = require('../../config/express');
 
 const makePayload = (id) =>
@@ -20,13 +19,8 @@ const makeHmac = () =>
     process.env.MONGODB_EMBEDDING_KEY,
   );
 
-const makeFilter = (filter) =>
-  `&filter=${encodeURIComponent(
-    JSON.stringify(aqp(filter).filter),
-  )}`;
-
 const MongoDbChartsController = async (
-  { user, query: { id, ...rest } },
+  { user, query: { id, filter } },
   res,
 ) => {
   if (
@@ -39,8 +33,8 @@ const MongoDbChartsController = async (
   const hmac = makeHmac();
   let payload = makePayload(id);
 
-  if (typeof rest === 'object' && Object.keys(rest).length)
-    payload += makeFilter(rest);
+  if (filter)
+    payload += `&filter=${encodeURIComponent(filter)}`;
 
   hmac.update(payload);
 
