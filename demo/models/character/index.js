@@ -1,16 +1,27 @@
 const mongoose = require('mongoose');
 
+const Movie = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  year: {
+    type: Date,
+    required: true,
+  },
+});
+
 module.exports = mongoose.model(
   'characters',
   new mongoose.Schema(
     {
-      name: String,
+      name: {
+        type: String,
+        searchable: true,
+      },
       role: String,
-      friends: [
-        {
-          name: String,
-        },
-      ],
+      movies: [Movie],
+      gender: String,
     },
     {
       restify: '*',

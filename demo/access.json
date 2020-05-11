@@ -19,5 +19,33 @@
     "role": "Public",
     "ownership": "Any",
     "fields": "*"
+  },
+  {
+    "coll": "characters",
+    "op": "Read",
+    "role": "Dev",
+    "ownership": "Any",
+    "fields": "*"
+  },
+  {
+    "coll": "characters",
+    "op": "Create",
+    "role": "Dev",
+    "ownership": "Any",
+    "fields": "*"
+  },
+  {
+    "coll": "characters",
+    "op": "Update",
+    "role": "Dev",
+    "ownership": "Any",
+    "fields": "*"
+  },
+  {
+    "coll": "characters",
+    "op": "Delete",
+    "role": "Dev",
+    "ownership": "Any",
+    "fields": "*"
   }
 ]

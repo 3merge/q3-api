@@ -29,15 +29,15 @@ const convertToInterval = (value) => {
     case 'biminutely':
       return '*/2 * * * *';
     case 'minutely':
-    default:
       return '* * * * *';
+    default:
+      return null;
   }
 };
 
 const setupEvent = async (eventName, interval, handler) => {
   await Logger.onEventAsync(eventName, handler);
-
-  await Scheduler.add(eventName, interval);
+  if (interval) await Scheduler.add(eventName, interval);
 };
 
 const walker = async (dir) => {
@@ -51,7 +51,7 @@ const walker = async (dir) => {
     const f = path.basename(dirent, path.extname(dirent));
     const [eventName, interval] = f.split('@');
 
-    if (interval && isListener(eventName))
+    if (isListener(eventName))
       await setupEvent(
         eventName,
         convertToInterval(interval),

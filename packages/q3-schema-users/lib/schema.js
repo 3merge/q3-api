@@ -77,6 +77,8 @@ const BaseUserModel = new Schema(
     },
     lastLoggedIn: Date,
     source: [String],
+    filters: Schema.Types.Mixed,
+    tours: [String],
   },
   {
     withUploads: true,
