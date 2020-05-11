@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/3merge/q3-api/compare/q3-api@1.1.0...q3-api@1.1.1) (2020-05-11)
+
+
+### Bug Fixes
+
+* **charts:** leave filter query for front-end task ([04f5c51](https://github.com/3merge/q3-api/commit/04f5c515f31e0355cb536cee9ee6e3c71117cf53))
+
+
+
+
+
 # [1.1.0](https://github.com/3merge/q3-api/compare/q3-api@1.0.133...q3-api@1.1.0) (2020-05-11)
 
 
