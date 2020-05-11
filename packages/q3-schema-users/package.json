@@ -1,13 +1,13 @@
 {
   "name": "q3-schema-users",
-  "version": "1.0.78",
+  "version": "1.1.0",
   "main": "lib/index.js",
   "dependencies": {
     "bcrypt": "^4.0.1",
     "generate-password": "^1.4.2",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
-    "q3-core-mailer": "^1.0.40",
+    "q3-core-mailer": "^1.1.0",
     "q3-core-responder": "^1.0.108"
   },
   "devDependencies": {

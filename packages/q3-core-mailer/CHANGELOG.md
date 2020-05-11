@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/3merge/q3-api/compare/q3-core-mailer@1.0.40...q3-core-mailer@1.1.0) (2020-05-11)
+
+
+### Features
+
+* tour/filter on user schema ([6b85cfe](https://github.com/3merge/q3-api/commit/6b85cfe7753cb4477e1c0f9012c155c6fbe0e764))
+
+
+
+
+
 ## [1.0.40](https://github.com/3merge/q3-api/compare/q3-core-mailer@1.0.39...q3-core-mailer@1.0.40) (2020-05-08)
 
 **Note:** Version bump only for package q3-core-mailer
