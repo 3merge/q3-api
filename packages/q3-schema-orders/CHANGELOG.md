@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.87](https://github.com/3merge/q3-api/compare/q3-schema-orders@1.1.86...q3-schema-orders@1.1.87) (2020-05-12)
+
+**Note:** Version bump only for package q3-schema-orders
+
+
+
+
+
 ## [1.1.86](https://github.com/3merge/q3-api/compare/q3-schema-orders@1.1.85...q3-schema-orders@1.1.86) (2020-05-08)
 
 **Note:** Version bump only for package q3-schema-orders

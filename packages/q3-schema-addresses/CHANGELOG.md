@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.82](https://github.com/3merge/q3-api/compare/q3-schema-addresses@1.1.81...q3-schema-addresses@1.1.82) (2020-05-12)
+
+**Note:** Version bump only for package q3-schema-addresses
+
+
+
+
+
 ## [1.1.81](https://github.com/3merge/q3-api/compare/q3-schema-addresses@1.1.80...q3-schema-addresses@1.1.81) (2020-05-08)
 
 **Note:** Version bump only for package q3-schema-addresses

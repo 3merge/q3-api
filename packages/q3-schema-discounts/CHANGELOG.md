@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/3merge/q3-api/compare/q3-schema-discounts@1.0.81...q3-schema-discounts@1.1.0) (2020-05-12)
+
+
+### Features
+
+* Distance discounting ([7f83dcc](https://github.com/3merge/q3-api/commit/7f83dcce5e26864b4312d3e12ca7465efe872860))
+
+
+
+
+
 ## [1.0.81](https://github.com/3merge/q3-api/compare/q3-schema-discounts@1.0.80...q3-schema-discounts@1.0.81) (2020-05-08)
 
 **Note:** Version bump only for package q3-schema-discounts
