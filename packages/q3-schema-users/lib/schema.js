@@ -78,6 +78,7 @@ const BaseUserModel = new Schema(
     lastLoggedIn: Date,
     source: [String],
     filters: Schema.Types.Mixed,
+    sorting: Schema.Types.Mixed,
     tours: [String],
   },
   {
