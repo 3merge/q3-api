@@ -44,6 +44,7 @@ module.exports = class DiscountFilter {
     return this.$getDiscountByResourceNameAndKind(name, [
       'Incremental',
       'Compound',
+      'Distance',
     ]);
   }
 

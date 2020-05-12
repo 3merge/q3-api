@@ -125,10 +125,26 @@ describe('Decorator', () => {
         }),
       ).toBe(8.99);
     });
+
+    it('should return Distance-discounted price', () => {
+      const m = new Model({
+        formula: 'Distance',
+        factor: 5,
+        target: 'test',
+        strategy: 'MSRP',
+      });
+
+      expect(
+        m.evaluate({
+          test: 20,
+          MSRP: 11.99,
+        }),
+      ).toBe(19.4005);
+    });
   });
 
   describe('diff', () => {
-    it('should calculate the difference between input and outout', () => {
+    it('should calculate the difference between input and output', () => {
       const m = new Model({
         formula: 'Fixed',
         factor: 4.99,

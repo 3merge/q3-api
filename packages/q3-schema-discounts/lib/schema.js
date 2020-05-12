@@ -31,6 +31,7 @@ const PricingSchema = new Schema(
         return v;
       },
     },
+    target: String,
     base: Number,
     taxonomy: Schema.Types.ObjectId,
     taxonomyRef: String,

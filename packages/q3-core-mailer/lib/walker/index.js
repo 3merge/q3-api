@@ -9,23 +9,23 @@ const isListener = (v) =>
 const convertToInterval = (value) => {
   switch (value) {
     case 'annually':
-      return '* * * */12 *';
+      return '0 0 1 1 *';
     case 'biannually':
-      return '* * * */6 *';
+      return '0 0 1 */6 *';
     case 'quarterly':
-      return '* * * */4 *';
+      return '0 0 1 */3 *';
     case 'monthly':
-      return '* * * */1 *';
+      return '0 0 1 * *';
     case 'weekly':
-      return '* * */7 * *';
+      return '0 0 * * 0';
     case 'daily':
-      return '* */24 * * *';
+      return '0 0 * * *';
     case 'bihourly':
-      return '* */2 * * *';
+      return '0 */2 * * *';
     case 'hourly':
-      return '* 1 * * *';
+      return '0 * * * *';
     case 'semihourly':
-      return '*/3 * * * *';
+      return '*/30 * * * *';
     case 'biminutely':
       return '*/2 * * * *';
     case 'minutely':

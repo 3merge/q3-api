@@ -39,6 +39,14 @@ module.exports = class DiscountDecorator {
         return asNumberIfDefined(
           reduceBy(previous, factor),
         );
+      case 'Distance':
+        return asNumberIfDefined(
+          increment(
+            toFactorOfOne(factor),
+            input,
+            getKey(pricingScheme, this.target || strategy),
+          ),
+        );
       case 'Incremental':
         return asNumberIfDefined(
           increment(toFactorOfOne(factor), input, previous),
