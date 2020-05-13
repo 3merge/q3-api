@@ -15,7 +15,12 @@ module.exports = (schema, instance) => {
   });
 
   schema.pre('save', async function markModified() {
-    if (this.isNew) return;
+    if (
+      this.isNew ||
+      !this.constructor ||
+      !this.constructor.findById
+    )
+      return;
 
     const original = await this.constructor
       .findById(this._id)
