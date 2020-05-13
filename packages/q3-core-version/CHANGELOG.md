@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.7](https://github.com/3merge/q3-api/compare/q3-core-version@1.0.6...q3-core-version@1.0.7) (2020-05-13)
+
+
+### Bug Fixes
+
+* **version:** constructor methods not available during lean query ([4039287](https://github.com/3merge/q3-api/commit/40392877df42db62418214830d304ea80ccc8f61))
+
+
+
+
+
 ## [1.0.6](https://github.com/3merge/q3-api/compare/q3-core-version@1.0.5...q3-core-version@1.0.6) (2020-05-08)
 
 **Note:** Version bump only for package q3-core-version

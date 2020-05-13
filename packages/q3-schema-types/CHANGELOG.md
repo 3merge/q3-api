@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.80](https://github.com/3merge/q3-api/compare/q3-schema-types@1.1.79...q3-schema-types@1.1.80) (2020-05-13)
+
+**Note:** Version bump only for package q3-schema-types
+
+
+
+
+
 ## [1.1.79](https://github.com/3merge/q3-api/compare/q3-schema-types@1.1.78...q3-schema-types@1.1.79) (2020-05-12)
 
 **Note:** Version bump only for package q3-schema-types

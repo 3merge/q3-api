@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/3merge/q3-api/compare/q3-test-utils@1.1.0...q3-test-utils@1.1.1) (2020-05-13)
+
+
+### Bug Fixes
+
+* **version:** constructor methods not available during lean query ([4039287](https://github.com/3merge/q3-api/commit/40392877df42db62418214830d304ea80ccc8f61))
+
+
+
+
+
 # [1.1.0](https://github.com/3merge/q3-api/compare/q3-test-utils@1.0.118...q3-test-utils@1.1.0) (2020-05-12)
 
 
