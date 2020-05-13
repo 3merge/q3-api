@@ -3,7 +3,7 @@
   "validationError": "Failed request validation. Please check your inputs.",
   "reverify": "reverify",
   "permission.new": "permission.new",
-  "ifEmailExists": "If this email belongs to an account, you should receive a new password shortly.",
+  "ifEmailExists": "If this email belongs to an account, you should receive an email with a link to change your password",
   "temporaryPassword": "Looks like you require a new password. We've auto-generated a password for you to temporarily access your account. If you did not ask for new credentials, reach out to an administrator immediately.",
   "greetings": "Hey {{name}},",
   "newNoteStarted": "newNoteStarted",
