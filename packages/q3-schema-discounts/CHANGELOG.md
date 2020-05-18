@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.2](https://github.com/3merge/q3-api/compare/q3-schema-discounts@1.1.1...q3-schema-discounts@1.1.2) (2020-05-18)
+
+
+### Bug Fixes
+
+* discount enum ([78bd3f4](https://github.com/3merge/q3-api/commit/78bd3f4d3041ffa17f593beba57404f3e22c42e0))
+
+
+
+
+
 ## [1.1.1](https://github.com/3merge/q3-api/compare/q3-schema-discounts@1.1.0...q3-schema-discounts@1.1.1) (2020-05-13)
 
 **Note:** Version bump only for package q3-schema-discounts

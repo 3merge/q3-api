@@ -1,6 +1,6 @@
 {
   "name": "e2e-tests",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "main": "index.js",
   "private": true,
   "dependencies": {
@@ -20,10 +20,10 @@
     "q3-core-walker": "^1.0.43",
     "q3-locale": "^1.1.7",
     "q3-schema-addresses": "^1.1.83",
-    "q3-schema-discounts": "^1.1.1",
+    "q3-schema-discounts": "^1.1.2",
     "q3-schema-inventory": "*",
     "q3-schema-notes": "^1.0.80",
-    "q3-schema-orders": "^1.1.88",
+    "q3-schema-orders": "^1.1.89",
     "q3-schema-rates": "^1.0.81",
     "q3-schema-rebates": "^1.1.83",
     "q3-schema-types": "^1.1.80",
