@@ -16,6 +16,7 @@ const PricingSchema = new Schema(
         'Percent',
         'Fixed',
         'Incremental',
+        'Distance',
       ],
       default: 'Factor',
     },
