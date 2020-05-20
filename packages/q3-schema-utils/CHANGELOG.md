@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.83](https://github.com/3merge/q3-api/compare/q3-schema-utils@1.0.82...q3-schema-utils@1.0.83) (2020-05-20)
+
+
+### Bug Fixes
+
+* base fallback in schema discounts ([9e820ee](https://github.com/3merge/q3-api/commit/9e820ee479a50dfb42d7f62e48a4753b941fb0e1))
+
+
+
+
+
 ## [1.0.82](https://github.com/3merge/q3-api/compare/q3-schema-utils@1.0.81...q3-schema-utils@1.0.82) (2020-05-13)
 
 **Note:** Version bump only for package q3-schema-utils
