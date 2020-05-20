@@ -18,13 +18,21 @@ module.exports = class DiscountDecorator {
   evaluate(pricingScheme) {
     if (!hasKeys(pricingScheme)) return 0;
 
-    const { factor, formula, strategy } = this;
+    const {
+      base,
+      factor,
+      formula,
+      strategy,
+      target,
+    } = this;
     const input = getKey(pricingScheme, strategy);
-    const previous =
-      this.base || getKey(pricingScheme, strategy);
+    const fallback = getKey(
+      pricingScheme,
+      target || strategy,
+    );
 
     const asNumberIfDefined = (v) =>
-      input ? asNumber(v) : previous;
+      input ? asNumber(v) : fallback;
 
     switch (formula) {
       case 'Fixed':
@@ -37,20 +45,22 @@ module.exports = class DiscountDecorator {
         );
       case 'Compound':
         return asNumberIfDefined(
-          reduceBy(previous, factor),
+          reduceBy(base || fallback, factor),
         );
       case 'Distance':
         return asNumberIfDefined(
           increment(
             toFactorOfOne(factor),
             input,
-            getKey(pricingScheme, this.target || strategy),
+            getKey(pricingScheme, target),
           ),
         );
       case 'Incremental':
-        return asNumberIfDefined(
-          increment(toFactorOfOne(factor), input, previous),
-        );
+        return base
+          ? asNumberIfDefined(
+              increment(toFactorOfOne(factor), input, base),
+            )
+          : fallback;
       default:
         return asNumber(input);
     }

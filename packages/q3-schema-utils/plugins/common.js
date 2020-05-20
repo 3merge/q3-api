@@ -20,14 +20,24 @@ const getPathsRecursively = ([key, v]) => {
   return key;
 };
 
+const primeForDeletion = (doc, args = {}) => {
+  if (typeof doc.onArchive === 'function') {
+    doc.onArchive();
+  } else {
+    doc.set({
+      active: false,
+    });
+  }
+
+  return doc.save(args);
+};
+
 async function archive(id) {
   const doc = await this.findById(id)
     .setOptions({ redact: true, op: 'Delete' })
     .exec();
-  if (!doc) return null;
 
-  doc.set({ active: false });
-  return doc.save();
+  return doc ? primeForDeletion(doc) : null;
 }
 
 async function archiveMany(ids) {
@@ -36,13 +46,12 @@ async function archiveMany(ids) {
   }).exec();
   if (!docs || !docs.length) return [];
   return Promise.all(
-    docs.map((d) => {
-      d.active = false;
-      return d.save({
+    docs.map((d) =>
+      primeForDeletion(d, {
         redact: true,
         op: 'Delete',
-      });
-    }),
+      }),
+    ),
   );
 }
 

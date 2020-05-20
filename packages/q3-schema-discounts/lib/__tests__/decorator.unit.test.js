@@ -18,14 +18,14 @@ describe('Decorator', () => {
       expect(m.evaluate()).toBe(0);
     });
 
-    it('should use a straight discount if incremental base unavailable', () => {
+    it('should use a straight discount if incremental base and target unavailable', () => {
       const m = new Model({
         formula: 'Incremental',
         strategy: 'MSRP',
         factor: 12,
       });
 
-      expect(m.evaluate({ MSRP: 45.99 })).toBe(40.4712);
+      expect(m.evaluate({ MSRP: 45.99 })).toBe(45.99);
     });
 
     it('should return Factor-discounted price', () => {
@@ -110,6 +110,36 @@ describe('Decorator', () => {
           MSRP: 11.99,
         }),
       ).toBe(9.4488);
+    });
+
+    it('should return strategy when no base and no target is present', () => {
+      const m = new Model({
+        formula: 'Incremental',
+        strategy: 'MSRP',
+        factor: 88,
+      });
+
+      expect(
+        m.evaluate({
+          MSRP: 11.99,
+        }),
+      ).toBe(11.99);
+    });
+
+    it('should return the target value when no base is present', () => {
+      const m = new Model({
+        formula: 'Incremental',
+        strategy: 'MSRP',
+        factor: 88,
+        target: 'custom',
+      });
+
+      expect(
+        m.evaluate({
+          MSRP: 11.99,
+          custom: 4.99,
+        }),
+      ).toBe(4.99);
     });
 
     it('should return Fixed-discounted price', () => {
