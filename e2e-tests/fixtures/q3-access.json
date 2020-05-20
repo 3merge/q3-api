@@ -9,12 +9,33 @@
     ]
   },
   {
+    "fields": [
+      "*"
+    ],
+    "role": "Developer",
+    "coll": "students",
+    "op": "Delete",
+    "ownership": "Any",
+    "documentConditions": [
+      "socialStatus=Freshman"
+    ]
+  },
+  {
     "role": "Developer",
     "coll": "students",
     "op": "Read",
     "ownership": "Any",
     "fields": [
       "*"
+    ]
+  },
+  {
+    "role": "Developer",
+    "coll": "students",
+    "op": "Update",
+    "ownership": "Any",
+    "fields": [
+      "friends.*"
     ]
   }
 ]

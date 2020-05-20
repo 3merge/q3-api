@@ -6,6 +6,7 @@ const StudentSchema = new mongoose.Schema(
   {
     name: String,
     socialStatus: String,
+    trigger: Boolean,
     friends: [
       {
         name: String,

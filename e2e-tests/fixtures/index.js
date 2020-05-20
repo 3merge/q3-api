@@ -4,7 +4,7 @@ const access = require('./q3-access.json');
 
 const { Users } = Q3;
 
-module.exports = () =>
+module.exports = (email = 'mibberson@3merge.ca') =>
   Q3.config({
     location: __dirname,
   })
@@ -16,7 +16,7 @@ module.exports = () =>
         firstName: 'Mike',
         lastName: 'Ibberson',
         role: 'Developer',
-        email: 'mibberson@3merge.ca',
         lang: 'en-CA',
+        email,
       }),
     );

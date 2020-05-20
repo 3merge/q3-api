@@ -6,12 +6,12 @@ const { exception } = require('q3-core-responder');
 const Grant = require('./core/grant');
 const { hasOptions, extractUser } = require('./helpers');
 
-const reportAccessLevelFailure = (condition = true) =>
+const reportAccessLevelFailure = (condition) =>
   condition
     ? exception('Authorization')
         .msg('insufficientAccessLevels')
-        .throw()
-    : null;
+        .boomerang()
+    : undefined;
 
 const getOp = (ctx, options) => {
   if (ctx.isNew) return 'Create';
@@ -19,23 +19,32 @@ const getOp = (ctx, options) => {
     return 'Delete';
 
   if (options.op) return options.op;
-  return 'Updated';
+  return 'Update';
 };
 
 module.exports = (schema) => {
-  function checkOp(options = {}) {
+  /**
+   * @NOTE
+   * Async required to handle thrown error.
+   */
+  async function checkOp(fn, options = {}) {
     const user = extractUser(this);
-    const { collectionName } = this.collection;
-    const op = getOp(this, options);
+    const { collection } = this;
 
     if (this.isNew && user) this.createdBy = user._id;
+    if (!collection) return;
 
-    reportAccessLevelFailure(
-      hasOptions(options) &&
-        !new Grant(user)
-          .can(op)
-          .on(collectionName)
-          .test(this.toJSON()),
+    const { collectionName } = this.collection;
+    const acResult = new Grant(user)
+      .can(getOp(this, options))
+      .on(collectionName)
+      .test(this.toJSON());
+
+    fn(
+      reportAccessLevelFailure(
+        hasOptions(options) &&
+          (!acResult || acResult === undefined),
+      ),
     );
   }
 

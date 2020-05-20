@@ -1,5 +1,6 @@
 const Q3 = require('q3-api');
 const supertest = require('supertest');
+const mongoose = require('mongoose');
 const setup = require('../fixtures');
 
 let Authorization;
@@ -17,6 +18,11 @@ beforeAll(async () => {
 
   Authorization = `Apikey ${await user.generateApiKey()}`;
   agent = supertest(Q3.$app);
+});
+
+afterAll(async () => {
+  await Q3.Users.deleteMany({});
+  await mongoose.disconnect();
 });
 
 describe('Version control plugin', () => {

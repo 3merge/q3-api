@@ -33,11 +33,12 @@ const primeForDeletion = async (doc, args = {}) => {
 };
 
 async function archive(id) {
+  const acOptions = { redact: true, op: 'Delete' };
   const doc = await this.findById(id)
-    .setOptions({ redact: true, op: 'Delete' })
+    .setOptions(acOptions)
     .exec();
 
-  return doc ? primeForDeletion(doc) : null;
+  return doc ? primeForDeletion(doc, acOptions) : null;
 }
 
 async function archiveMany(ids) {
