@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.84](https://github.com/3merge/q3-api/compare/q3-schema-utils@1.0.83...q3-schema-utils@1.0.84) (2020-05-20)
+
+
+### Bug Fixes
+
+* onarchive as async ([2b7b5e9](https://github.com/3merge/q3-api/commit/2b7b5e9056e05f9af8c2093b3ac49b2340bb2f60))
+
+
+
+
+
 ## [1.0.83](https://github.com/3merge/q3-api/compare/q3-schema-utils@1.0.82...q3-schema-utils@1.0.83) (2020-05-20)
 
 
