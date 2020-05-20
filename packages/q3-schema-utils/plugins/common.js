@@ -20,9 +20,9 @@ const getPathsRecursively = ([key, v]) => {
   return key;
 };
 
-const primeForDeletion = (doc, args = {}) => {
+const primeForDeletion = async (doc, args = {}) => {
   if (typeof doc.onArchive === 'function') {
-    doc.onArchive();
+    await doc.onArchive();
   } else {
     doc.set({
       active: false,
