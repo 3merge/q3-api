@@ -21,7 +21,7 @@ const wrapConstructor = (discounts = []) => {
 };
 
 beforeAll(async () => {
-  DiscountSchema.set('base', 'custom');
+  DiscountSchema.set('target', 'custom');
   Model = mongoose.model(
     'DISCOUNTING',
     new mongoose.Schema({

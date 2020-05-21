@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Schema = require('..');
 
 Schema.set('base', 'test');
+Schema.set('target', 'test');
 const Model = mongoose.model('Discounts', Schema);
 
 describe('Decorator', () => {
@@ -131,15 +132,14 @@ describe('Decorator', () => {
         formula: 'Incremental',
         strategy: 'MSRP',
         factor: 88,
-        target: 'custom',
       });
 
       expect(
         m.evaluate({
           MSRP: 11.99,
-          custom: 4.99,
+          test: 21.99,
         }),
-      ).toBe(4.99);
+      ).toBeCloseTo(11.4388);
     });
 
     it('should return Fixed-discounted price', () => {
@@ -192,6 +192,18 @@ describe('Decorator', () => {
       });
 
       expect(m.diff({ test: 19.99 })).toBe(16.99);
+    });
+
+    it('should calculate the incremented difference between input and outout', () => {
+      const m = new Model({
+        formula: 'Incremental',
+        strategy: 'baseline',
+        factor: 8.99,
+      });
+
+      expect(
+        m.diff({ test: 19.99, baseline: 14.99 }),
+      ).toBeCloseTo(1.3476);
     });
   });
 });
