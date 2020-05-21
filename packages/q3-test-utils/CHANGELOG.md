@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/3merge/q3-api/compare/q3-test-utils@1.1.5...q3-test-utils@1.2.0) (2020-05-21)
+
+
+### Features
+
+* **rest:** casters to simplify client querying ([f7b9d3e](https://github.com/3merge/q3-api/commit/f7b9d3e018b5f6f0fab629e9c329dd0a72b134c3))
+
+
+
+
+
 ## [1.1.5](https://github.com/3merge/q3-api/compare/q3-test-utils@1.1.4...q3-test-utils@1.1.5) (2020-05-21)
 
 

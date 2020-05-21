@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/3merge/q3-api/compare/q3-core-rest@1.0.130...q3-core-rest@1.1.0) (2020-05-21)
+
+
+### Features
+
+* **rest:** casters to simplify client querying ([f7b9d3e](https://github.com/3merge/q3-api/commit/f7b9d3e018b5f6f0fab629e9c329dd0a72b134c3))
+
+
+
+
+
 ## [1.0.130](https://github.com/3merge/q3-api/compare/q3-core-rest@1.0.129...q3-core-rest@1.0.130) (2020-05-21)
 
 **Note:** Version bump only for package q3-core-rest
