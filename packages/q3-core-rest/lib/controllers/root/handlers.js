@@ -6,6 +6,7 @@ const {
   transformArraysInDotNotation,
   castObjectIds,
 } = require('../../utils');
+const casters = require('../casters');
 
 module.exports = {
   async Get(
@@ -37,7 +38,9 @@ module.exports = {
       limit = 25,
       projection: select,
       filter: { search, page, ...where },
-    } = aqp(q !== null ? q : {});
+    } = aqp(q !== null ? q : {}, {
+      casters,
+    });
 
     const regex = datasource.searchBuilder(search) || {};
     const params = Object.assign(
