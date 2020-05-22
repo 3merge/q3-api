@@ -3,7 +3,7 @@
   "version": "1.0.8",
   "main": "lib/index.js",
   "dependencies": {
-    "comparisons": "2.2.5",
+    "comparisons": "2.2.7",
     "lodash": "^4.17.15",
     "micromatch": "^4.0.2",
     "mongoose": "^5.7.1",
