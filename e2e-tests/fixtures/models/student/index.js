@@ -5,6 +5,7 @@ const { assignSocialStatus } = require('./middleware');
 const StudentSchema = new mongoose.Schema(
   {
     name: String,
+    age: Number,
     socialStatus: String,
     trigger: Boolean,
     friends: [
@@ -18,6 +19,11 @@ const StudentSchema = new mongoose.Schema(
     restify: '*',
     collectionPluralName: 'students',
     collectionSingularName: 'student',
+    versionHistoryWatchers: [
+      'age',
+      'friends.*.name',
+      'friends.*.age',
+    ],
   },
 );
 

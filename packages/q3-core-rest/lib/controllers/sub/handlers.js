@@ -32,10 +32,7 @@ module.exports = {
     suggestPutRequest(parent, fieldName);
 
     await parent
-      .snapshotChangeOnSubdocument(fieldName, {
-        id: params.fieldID,
-        ...body,
-      })
+      .snapshotUpdateSubdocument(fieldName)
       .updateSubDocument(fieldName, params.fieldID, body);
 
     res.update({
@@ -61,10 +58,7 @@ module.exports = {
         .throw();
 
     await parent
-      .snapshotChangeOnSubdocument(fieldName, {
-        ...body,
-        ids,
-      })
+      .snapshotUpdateSubdocument(fieldName)
       .updateSubDocuments(fieldName, ids, body);
 
     res.update({
@@ -82,7 +76,7 @@ module.exports = {
 
     if (!files) {
       await parent
-        .snapshotChangeOnSubdocument(fieldName, body)
+        .snapshotInsertSubdocument(fieldName)
         .pushSubDocument(fieldName, body);
     } else {
       await parent.handleUpload({ files, ...body });
@@ -96,7 +90,8 @@ module.exports = {
 
   async Put({ body, marshal, fieldName, parent }, res) {
     await parent
-      .snapshotChange({ [fieldName]: body })
+      .snapshotInsertSubdocument(fieldName)
+      .set({ [fieldName]: body })
       .save();
 
     res.create({
@@ -106,10 +101,9 @@ module.exports = {
   },
 
   async Remove({ parent, fieldName, params }, res) {
-    await parent.removeSubDocument(
-      fieldName,
-      params.fieldID,
-    );
+    await parent
+      .snapshotDeleteSubdocument(fieldName)
+      .removeSubDocument(fieldName, params.fieldID);
 
     res.acknowledge();
   },

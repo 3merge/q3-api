@@ -144,6 +144,7 @@ describe('Handlers', () => {
       Model.findStrictly.mockResolvedValue({
         ...Model,
         updatedAt: new Date(),
+        snapshotChange: jest.fn().mockReturnValue(Model),
         set,
       });
 

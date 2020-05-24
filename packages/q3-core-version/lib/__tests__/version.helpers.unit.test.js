@@ -89,15 +89,25 @@ describe('Version helpers', () => {
             },
           },
         },
-        ['*id*'],
+        ['foo', 'bar*'],
       );
 
-      expect(output).toHaveProperty('foo', 2);
-      expect(output).not.toHaveProperty('id');
-      expect(output.bar).not.toHaveProperty('quuz');
-      expect(output.bar.thunk).toHaveLength(2);
-      expect(output.bar.deeper.truthy).toBeFalsy();
-      expect(output.bar.deeper.retain).toBeUndefined();
+      expect(output).toHaveProperty('foo', {
+        curr: 2,
+        prev: 1,
+      });
+
+      expect(output['bar%2Egarply']).toMatchObject({
+        prev: 1,
+        curr: 2,
+      });
+
+      expect(output['bar%2Edeeper%2Etruthy']).toMatchObject(
+        {
+          prev: true,
+          curr: false,
+        },
+      );
     });
   });
 });

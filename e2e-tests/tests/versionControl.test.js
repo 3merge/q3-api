@@ -6,6 +6,12 @@ const setup = require('../fixtures');
 let Authorization;
 let agent;
 
+const addFriend = async (id, name) =>
+  agent
+    .post(`/students/${id}/friends`)
+    .send({ name })
+    .set({ Authorization });
+
 beforeAll(async () => {
   const user = await setup();
 
@@ -57,20 +63,39 @@ describe('Version control plugin', () => {
     ).resolves.toHaveLength(0);
   });
 
-  it('should ignore automated data changes', async () => {
+  it('should capture patch payloads', async () => {
     await agent
-      .post(`/students/${id}/friends`)
-      .send({ name: 'Barrie' })
+      .patch(`/students/${id}`)
+      .send({ name: 'Bobby', age: 21 })
       .set({ Authorization })
-      .expect(201);
+      .expect(200);
+
+    return expect(
+      getStudentVersion(),
+    ).resolves.toHaveLength(1);
+  });
+
+  it('should ignore automated data changes', async () => {
+    await addFriend(id, 'Barrie');
+    await addFriend(id, 'Christine');
+    const {
+      body: { friends },
+    } = await addFriend(id, 'Angus');
 
     const v = await getStudentVersion();
+    expect(v).toHaveLength(4);
 
-    expect(v).toHaveLength(1);
-    expect(v[0].modified.friends).not.toHaveProperty(
-      'createdAt',
-    );
+    await agent
+      .patch(`/students/${id}/friends/${friends[1].id}`)
+      .send({ name: 'Allan' })
+      .set({ Authorization })
+      .expect(200);
 
-    expect(v[0].modified.friends).not.toHaveProperty('id');
+    const v2 = await getStudentVersion();
+
+    expect(v2).toHaveLength(5);
+    expect(
+      v2[0].modified['friends%2E1%2Ename'],
+    ).toHaveProperty('prev', 'Christine');
   });
 });

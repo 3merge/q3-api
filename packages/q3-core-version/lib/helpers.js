@@ -1,6 +1,7 @@
 const {
   get,
   pick,
+  omit,
   isEqual,
   reduce,
   isPlainObject,
@@ -68,30 +69,41 @@ exports.getFromPatchHistory = (
 
 const diff = (a, b, fields = []) => {
   if (!a || !b) return {};
-  const inner = flat(a, { safe: true });
-  const out = flat(b, { safe: true });
+
+  const inner = flat(a);
+  const out = flat(b);
 
   const output = reduce(
     inner,
     (result, value, key) => {
-      if (!isEqual(value, out[key])) {
-        // eslint-disable-next-line
-        result[key] =
-          isPlainObject(value) && isPlainObject(out[key])
-            ? diff(value, out[key])
-            : value;
-      }
+      if (!isEqual(value, out[key]))
+        Object.assign(result, {
+          [key]: {
+            ...(out[key]
+              ? {
+                  prev: out[key],
+                }
+              : {}),
+            curr:
+              isPlainObject(value) &&
+              isPlainObject(out[key])
+                ? diff(value, out[key])
+                : value,
+          },
+        });
 
       return result;
     },
     {},
   );
 
-  micromatch(Object.keys(output), fields).forEach((key) => {
-    delete output[key];
-  });
-
-  return flat.unflatten(output);
+  return micromatch(Object.keys(output), fields).reduce(
+    (acc, key) => {
+      acc[key.replace(/\./g, '%2E')] = output[key];
+      return acc;
+    },
+    {},
+  );
 };
 
 exports.diff = diff;

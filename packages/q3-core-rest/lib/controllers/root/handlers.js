@@ -8,6 +8,13 @@ const {
 } = require('../../utils');
 const casters = require('../casters');
 
+const clean = (o) =>
+  Object.entries(o).reduce((acc, [key, v]) => {
+    if (v !== null && v !== undefined)
+      Object.assign(acc, { [key]: v });
+    return acc;
+  }, {});
+
 module.exports = {
   async Get(
     { datasource, collectionSingularName, params, marshal },
@@ -108,20 +115,12 @@ module.exports = {
       { redact: false },
     );
 
-    doc.snapshotChange(
-      Object.entries(body).reduce((acc, [key, v]) => {
-        if (v !== null && v !== undefined)
-          Object.assign(acc, { [key]: v });
-        return acc;
-      }, {}),
-    );
-
-    isFresh(doc.updatedAt);
-
-    await doc.save({
+    await doc.snapshotChange(clean(body)).save({
       redact: true,
       op: 'Update',
     });
+
+    isFresh(doc.updatedAt);
 
     res.update({
       message: res.say('resourceUpdated'),

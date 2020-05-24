@@ -9,6 +9,11 @@ const {
   diff,
 } = require('./helpers');
 
+const hasWatchers = (options) =>
+  options &&
+  options.versionHistoryWatchers &&
+  options.versionHistoryWatchers.length;
+
 module.exports = (schema, instance) => {
   schema.add({
     lastModifiedBy: mongoose.SchemaTypes.Mixed,
@@ -16,9 +21,10 @@ module.exports = (schema, instance) => {
 
   schema.pre('save', async function markModified() {
     if (
-      this.isNew ||
       !this.constructor ||
-      !this.constructor.findById
+      !this.constructor.findById ||
+      !hasWatchers(schema.options) ||
+      !this.$locals.$op
     )
       return;
 
@@ -30,21 +36,9 @@ module.exports = (schema, instance) => {
 
     const modifiedBy = getUserMeta(this);
     const modified = diff(
-      this.$locals.$raw,
+      this.toJSON(),
       original.toJSON(),
-      [
-        '*_id*',
-        '*__v*',
-        '*__t*',
-        '__$q3',
-        '*id*',
-        'code',
-        'secret',
-        'password',
-        'transaction',
-        '*updatedAt*',
-        '*createdBy*',
-      ],
+      schema.options.versionHistoryWatchers,
     );
 
     set(this, '$locals.patch', {
@@ -55,6 +49,8 @@ module.exports = (schema, instance) => {
        */
       ref: this._id,
       modifiedOn: new Date().toISOString(),
+      target: this.$locals.$target,
+      op: this.$locals.$op,
       modified,
       modifiedBy,
     });
@@ -73,7 +69,8 @@ module.exports = (schema, instance) => {
   // eslint-disable-next-line
   schema.methods.snapshotChange = function (body) {
     try {
-      this.$locals.$raw = body;
+      this.$locals.$op = 'Update';
+      this.$locals.$target = 'baseSchema';
       return this.set(body);
     } catch (e) {
       return this.set(body);
@@ -81,17 +78,38 @@ module.exports = (schema, instance) => {
   };
 
   // eslint-disable-next-line
-  schema.methods.snapshotChangeOnSubdocument = function (field, body) {
+  schema.methods.snapshotChangeOnSubdocument = function (field, op) {
     try {
-      if (!this.$locals.$raw) this.$locals.$raw = {};
-      if (!this.$locals.$raw[field])
-        this.$locals.$raw[field] = [];
-
-      this.$locals.$raw[field].push(body);
+      this.$locals.$op = op;
+      this.$locals.$target = field;
       return this;
     } catch (e) {
       return this;
     }
+  };
+
+  // eslint-disable-next-line
+  schema.methods.snapshotInsertSubdocument = function (field) {
+    return this.snapshotChangeOnSubdocument(
+      field,
+      'Create',
+    );
+  };
+
+  // eslint-disable-next-line
+  schema.methods.snapshotUpdateSubdocument = function (field) {
+    return this.snapshotChangeOnSubdocument(
+      field,
+      'Update',
+    );
+  };
+
+  // eslint-disable-next-line
+  schema.methods.snapshotDeleteSubdocument = function (field) {
+    return this.snapshotChangeOnSubdocument(
+      field,
+      'Delete',
+    );
   };
 
   // eslint-disable-next-line

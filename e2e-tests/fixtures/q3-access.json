@@ -35,6 +35,7 @@
     "op": "Update",
     "ownership": "Any",
     "fields": [
+      "age",
       "friends.*"
     ]
   }
