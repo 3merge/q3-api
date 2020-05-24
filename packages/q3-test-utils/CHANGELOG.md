@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.3](https://github.com/3merge/q3-api/compare/q3-test-utils@1.2.2...q3-test-utils@1.2.3) (2020-05-24)
+
+
+### Bug Fixes
+
+* distance comparison of negative vs positive values ([d4a76fa](https://github.com/3merge/q3-api/commit/d4a76fad36e7dd1bbe372c15b7e551aa490c2c53))
+
+
+
+
+
 ## [1.2.2](https://github.com/3merge/q3-api/compare/q3-test-utils@1.2.1...q3-test-utils@1.2.2) (2020-05-24)
 
 **Note:** Version bump only for package q3-test-utils
