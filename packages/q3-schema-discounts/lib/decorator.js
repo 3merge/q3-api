@@ -67,12 +67,10 @@ module.exports = class DiscountDecorator {
 
   diff(pricingScheme) {
     const { target } = getOptions(this);
-    return Math.abs(
-      asNumber(
-        getKey(pricingScheme, target) -
-          this.evaluate(pricingScheme),
-        0,
-      ),
+    return asNumber(
+      getKey(pricingScheme, target) -
+        this.evaluate(pricingScheme),
+      0,
     );
   }
 };
