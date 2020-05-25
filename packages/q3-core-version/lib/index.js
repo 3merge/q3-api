@@ -55,7 +55,7 @@ module.exports = (schema, instance) => {
       modifiedBy,
     });
 
-    if (hasKeys(modifiedBy) && hasKeys(modified)) {
+    if (hasKeys(modifiedBy)) {
       this.lastModifiedBy = modifiedBy;
 
       await insertToPatchHistory(

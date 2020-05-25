@@ -27,6 +27,13 @@ module.exports = mongoose.model(
       restify: '*',
       collectionSingularName: 'character',
       collectionPluralName: 'characters',
+      versionHistoryWatchers: [
+        'name',
+        'role',
+        'gender',
+        'movies.*.title',
+        'movies.*.year',
+      ],
     },
   ),
 );
