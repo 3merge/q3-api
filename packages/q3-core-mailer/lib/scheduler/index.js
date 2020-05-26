@@ -31,23 +31,14 @@ module.exports = {
   update: (event, interval) =>
     Scheduler.findOneAndUpdate(
       { event },
-      { running: false, interval },
+      { interval },
       { new: true },
     ),
 
   init: () =>
-    Scheduler.updateMany({
-      running: false,
-    })
-      .then((r) => {
-        cron.schedule('* * * * *', async () => {
-          await Scheduler.registerTasks();
-        });
-
-        return r.nModified;
-      })
-      .catch((e) => {
-        // eslint-disable-next-line
-        console.warn('Scheduler could not start', e);
-      }),
+    // look for new tasks every minute
+    cron.schedule(
+      '* * * * *',
+      Scheduler.registerTasks.bind(Scheduler),
+    ),
 };

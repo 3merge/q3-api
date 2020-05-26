@@ -4,7 +4,6 @@ jest.mock('node-cron', () => ({
 }));
 
 const mongoose = require('mongoose');
-const { schedule } = require('node-cron');
 const Scheduler = require('..');
 
 beforeAll(() => {
@@ -12,20 +11,6 @@ beforeAll(() => {
 });
 
 describe('Scheduler', () => {
-  it('should start the scheduler by stopping all tasks', async () => {
-    const event = 'onTest';
-    await Scheduler.$model.create({
-      running: true,
-      event,
-    });
-
-    await Scheduler.init();
-    expect(
-      Scheduler.$model.findOne({ event }).exec(),
-    ).resolves.toHaveProperty('running', false);
-    return expect(schedule).toHaveBeenCalled();
-  });
-
   it('should add a new scheduler', async () => {
     const doc = await Scheduler.add('newEvent');
     expect(doc._id).toBeDefined();

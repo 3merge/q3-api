@@ -1,5 +1,5 @@
 /* eslint-disable func-names, no-console  */
-const cron = require('node-cron');
+const moment = require('moment');
 const mongoose = require('mongoose');
 const { executeOnAsync } = require('q3-schema-utils');
 const Emitter = require('../emitter');
@@ -15,11 +15,13 @@ const Schema = new mongoose.Schema(
     },
     interval: {
       type: String,
-      default: '* * * * *',
     },
     running: {
       type: Boolean,
       default: false,
+    },
+    lastRan: {
+      type: Date,
     },
   },
   {
@@ -27,33 +29,63 @@ const Schema = new mongoose.Schema(
   },
 );
 
-const makeTask = ({ interval, event }) => {
-  if (!cron.validate(interval))
-    throw new Error('Interval value is invalid');
+const hasPassed = (value, date) => {
+  const shouldRestart = (increment, qualifier) => {
+    return moment().isAfter(
+      moment(date).add(increment, qualifier),
+    );
+  };
 
-  return cron.schedule(interval, () => Emitter.emit(event));
+  switch (value) {
+    case 'annually':
+      return shouldRestart(1, 'years');
+    case 'biannually':
+      return shouldRestart(2, 'quarters');
+    case 'quarterly':
+      return shouldRestart(1, 'quarters');
+    case 'monthly':
+      return shouldRestart(1, 'months');
+    case 'weekly':
+      return shouldRestart(1, 'weeks');
+    case 'daily':
+      return shouldRestart(1, 'days');
+    case 'bihourly':
+      return shouldRestart(2, 'hours');
+    case 'hourly':
+      return shouldRestart(1, 'hours');
+    case 'semihourly':
+      return shouldRestart(30, 'minutes');
+    case 'biminutely':
+      return shouldRestart(2, 'minutes');
+    case 'minutely':
+      return shouldRestart(1, 'minutes');
+    default:
+      return false;
+  }
 };
 
 const startTask = async (doc) => {
   try {
-    makeTask(doc);
-    await Logger.accept(doc);
     await doc.run();
+    await Logger.accept(doc);
   } catch (e) {
     await Logger.reject(doc);
   }
 };
 
-Schema.path('interval').validate(cron.validate);
-
 Schema.methods.run = async function () {
-  if (!this.running)
-    await this.set({ running: true }).save();
+  if (!hasPassed(this.interval, this.lastRan)) return null;
+
+  return this.set({
+    lastRan: moment().toISOString(),
+  }).save(() => {
+    Emitter.emit(this.event);
+  });
 };
 
 Schema.statics.registerTasks = async function () {
   return executeOnAsync(
-    await this.find({ running: false }).exec(),
+    await this.find().exec(),
     startTask,
   );
 };

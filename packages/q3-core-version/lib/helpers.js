@@ -1,7 +1,6 @@
 const {
   get,
   pick,
-  omit,
   isEqual,
   reduce,
   isPlainObject,

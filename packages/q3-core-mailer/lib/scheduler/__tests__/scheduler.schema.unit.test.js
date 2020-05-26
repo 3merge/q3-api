@@ -20,24 +20,4 @@ describe('Scheduler Schema', () => {
       expect.any(Function),
     );
   });
-
-  it('should run only if not already running', async () => {
-    await Schema.methods.run.call({
-      running: false,
-      ...ModelHelpers,
-    });
-
-    expect(ModelHelpers.set).toHaveBeenCalledWith({
-      running: true,
-    });
-  });
-
-  it('should not run an already running task', async () => {
-    await Schema.methods.run.call({
-      running: true,
-      ...ModelHelpers,
-    });
-
-    expect(ModelHelpers.set).not.toHaveBeenCalled();
-  });
 });
