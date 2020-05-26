@@ -65,8 +65,12 @@ describe('DiscountFilter', () => {
       const inst = wrapConstructor([
         foo,
         glob,
-        taxonomy(id),
+        {
+          ...taxonomy(id),
+          formula: 'Percent',
+        },
       ]);
+
       const result = inst.getDiscountByTaxonomy(id);
       expect(result).toHaveLength(1);
     });

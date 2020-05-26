@@ -5,6 +5,16 @@ const {
   compareValues,
 } = require('./helpers');
 
+const filterBySimpleDiscountFormula = (kinds) => ({
+  formula,
+}) => {
+  try {
+    return kinds.includes(formula);
+  } catch (e) {
+    return false;
+  }
+};
+
 module.exports = class DiscountFilter {
   constructor(docs = []) {
     this.discounts = docs;
@@ -26,18 +36,24 @@ module.exports = class DiscountFilter {
   $getDiscountByResourceNameAndKind(name, kinds = []) {
     return this.$getDiscountByResourceName(
       name,
-      ({ formula }) => kinds.includes(formula),
+      filterBySimpleDiscountFormula(kinds),
     );
   }
 
   getDiscountByTaxonomy(taxonomy) {
     return this.$getEligibleDiscounts(
       filterByTaxonomy(taxonomy),
+    ).filter(
+      filterBySimpleDiscountFormula(['Factor', 'Percent']),
     );
   }
 
   getGlobalDiscount() {
-    return this.$getEligibleDiscounts((v) => v.global);
+    return this.$getEligibleDiscounts(
+      (v) => v.global,
+    ).filter(
+      filterBySimpleDiscountFormula(['Factor', 'Percent']),
+    );
   }
 
   getIncrementalDiscountByResourceName(name) {
@@ -89,6 +105,7 @@ module.exports = class DiscountFilter {
     verbose = false,
   ) {
     const b = this.getBaseDiscount(name, taxonomy, pricing);
+
     const discounted = b ? b.evaluate(pricing) : null;
     const a = this.getAugmentedDiscount(
       name,
