@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.17](https://github.com/3merge/q3-api/compare/demo@1.1.16...demo@1.1.17) (2020-05-26)
+
+
+### Bug Fixes
+
+* scheduling via chron ([3503f66](https://github.com/3merge/q3-api/commit/3503f66e80cf8b83c990af27bfe40a7feac1df11))
+
+
+
+
+
 ## [1.1.16](https://github.com/3merge/q3-api/compare/demo@1.1.15...demo@1.1.16) (2020-05-25)
 
 **Note:** Version bump only for package demo
