@@ -9,7 +9,8 @@ const statusCodeHelper = (res) => (code) => (body = {}) => {
 const removeEmpty = (obj = {}) =>
   Object.entries(obj).reduce((a, [key, value]) => {
     const copy = { ...a };
-    if (value) copy[key] = value;
+    if (value !== null && value !== undefined)
+      copy[key] = value;
     return copy;
   }, {});
 
