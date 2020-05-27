@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.122](https://github.com/3merge/q3-api/compare/q3-core-responder@1.0.121...q3-core-responder@1.0.122) (2020-05-27)
+
+
+### Bug Fixes
+
+* allow for some falsy values in responder ([782fad0](https://github.com/3merge/q3-api/commit/782fad057b0acceb0559c2f8374cc838932574c1))
+
+
+
+
+
 ## [1.0.121](https://github.com/3merge/q3-api/compare/q3-core-responder@1.0.120...q3-core-responder@1.0.121) (2020-05-26)
 
 **Note:** Version bump only for package q3-core-responder
