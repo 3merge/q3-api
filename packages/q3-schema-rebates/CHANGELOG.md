@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.96](https://github.com/3merge/q3-api/compare/q3-schema-rebates@1.1.95...q3-schema-rebates@1.1.96) (2020-05-29)
+
+**Note:** Version bump only for package q3-schema-rebates
+
+
+
+
+
 ## [1.1.95](https://github.com/3merge/q3-api/compare/q3-schema-rebates@1.1.94...q3-schema-rebates@1.1.95) (2020-05-27)
 
 **Note:** Version bump only for package q3-schema-rebates

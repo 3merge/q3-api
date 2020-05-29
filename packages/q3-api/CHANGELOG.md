@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/3merge/q3-api/compare/q3-api@1.1.18...q3-api@1.2.0) (2020-05-29)
+
+
+### Features
+
+* **gom-497:** dynamic access control ([ae28251](https://github.com/3merge/q3-api/commit/ae28251d719f798c5e1e613807b504d830b20ce1))
+
+
+
+
+
 ## [1.1.18](https://github.com/3merge/q3-api/compare/q3-api@1.1.17...q3-api@1.1.18) (2020-05-27)
 
 **Note:** Version bump only for package q3-api

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/3merge/q3-api/compare/e2e-tests@1.0.22...e2e-tests@1.1.0) (2020-05-29)
+
+
+### Features
+
+* **gom-497:** dynamic access control ([ae28251](https://github.com/3merge/q3-api/commit/ae28251d719f798c5e1e613807b504d830b20ce1))
+
+
+
+
+
 ## [1.0.22](https://github.com/3merge/q3-api/compare/e2e-tests@1.0.21...e2e-tests@1.0.22) (2020-05-27)
 
 **Note:** Version bump only for package e2e-tests
