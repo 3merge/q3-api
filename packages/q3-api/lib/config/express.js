@@ -7,6 +7,7 @@ const limit = require('express-rate-limit');
 const fileUpload = require('express-fileupload');
 const useragent = require('express-useragent');
 const session = require('q3-core-session');
+const corsConfig = require('./express-cors');
 require('csv-express');
 
 const server = express();
@@ -15,7 +16,9 @@ server.all(session.middleware);
 
 server.enable('trust proxy');
 server.use(helmet());
-server.use(cors());
+
+// relies on app.locals to run
+server.use(cors(corsConfig(server)));
 server.use(compression());
 server.use(bodyParser.json());
 server.use(useragent.express());

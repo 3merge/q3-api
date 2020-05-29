@@ -7,6 +7,8 @@ const { Users } = Q3;
 module.exports = (email = 'mibberson@3merge.ca') =>
   Q3.config({
     location: __dirname,
+    // for testing purposes only..
+    onCors: () => true,
   })
     .protect(access)
     .routes()
