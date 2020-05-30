@@ -12,12 +12,12 @@ module.exports = class FileUploadAdapter {
 
     await Promise.all(data.map(method)).then((keys) =>
       Promise.all(
-        keys.map((name) =>
-          this.uploads.push({
+        keys.map((name) => {
+          return this.uploads.push({
             sensitive: true,
             name,
-          }),
-        ),
+          });
+        }),
       ),
     );
 

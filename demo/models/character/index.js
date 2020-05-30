@@ -25,6 +25,8 @@ module.exports = mongoose.model(
     },
     {
       restify: '*',
+      withNotes: true,
+      withUploads: true,
       collectionSingularName: 'character',
       collectionPluralName: 'characters',
       versionHistoryWatchers: [

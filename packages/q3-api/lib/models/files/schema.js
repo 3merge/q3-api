@@ -19,14 +19,41 @@ const FileSchema = new Schema(
   },
 );
 
+FileSchema.path('name').set(function (newVal) {
+  if (this.$locals && this.name)
+    this.$locals.prev = this.name;
+
+  return newVal;
+});
+
+FileSchema.pre(
+  'save',
+  async function modifyS3OnNameChange() {
+    try {
+      if (this.isModified('name') && !this.isNew) {
+        const sdk = AWSInterface();
+        sdk.copyFrom(
+          `${this.parent().id}/${this.$locals.prev}`,
+          `${this.parent().id}/${this.name}`,
+        );
+      }
+    } catch (e) {
+      // noop
+    }
+  },
+);
+
 FileSchema.virtual('url').get((value, v, doc) => {
-  const sdk = AWSInterface();
+  try {
+    const sdk = AWSInterface();
+    const method = doc.sensitive
+      ? sdk.getPrivate
+      : sdk.getPublic;
 
-  const method = doc.sensitive
-    ? sdk.getPrivate
-    : sdk.getPublic;
-
-  return method(`${doc.parent().id}/${doc.name}`);
+    return method(`${doc.parent().id}/${doc.name}`);
+  } catch (e) {
+    return null;
+  }
 });
 
 const UploadSchema = new Schema({

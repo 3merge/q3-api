@@ -82,7 +82,24 @@ module.exports = () => {
           Bucket: process.env.PRIVATE_BUCKET,
           Key,
         })
-        .createReadStream();
+        .createReadStream()
+        .on('error', () => {
+          // noop
+        });
+    },
+
+    copyFrom(prevKey, newKey) {
+      s3.copyObject(
+        {
+          CopySource: `${process.env.PRIVATE_BUCKET}/${prevKey}`,
+          Bucket: process.env.PRIVATE_BUCKET,
+          Key: newKey,
+        },
+        () => {
+          // noop
+          // will need to improve this...
+        },
+      );
     },
 
     add(Key, data) {
