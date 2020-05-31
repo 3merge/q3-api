@@ -36,7 +36,8 @@
     "ownership": "Any",
     "fields": [
       "age",
-      "friends.*"
+      "friends.*",
+      "class"
     ]
   }
 ]

@@ -23,6 +23,7 @@ const StudentSchema = new mongoose.Schema(
       'age',
       'friends.*.name',
       'friends.*.age',
+      'class',
     ],
   },
 );

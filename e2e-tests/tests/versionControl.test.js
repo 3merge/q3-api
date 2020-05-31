@@ -54,7 +54,11 @@ describe('Version control plugin', () => {
       },
     } = await agent
       .post('/students')
-      .send({ name: 'George' })
+      .send({
+        '__t': 'teach-assistant',
+        name: 'George',
+        class: 'Science',
+      })
       .set({ Authorization })
       .expect(201));
 
@@ -64,9 +68,14 @@ describe('Version control plugin', () => {
   });
 
   it('should capture patch payloads', async () => {
-    await agent
+    const o = await agent
       .patch(`/students/${id}`)
-      .send({ name: 'Bobby', age: 21 })
+      .send({
+        '__t': 'teach-assistant',
+        name: 'Bobby',
+        age: 21,
+        class: 'Math',
+      })
       .set({ Authorization })
       .expect(200);
 

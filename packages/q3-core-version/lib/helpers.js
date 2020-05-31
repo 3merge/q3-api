@@ -96,13 +96,18 @@ const diff = (a, b, fields = []) => {
     {},
   );
 
-  return micromatch(Object.keys(output), fields).reduce(
-    (acc, key) => {
-      acc[key.replace(/\./g, '%2E')] = output[key];
-      return acc;
-    },
-    {},
-  );
+  return micromatch(Object.keys(output), [
+    ...(Array.isArray(fields) ? fields : []),
+    '!*__t*',
+    '!*__v*',
+    '!*id*',
+    '!*updatedAt*',
+    '!*createdAt*',
+    '!*createdBy*',
+  ]).reduce((acc, key) => {
+    acc[key.replace(/\./g, '%2E')] = output[key];
+    return acc;
+  }, {});
 };
 
 exports.diff = diff;

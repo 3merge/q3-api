@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { set } = require('lodash');
+const { set, union } = require('lodash');
 const {
   insertToPatchHistory,
   getFromPatchHistory,
@@ -10,9 +10,18 @@ const {
 } = require('./helpers');
 
 const hasWatchers = (options) =>
-  options &&
-  options.versionHistoryWatchers &&
-  options.versionHistoryWatchers.length;
+  options && options.versionHistoryWatchers;
+
+const getSchemaPaths = (schema) => {
+  let paths = [];
+
+  if (schema.discriminators)
+    paths = Object.values(
+      schema.discriminators,
+    ).flatMap((s) => Object.keys(s.paths));
+
+  return union(paths, Object.keys(schema.paths)).join(' ');
+};
 
 module.exports = (schema, instance) => {
   schema.add({
@@ -30,6 +39,7 @@ module.exports = (schema, instance) => {
 
     const original = await this.constructor
       .findById(this._id)
+      .select(getSchemaPaths(schema))
       .exec();
 
     if (!original) return;

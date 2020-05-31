@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const isGlob = require('is-glob');
 
 const clean = (a = []) =>
-  a.map((v) => v.trim().toLowerCase());
+  a.map((v) => v.trim().toLowerCase()).filter(Boolean);
 
 const throwOnDuplicate = (a = []) => {
   const simple = a.filter((v) => !isGlob(v));
@@ -26,8 +26,13 @@ CommaDelimited.prototype = Object.create(
   mongoose.SchemaType.prototype,
 );
 
-CommaDelimited.prototype.cast = function castToString(val) {
+CommaDelimited.prototype.cast = function castToString(
+  val,
+  e,
+) {
   let output = [];
+
+  if (e.constructor.name === 'Query') return val;
 
   if (Array.isArray(val)) {
     output = clean(val);
