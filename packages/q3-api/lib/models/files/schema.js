@@ -12,6 +12,7 @@ const FileSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    tags: [String],
   },
   {
     timestamps: true,
