@@ -35,10 +35,13 @@ module.exports = {
       { new: true },
     ),
 
-  init: () =>
+  init: async () => {
+    await Scheduler.registerTasks();
+
     // look for new tasks every minute
-    cron.schedule(
+    return cron.schedule(
       '* * * * *',
       Scheduler.registerTasks.bind(Scheduler),
-    ),
+    );
+  },
 };

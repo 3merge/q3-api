@@ -31,9 +31,11 @@ const Schema = new mongoose.Schema(
 
 const hasPassed = (value, date) => {
   const shouldRestart = (increment, qualifier) => {
-    return moment().isAfter(
-      moment(date).add(increment, qualifier),
-    );
+    return date
+      ? moment().isSameOrAfter(
+          moment(date).add(increment, qualifier),
+        )
+      : true;
   };
 
   switch (value) {
