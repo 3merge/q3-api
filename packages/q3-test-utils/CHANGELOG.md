@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.2](https://github.com/3merge/q3-api/compare/q3-test-utils@1.3.1...q3-test-utils@1.3.2) (2020-06-17)
+
+
+### Bug Fixes
+
+* start new tasks immediately ([0674b69](https://github.com/3merge/q3-api/commit/0674b6953d53445dc4ab5114f90ac764b18da2ec))
+
+
+
+
+
 ## [1.3.1](https://github.com/3merge/q3-api/compare/q3-test-utils@1.3.0...q3-test-utils@1.3.1) (2020-05-31)
 
 
