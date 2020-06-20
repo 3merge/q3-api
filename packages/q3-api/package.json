@@ -1,6 +1,6 @@
 {
   "name": "q3-api",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "REST api configurations",
   "main": "lib/index.js",
   "license": "MIT",
@@ -41,7 +41,7 @@
     "q3-locale": "^1.1.7",
     "q3-schema-notes": "^1.0.94",
     "q3-schema-types": "^1.1.94",
-    "q3-schema-users": "^1.1.18"
+    "q3-schema-users": "^1.1.19"
   },
   "peerDependencies": {
     "express": "^4.17.1",
