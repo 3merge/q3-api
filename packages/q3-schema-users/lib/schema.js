@@ -85,6 +85,7 @@ const BaseUserModel = new Schema(
     withUploads: true,
     withVirtuals: true,
     withVersioning: true,
+    withNotes: true,
   },
 );
 
