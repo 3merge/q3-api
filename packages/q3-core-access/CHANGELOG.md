@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.19](https://github.com/3merge/q3-api/compare/q3-core-access@1.0.18...q3-core-access@1.0.19) (2020-06-22)
+
+
+### Bug Fixes
+
+* nested ownershipAlias path ([71574df](https://github.com/3merge/q3-api/commit/71574dfbb41c9c44e3229cbdd73efb8f12282cec))
+
+
+
+
+
 ## [1.0.18](https://github.com/3merge/q3-api/compare/q3-core-access@1.0.17...q3-core-access@1.0.18) (2020-06-17)
 
 **Note:** Version bump only for package q3-core-access
