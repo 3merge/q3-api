@@ -79,7 +79,7 @@ module.exports = (schema) => {
     if (ownership !== 'Any') {
       const aliases = ownershipAliases.map(
         ({ foreign, local }) => ({
-          [local]: user[foreign],
+          [local]: get(user, foreign),
         }),
       );
 
