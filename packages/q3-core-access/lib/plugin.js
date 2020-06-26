@@ -121,7 +121,7 @@ module.exports = (schema) => {
     }
   }
 
-  if (!schema.options.disableOwnership) {
+  if (schema.options.enableOwnership) {
     schema.pre('save', checkOp);
     schema.pre('find', useQuery);
     schema.pre('findOne', useQuery);

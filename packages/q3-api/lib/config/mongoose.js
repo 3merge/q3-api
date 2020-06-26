@@ -32,6 +32,8 @@ mongoose.plugin((schema) => {
     mongoose.plugin(mongooseLeanVirtuals);
 
   if (schema.options.restify) {
+    // most packages assume the existence of this plugin
+    schema.set('enableOwnership', true);
     schema.plugin(version, mongoose);
     schema.add(Files);
     schema.add(Notes);
