@@ -68,9 +68,22 @@ function middleware(UserModel) {
       method in UserModel && !req.user;
 
     const identity = new Session(req);
-    const token = identity.getToken();
-    const nonce = req.header('X-Session-Nonce');
     const host = req.get('host');
+
+    let token = identity.getToken();
+    let nonce = req.header('X-Session-Nonce');
+
+    // provide a means of authenticating via query string
+    // this will only work for the token/nonce strategy now
+    if (req.query) {
+      if (!token && req.query.token) {
+        token = req.query.token;
+      }
+
+      if (!nonce && req.query.nonce) {
+        nonce = req.query.nonce;
+      }
+    }
 
     if (hasMethod('findbyBearerToken'))
       req.user = await UserModel.findbyBearerToken(

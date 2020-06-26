@@ -28,14 +28,14 @@ mongoose.plugin(dedupe, {
 });
 
 mongoose.plugin((schema) => {
-  if (schema.options.withNotes) schema.add(Notes);
-  if (schema.options.withUploads) schema.add(Files);
-
   if (schema.options.withVirtuals)
     mongoose.plugin(mongooseLeanVirtuals);
 
-  if (schema.options.restify)
+  if (schema.options.restify) {
     schema.plugin(version, mongoose);
+    schema.add(Files);
+    schema.add(Notes);
+  }
 });
 
 mongoose.plugin(accessControl);

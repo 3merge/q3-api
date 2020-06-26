@@ -66,6 +66,8 @@ module.exports = (schema) => {
 
     const {
       ownership = 'Own',
+      ownershipAliasesOnly = false,
+      ownershipAliasesWith = false,
       ownershipAliases = [],
       documentConditions = [],
     } = doc;
@@ -78,17 +80,39 @@ module.exports = (schema) => {
 
     if (ownership !== 'Any') {
       const aliases = ownershipAliases.map(
-        ({ foreign, local }) => ({
-          [local]: get(user, foreign),
-        }),
-      );
+        ({ foreign, local, cast }) => {
+          const q = get(user, foreign);
 
+          // for now, we've only encountered ObjectId references
+          // we may need to support other caster functions/presets later
+          if (cast === 'ObjectId')
+            return {
+              $expr: {
+                $eq: [{ $toString: `$${local}` }, q],
+              },
+            };
+
+          return {
+            [local]: q,
+          };
+        },
+      );
       if (aliases.length) {
-        this.or(
-          aliases.concat({
-            createdBy,
-          }),
-        );
+        if (ownershipAliasesOnly) {
+          this.or(aliases);
+        } else if (ownershipAliasesWith) {
+          this.and(
+            aliases.concat({
+              createdBy,
+            }),
+          );
+        } else {
+          this.or(
+            aliases.concat({
+              createdBy,
+            }),
+          );
+        }
       } else {
         this.where({
           createdBy,
