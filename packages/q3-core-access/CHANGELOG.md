@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.21](https://github.com/3merge/q3-api/compare/q3-core-access@1.0.20...q3-core-access@1.0.21) (2020-06-26)
+
+
+### Bug Fixes
+
+* **j3-150:** enable access control on all rest-enabled schemas ([56ceaf0](https://github.com/3merge/q3-api/commit/56ceaf0a215fa13ceea715c11f51793b8cb1dcce))
+
+
+
+
+
 ## [1.0.20](https://github.com/3merge/q3-api/compare/q3-core-access@1.0.19...q3-core-access@1.0.20) (2020-06-26)
 
 
