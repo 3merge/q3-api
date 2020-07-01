@@ -82,7 +82,7 @@ class Redact {
   }
 }
 
-module.exports = (
+const redactPostware = (
   { redactions },
   mutable,
   targetLocation,
@@ -102,3 +102,6 @@ module.exports = (
       )
     : mutable;
 };
+
+module.exports = redactPostware;
+redactPostware.Redact = Redact;
