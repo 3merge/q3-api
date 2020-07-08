@@ -39,6 +39,7 @@
     "q3-core-session": "^1.0.7",
     "q3-core-version": "^1.0.11",
     "q3-core-walker": "^1.0.43",
+    "q3-exports": "^1.0.0",
     "q3-locale": "^1.1.7",
     "q3-schema-notes": "^1.0.96",
     "q3-schema-types": "^1.1.96",

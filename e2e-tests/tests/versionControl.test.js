@@ -1,6 +1,5 @@
-const Q3 = require('q3-api');
-const mongoose = require('mongoose');
 const setup = require('../fixtures');
+const { teardown } = require('../helpers');
 
 let Authorization;
 let agent;
@@ -15,10 +14,7 @@ beforeAll(async () => {
   ({ Authorization, agent } = await setup());
 });
 
-afterAll(async () => {
-  await Q3.Users.deleteMany({});
-  await mongoose.disconnect();
-});
+afterAll(teardown);
 
 describe('Version control plugin', () => {
   let id;
@@ -57,7 +53,7 @@ describe('Version control plugin', () => {
   });
 
   it('should capture patch payloads', async () => {
-    const o = await agent
+    await agent
       .patch(`/students/${id}`)
       .send({
         '__t': 'teach-assistant',

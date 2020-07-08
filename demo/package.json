@@ -11,6 +11,7 @@
     "moment": "^2.24.0",
     "mongoose": "^5.7.1",
     "q3-api": "^1.2.8",
+    "q3-core-access": "1.0.21",
     "q3-core-composer": "^1.0.120",
     "q3-core-mailer": "^1.2.18",
     "q3-core-puncher": "*",

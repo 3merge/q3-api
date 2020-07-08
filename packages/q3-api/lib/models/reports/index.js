@@ -1,3 +1,4 @@
+/* eslint-disable func-names  */
 const { get, pick } = require('lodash');
 const path = require('path');
 const { Schema } = require('mongoose');

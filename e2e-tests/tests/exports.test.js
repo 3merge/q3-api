@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
 const Student = require('../fixtures/models/student');
 const setup = require('../fixtures');
 const connectToSocket = require('../helpers/connectToSocket');
+const { teardown } = require('../helpers');
 
 let Authorization;
 let agent;
@@ -16,9 +16,7 @@ beforeAll(async () => {
   ]);
 });
 
-afterAll(async () => {
-  await mongoose.disconnect();
-});
+afterAll(teardown);
 
 describe('Exports', () => {
   it('should emit server side event when a new export is ready', async (done) => {

@@ -1,16 +1,9 @@
-const Q3 = require('q3-api');
-
-const mongoose = require('mongoose');
 const setup = require('../fixtures');
+const { teardown } = require('../helpers');
 const Student = require('../fixtures/models/student');
 
 let agent;
 let Authorization;
-
-const teardown = async () => {
-  await Q3.Users.deleteMany({});
-  await mongoose.disconnect();
-};
 
 const genStudent = async () =>
   Student.create({

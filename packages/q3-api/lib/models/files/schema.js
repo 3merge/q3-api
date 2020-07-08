@@ -20,7 +20,9 @@ const FileSchema = new Schema(
   },
 );
 
-FileSchema.path('name').set(function (newVal) {
+FileSchema.path('name').set(function savePreviousFileName(
+  newVal,
+) {
   if (this.$locals && this.name)
     this.$locals.prev = this.name;
 

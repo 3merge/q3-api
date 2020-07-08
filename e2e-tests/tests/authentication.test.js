@@ -1,7 +1,9 @@
 const Q3 = require('q3-api');
 const moment = require('moment');
-const mongoose = require('mongoose');
-const { hasEventBeenCalled } = require('../helpers');
+const {
+  hasEventBeenCalled,
+  teardown,
+} = require('../helpers');
 const setup = require('../fixtures');
 
 let agent;
@@ -17,10 +19,7 @@ beforeAll(async () => {
   });
 });
 
-afterAll(async () => {
-  await Q3.Users.deleteMany({});
-  await mongoose.disconnect();
-});
+afterAll(teardown);
 
 const verificationCode = 'Shh!';
 const newPassword = 'Strong!12';
