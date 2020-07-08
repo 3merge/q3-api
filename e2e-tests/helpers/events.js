@@ -10,3 +10,6 @@ exports.hasEventBeenCalled = (eventName) => {
    */
   return () => expect(cb).toHaveBeenCalled();
 };
+
+exports.delay = async (timeout) =>
+  new Promise((resolve) => setTimeout(resolve, timeout));

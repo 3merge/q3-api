@@ -1,4 +1,4 @@
-const { get } = require('lodash');
+const { get, pick } = require('lodash');
 const path = require('path');
 const { Schema } = require('mongoose');
 const moment = require('moment');
@@ -14,6 +14,7 @@ const getUserPath = (user, fileName) =>
 
 const ReportsSchema = new Schema(
   {
+    hasDownloaded: Boolean,
     userId: Schema.Types.ObjectId,
     path: String,
   },
@@ -30,9 +31,10 @@ ReportsSchema.statics.upload = async function saveToAws(
   const [, ext] = name.split('.');
   const fileName = getUserPath(sessionUser, name);
 
-  await new Exporter(ext).toBuffer(data).then((buffer) => {
-    return aws().add(fileName, buffer);
-  });
+  if (!data || !data.length) return null;
+
+  const buffer = await new Exporter(ext).toBuffer(data);
+  await aws().add(fileName, buffer);
 
   return this.create({
     path: fileName,
@@ -52,8 +54,11 @@ ReportsSchema.statics.recent = async function getFromAws(
     .exec();
 
   return Promise.all(
-    results.map((item) => {
-      return aws().getPrivate(item.path);
+    results.map(async (item) => {
+      return {
+        url: await aws().getPrivate(item.path),
+        ...item,
+      };
     }),
   );
 };
@@ -65,6 +70,26 @@ ReportsSchema.statics.uploadAndReturnRecent = async function (
 ) {
   await this.upload(name, data, sessionUser);
   return this.recent(sessionUser);
+};
+
+ReportsSchema.statics.mapHeaders = function (
+  docs,
+  legend,
+  trans,
+) {
+  const translate = (key) =>
+    typeof trans === 'function' ? trans(key) : key;
+
+  return docs.map((doc) => {
+    const picked = pick(doc, Object.keys(legend));
+    return Object.entries(legend).reduce(
+      (acc, [key, value]) => {
+        acc[translate(value)] = picked[key];
+        return acc;
+      },
+      {},
+    );
+  });
 };
 
 module.exports = ReportsSchema;

@@ -8,7 +8,6 @@ const fileUpload = require('express-fileupload');
 const useragent = require('express-useragent');
 const session = require('q3-core-session');
 const corsConfig = require('./express-cors');
-require('csv-express');
 
 const server = express();
 

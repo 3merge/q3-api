@@ -15,6 +15,7 @@ module.exports = () => {
 
   const s3 = new AWS.S3({
     signatureVersion: 'v4',
+    region: 'us-east-2',
   });
 
   return {
@@ -24,6 +25,7 @@ module.exports = () => {
 
     getPrivate(Key) {
       return s3.getSignedUrl('getObject', {
+        Expires: 86400, // one day
         Bucket: PrivateBucket,
         Key,
       });

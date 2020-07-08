@@ -4,40 +4,28 @@
     "coll": "students",
     "op": "Create",
     "ownership": "Any",
-    "fields": [
-      "*"
-    ]
+    "fields": ["*"]
   },
   {
-    "fields": [
-      "*"
-    ],
+    "fields": ["!friends"],
     "role": "Developer",
     "coll": "students",
     "op": "Delete",
     "ownership": "Any",
-    "documentConditions": [
-      "socialStatus=Freshman"
-    ]
+    "documentConditions": ["socialStatus=Freshman"]
   },
   {
     "role": "Developer",
     "coll": "students",
     "op": "Read",
     "ownership": "Any",
-    "fields": [
-      "*"
-    ]
+    "fields": ["!socialStatus"]
   },
   {
     "role": "Developer",
     "coll": "students",
     "op": "Update",
     "ownership": "Any",
-    "fields": [
-      "age",
-      "friends.*",
-      "class"
-    ]
+    "fields": ["name", "friends.*", "class"]
   }
 ]

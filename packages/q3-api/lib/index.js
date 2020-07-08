@@ -14,6 +14,7 @@ const path = require('path');
 const locale = require('q3-locale');
 const runner = require('./config');
 const app = require('./config/express');
+const io = require('./config/socket');
 const mongoose = require('./config/mongoose');
 const models = require('./models');
 
@@ -23,8 +24,10 @@ const models = require('./models');
 const connectToDB = (res, rej) => (err) => {
   if (err) return rej(err);
   app.use(handleUncaughtExceptions);
-  if (process.env.NODE_ENV !== 'test')
+  if (process.env.NODE_ENV !== 'test') {
     app.listen(process.env.PORT);
+    io.listen();
+  }
 
   return res(null);
 };
@@ -106,16 +109,18 @@ const Q3 = {
   },
 
   connect: async () =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve, reject) =>
       mongoose.connect(
         process.env.CONNECTION,
         connectToDB(resolve, reject),
-      );
-    })
+      ),
+    )
       .then(registerLocale(app.locals))
       .then(registerChores(app.locals))
 
-      .catch(() => {
+      .catch((e) => {
+        // eslint-disable-next-line
+        console.error(e);
         process.exit(0);
       }),
 };

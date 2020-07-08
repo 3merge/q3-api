@@ -24,6 +24,7 @@ const filterBy = (propertyName, propertyValue) => (
     }
   });
 };
+
 exports.hasOptions = (d) =>
   'options' in d ? d.options.redact : d.redact;
 

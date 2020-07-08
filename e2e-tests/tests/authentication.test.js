@@ -1,6 +1,5 @@
 const Q3 = require('q3-api');
 const moment = require('moment');
-const supertest = require('supertest');
 const mongoose = require('mongoose');
 const { hasEventBeenCalled } = require('../helpers');
 const setup = require('../fixtures');
@@ -9,9 +8,13 @@ let agent;
 let user;
 
 beforeAll(async () => {
-  process.env.SECRET = 'SECRET';
-  user = await setup();
-  agent = supertest(Q3.$app);
+  ({ user, agent } = await setup());
+
+  // make this user non-verified
+  await user.update({
+    verified: false,
+    password: undefined,
+  });
 });
 
 afterAll(async () => {
@@ -179,6 +182,7 @@ describe('User authentication flow', () => {
       it('should alert on new sign-in', async () => {
         const confirm = hasEventBeenCalled('onNewDevice');
         const confirmNewPassword = 'N3tN2w!123';
+
         const { body } = await agent
           .post('/authenticate')
           .send({

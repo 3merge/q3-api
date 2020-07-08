@@ -1,16 +1,19 @@
 const {
-  MongoMemoryServer,
+  MongoMemoryReplSet,
 } = require('mongodb-memory-server');
 const path = require('path');
 const fs = require('fs');
 
 module.exports = async () => {
-  const mongod = new MongoMemoryServer({
+  const mongod = new MongoMemoryReplSet({
     autoStart: true,
+    retryWrites: false,
   });
 
+  await mongod.waitUntilRunning();
+
   const instance = {
-    uri: await mongod.getConnectionString(),
+    uri: `${await mongod.getConnectionString()}&retryWrites=false`,
     name: await mongod.getDbName(),
   };
 

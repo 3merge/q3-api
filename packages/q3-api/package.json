@@ -43,6 +43,7 @@
     "q3-schema-notes": "^1.0.96",
     "q3-schema-types": "^1.1.96",
     "q3-schema-users": "^1.1.21",
+    "socket.io": "^2.3.0",
     "ssestream": "^1.1.0"
   },
   "peerDependencies": {
