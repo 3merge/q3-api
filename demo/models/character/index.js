@@ -1,16 +1,5 @@
 const mongoose = require('mongoose');
 
-const Movie = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-  year: {
-    type: Date,
-    required: true,
-  },
-});
-
 module.exports = mongoose.model(
   'characters',
   new mongoose.Schema(
@@ -20,22 +9,12 @@ module.exports = mongoose.model(
         searchable: true,
       },
       role: String,
-      movies: [Movie],
       gender: String,
     },
     {
       restify: '*',
-      withNotes: true,
-      withUploads: true,
       collectionSingularName: 'character',
       collectionPluralName: 'characters',
-      versionHistoryWatchers: [
-        'name',
-        'role',
-        'gender',
-        'movies.*.title',
-        'movies.*.year',
-      ],
     },
   ),
 );

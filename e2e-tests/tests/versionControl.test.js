@@ -1,7 +1,5 @@
-const Q3 = require('q3-api');
-const supertest = require('supertest');
-const mongoose = require('mongoose');
 const setup = require('../fixtures');
+const { teardown } = require('../helpers');
 
 let Authorization;
 let agent;
@@ -13,23 +11,10 @@ const addFriend = async (id, name) =>
     .set({ Authorization });
 
 beforeAll(async () => {
-  const user = await setup();
-
-  await user
-    .set({
-      secret: 'Shh!',
-      verified: true,
-    })
-    .setPassword();
-
-  Authorization = `Apikey ${await user.generateApiKey()}`;
-  agent = supertest(Q3.$app);
+  ({ Authorization, agent } = await setup());
 });
 
-afterAll(async () => {
-  await Q3.Users.deleteMany({});
-  await mongoose.disconnect();
-});
+afterAll(teardown);
 
 describe('Version control plugin', () => {
   let id;
@@ -68,7 +53,7 @@ describe('Version control plugin', () => {
   });
 
   it('should capture patch payloads', async () => {
-    const o = await agent
+    await agent
       .patch(`/students/${id}`)
       .send({
         '__t': 'teach-assistant',

@@ -110,20 +110,6 @@ describe('Handlers', () => {
         }),
       );
     });
-
-    it('should return as CSV formatting', async () => {
-      req.get.mockReturnValue('text/csv');
-      req.t.mockImplementation((v) => v.split(':')[1]);
-      req.marshal.mockReturnValue([
-        { name: { first: 'Mike' } },
-      ]);
-
-      await List(req, res);
-      expect(res.csv).toHaveBeenCalledWith(
-        [{ 'name.first': 'Mike' }],
-        true,
-      );
-    });
   });
 
   describe('Post Controller', () => {

@@ -1,17 +1,30 @@
 const { Grant } = require('q3-core-access');
+const { get, invoke } = require('lodash');
 
 class Session {
   constructor(req) {
     this.method = req.method;
-    this.auth = req.get('Authorization');
+    this.query = get(req, 'query', {});
+    this.auth = invoke(req, 'get', 'Authorization');
+    this.sessionNonce = invoke(
+      req,
+      'header',
+      'X-Session-Nonce',
+    );
   }
 
-  getToken() {
-    if (!this.auth) return '';
+  get token() {
+    if (!this.auth)
+      return this.query.token || this.query.apikey || '';
+
     return this.auth.startsWith('Apikey') ||
       this.auth.startsWith('Bearer')
       ? this.auth.substr(7)
       : this.auth;
+  }
+
+  get nonce() {
+    return this.sessionNonce || this.query.nonce;
   }
 
   setOperation() {
@@ -67,23 +80,9 @@ function middleware(UserModel) {
     const hasMethod = (method) =>
       method in UserModel && !req.user;
 
-    const identity = new Session(req);
     const host = req.get('host');
-
-    let token = identity.getToken();
-    let nonce = req.header('X-Session-Nonce');
-
-    // provide a means of authenticating via query string
-    // this will only work for the token/nonce strategy now
-    if (req.query) {
-      if (!token && req.query.token) {
-        token = req.query.token;
-      }
-
-      if (!nonce && req.query.nonce) {
-        nonce = req.query.nonce;
-      }
-    }
+    const identity = new Session(req);
+    const { token, nonce } = identity;
 
     if (hasMethod('findbyBearerToken'))
       req.user = await UserModel.findbyBearerToken(

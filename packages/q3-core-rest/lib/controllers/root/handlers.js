@@ -1,12 +1,4 @@
-const aqp = require('api-query-params');
-const read = require('url');
-const {
-  getColumnsHeadersFromPayload,
-  populateEmptyObjectKeys,
-  transformArraysInDotNotation,
-  castObjectIds,
-} = require('../../utils');
-const casters = require('../casters');
+const queryParser = require('../../queryParser');
 
 const clean = (o) =>
   Object.entries(o).reduce((acc, [key, v]) => {
@@ -31,71 +23,42 @@ module.exports = {
 
   async List(req, res) {
     const {
-      t,
       marshal,
       collectionPluralName,
-      originalUrl,
       datasource,
     } = req;
 
-    const { query: q } = read.parse(originalUrl, true);
-
     const {
+      query,
+      select,
+      limit,
       sort,
-      limit = 25,
-      projection: select,
-      filter: { search, page, ...where },
-    } = aqp(q !== null ? q : {}, {
-      casters,
-    });
-
-    const regex = datasource.searchBuilder(search) || {};
-    const params = Object.assign(
-      regex,
-      castObjectIds(where),
-      {
-        active: true,
-      },
-    );
+      page,
+    } = queryParser(req);
 
     const {
       docs,
       totalDocs,
       hasNextPage,
       hasPrevPage,
-    } = await datasource.paginate(params, {
+    } = await datasource.paginate(query, {
       options: { redact: true },
       page: page >= 0 ? page + 1 : 1,
+      limit: limit > 500 ? 500 : limit,
       collation: { locale: 'en' },
       lean: { virtuals: true },
       sort,
       select,
-      limit,
     });
 
     const payload = marshal(docs);
 
-    if (req.get('Accept') === 'text/csv') {
-      const columns = getColumnsHeadersFromPayload(payload);
-      const rows = populateEmptyObjectKeys(
-        payload,
-        columns,
-      );
-
-      res.csv(
-        transformArraysInDotNotation(rows, (v) =>
-          t(`labels:${v}`),
-        ),
-        true,
-      );
-    } else {
-      res.ok({
-        [collectionPluralName]: payload,
-        total: totalDocs,
-        hasNextPage,
-        hasPrevPage,
-      });
-    }
+    res.ok({
+      [collectionPluralName]: payload,
+      total: totalDocs,
+      hasNextPage,
+      hasPrevPage,
+    });
   },
 
   async Patch(

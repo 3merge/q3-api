@@ -20,15 +20,15 @@ class IsAuthorizedInLocationRef {
     try {
       const m = this.source;
       const grant = req.authorize(m);
-      const { fields, readOnly } = grant;
+      const { fields } = grant;
 
       if (!this.meetsFieldRequirements(fields))
         throw new Error('Failed field authorization');
 
       set(req, `redactions.${m}`, {
         locations: this.locations,
-        readOnly,
-        fields,
+        collectionName: m,
+        grant,
       });
 
       req.grant = grant;

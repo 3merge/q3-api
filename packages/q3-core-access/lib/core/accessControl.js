@@ -1,8 +1,6 @@
 const { filterByRoleType } = require('../helpers');
 
-const AccessControl = {};
-
-module.exports = {
+const AccessControl = {
   init(seedData = []) {
     AccessControl.grants = seedData
       .filter(
@@ -33,3 +31,5 @@ module.exports = {
     return filterByRoleType(AccessControl.grants, roleType);
   },
 };
+
+module.exports = AccessControl;

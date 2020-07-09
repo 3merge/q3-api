@@ -88,7 +88,10 @@ module.exports = (schema, instance) => {
   };
 
   // eslint-disable-next-line
-  schema.methods.snapshotChangeOnSubdocument = function (field, op) {
+  schema.methods.snapshotChangeOnSubdocument = function (
+    field,
+    op,
+  ) {
     try {
       this.$locals.$op = op;
       this.$locals.$target = field;
@@ -99,7 +102,9 @@ module.exports = (schema, instance) => {
   };
 
   // eslint-disable-next-line
-  schema.methods.snapshotInsertSubdocument = function (field) {
+  schema.methods.snapshotInsertSubdocument = function (
+    field,
+  ) {
     return this.snapshotChangeOnSubdocument(
       field,
       'Create',
@@ -107,7 +112,9 @@ module.exports = (schema, instance) => {
   };
 
   // eslint-disable-next-line
-  schema.methods.snapshotUpdateSubdocument = function (field) {
+  schema.methods.snapshotUpdateSubdocument = function (
+    field,
+  ) {
     return this.snapshotChangeOnSubdocument(
       field,
       'Update',
@@ -115,7 +122,9 @@ module.exports = (schema, instance) => {
   };
 
   // eslint-disable-next-line
-  schema.methods.snapshotDeleteSubdocument = function (field) {
+  schema.methods.snapshotDeleteSubdocument = function (
+    field,
+  ) {
     return this.snapshotChangeOnSubdocument(
       field,
       'Delete',
