@@ -63,9 +63,13 @@ const runChildProcess = async (
     // force kill
     forked.kill('SIGINT');
 
-    io.emit(bridgeType, {
-      data,
-    });
+    io.emit(
+      // reports and exports both return files
+      'message',
+      {
+        data,
+      },
+    );
   });
 
   forked.send(brideParamters);

@@ -5,6 +5,7 @@ const MODEL_NAMES = {
   VERSIONS: 'q3-api-versions',
   NOTES: 'q3-api-notes',
   REPORTS: 'q3-api-reports',
+  NOTIFICATIONS: 'q3-api-notifications',
 };
 
 const CONTEXT = {

@@ -24,7 +24,8 @@ execChildProcess(
       trans,
     );
 
-    return Q3Instance.Reports.uploadAndReturnRecent(
+    // send file back to server
+    return Q3Instance.Reports.uploadAndReturn(
       fileName,
       mapped,
       user,

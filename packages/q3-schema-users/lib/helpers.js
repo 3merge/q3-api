@@ -16,6 +16,14 @@ const compareWithHash = (a, b) => {
   return bcrypt.compareSync(a, b);
 };
 
+const stripPortFromString = (address) => {
+  try {
+    return address.split(':')[0];
+  } catch (e) {
+    return address;
+  }
+};
+
 const getPassword = () =>
   generatePsw.generate({
     length: 20,
@@ -58,7 +66,8 @@ async function verifyToken(token, nonce, host) {
 
     if (
       nonce !== secretNonce ||
-      aud !== host ||
+      stripPortFromString(aud) !==
+        stripPortFromString(host) ||
       !user.isPermitted ||
       user.secret !== code
     )
