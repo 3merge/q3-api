@@ -7,7 +7,7 @@ const { AccessControl } = require('q3-core-access');
 const {
   handleUncaughtExceptions,
 } = require('q3-core-responder');
-
+const i18next = require('i18next');
 const { middleware } = require('q3-core-composer');
 const { config } = require('q3-core-mailer');
 const path = require('path');
@@ -108,12 +108,17 @@ const Q3 = {
     return mongoose.model(name, Schema);
   },
 
-  connect: async () =>
+  connect: async (directConnectionString) =>
     new Promise((resolve, reject) =>
-      mongoose.connect(
-        process.env.CONNECTION,
-        connectToDB(resolve, reject),
-      ),
+      directConnectionString
+        ? mongoose.connect(directConnectionString, (e) => {
+            if (e) reject(e);
+            resolve();
+          })
+        : mongoose.connect(
+            process.env.CONNECTION,
+            connectToDB(resolve, reject),
+          ),
     )
       .then(registerLocale(app.locals))
       .then(registerChores(app.locals))
@@ -127,6 +132,7 @@ const Q3 = {
 
 Q3.$app = app;
 Q3.$mongoose = mongoose;
+Q3.$i18 = i18next;
 
 Object.assign(Q3, models);
 module.exports = Q3;

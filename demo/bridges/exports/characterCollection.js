@@ -8,7 +8,7 @@ const { Character } = require('../../models');
 execChildProcess(
   Q3Instance,
   async ({ user, query }, trans) => {
-    const fileName = 'characters.xlsx';
+    const fileName = 'characters.csv';
     const characters = await Character.find(query)
       .select('name')
       .lean()
@@ -20,18 +20,18 @@ execChildProcess(
       'characters',
     );
 
-    const mapped = Q3Instance.Reports.mapHeaders(
-      data,
+    const file = await Q3Instance.Notifications.upload(
       {
+        name: fileName,
+        user,
+        data,
+      },
+      {
+        $t: trans,
         name: 'labels:demo',
       },
-      trans,
     );
 
-    return Q3Instance.Reports.uploadAndReturnRecent(
-      fileName,
-      mapped,
-      user,
-    );
+    return file;
   },
 );

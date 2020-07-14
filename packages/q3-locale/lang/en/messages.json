@@ -33,5 +33,6 @@
   "incorrectPassword": "Bad credentials. Please try again.",
   "validation": "The request failed validation. Please check your data and try again.",
   "expired": "The information used in this request has expired",
-  "insufficientAccessLevels": "This role type cannot perform the requested operation"
+  "insufficientAccessLevels": "This role type cannot perform the requested operation",
+  "unknownBridge": "The template requested does not exist"
 }
