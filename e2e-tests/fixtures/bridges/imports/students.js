@@ -5,6 +5,7 @@ const Q3Instance = require('../../config');
 
 execChildProcess(
   Q3Instance,
+  // eslint-disable-next-line
   async ({ user, query }, trans) => {
     // send file back to server
     return {
