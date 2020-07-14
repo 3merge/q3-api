@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.30](https://github.com/3merge/q3-api/compare/demo@1.1.29...demo@1.1.30) (2020-07-14)
+
+**Note:** Version bump only for package demo
+
+
+
+
+
 ## [1.1.29](https://github.com/3merge/q3-api/compare/demo@1.1.28...demo@1.1.29) (2020-07-09)
 
 **Note:** Version bump only for package demo
