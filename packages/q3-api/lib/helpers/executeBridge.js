@@ -32,11 +32,7 @@ const runQueryParserOnRequest = (req) => {
   ];
 };
 
-const runChildProcess = async (
-  template,
-  bridgeType,
-  brideParamters,
-) => {
+const getActionPath = (bridgeType, template) => {
   const action = path.join(
     // default to root directory
     get(app, 'locals.location', process.cwd()),
@@ -50,6 +46,14 @@ const runChildProcess = async (
       .msg('unknownBridge')
       .throw();
 
+  return action;
+};
+
+const runChildProcess = async (
+  action,
+  bridgeType,
+  brideParamters,
+) => {
   const forked = fork(action);
 
   // emit the bridge type (exports, imports, reports)
@@ -67,11 +71,20 @@ const runChildProcess = async (
   forked.send(brideParamters);
 };
 
-module.exports = (bridgeType) => {
+module.exports = (bridgeType, forkProcess = true) => {
   const ctrl = async (req, res) => {
     const [template, args] = runQueryParserOnRequest(req);
-    await runChildProcess(template, bridgeType, args);
-    res.acknowledge();
+    const action = getActionPath(bridgeType, template);
+
+    if (forkProcess) {
+      await runChildProcess(action, bridgeType, args);
+      res.acknowledge();
+    } else {
+      res.ok({
+        // eslint-disable-next-line
+        data: await require(action)(args),
+      });
+    }
   };
 
   ctrl.authorization = [verify];

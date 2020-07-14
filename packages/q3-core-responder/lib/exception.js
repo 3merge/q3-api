@@ -75,7 +75,7 @@ class Exception {
 
   log() {
     // eslint-disable-next-line
-    console.log(this.$error)
+    console.log(this.$error);
   }
 
   throw() {
@@ -123,10 +123,13 @@ const handleUncaughtExceptions = (err, req, res, next) => {
   } else {
     setHeader(status);
     res.json({
-      errors: translateErrors(err.errors),
       message: translateMessage(err.message),
-      stack: err.stack,
       name: err.name,
+      ...(process.env.NODE_ENV !== 'production'
+        ? {
+            stack: err.stack,
+          }
+        : {}),
     });
   }
 };
