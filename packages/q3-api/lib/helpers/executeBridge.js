@@ -17,6 +17,7 @@ const runQueryParserOnRequest = (req) => {
     files,
     query: { template },
     user,
+    headers,
   } = req;
 
   const { query } = queryParser(req);
@@ -25,6 +26,7 @@ const runQueryParserOnRequest = (req) => {
   return [
     template,
     {
+      headers,
       files,
       query,
       user,
