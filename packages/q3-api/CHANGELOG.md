@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.11](https://github.com/3merge/q3-api/compare/q3-api@1.2.10...q3-api@1.2.11) (2020-07-20)
+
+
+### Bug Fixes
+
+* wrap forked process in session middleware ([4ad6ec9](https://github.com/3merge/q3-api/commit/4ad6ec9cd3baa3a4d6361ceae75d838fa60efa5e))
+
+
+
+
+
 ## [1.2.10](https://github.com/3merge/q3-api/compare/q3-api@1.2.9...q3-api@1.2.10) (2020-07-14)
 
 **Note:** Version bump only for package q3-api
