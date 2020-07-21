@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.7](https://github.com/3merge/q3-api/compare/q3-test-utils@1.3.6...q3-test-utils@1.3.7) (2020-07-21)
+
+
+### Bug Fixes
+
+* nested error message extraction when thrown in mongoose validation middleware ([b5610f3](https://github.com/3merge/q3-api/commit/b5610f38997ddc909f95644807ca43f17ce9de93))
+
+
+
+
+
 ## [1.3.6](https://github.com/3merge/q3-api/compare/q3-test-utils@1.3.5...q3-test-utils@1.3.6) (2020-07-14)
 
 **Note:** Version bump only for package q3-test-utils
