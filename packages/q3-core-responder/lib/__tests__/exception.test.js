@@ -78,6 +78,47 @@ describe('handleUncaughtExceptions', () => {
     expect(res.status).not.toHaveBeenCalled();
   });
 
+  it('should extract error messages', () => {
+    const e = new Error();
+
+    e.errors = {
+      foo: 'bar',
+      bar: {
+        msg: 'baz',
+      },
+      baz: {
+        properties: {
+          message: 'thunk',
+        },
+      },
+    };
+
+    const expectMsg = (msg) =>
+      expect.objectContaining({
+        msg,
+      });
+
+    const t = jest.fn().mockImplementation((v) => {
+      const [namespace, prop] = v.split(':');
+      expect(namespace).toMatch(/(validations|messages)/);
+
+      return prop;
+    });
+
+    handleUncaughtExceptions(e, { t }, res, jest.fn());
+
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'validation',
+        errors: {
+          foo: expectMsg('bar'),
+          bar: expectMsg('baz'),
+          baz: expectMsg('thunk'),
+        },
+      }),
+    );
+  });
+
   it('should correct 500 response if error payload present', () => {
     handleUncaughtExceptions(
       exception('Unknown').field('hey').boomerang(),

@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars, max-classes-per-file */
+
 const retrieveStatusMeta = (code) =>
   Object.entries({
     BadRequest: 400,
@@ -13,6 +14,19 @@ const retrieveStatusMeta = (code) =>
     'InternalServer',
     500,
   ];
+
+const getErrorMessage = (e) => {
+  const isObject = (o) => typeof o === 'object';
+  const isNull = (o) => o === null;
+
+  if (isObject(e) && !isNull(e)) {
+    if ('properties' in e) return e.properties.message;
+    if ('msg' in e) return e.msg;
+    if ('message' in e) return e.message;
+  }
+
+  return e;
+};
 
 class Exception {
   constructor(code) {
@@ -103,7 +117,9 @@ const handleUncaughtExceptions = (err, req, res, next) => {
           ? Object.assign(a, {
               [key]: {
                 ...value,
-                msg: req.t(`validations:${value.msg}`),
+                msg: req.t(
+                  `validations:${getErrorMessage(value)}`,
+                ),
               },
             })
           : a,
@@ -122,14 +138,15 @@ const handleUncaughtExceptions = (err, req, res, next) => {
     });
   } else {
     setHeader(status);
+
+    if (process.env.NODE_ENV === 'production')
+      // eslint-disable-next-line
+      delete err.stack;
+
     res.json({
+      ...err,
       message: translateMessage(err.message),
       name: err.name,
-      ...(process.env.NODE_ENV !== 'production'
-        ? {
-            stack: err.stack,
-          }
-        : {}),
     });
   }
 };
