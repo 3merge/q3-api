@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.12](https://github.com/3merge/q3-api/compare/q3-api@1.2.11...q3-api@1.2.12) (2020-07-21)
+
+
+### Bug Fixes
+
+* custom buffer argument ([e62bb2f](https://github.com/3merge/q3-api/commit/e62bb2f8d3d20d239bbd9228184a0e49244605ef))
+
+
+
+
+
 ## [1.2.11](https://github.com/3merge/q3-api/compare/q3-api@1.2.10...q3-api@1.2.11) (2020-07-20)
 
 
