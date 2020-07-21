@@ -43,16 +43,23 @@ class NotificationDecorator {
     };
   }
 
-  static async upload({ name, data, user }, columnMapDef) {
+  static async upload(
+    { name, data, user, buffer },
+    columnMapDef,
+  ) {
     const [, ext] = name.split('.');
     const userId = getId(user);
     const fileName = getUserPath(user, name);
 
     if (!data || !data.length) return null;
 
-    const buffer = await new Exporter(ext).toBuffer(
-      columnMapDef ? mapHeaders(data, columnMapDef) : data,
-    );
+    if (!buffer)
+      // eslint-disable-next-line
+      buffer = await new Exporter(ext).toBuffer(
+        columnMapDef
+          ? mapHeaders(data, columnMapDef)
+          : data,
+      );
 
     await aws().add(fileName, buffer);
     const doc = await this.create({
