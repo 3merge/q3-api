@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign, func-names */
-const { get } = require('lodash');
+const { get, invoke } = require('lodash');
 const Comparison = require('comparisons');
 const mongoose = require('mongoose');
 const { exception } = require('q3-core-responder');
@@ -88,7 +88,12 @@ module.exports = (schema) => {
           if (cast === 'ObjectId')
             return {
               $expr: {
-                $eq: [{ $toString: `$${local}` }, q],
+                $eq: [
+                  { $toString: `$${local}` },
+                  typeof q === 'object'
+                    ? invoke(q, 'toString')
+                    : q,
+                ],
               },
             };
 
