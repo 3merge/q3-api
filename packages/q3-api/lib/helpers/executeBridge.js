@@ -1,9 +1,9 @@
+const aqp = require('api-query-params');
 const path = require('path');
-const { get } = require('lodash');
+const { get, pick, unset } = require('lodash');
 const fs = require('fs');
 const { fork } = require('child_process');
 const { exception } = require('q3-core-responder');
-const queryParser = require('q3-core-rest/lib/queryParser');
 const {
   compose,
   verify,
@@ -12,33 +12,13 @@ const {
 const app = require('../config/express');
 const io = require('../config/socket');
 
-const runQueryParserOnRequest = (req) => {
-  const {
-    files,
-    query: { template },
-    user,
-    headers,
-  } = req;
-
-  const { query } = queryParser(req);
-  delete query.template;
-
-  return [
-    template,
-    {
-      headers,
-      files,
-      query,
-      user,
-    },
-  ];
-};
-
+// renamed to "processes"
+// will edit the variables eventually
 const getActionPath = (bridgeType, template) => {
   const action = path.join(
     // default to root directory
     get(app, 'locals.location', process.cwd()),
-    'bridges',
+    'processes',
     bridgeType,
     `${template}.js`,
   );
@@ -79,16 +59,24 @@ const runChildProcess = async (
 
 module.exports = (bridgeType, forkProcess = true) => {
   const ctrl = async (req, res) => {
-    const [template, args] = runQueryParserOnRequest(req);
+    const template = get(req, 'query.template');
     const action = getActionPath(bridgeType, template);
 
+    unset(req, 'query.template');
+
     if (forkProcess) {
-      await runChildProcess(action, bridgeType, args);
+      await runChildProcess(
+        action,
+        bridgeType,
+        pick(req, ['headers', 'files', 'query', 'user']),
+      );
       res.acknowledge();
     } else {
       res.ok({
         // eslint-disable-next-line
-        data: await require(action)(args),
+        data: await require(action)({
+          $match: aqp(req.query),
+        }),
       });
     }
   };

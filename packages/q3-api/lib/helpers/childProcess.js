@@ -1,4 +1,5 @@
 const { first, get } = require('lodash');
+const aqp = require('api-query-params');
 
 module.exports = (Q3InsanceConfig, executable) => {
   const connection = Q3InsanceConfig.connect(
@@ -8,6 +9,8 @@ module.exports = (Q3InsanceConfig, executable) => {
   process.on('message', (args) => {
     // eslint-disable-next-line
     const session = require('q3-core-session');
+    // eslint-disable-next-line
+    const { Redact } = require('q3-core-access');
 
     return Promise.all([
       Q3InsanceConfig.$i18.changeLanguage(
@@ -18,7 +21,16 @@ module.exports = (Q3InsanceConfig, executable) => {
       .then(([t]) => {
         return new Promise((r) => {
           session.middleware(args, null, () => {
-            return executable(args, t).then((res) => {
+            return executable(
+              {
+                ...args,
+                ...aqp(args.query),
+                redact: async (data, collectionname) =>
+                  Redact(data, args.user, collectionname),
+                t,
+              },
+              t,
+            ).then((res) => {
               r(res);
             });
           });
