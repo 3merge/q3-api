@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.15](https://github.com/3merge/q3-api/compare/q3-api@1.2.14...q3-api@1.2.15) (2020-07-26)
+
+
+### Bug Fixes
+
+* CSV to buffer ([fc3daf6](https://github.com/3merge/q3-api/commit/fc3daf6e1dcde10910e67b32cde5852df3425d0d))
+
+
+
+
+
 ## [1.2.14](https://github.com/3merge/q3-api/compare/q3-api@1.2.13...q3-api@1.2.14) (2020-07-25)
 
 **Note:** Version bump only for package q3-api
