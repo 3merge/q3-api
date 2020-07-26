@@ -75,7 +75,7 @@ module.exports = (bridgeType, forkProcess = true) => {
       res.ok({
         // eslint-disable-next-line
         data: await require(action)({
-          $match: aqp(req.query),
+          $match: aqp(req.query).filter,
         }),
       });
     }

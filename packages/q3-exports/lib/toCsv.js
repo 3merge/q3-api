@@ -4,6 +4,14 @@ module.exports = (body) =>
   new Promise((resolve, reject) =>
     converter.json2csv(body, (err, csv) => {
       if (err) reject(err);
-      else resolve(csv);
+      else
+        resolve(
+          Buffer.from(
+            csv
+              .replace(/,null,/g, ',,')
+              .replace(/,undefined,/g, ',,'),
+            'utf8',
+          ),
+        );
     }),
   );
