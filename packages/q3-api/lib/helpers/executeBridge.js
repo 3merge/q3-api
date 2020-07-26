@@ -1,6 +1,5 @@
-const aqp = require('api-query-params');
 const path = require('path');
-const { get, pick, unset } = require('lodash');
+const { get, pick } = require('lodash');
 const fs = require('fs');
 const { fork } = require('child_process');
 const { exception } = require('q3-core-responder');
@@ -11,6 +10,7 @@ const {
 } = require('q3-core-composer');
 const app = require('../config/express');
 const io = require('../config/socket');
+const { toQuery } = require('./casters');
 
 // renamed to "processes"
 // will edit the variables eventually
@@ -62,20 +62,24 @@ module.exports = (bridgeType, forkProcess = true) => {
     const template = get(req, 'query.template');
     const action = getActionPath(bridgeType, template);
 
-    unset(req, 'query.template');
-
     if (forkProcess) {
       await runChildProcess(
         action,
         bridgeType,
-        pick(req, ['headers', 'files', 'query', 'user']),
+        pick(req, [
+          'files',
+          'headers',
+          'originalUrl',
+          'query',
+          'user',
+        ]),
       );
       res.acknowledge();
     } else {
       res.ok({
         // eslint-disable-next-line
         data: await require(action)({
-          $match: aqp(req.query).filter,
+          $match: toQuery(req),
         }),
       });
     }

@@ -33,7 +33,10 @@ mongoose.plugin((schema) => {
 
   if (schema.options.restify) {
     // most packages assume the existence of this plugin
+    schema.set('enableArchive', true);
     schema.set('enableOwnership', true);
+    schema.set('versionHistoryWatchers', true);
+
     schema.plugin(version, mongoose);
     schema.add(Files);
     schema.add(Notes);

@@ -16,6 +16,7 @@ const pluginSchemaEnabled = new mongoose.Schema(
   },
   {
     featured: true,
+    enableArchive: true,
   },
 );
 

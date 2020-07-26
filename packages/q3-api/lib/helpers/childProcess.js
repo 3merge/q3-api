@@ -1,5 +1,5 @@
 const { first, get } = require('lodash');
-const aqp = require('api-query-params');
+const { toQuery } = require('./casters');
 
 module.exports = (Q3InsanceConfig, executable) => {
   const connection = Q3InsanceConfig.connect(
@@ -24,7 +24,7 @@ module.exports = (Q3InsanceConfig, executable) => {
             return executable(
               {
                 ...args,
-                ...aqp(args.query),
+                filter: toQuery(args),
                 redact: async (data, collectionname) =>
                   Redact(data, args.user, collectionname),
                 t,

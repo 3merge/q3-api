@@ -193,8 +193,6 @@ function verifyOutput(d) {
 }
 
 const plugin = (schema) => {
-  schema.statics.archive = archive;
-  schema.statics.archiveMany = archiveMany;
   schema.statics.findStrictly = findStrictly;
   schema.methods.getSubDocument = getSubDocument;
   schema.methods.pushSubDocument = pushSubDocument;
@@ -207,13 +205,6 @@ const plugin = (schema) => {
   schema.statics.findOneOrCreate = findOneOrCreate;
   schema.statics.verifyOutput = verifyOutput;
 
-  schema.add({
-    active: {
-      type: Boolean,
-      default: true,
-    },
-  });
-
   schema.set('timestamps', true);
 
   schema.set('toObject', {
@@ -225,6 +216,18 @@ const plugin = (schema) => {
     virtuals: true,
     getters: true,
   });
+
+  if (schema.options.enableArchive) {
+    schema.statics.archive = archive;
+    schema.statics.archiveMany = archiveMany;
+
+    schema.add({
+      active: {
+        type: Boolean,
+        default: true,
+      },
+    });
+  }
 
   if (schema.options.featured)
     schema.add({
