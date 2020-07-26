@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.16](https://github.com/3merge/q3-api/compare/q3-api@1.2.15...q3-api@1.2.16) (2020-07-26)
+
+
+### Bug Fixes
+
+* authorship on notes, sub-document archiving and caster helpers ([2082a79](https://github.com/3merge/q3-api/commit/2082a79afd8a9080feb4efbfc8fe584d28dc7114))
+
+
+
+
+
 ## [1.2.15](https://github.com/3merge/q3-api/compare/q3-api@1.2.14...q3-api@1.2.15) (2020-07-26)
 
 

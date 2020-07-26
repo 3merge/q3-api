@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.104](https://github.com/3merge/q3-api/compare/q3-schema-utils@1.0.103...q3-schema-utils@1.0.104) (2020-07-26)
+
+
+### Bug Fixes
+
+* authorship on notes, sub-document archiving and caster helpers ([2082a79](https://github.com/3merge/q3-api/commit/2082a79afd8a9080feb4efbfc8fe584d28dc7114))
+
+
+
+
+
 ## [1.0.103](https://github.com/3merge/q3-api/compare/q3-schema-utils@1.0.102...q3-schema-utils@1.0.103) (2020-07-25)
 
 **Note:** Version bump only for package q3-schema-utils
