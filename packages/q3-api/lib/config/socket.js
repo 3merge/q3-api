@@ -59,16 +59,18 @@ io.listen = () => {
           ns: { coll },
           ...rest
         }) => {
-          io.emit(operationType, {
-            updatedAt: get(
-              rest,
-              // this will always change so long as timestamps is enabled
-              'updateDescription.updatedFields.updatedAt',
-              new Date(),
-            ),
-            collectionName: coll,
-            id: _id,
-          });
+          setTimeout(() => {
+            io.emit(operationType, {
+              updatedAt: get(
+                rest,
+                // this will always change so long as timestamps is enabled
+                'updateDescription.updatedFields.updatedAt',
+                new Date(),
+              ),
+              collectionName: coll,
+              id: _id,
+            });
+          }, 5000);
         },
       )
       .on('error', () => {
