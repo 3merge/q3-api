@@ -25,7 +25,8 @@
     "op": "Read",
     "role": "Dev",
     "ownership": "Any",
-    "fields": "*"
+    "fields": "*",
+    "inClient": true
   },
   {
     "coll": "characters",

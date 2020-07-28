@@ -47,7 +47,7 @@ const runChildProcess = async (
 
     io.emit(
       // reports and exports both return files
-      'message',
+      'download',
       {
         data,
       },

@@ -4,6 +4,54 @@ const io = require('socket.io')(http);
 const { get } = require('lodash');
 const mongoose = require('./mongoose');
 
+class CollectionWatch {
+  constructor(socket) {
+    this.$socket = socket;
+  }
+
+  static getUpdatedProp(params) {
+    return get(
+      params,
+      // this will always change so long as timestamps is enabled
+      'updateDescription.updatedFields.updatedAt',
+      new Date(),
+    );
+  }
+
+  watch(models = {}) {
+    Object.values(models).forEach((Model) => {
+      const coll = get(
+        Model,
+        'collection.collectionName',
+        'noop',
+      );
+
+      const emitTo = (args) =>
+        this.$socket
+          .to(coll)
+          .emit(
+            'refresh',
+            this.constructor.getUpdatedProp(args),
+          );
+
+      if (
+        ![
+          'q3-api-notifications',
+          'q3-task-scheduler-logs',
+          'q3-task-schedulers',
+        ].includes(coll)
+      )
+        Model.watch()
+          .on('change', (args) => {
+            emitTo(args);
+          })
+          .on('error', () => {
+            // do not emit on error
+          });
+    });
+  }
+}
+
 // middleware
 io.use(async (socket, next) => {
   const {
@@ -34,7 +82,31 @@ io.use(async (socket, next) => {
 io.on('connection', async (socket) => {
   const Noti = mongoose.models['q3-api-notifications'];
 
-  io.emit('message', {
+  const makeRoom = ({ collectionName, id }) =>
+    [collectionName, id]
+      .filter(Boolean)
+      .join('.')
+      .replace(/\.$/, '');
+
+  socket.on('join', (data) => {
+    socket.join(makeRoom(data));
+  });
+
+  socket.on('leave', (data) => {
+    socket.leave(makeRoom(data));
+  });
+
+  socket.on('change', ({ updatedAt, ...data }) => {
+    socket.to(makeRoom(data)).emit('modify', updatedAt);
+  });
+
+  socket.on('disconnect', () => {
+    Object.values(io.sockets.rooms).forEach((room) => {
+      socket.leave(room);
+    });
+  });
+
+  socket.emit('recent', {
     data: await Noti.recent(socket.user),
   });
 
@@ -48,35 +120,7 @@ io.listen = () => {
   // the socket will always be 8080 in our applications
   // the main app port may change, though, between dev and production
   http.listen(8080);
-
-  return Object.values(mongoose.models).forEach((Model) =>
-    Model.watch()
-      .on(
-        'change',
-        ({
-          operationType,
-          documentKey: { _id },
-          ns: { coll },
-          ...rest
-        }) => {
-          setTimeout(() => {
-            io.emit(operationType, {
-              updatedAt: get(
-                rest,
-                // this will always change so long as timestamps is enabled
-                'updateDescription.updatedFields.updatedAt',
-                new Date(),
-              ),
-              collectionName: coll,
-              id: _id,
-            });
-          }, 5000);
-        },
-      )
-      .on('error', () => {
-        // boll
-      }),
-  );
+  new CollectionWatch(io).watch(mongoose.models);
 };
 
 module.exports = io;

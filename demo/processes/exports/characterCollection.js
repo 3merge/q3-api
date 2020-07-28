@@ -7,9 +7,9 @@ const { Character } = require('../../models');
 
 execChildProcess(
   Q3Instance,
-  async ({ user, query }, trans) => {
+  async ({ user, filter }, trans) => {
     const fileName = 'characters.csv';
-    const characters = await Character.find(query)
+    const characters = await Character.find(filter)
       .select('name')
       .lean()
       .exec();
