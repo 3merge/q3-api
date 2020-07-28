@@ -39,10 +39,9 @@ module.exports = (Q3InsanceConfig, executable) => {
 
       .then((resp) => {
         process.send(resp);
-        return Q3InsanceConfig.$mongoose.close();
+        process.exit(1);
       })
       .catch(() => {
-        session.kill();
         process.exit(0);
       });
   });

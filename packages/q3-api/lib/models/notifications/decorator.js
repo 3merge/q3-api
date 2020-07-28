@@ -51,7 +51,7 @@ class NotificationDecorator {
     const userId = getId(user);
     const fileName = getUserPath(user, name);
 
-    if (!data || !data.length) return null;
+    if ((!data || !data.length) && !buffer) return null;
 
     if (!buffer)
       // eslint-disable-next-line
