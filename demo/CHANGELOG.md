@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.38](https://github.com/3merge/q3-api/compare/demo@1.1.37...demo@1.1.38) (2020-07-28)
+
+
+### Bug Fixes
+
+* socket watchers ([a4ea345](https://github.com/3merge/q3-api/commit/a4ea34595d9da604971cf2d3193161f7933a3bc2))
+
+
+
+
+
 ## [1.1.37](https://github.com/3merge/q3-api/compare/demo@1.1.36...demo@1.1.37) (2020-07-27)
 
 **Note:** Version bump only for package demo
