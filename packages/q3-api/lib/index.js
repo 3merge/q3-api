@@ -115,14 +115,15 @@ const Q3 = {
             if (e) reject(e);
             resolve();
           })
-        : mongoose.connect(
-            process.env.CONNECTION,
-            connectToDB(resolve, reject),
-          ),
+        : mongoose
+            .connect(
+              process.env.CONNECTION,
+              connectToDB(resolve, reject),
+            )
+            // register only on the main process
+            .then(registerChores(app.locals)),
     )
       .then(registerLocale(app.locals))
-      .then(registerChores(app.locals))
-
       .catch((e) => {
         // eslint-disable-next-line
         console.error(e);

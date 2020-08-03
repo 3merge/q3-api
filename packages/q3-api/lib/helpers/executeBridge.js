@@ -57,12 +57,12 @@ const runChildProcess = async (
   forked.send(brideParamters);
 };
 
-module.exports = (bridgeType, forkProcess = true) => {
+module.exports = (bridgeType) => {
   const ctrl = async (req, res) => {
     const template = get(req, 'query.template');
     const action = getActionPath(bridgeType, template);
 
-    if (forkProcess) {
+    if (bridgeType !== 'pipeline') {
       await runChildProcess(
         action,
         bridgeType,

@@ -10,6 +10,7 @@ const FINISHED = 'Finished';
 
 const LoggerSchema = new Schema(
   {
+    userId: mongoose.Schema.Types.ObjectId,
     event: {
       type: String,
       required: true,
@@ -31,12 +32,13 @@ const LoggerModel = mongoose.model(
   LoggerSchema,
 );
 
-const addToLogger = (status) => ({ event }) => {
+const addToLogger = (status) => ({ event, ...rest }) => {
   if (process.env.DEBUG)
     // eslint-disable-next-line
     console.log(`SCHEDULER says, "${event} has ${status}"`);
 
   return LoggerModel.create({
+    ...rest,
     status,
     event,
   });
@@ -48,6 +50,8 @@ const finish = addToLogger(FINISHED);
 const fail = addToLogger(FINISHED);
 
 module.exports = {
+  LoggerModel,
+
   accept,
   reject,
   finish,

@@ -1,12 +1,24 @@
 const { first, get } = require('lodash');
+const {
+  accept,
+  reject,
+  finish,
+  fail,
+} = require('q3-core-mailer/lib/logger');
 const { toQuery } = require('./casters');
 
 module.exports = (Q3InsanceConfig, executable) => {
+  const log = {
+    event: get(Q3InsanceConfig, 'eventName', 'Anonymous'),
+  };
+
   const connection = Q3InsanceConfig.connect(
     process.env.CONNECTION,
   );
 
   process.on('message', (args) => {
+    log.userId = get(args, 'user._id');
+
     // eslint-disable-next-line
     const session = require('q3-core-session');
     // eslint-disable-next-line
@@ -16,7 +28,13 @@ module.exports = (Q3InsanceConfig, executable) => {
       Q3InsanceConfig.$i18.changeLanguage(
         first(get(args, 'user.lang', 'en').split('-')),
       ),
-      connection,
+      connection
+        .then(() => {
+          return accept(log);
+        })
+        .catch(() => {
+          return reject(log);
+        }),
     ])
       .then(([t]) => {
         return new Promise((r) => {
@@ -30,9 +48,13 @@ module.exports = (Q3InsanceConfig, executable) => {
                 t,
               },
               t,
-            ).then((res) => {
-              r(res);
-            });
+            )
+              .then((res) =>
+                finish(log).then(() => {
+                  r(res);
+                }),
+              )
+              .catch(() => fail(log));
           });
         });
       })
