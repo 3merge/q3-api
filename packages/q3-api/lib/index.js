@@ -25,7 +25,7 @@ const connectToDB = (res, rej) => (err) => {
   if (err) return rej(err);
   app.use(handleUncaughtExceptions);
   if (process.env.NODE_ENV !== 'test') {
-    app.listen(process.env.PORT);
+    // will attach to app during
     io.listen();
   }
 

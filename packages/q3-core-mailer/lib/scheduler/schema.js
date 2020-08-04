@@ -69,9 +69,9 @@ const hasPassed = (value, date) => {
 const startTask = async (doc) => {
   try {
     await doc.run();
-    await Logger.accept(doc);
+    await Logger.finish(doc);
   } catch (e) {
-    await Logger.reject(doc);
+    await Logger.fail(doc);
   }
 };
 

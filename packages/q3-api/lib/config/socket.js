@@ -119,9 +119,7 @@ io.on('connection', async (socket) => {
 });
 
 io.listen = () => {
-  // the socket will always be 8080 in our applications
-  // the main app port may change, though, between dev and production
-  http.listen(8080);
+  http.listen(process.env.PORT);
   new CollectionWatch(io).watch(mongoose.models);
 };
 
