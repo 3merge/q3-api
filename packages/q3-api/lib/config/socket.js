@@ -97,7 +97,9 @@ io.on('connection', async (socket) => {
   });
 
   socket.on('change', ({ updatedAt, ...data }) => {
-    socket.to(makeRoom(data)).emit('modify', updatedAt);
+    socket
+      .to(makeRoom(data))
+      .broadcast.emit('modify', updatedAt);
   });
 
   socket.on('disconnect', () => {
