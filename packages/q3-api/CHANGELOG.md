@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.21](https://github.com/3merge/q3-api/compare/q3-api@1.2.20...q3-api@1.2.21) (2020-08-04)
+
+
+### Bug Fixes
+
+* broadcast change to all but sender ([1dadb6e](https://github.com/3merge/q3-api/commit/1dadb6e1d6c14566644990bc2471962768c97e6b))
+
+
+
+
+
 ## [1.2.20](https://github.com/3merge/q3-api/compare/q3-api@1.2.19...q3-api@1.2.20) (2020-08-03)
 
 **Note:** Version bump only for package q3-api
