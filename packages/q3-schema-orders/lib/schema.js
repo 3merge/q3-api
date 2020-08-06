@@ -18,12 +18,8 @@ const OrderLineSchema = new Schema(
   {
     bucket: {
       type: Schema.Types.Mixed,
+      systemOnly: true,
       private: true,
-    },
-    subtotal: {
-      type: Number,
-      private: true,
-      default: 0,
     },
     product: {
       type: mongoose.Schema.Types.ObjectId,
@@ -33,10 +29,8 @@ const OrderLineSchema = new Schema(
       type: Number,
       required: true,
     },
-    price: {
-      ...price,
-      private: true,
-    },
+    subtotal: price,
+    price,
   },
   {
     disableOwnership: true,
