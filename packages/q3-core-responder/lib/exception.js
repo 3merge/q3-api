@@ -118,13 +118,22 @@ const handleUncaughtExceptions = (err, req, res, next) => {
               [key]: {
                 ...value,
                 msg: req.t(
-                  `validations:${getErrorMessage(value)}`,
+                  `errors:${getErrorMessage(value)}`,
                 ),
               },
             })
           : a,
       {},
     );
+
+  if (process.env.NODE_ENV === 'production')
+    // eslint-disable-next-line
+    delete err.stack;
+
+  if (err.errors)
+    Object.assign(err, {
+      errors: translateErrors(err.errors),
+    });
 
   if (
     err.errors &&
@@ -133,15 +142,11 @@ const handleUncaughtExceptions = (err, req, res, next) => {
   ) {
     setHeader(422);
     res.json({
+      ...err,
       message: translateMessage('validation'),
-      errors: translateErrors(err.errors),
     });
   } else {
     setHeader(status);
-
-    if (process.env.NODE_ENV === 'production')
-      // eslint-disable-next-line
-      delete err.stack;
 
     res.json({
       ...err,

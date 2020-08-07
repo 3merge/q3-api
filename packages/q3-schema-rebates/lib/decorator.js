@@ -1,18 +1,10 @@
 const Utils = require('q3-schema-utils');
-
-const getRemainder = (a, b, c) => {
-  if (a <= b && a < c) return a;
-  if (a > b && b < c) return b;
-  if (!b && a < c) return a;
-  return c;
-};
-
-const sofar = (a) => a.reduce((all, curr) => all + curr, 0);
-
-const compact = (a) => a.filter((v) => v && v !== '');
-
-const hasLength = (a) =>
-  Array.isArray(a) && compact(a).length;
+const {
+  getRemainder,
+  sofar,
+  compact,
+  hasLength,
+} = require('./helpers');
 
 class RebateDecorator {
   static async findApplicable(
@@ -60,7 +52,7 @@ class RebateDecorator {
         const values = rebate.getPriceValues(sorted);
 
         // eslint-disable-next-line
-      const output = rebate.toJSON();
+        const output = rebate.toJSON();
         output.applicableTo = sorted.map((item, i) => ({
           id: item.id,
           value: values[i],
