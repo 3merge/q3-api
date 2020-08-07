@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.9](https://github.com/3merge/q3-api/compare/q3-locale@1.1.8...q3-locale@1.1.9) (2020-08-07)
+
+
+### Bug Fixes
+
+* nullish values in rebate getRemainder helper ([ef5044d](https://github.com/3merge/q3-api/commit/ef5044d7ebe0dfb58070e0dddaee99afe23fb3c3))
+
+
+
+
+
 ## [1.1.8](https://github.com/3merge/q3-api/compare/q3-locale@1.1.7...q3-locale@1.1.8) (2020-07-14)
 
 **Note:** Version bump only for package q3-locale

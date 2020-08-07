@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.23](https://github.com/3merge/q3-api/compare/q3-core-rest@1.1.22...q3-core-rest@1.1.23) (2020-08-07)
+
+**Note:** Version bump only for package q3-core-rest
+
+
+
+
+
 ## [1.1.22](https://github.com/3merge/q3-api/compare/q3-core-rest@1.1.21...q3-core-rest@1.1.22) (2020-08-06)
 
 **Note:** Version bump only for package q3-core-rest
