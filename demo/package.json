@@ -9,7 +9,7 @@
     "express": "^4.17.1",
     "i18next": "^19.1.0",
     "moment": "^2.24.0",
-    "mongoose": "^5.7.1",
+    "mongoose": "^5.9.28",
     "q3-api": "^1.2.24",
     "q3-core-access": "^1.0.31",
     "q3-core-composer": "^1.0.130",

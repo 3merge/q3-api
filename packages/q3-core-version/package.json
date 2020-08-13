@@ -3,9 +3,9 @@
   "version": "1.0.12",
   "main": "lib/index.js",
   "dependencies": {
-    "flat": "^5.0.0",
-    "lodash": "^4.17.15",
+    "flat": "^5.0.2",
+    "lodash": "^4.17.20",
     "micromatch": "^4.0.2",
-    "mongoose": "^5.7.1"
+    "mongoose": "^5.9.28"
   }
 }
