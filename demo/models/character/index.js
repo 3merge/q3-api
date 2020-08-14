@@ -1,20 +1,25 @@
 const mongoose = require('mongoose');
 
-module.exports = mongoose.model(
-  'characters',
-  new mongoose.Schema(
-    {
-      name: {
-        type: String,
-        searchable: true,
-      },
-      role: String,
-      gender: String,
+const Character = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      searchable: true,
     },
-    {
-      restify: '*',
-      collectionSingularName: 'character',
-      collectionPluralName: 'characters',
-    },
-  ),
+    role: String,
+    gender: String,
+  },
+  {
+    restify: '*',
+    collectionSingularName: 'character',
+    collectionPluralName: 'characters',
+  },
 );
+
+Character.virtual('example').get(function callFilePath() {
+  return this.getFilePath
+    ? this.getFilePath('pos/example')
+    : undefined;
+});
+
+module.exports = mongoose.model('characters', Character);
