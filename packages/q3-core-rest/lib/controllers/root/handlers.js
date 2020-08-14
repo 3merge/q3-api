@@ -14,6 +14,9 @@ module.exports = {
   ) {
     const doc = await datasource.findStrictly(
       params.resourceID,
+      {
+        select: '+uploads',
+      },
     );
 
     res.ok({
@@ -69,14 +72,23 @@ module.exports = {
       marshal,
       params,
       isFresh,
+      files,
     },
     res,
   ) {
     // @NOTE - otherwise it picks up on READ permissions
     const doc = await datasource.findStrictly(
       params.resourceID,
-      { redact: false },
+      {
+        redact: false,
+        select: '+uploads',
+      },
     );
+
+    await doc.handleReq({
+      body,
+      files,
+    });
 
     await doc.snapshotChange(clean(body)).save({
       redact: true,

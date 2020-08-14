@@ -14,6 +14,12 @@ let req = {};
 let res = {};
 const api = new ApiMock();
 
+Model.snapshotInsertSubdocument = jest
+  .fn()
+  .mockImplementation(function mock() {
+    return this;
+  });
+
 beforeEach(() => {
   api.inject({
     parent: Model,
@@ -125,8 +131,8 @@ describe('SubController route handlers', () => {
       req.fieldName = 'foo';
       await Post(req, res);
       expect(
-        Model.snapshotChangeOnSubdocument,
-      ).toHaveBeenCalledWith('foo', {});
+        Model.snapshotInsertSubdocument,
+      ).toHaveBeenCalledWith('foo');
     });
 
     it('should throw an error', async () => {

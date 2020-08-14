@@ -14,6 +14,10 @@ let req = {};
 let res = {};
 const api = new ApiMock();
 
+Model.handleReq = function fileHandlerMethod() {
+  return this;
+};
+
 beforeEach(() => {
   api.inject({
     datasource: Model,
@@ -33,6 +37,7 @@ describe('Handlers', () => {
       req.params.resourceID = 1;
       await Remove(req, res);
       expect(Model.archive).toHaveBeenCalledWith(1);
+
       expect(res.acknowledge).toHaveBeenCalled();
     });
   });
@@ -54,16 +59,9 @@ describe('Handlers', () => {
     it('should forward parameter to Model', async () => {
       req.params.resourceID = 1;
       await Get(req, res);
-      expect(Model.findStrictly).toHaveBeenCalledWith(1);
-      expect(res.ok).toHaveBeenCalled();
-    });
-  });
-
-  describe('Get Controller', () => {
-    it('should forward parameter to Model', async () => {
-      req.params.resourceID = 1;
-      await Get(req, res);
-      expect(Model.findStrictly).toHaveBeenCalledWith(1);
+      expect(Model.findStrictly).toHaveBeenCalledWith(1, {
+        select: '+uploads',
+      });
       expect(res.ok).toHaveBeenCalled();
     });
   });
@@ -140,6 +138,7 @@ describe('Handlers', () => {
       await Patch(req, res);
       expect(Model.findStrictly).toHaveBeenCalledWith(1, {
         redact: false,
+        select: '+uploads',
       });
       // expect(set).toHaveBeenCalledWith(args);
       expect(res.update).toHaveBeenCalled();

@@ -1,7 +1,13 @@
 const { compose, verify } = require('q3-core-composer');
 
 const getProfile = async (req, res) => {
-  const { body, user, marshal } = req;
+  const { body, files, user, marshal } = req;
+
+  await user.handleReq({
+    body,
+    files,
+  });
+
   await user.set(body).save();
 
   res.update({

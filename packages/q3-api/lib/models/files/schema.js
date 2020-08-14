@@ -13,6 +13,7 @@ const FileSchema = new Schema(
       default: false,
     },
     tags: [String],
+    relativePath: String,
   },
   {
     timestamps: true,

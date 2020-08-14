@@ -6,7 +6,7 @@
     "mongoose": "^5.7.12"
   },
   "dependencies": {
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.20",
     "q3-core-responder": "^1.0.137"
   },
   "devDependencies": {
