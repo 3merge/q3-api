@@ -37,10 +37,11 @@ const getStatus = (transactionReceipt) =>
 Schema.methods.pay = async function connectToGateway(
   merchant,
   token,
+  callback,
 ) {
   verifyMerchantName(merchant);
   const fn = MERCHANTS[merchant];
-  const resp = await fn(this, token);
+  const resp = await fn(this, token, callback);
 
   this.set({
     status: getStatus(resp),
