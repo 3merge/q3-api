@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.17](https://github.com/3merge/q3-api/compare/q3-test-utils@1.3.16...q3-test-utils@1.3.17) (2020-08-25)
+
+
+### Bug Fixes
+
+* monkey-patch countDocuments to apply options ([c0538ad](https://github.com/3merge/q3-api/commit/c0538ad04fb0af505ce82e921914d2594acbdcf7))
+
+
+
+
+
 ## [1.3.16](https://github.com/3merge/q3-api/compare/q3-test-utils@1.3.15...q3-test-utils@1.3.16) (2020-08-24)
 
 **Note:** Version bump only for package q3-test-utils

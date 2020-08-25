@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.26](https://github.com/3merge/q3-api/compare/q3-core-rest@1.1.25...q3-core-rest@1.1.26) (2020-08-25)
+
+
+### Bug Fixes
+
+* monkey-patch countDocuments to apply options ([c0538ad](https://github.com/3merge/q3-api/commit/c0538ad04fb0af505ce82e921914d2594acbdcf7))
+
+
+
+
+
 ## [1.1.25](https://github.com/3merge/q3-api/compare/q3-core-rest@1.1.24...q3-core-rest@1.1.25) (2020-08-24)
 
 **Note:** Version bump only for package q3-core-rest
