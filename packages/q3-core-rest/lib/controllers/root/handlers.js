@@ -39,6 +39,20 @@ module.exports = {
       page,
     } = queryParser(req);
 
+    // save original so we can restore later
+    datasource.$$countDocuments = datasource.countDocuments;
+
+    // otherwise the counter doesn't redact
+    datasource.countDocuments = function monkeyPatchPaginationPluginInternals(
+      params,
+    ) {
+      return datasource
+        .$$countDocuments(params)
+        .setOptions({
+          redact: true,
+        });
+    };
+
     const {
       docs,
       totalDocs,
@@ -53,6 +67,9 @@ module.exports = {
       sort,
       select,
     });
+
+    // must re-assigned afterwards
+    datasource.$$countDocuments = datasource.countDocuments;
 
     const payload = marshal(docs);
 
