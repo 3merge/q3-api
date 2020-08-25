@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.27](https://github.com/3merge/q3-api/compare/q3-core-rest@1.1.26...q3-core-rest@1.1.27) (2020-08-25)
+
+
+### Bug Fixes
+
+* improper reference causing stack error ([a5d47c3](https://github.com/3merge/q3-api/commit/a5d47c3732b9f10fce3937d62e44320f9d38c6cb))
+
+
+
+
+
 ## [1.1.26](https://github.com/3merge/q3-api/compare/q3-core-rest@1.1.25...q3-core-rest@1.1.26) (2020-08-25)
 
 
