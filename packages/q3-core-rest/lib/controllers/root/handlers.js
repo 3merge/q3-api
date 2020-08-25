@@ -69,7 +69,7 @@ module.exports = {
     });
 
     // must re-assigned afterwards
-    datasource.$$countDocuments = datasource.countDocuments;
+    datasource.countDocuments = datasource.$$countDocuments;
 
     const payload = marshal(docs);
 
