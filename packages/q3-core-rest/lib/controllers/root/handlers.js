@@ -40,18 +40,22 @@ module.exports = {
     } = queryParser(req);
 
     // save original so we can restore later
+    delete datasource.$$countDocuments;
     datasource.$$countDocuments = datasource.countDocuments;
 
     // otherwise the counter doesn't redact
-    datasource.countDocuments = function monkeyPatchPaginationPluginInternals(
-      params,
-    ) {
-      return datasource
-        .$$countDocuments(params)
-        .setOptions({
-          redact: true,
-        });
-    };
+    if (datasource.$$monkeyed) {
+      datasource.$$monkeyed = true;
+      datasource.countDocuments = function monkeyPatchPaginationPluginInternals(
+        params,
+      ) {
+        return datasource
+          .$$countDocuments(params)
+          .setOptions({
+            redact: true,
+          });
+      };
+    }
 
     const {
       docs,
