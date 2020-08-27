@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.29](https://github.com/3merge/q3-api/compare/q3-core-rest@1.1.28...q3-core-rest@1.1.29) (2020-08-27)
+
+
+### Bug Fixes
+
+* monkey-patched mongoose method ([#93](https://github.com/3merge/q3-api/issues/93)) ([4d22078](https://github.com/3merge/q3-api/commit/4d22078b1a3b740c84cd612a256d4747b0206631))
+
+
+
+
+
 ## [1.1.28](https://github.com/3merge/q3-api/compare/q3-core-rest@1.1.27...q3-core-rest@1.1.28) (2020-08-26)
 
 
