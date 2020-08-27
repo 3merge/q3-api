@@ -1575,6 +1575,11 @@
   resolved "https://registry.yarnpkg.com/@types/prettier/-/prettier-2.0.2.tgz#5bb52ee68d0f8efa9cc0099920e56be6cc4e37f3"
   integrity sha512-IkVfat549ggtkZUthUzEX49562eGikhSYeVGX97SkMFn+sTZrgRewXjQ4tPKFPCykZHkX1Zfd9OoELGqKU2jJA==
 
+"@types/semver@^7.3.3":
+  version "7.3.3"
+  resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.3.3.tgz#3ad6ed949e7487e7bda6f886b4a2434a2c3d7b1a"
+  integrity sha512-jQxClWFzv9IXdLdhSaTf16XI3NYe6zrEbckSpb5xhKfPbWgIyAY0AFyWWWfaiDcBuj3UHmMkCIwSRqpKMTZL2Q==
+
 "@types/stack-utils@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-1.0.1.tgz#0a851d3bd96498fa25c33ab7278ed3bd65f06c3e"
@@ -2048,10 +2053,10 @@ aws-sdk-mock@^5.1.0:
     sinon "^9.0.1"
     traverse "^0.6.6"
 
-aws-sdk@^2.637.0, aws-sdk@^2.732.0:
-  version "2.738.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.738.0.tgz#37e4b75ab1acf9bc01bea5d4f83ebb937842de6a"
-  integrity sha512-oO1odRT4DGssivoP6lHO3yB6I+5sU0uqpj6UJ0kS5wrHQ9J9EGrictLVKA9y6XhN0sNW+XPNLD9jMMY/A+gXWA==
+aws-sdk@^2.637.0, aws-sdk@^2.741.0:
+  version "2.741.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.741.0.tgz#b832d838e5f1ef9cdb2b4901ade4555b1ca4c085"
+  integrity sha512-bpk5VvlBSvKu3Lg30AxX+PHk+0TD69K3tYe6D6VeEFl/3XzuZ5RKTGCIl96isSMyYc5bBMhLS9pC9glrxT7OTw==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -2162,10 +2167,10 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
   integrity sha1-ibTRmasr7kneFk6gK4nORi1xt2c=
 
-bambora-node@^1.0.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/bambora-node/-/bambora-node-1.1.0.tgz#d7801fcba836140ab926897073bd8c2f0ccc89af"
-  integrity sha512-72qzzzUKPojMGy1UpUjUzm3lojWiTu5b3HHShln4jtDcbb48HSvR5A7AmWGeNVdrkhlWcIVOt7mzJqZrFpVHcg==
+bambora-node@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/bambora-node/-/bambora-node-1.1.1.tgz#6984bfaab966a31452ec3cd00d4dc9767aa80485"
+  integrity sha512-cwOEzrBlSr/qp5hcvD9lpoSvbu9HfqlSGMieOR6v/oNEB2Mh9U1wLPRKsc6A81I9CzxIA882M63AHw8WVwLcrQ==
   dependencies:
     axios "^0.19.1"
     lodash.get "^4.4.2"
@@ -2889,10 +2894,10 @@ compare-func@^2.0.0:
     array-ify "^1.0.0"
     dot-prop "^5.1.0"
 
-comparisons@2.2.8:
-  version "2.2.8"
-  resolved "https://registry.yarnpkg.com/comparisons/-/comparisons-2.2.8.tgz#24349be886c35d0a187c458c86383873b28bd202"
-  integrity sha512-tgGADetDDuTgTJuFUfGtuPCB9LI4eWm/f26DIMMChVTUK3jwuTHB1huRZNeyl8s8CMRcNo7cZdnLOmpuM4lVTg==
+comparisons@2.2.9:
+  version "2.2.9"
+  resolved "https://registry.yarnpkg.com/comparisons/-/comparisons-2.2.9.tgz#0c7c278159da5e2c8d8fa0a2a3142698485150e5"
+  integrity sha512-CjRk58jAmVQDp4Y8+iX5G+BYUeekAP7/XxGON8n0rKQ6duRE9AuDP7nJr3NPh7v58GIP3/6LOTLqmeS4DF0IwQ==
   dependencies:
     flat "^5.0.0"
     moment "^2.24.0"
@@ -7049,10 +7054,10 @@ mongodb-cron@^1.7.0:
     es6-sleep "^2.0.2"
     moment "^2.24.0"
 
-mongodb-memory-server-core@6.6.4:
-  version "6.6.4"
-  resolved "https://registry.yarnpkg.com/mongodb-memory-server-core/-/mongodb-memory-server-core-6.6.4.tgz#f2a003cf358c348528e1b9c7c493aeefc9a600c1"
-  integrity sha512-g4WMmXp2Gg305eKETaE9Nnp2eR3mTMKSTZJsxpXhsx+Mhl2IQoMLa78ny7eFPN7FORnLxQsmLMANv4b0bP+RDA==
+mongodb-memory-server-core@6.6.6:
+  version "6.6.6"
+  resolved "https://registry.yarnpkg.com/mongodb-memory-server-core/-/mongodb-memory-server-core-6.6.6.tgz#298eeca363731eb11a924c11c68e2617882682e1"
+  integrity sha512-vRpqWlMdRCJYlOjfhFr9RWVUOA+dFZJF8mKMe5b7itY/aOur2ktztAL2lD868VokUfIqiu7F8Wev1/i7CdrNEQ==
   dependencies:
     "@types/cross-spawn" "^6.0.2"
     "@types/debug" "^4.1.5"
@@ -7062,6 +7067,7 @@ mongodb-memory-server-core@6.6.4:
     "@types/lockfile" "^1.0.1"
     "@types/md5-file" "^4.0.2"
     "@types/mkdirp" "^1.0.1"
+    "@types/semver" "^7.3.3"
     "@types/tmp" "^0.2.0"
     "@types/uuid" "^8.0.0"
     camelcase "^6.0.0"
@@ -7075,6 +7081,7 @@ mongodb-memory-server-core@6.6.4:
     lockfile "^1.0.4"
     md5-file "^5.0.0"
     mkdirp "^1.0.4"
+    semver "^7.3.2"
     tar-stream "^2.1.3"
     tmp "^0.2.1"
     uuid "^8.2.0"
@@ -7082,12 +7089,12 @@ mongodb-memory-server-core@6.6.4:
   optionalDependencies:
     mongodb "^3.5.9"
 
-mongodb-memory-server@^6.0.2:
-  version "6.6.4"
-  resolved "https://registry.yarnpkg.com/mongodb-memory-server/-/mongodb-memory-server-6.6.4.tgz#c39b62e34d475458d682c418d347839ae9196329"
-  integrity sha512-GCtrlUDpq6oPkdlkmIgh0Q6vJYf7njzw8AJnbg/gime2NxuUtqcOK2n+9L3qeDzt6EZxdtP/+1u/80wfjwc5mA==
+mongodb-memory-server@^6.6.6:
+  version "6.6.6"
+  resolved "https://registry.yarnpkg.com/mongodb-memory-server/-/mongodb-memory-server-6.6.6.tgz#9e8bd2140110e76b30076be8a28ea8b0f571666b"
+  integrity sha512-34PvA7uMeb/jcjBWHqTo16CfK+4T+kniF59wdH6a0egMGYZdVoYs/+r4R6J1So7Cw2HIJznf8qLf5ycTuyWiuQ==
   dependencies:
-    mongodb-memory-server-core "6.6.4"
+    mongodb-memory-server-core "6.6.6"
 
 mongodb@3.6.0, mongodb@^3.5.9:
   version "3.6.0"
@@ -7159,10 +7166,10 @@ mongoose-unique-validator@^2.0.3:
     lodash.foreach "^4.1.0"
     lodash.get "^4.0.2"
 
-mongoose@^5.7.12, mongoose@^5.8.5, mongoose@^5.9.28:
-  version "5.10.0"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.10.0.tgz#05a35f5a3d8485613c9988aeb9548285a97083f7"
-  integrity sha512-5itAvBMVDG4+zTDtuLg/IyoTxEMgvpOSHnigQ9Cyh8LR4BEgMAChJj7JSaGkg+tr1AjCSY9DgSdU8bHqCOoxXg==
+mongoose@^5.10.1, mongoose@^5.7.12, mongoose@^5.8.5:
+  version "5.10.1"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.10.1.tgz#cdd083d72e19a5c4ff134171d7d1a9976bf01fe9"
+  integrity sha512-RtqhhYmfVBYVAGDibYNvZDFxi2cYUwjtgpekOOk9MhXsR414Uh1y/rzj3i9ymm5icFGoAm8OStQM46k+qv/VOg==
   dependencies:
     bson "^1.1.4"
     kareem "2.3.1"
@@ -8172,10 +8179,10 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-prettier@^2.0.4:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.1.0.tgz#5a9789f767a243118c60f3e56d95cb6544914fbb"
-  integrity sha512-lz28cCbA1cDFHVuY8vvj6QuqOwIpyIfPUYkSl8AZ/vxH8qBXMMjE2knfLHCrZCmUsK/H1bg1P0tOo0dJkTJHvw==
+prettier@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.1.1.tgz#d9485dd5e499daa6cb547023b87a6cf51bee37d6"
+  integrity sha512-9bY+5ZWCfqj3ghYBLxApy2zf6m+NJo5GzmLTpr9FsApsfjriNnS2dahWReHMi7qNPhhHl9SYHJs2cHZLgexNIw==
 
 pretty-format@^26.4.2:
   version "26.4.2"

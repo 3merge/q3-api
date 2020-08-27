@@ -3,11 +3,11 @@
   "version": "1.0.36",
   "main": "lib/index.js",
   "dependencies": {
-    "comparisons": "2.2.8",
+    "comparisons": "2.2.9",
     "flat": "^5.0.2",
     "lodash": "^4.17.20",
     "micromatch": "^4.0.2",
-    "mongoose": "^5.9.28",
+    "mongoose": "^5.10.1",
     "q3-core-responder": "^1.0.142"
   },
   "devDependencies": {
