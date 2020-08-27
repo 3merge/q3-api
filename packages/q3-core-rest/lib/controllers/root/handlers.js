@@ -39,23 +39,16 @@ module.exports = {
       page,
     } = queryParser(req);
 
-    // save original so we can restore later
-    delete datasource.$$countDocuments;
-    datasource.$$countDocuments = datasource.countDocuments;
-
-    // otherwise the counter doesn't redact
-    if (datasource.$$monkeyed) {
-      datasource.$$monkeyed = true;
-      datasource.countDocuments = function monkeyPatchPaginationPluginInternals(
-        params,
-      ) {
-        return datasource
-          .$$countDocuments(params)
-          .setOptions({
-            redact: true,
-          });
-      };
-    }
+    const { countDocuments } = datasource;
+    datasource.countDocuments = function monkeyPatchPaginationPluginInternals(
+      params,
+    ) {
+      return countDocuments
+        .call(datasource, params)
+        .setOptions({
+          redact: true,
+        });
+    };
 
     const {
       docs,
@@ -71,9 +64,6 @@ module.exports = {
       sort,
       select,
     });
-
-    // must re-assigned afterwards
-    datasource.countDocuments = datasource.$$countDocuments;
 
     const payload = marshal(docs);
 
