@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.137](https://github.com/3merge/q3-api/compare/q3-core-composer@1.0.136...q3-core-composer@1.0.137) (2020-08-31)
+
+**Note:** Version bump only for package q3-core-composer
+
+
+
+
+
 ## [1.0.136](https://github.com/3merge/q3-api/compare/q3-core-composer@1.0.135...q3-core-composer@1.0.136) (2020-08-27)
 
 **Note:** Version bump only for package q3-core-composer
