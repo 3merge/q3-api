@@ -44,7 +44,7 @@
     "nodemon": "^2.0.3",
     "prettier": "^2.1.1",
     "supertest": "^4.0.2",
-    "yarn-deduplicate": "^2.0.0",
+    "yarn-deduplicate": "^3.0.0",
     "yarn-workspace-sync-deps": "^0.3.2"
   },
   "dependencies": {
@@ -52,7 +52,7 @@
     "bambora-node": "^1.1.1",
     "body-parser": "^1.19.0",
     "cls-hooked": "^4.2.2",
-    "comparisons": "2.2.9",
+    "comparisons": "2.2.10",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.2.0",
@@ -66,7 +66,7 @@
     "micromatch": "^4.0.2",
     "moment": "^2.24.0",
     "mongodb-cron": "^1.7.0",
-    "mongoose": "^5.10.1",
+    "mongoose": "^5.10.2",
     "mongoose-dedupe": "^1.0.0",
     "mongoose-field-populate": "^2.2.6",
     "mongoose-partial-search": "^1.0.1",

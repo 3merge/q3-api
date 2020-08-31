@@ -2053,10 +2053,10 @@ aws-sdk-mock@^5.1.0:
     sinon "^9.0.1"
     traverse "^0.6.6"
 
-aws-sdk@^2.637.0, aws-sdk@^2.741.0:
-  version "2.741.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.741.0.tgz#b832d838e5f1ef9cdb2b4901ade4555b1ca4c085"
-  integrity sha512-bpk5VvlBSvKu3Lg30AxX+PHk+0TD69K3tYe6D6VeEFl/3XzuZ5RKTGCIl96isSMyYc5bBMhLS9pC9glrxT7OTw==
+aws-sdk@^2.637.0, aws-sdk@^2.742.0:
+  version "2.742.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.742.0.tgz#02373d324ca8201cd3fc8c1b82eff8b48b593f4c"
+  integrity sha512-zntDB0BpMn/y+B4RQvXuqY8DmJDYPkeFjZ6BbZ6vdNrsdB5TRz8p53ats4D3mLG068RB4M4AmVioFnU69nDXyQ==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -2876,10 +2876,10 @@ commander@^2.20.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
 
-commander@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-5.1.0.tgz#46abbd1652f8e059bddaef99bbdcb2ad9cf179ae"
-  integrity sha512-P0CysNDQ7rtVw4QIQtm+MRxV66vKFSvlsQvGYXZWR3qFU0jlMKHZZZgw8e+8DSah4UDKMqnknRDQz+xuQXQ/Zg==
+commander@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-6.1.0.tgz#f8d722b78103141006b66f4c7ba1e97315ba75bc"
+  integrity sha512-wl7PNrYWd2y5mp1OK/LhTlv8Ff4kQJQRXXAvF+uU/TPNiVJUxZLRYGj/B0y/lPGAVcSbJqH2Za/cvHmrPMC8mA==
 
 commondir@^1.0.1:
   version "1.0.1"
@@ -2894,12 +2894,13 @@ compare-func@^2.0.0:
     array-ify "^1.0.0"
     dot-prop "^5.1.0"
 
-comparisons@2.2.9:
-  version "2.2.9"
-  resolved "https://registry.yarnpkg.com/comparisons/-/comparisons-2.2.9.tgz#0c7c278159da5e2c8d8fa0a2a3142698485150e5"
-  integrity sha512-CjRk58jAmVQDp4Y8+iX5G+BYUeekAP7/XxGON8n0rKQ6duRE9AuDP7nJr3NPh7v58GIP3/6LOTLqmeS4DF0IwQ==
+comparisons@2.2.10:
+  version "2.2.10"
+  resolved "https://registry.yarnpkg.com/comparisons/-/comparisons-2.2.10.tgz#bf6d9fad9936ef2313695323f17b9e4b6fe86cbf"
+  integrity sha512-TUboAOc6G2Th+drBO6MRoH9nSRg9mSg/aGbpSz1PlWQIeO2KE/T4aO6UCtXXDkmxarsDEdzTiGqr8ibsjLpI7Q==
   dependencies:
     flat "^5.0.0"
+    lodash.get "^4.4.2"
     moment "^2.24.0"
 
 component-bind@1.0.0:
@@ -7054,10 +7055,10 @@ mongodb-cron@^1.7.0:
     es6-sleep "^2.0.2"
     moment "^2.24.0"
 
-mongodb-memory-server-core@6.6.6:
-  version "6.6.6"
-  resolved "https://registry.yarnpkg.com/mongodb-memory-server-core/-/mongodb-memory-server-core-6.6.6.tgz#298eeca363731eb11a924c11c68e2617882682e1"
-  integrity sha512-vRpqWlMdRCJYlOjfhFr9RWVUOA+dFZJF8mKMe5b7itY/aOur2ktztAL2lD868VokUfIqiu7F8Wev1/i7CdrNEQ==
+mongodb-memory-server-core@6.6.7:
+  version "6.6.7"
+  resolved "https://registry.yarnpkg.com/mongodb-memory-server-core/-/mongodb-memory-server-core-6.6.7.tgz#f402bb5808f052e20d040cd9ce03a64dde94fc62"
+  integrity sha512-21g2FpQdgqN3sFsj5lbGje1BhrSRGNHgz6gMAl8bvmdpRpoZErclkImVtjBXNHCNmCc1Dxr+EBvH11KaVE+9iQ==
   dependencies:
     "@types/cross-spawn" "^6.0.2"
     "@types/debug" "^4.1.5"
@@ -7073,7 +7074,6 @@ mongodb-memory-server-core@6.6.6:
     camelcase "^6.0.0"
     cross-spawn "^7.0.3"
     debug "^4.1.1"
-    dedent "^0.7.0"
     find-cache-dir "^3.3.1"
     find-package-json "^1.2.0"
     get-port "^5.1.1"
@@ -7089,12 +7089,12 @@ mongodb-memory-server-core@6.6.6:
   optionalDependencies:
     mongodb "^3.5.9"
 
-mongodb-memory-server@^6.6.6:
-  version "6.6.6"
-  resolved "https://registry.yarnpkg.com/mongodb-memory-server/-/mongodb-memory-server-6.6.6.tgz#9e8bd2140110e76b30076be8a28ea8b0f571666b"
-  integrity sha512-34PvA7uMeb/jcjBWHqTo16CfK+4T+kniF59wdH6a0egMGYZdVoYs/+r4R6J1So7Cw2HIJznf8qLf5ycTuyWiuQ==
+mongodb-memory-server@^6.6.7:
+  version "6.6.7"
+  resolved "https://registry.yarnpkg.com/mongodb-memory-server/-/mongodb-memory-server-6.6.7.tgz#fa5f1e8153f4248c7c166f99b5143662699f40d6"
+  integrity sha512-azRGr5csTAl0MCLR/amPCJrmV5TFwRcVtal56dHrPy1o2T8wZRc3AaJyukob8a/JP38JYa/pQnw1AQH7lFA2Cg==
   dependencies:
-    mongodb-memory-server-core "6.6.6"
+    mongodb-memory-server-core "6.6.7"
 
 mongodb@3.6.0, mongodb@^3.5.9:
   version "3.6.0"
@@ -7166,10 +7166,10 @@ mongoose-unique-validator@^2.0.3:
     lodash.foreach "^4.1.0"
     lodash.get "^4.0.2"
 
-mongoose@^5.10.1, mongoose@^5.7.12, mongoose@^5.8.5:
-  version "5.10.1"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.10.1.tgz#cdd083d72e19a5c4ff134171d7d1a9976bf01fe9"
-  integrity sha512-RtqhhYmfVBYVAGDibYNvZDFxi2cYUwjtgpekOOk9MhXsR414Uh1y/rzj3i9ymm5icFGoAm8OStQM46k+qv/VOg==
+mongoose@^5.10.2, mongoose@^5.7.12, mongoose@^5.8.5:
+  version "5.10.2"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.10.2.tgz#3a6770affa8c05c4198515616fd555a5c9bc74d6"
+  integrity sha512-VO5eZawEMFh2gx9XPg9ZafzFg5eIVs4R7PW6kK1MFqBq34YD7GomkalYWVt02HctvTPDI1mkXsm52LXNZR1NxA==
   dependencies:
     bson "^1.1.4"
     kareem "2.3.1"
@@ -10735,13 +10735,13 @@ yargs@^15.3.1:
     y18n "^4.0.0"
     yargs-parser "^18.1.2"
 
-yarn-deduplicate@^2.0.0:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/yarn-deduplicate/-/yarn-deduplicate-2.1.1.tgz#500a3010e4bdee3c3250936e210910c7cae3d75d"
-  integrity sha512-lbFJGOMnqG/ncGjNBUt+JG4qfAGqeh8o9i4i5LXqNBdQ8ov8av6T1jizWQqr+zLPLCOqp/BYBZz8FymPQSR4RA==
+yarn-deduplicate@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/yarn-deduplicate/-/yarn-deduplicate-3.0.0.tgz#e5c219c48d687e3be79eff4c719d6d7ef372f094"
+  integrity sha512-Ps1JEurQJ7VHt4lFD1x7QLtnsfA0DxYzdz8jvu5q7mAw8JFgRC1Hqq46uC+NjSwf2wOlitTfbmWswMnnW2Gqfg==
   dependencies:
     "@yarnpkg/lockfile" "^1.1.0"
-    commander "^5.1.0"
+    commander "^6.1.0"
     semver "^7.3.2"
 
 yarn-workspace-sync-deps@^0.3.2:

@@ -4,7 +4,7 @@
   "main": "jest-preset.js",
   "dependencies": {
     "jest-environment-node": "^26.3.0",
-    "mongodb-memory-server": "^6.6.6",
+    "mongodb-memory-server": "^6.6.7",
     "q3-schema-types": "^1.1.112",
     "supertest": "^4.0.2"
   },
