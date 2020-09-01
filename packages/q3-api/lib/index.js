@@ -115,13 +115,14 @@ const Q3 = {
             if (e) reject(e);
             resolve();
           })
-        : mongoose
-            .connect(
-              process.env.CONNECTION,
-              connectToDB(resolve, reject),
-            )
-            // register only on the main process
-            .then(registerChores(app.locals)),
+        : mongoose.connect(
+            process.env.CONNECTION,
+            connectToDB((data) => {
+              // otherwise it doesn't get called
+              registerChores(app.locals);
+              return resolve(data);
+            }, reject),
+          ),
     )
       .then(registerLocale(app.locals))
       .catch((e) => {

@@ -94,7 +94,7 @@ module.exports = class UserAuthDecorator {
       ...isVerifiedQuery,
     })
       .setOptions({ bypassAuthorization: true })
-      .select('+apiKeys')
+      .select('+apiKeys +uploads')
       .exec();
   }
 
@@ -109,7 +109,7 @@ module.exports = class UserAuthDecorator {
       });
 
     const doc = await this.findOne(args)
-      .select('+apiKeys')
+      .select('+apiKeys +uploads')
       .setOptions({ bypassAuthorization: true })
       .exec();
 
