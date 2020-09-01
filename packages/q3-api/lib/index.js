@@ -47,7 +47,7 @@ const registerLocale = ({ location }) => () =>
  * See q3-core-mailer for more details.
  * Essentially, it uses the location to register event handlers by the file system architecture.
  */
-const registerChores = ({ location, chores }) => () =>
+const registerChores = ({ location, chores }) =>
   chores && location ? config(chores).walk(location) : null;
 
 /**
