@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.20](https://github.com/3merge/q3-api/compare/q3-exports@1.0.19...q3-exports@1.0.20) (2020-09-01)
+
+**Note:** Version bump only for package q3-exports
+
+
+
+
+
 ## [1.0.19](https://github.com/3merge/q3-api/compare/q3-exports@1.0.18...q3-exports@1.0.19) (2020-09-01)
 
 **Note:** Version bump only for package q3-exports

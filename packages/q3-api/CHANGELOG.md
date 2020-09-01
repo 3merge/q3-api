@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.34](https://github.com/3merge/q3-api/compare/q3-api@1.2.33...q3-api@1.2.34) (2020-09-01)
+
+
+### Bug Fixes
+
+* chore registration currying no longer necessary ([4f490ba](https://github.com/3merge/q3-api/commit/4f490bad4073fc4616825767de207d43e2c10193))
+
+
+
+
+
 ## [1.2.33](https://github.com/3merge/q3-api/compare/q3-api@1.2.32...q3-api@1.2.33) (2020-09-01)
 
 
