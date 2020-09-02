@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.42](https://github.com/3merge/q3-api/compare/q3-core-access@1.0.41...q3-core-access@1.0.42) (2020-09-02)
+
+**Note:** Version bump only for package q3-core-access
+
+
+
+
+
 ## [1.0.41](https://github.com/3merge/q3-api/compare/q3-core-access@1.0.40...q3-core-access@1.0.41) (2020-09-02)
 
 **Note:** Version bump only for package q3-core-access

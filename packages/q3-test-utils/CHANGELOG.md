@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.25](https://github.com/3merge/q3-api/compare/q3-test-utils@1.3.24...q3-test-utils@1.3.25) (2020-09-02)
+
+
+### Bug Fixes
+
+* dep conflict ([66cf1b5](https://github.com/3merge/q3-api/commit/66cf1b5a8287fec469c4cea82c1ca0e9795f15ed))
+
+
+
+
+
 ## [1.3.24](https://github.com/3merge/q3-api/compare/q3-test-utils@1.3.23...q3-test-utils@1.3.24) (2020-09-02)
 
 **Note:** Version bump only for package q3-test-utils

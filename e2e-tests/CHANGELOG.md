@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.36](https://github.com/3merge/q3-api/compare/e2e-tests@1.1.35...e2e-tests@1.1.36) (2020-09-02)
+
+**Note:** Version bump only for package e2e-tests
+
+
+
+
+
 ## [1.1.35](https://github.com/3merge/q3-api/compare/e2e-tests@1.1.34...e2e-tests@1.1.35) (2020-09-02)
 
 **Note:** Version bump only for package e2e-tests
