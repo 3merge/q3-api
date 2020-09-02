@@ -1,6 +1,6 @@
 const validatorAdapter = require('m2e-validator');
 const i18next = require('i18next');
-const middleware = require('i18next-express-middleware');
+const middleware = require('i18next-http-middleware');
 const paginate = require('mongoose-paginate-v2');
 const partialSearch = require('mongoose-partial-search');
 const commonUtils = require('q3-schema-utils/plugins/common');
