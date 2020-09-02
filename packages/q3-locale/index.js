@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const i18next = require('i18next');
-const middleware = require('i18next-express-middleware');
+const middleware = require('i18next-http-middleware');
 
 const walk = (dir) => {
   const root = path.join(dir, './lang');
