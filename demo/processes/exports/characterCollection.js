@@ -9,6 +9,7 @@ execChildProcess(
   Q3Instance,
   async ({ user, filter }, trans) => {
     const fileName = 'characters.csv';
+
     const characters = await Character.find(filter)
       .select('name')
       .lean()
@@ -27,7 +28,6 @@ execChildProcess(
         data,
       },
       {
-        $t: trans,
         name: 'labels:demo',
       },
     );
