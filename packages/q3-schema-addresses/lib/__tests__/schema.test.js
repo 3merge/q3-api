@@ -67,7 +67,6 @@ describe('Address schema', () => {
       expect.arrayContaining([
         'firstName',
         'lastName',
-        'streetNumber',
         'streetLine1',
         'city',
         'region',
@@ -88,5 +87,14 @@ describe('Address schema', () => {
     });
     doc.addresses.push(stub);
     return expect(doc.save()).rejects.toThrowError();
+  });
+
+  it('should print', () => {
+    expect(new Address(stub)).toHaveProperty('print', [
+      'Hooli',
+      '12 123 Fake Street',
+      'Toronoto, ON',
+      'CA M5K9R1',
+    ]);
   });
 });

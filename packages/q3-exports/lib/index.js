@@ -1,6 +1,7 @@
 const { get } = require('lodash');
 const CSV = require('./toCsv');
 const Excel = require('./toExcel');
+const Pdf = require('./toPdf');
 
 module.exports = class Q3Export {
   constructor(strategyName) {
@@ -8,6 +9,7 @@ module.exports = class Q3Export {
       {
         csv: CSV,
         xlsx: Excel,
+        pdf: Pdf,
       },
       strategyName,
     );
@@ -18,6 +20,9 @@ module.exports = class Q3Export {
       throw new Error(
         'You must specify an export strategy',
       );
+
+    if (!Array.isArray(data))
+      throw new Error('Data must be an array');
 
     return this.$__fn(data);
   }

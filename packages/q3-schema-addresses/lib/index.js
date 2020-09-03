@@ -40,6 +40,30 @@ Schema.path('region').validate(function verifyGeo(v) {
   return true;
 });
 
+Schema.virtual('print').get(
+  function assembleAddressParts() {
+    const out = [];
+
+    const clean = (v, char = ' ') =>
+      v.filter(Boolean).join(char);
+
+    out.push(
+      clean([
+        this.streetNumber,
+        this.streetLine1,
+        this.streetLine2,
+      ]),
+    );
+
+    out.push(clean([this.city, this.region], ', '));
+    out.push(clean([this.country, this.postal]));
+
+    if (this.company) out.unshift(this.company);
+
+    return out;
+  },
+);
+
 Schema.ensureSingleBilling = ensureSingleBilling;
 Schema.methods.normalize = adapters;
 

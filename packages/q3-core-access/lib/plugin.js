@@ -57,10 +57,11 @@ module.exports = (schema) => {
     const user = extractUser(this);
     const createdBy = get(user, '_id', null);
 
-    const doc = new Grant(user)
-      .can('Read')
-      .on(collectionName)
-      .first();
+    const doc =
+      new Grant(user)
+        .can('Read')
+        .on(collectionName)
+        .first() || {};
 
     reportAccessLevelFailure(!doc);
 
