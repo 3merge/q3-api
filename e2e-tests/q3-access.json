@@ -19,7 +19,11 @@
     "coll": "students",
     "op": "Read",
     "ownership": "Any",
-    "fields": ["!socialStatus"]
+    "fields": [
+      "!socialStatus",
+      "!samples.*.createdAt*",
+      "!samples.*.updatedAt*"
+    ]
   },
   {
     "role": "Developer",

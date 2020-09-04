@@ -2,6 +2,10 @@ const Q3 = require('q3-api');
 const mongoose = require('mongoose');
 const { assignSocialStatus } = require('./middleware');
 
+const SampleSchema = new mongoose.Schema({
+  test: String,
+});
+
 const StudentSchema = new mongoose.Schema(
   {
     name: String,
@@ -14,6 +18,7 @@ const StudentSchema = new mongoose.Schema(
         age: Number,
       },
     ],
+    samples: [SampleSchema],
   },
   {
     restify: '*',
