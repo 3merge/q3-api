@@ -19,22 +19,34 @@ module.exports = async (
         grant,
       } = redaction;
 
+      const execRedactFn = async (data) => {
+        const hasPrefix = locations && locations.prefix;
+
+        // shape the payload
+        const input = hasPrefix
+          ? { [locations.prefix]: data }
+          : data;
+
+        const output =
+          targetLocation === 'request'
+            ? await Redact.flattenAndReduceByFields(
+                input,
+                grant,
+              )
+            : await Redact(input, user, collectionName);
+
+        // re-shape the payload
+        return hasPrefix
+          ? output[locations.prefix]
+          : output;
+      };
+
       const promises = locations[targetLocation].map(
         async (item) => {
           const original = mutable[item];
 
           Object.assign(mutable, {
-            [item]:
-              targetLocation === 'request'
-                ? Redact.flattenAndReduceByFields(
-                    original,
-                    grant,
-                  )
-                : await Redact(
-                    original,
-                    user,
-                    collectionName,
-                  ),
+            [item]: await execRedactFn(original),
           });
         },
       );
