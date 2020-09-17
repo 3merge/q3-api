@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.42](https://github.com/3merge/q3-api/compare/q3-core-mailer@1.2.41...q3-core-mailer@1.2.42) (2020-09-17)
+
+**Note:** Version bump only for package q3-core-mailer
+
+
+
+
+
 ## [1.2.41](https://github.com/3merge/q3-api/compare/q3-core-mailer@1.2.40...q3-core-mailer@1.2.41) (2020-09-04)
 
 **Note:** Version bump only for package q3-core-mailer
