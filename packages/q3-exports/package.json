@@ -7,7 +7,7 @@
     "exceljs": "^4.1.0",
     "json-2-csv": "^3.7.5",
     "lodash": "^4.17.20",
-    "pdf-lib": "^1.10.0",
+    "pdf-lib": "^1.11.1",
     "pdfmake": "^0.1.68"
   },
   "devDependencies": {
