@@ -1,3 +1,6 @@
+/**
+ * @module Q3
+ */
 require('dotenv').config();
 require('q3-locale');
 
@@ -50,9 +53,6 @@ const registerLocale = ({ location }) => () =>
 const registerChores = ({ location, chores }) =>
   chores && location ? config(chores).walk(location) : null;
 
-/**
- * Uses the package.json file to locate app index.
- */
 const locate = () => {
   try {
     const root = process.cwd();

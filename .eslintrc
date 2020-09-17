@@ -1,5 +1,4 @@
 {
-  "extends": [
-    "node-3merge"
-  ]
+  "extends": ["node-3merge"],
+  "ignorePatterns": ["node_modules", "docs"]
 }

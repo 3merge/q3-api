@@ -1,3 +1,16 @@
+/**
+ * A job is an interval-based child process in a Q3 application. Developers register them in the file system by adding scripts to the jobs directory, labelled with a known qualifier like “daily” or “weekly”. The system schedules the job to run accordingly, logging all failed and successful attempts to the database.
+ * @module Jobs
+ * @example
+ * // sample application structure
+ * // use the walker helper to auto-assign jobs
+ * lib
+ * |- index.js
+ * |- jobs
+ * |-- onFoo@minutely.js
+ * |-- onFoo@minutely.js
+ * |-- onFoo@minutely.js
+ */
 const cron = require('node-cron');
 const mongoose = require('mongoose');
 const SchedulerSchema = require('./schema');
@@ -10,6 +23,17 @@ const Scheduler = mongoose.model(
 module.exports = {
   $model: Scheduler,
 
+  /**
+   * Add a new job to the scheduler. If the event exists, the interval updates.
+   * @param {string} event - The name of the event
+   * @param {string} interval - How often the event should run
+   * @example
+   const { Scheduler } = require('q3-core-mailer');
+
+   async function addtoScheduler() {
+      await Scheduler.add('onFooBar', 'minutely');
+   }
+   */
   add: async (event, interval) => {
     const exists = await Scheduler.findOne({
       event,

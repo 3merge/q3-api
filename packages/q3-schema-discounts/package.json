@@ -6,8 +6,8 @@
     "bignumber.js": "^9.0.0",
     "lodash": "^4.17.20",
     "micromatch": "^4.0.2",
-    "moment": "^2.24.0",
-    "mongoose": "^5.10.2",
+    "moment": "^2.28.0",
+    "mongoose": "^5.10.5",
     "q3-core-responder": "^1.0.150",
     "q3-schema-types": "^1.1.119",
     "q3-schema-utils": "^1.0.122"
