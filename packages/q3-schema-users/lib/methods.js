@@ -91,7 +91,7 @@ module.exports = class UserAuthDecorator {
     if (!str) return null;
     return this.findOne({
       apiKeys: str.trim(),
-      ...isVerifiedQuery,
+      active: true,
     })
       .setOptions({ bypassAuthorization: true })
       .select('+apiKeys +uploads')

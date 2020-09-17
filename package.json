@@ -9,14 +9,15 @@
   "scripts": {
     "postinstall": "yarnw-sync-deps && yarn-deduplicate",
     "bootstrap": "lerna bootstrap --use-workspaces",
-    "lint": "eslint . --ext .js --ignore-pattern node_modules",
+    "lint": "eslint packages --ext .js",
     "test:packages": "jest \"^(.*?)\\.unit.test.js\"  --detectOpenHandles --forceExit --collectCoverage --coverageDirectory coverage/coverage_units",
     "test:integrations": "jest \"^(.*?)\\.int.test.js\" --runInBand --detectOpenHandles --forceExit --collectCoverage --coverageDirectory coverage/coverage_integrations",
     "test:e2e": "yarn workspace e2e-tests test",
     "test": "yarn test:packages && yarn test:e2e",
     "coverage": "lcov-result-merger coverage/coverage_*/lcov.info | codecov --pipe",
     "upload": "lerna publish",
-    "demo": "nodemon demo"
+    "demo": "nodemon demo",
+    "docs": "jsdoc -c jsdoc.json"
   },
   "workspaces": [
     "demo",
@@ -39,11 +40,13 @@
     "jest-resolve": "^26.4.0",
     "jest-watch-typeahead": "^0.6.0",
     "jest-watch-yarn-workspaces": "^1.1.0",
+    "jsdoc": "^3.6.5",
     "lcov-result-merger": "^3.1.0",
     "lerna": "^3.16.4",
     "nodemon": "^2.0.3",
     "prettier": "^2.1.1",
     "supertest": "^4.0.2",
+    "tui-jsdoc-template": "^1.2.2",
     "yarn-deduplicate": "^3.0.0",
     "yarn-workspace-sync-deps": "^0.3.2"
   },
