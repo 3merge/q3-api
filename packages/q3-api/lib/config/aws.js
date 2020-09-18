@@ -6,6 +6,7 @@ module.exports = () => {
     S3_SECRET: secretAccessKey,
     PRIVATE_BUCKET: PrivateBucket,
     PUBLIC_BUCKET: PublicBucket,
+    S3_REGION: s3Region,
   } = process.env;
 
   AWS.config.update({
@@ -15,7 +16,7 @@ module.exports = () => {
 
   const s3 = new AWS.S3({
     signatureVersion: 'v4',
-    region: 'us-east-2',
+    region: s3Region || 'us-east-2',
   });
 
   return {
