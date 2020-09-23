@@ -1,15 +1,10 @@
 const context = require('q3-core-session/lib/plugin');
 const accessControl = require('q3-core-access/lib/plugin');
 const mongooseLeanVirtuals = require('mongoose-lean-virtuals-v2');
-const Notes = require('q3-schema-notes');
 const mongoose = require('mongoose');
 const dedupe = require('mongoose-dedupe');
 const locking = require('mongoose-field-lock');
 const { autopopulate } = require('mongoose-field-populate');
-const version = require('q3-core-version');
-const Files = require('../models/files');
-
-require('q3-schema-types');
 
 mongoose.pluralize(null);
 mongoose.set('useCreateIndex', true);
@@ -37,10 +32,6 @@ mongoose.plugin((schema) => {
     schema.set('enableOwnership', true);
     schema.set('versionHistoryWatchers', true);
 
-    schema.plugin(version, mongoose);
-    schema.add(Files);
-    schema.add(Notes);
-
     // will eventually replace this
     // eslint-disable-next-line
     schema.extend = schema.plugin.bind(schema);
@@ -48,5 +39,3 @@ mongoose.plugin((schema) => {
 });
 
 mongoose.plugin(accessControl);
-
-module.exports = mongoose;

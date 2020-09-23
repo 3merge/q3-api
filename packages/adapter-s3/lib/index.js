@@ -95,6 +95,7 @@ const S3Adapter = () => {
           }),
 
     remove() {},
+    transfer() {},
   };
 };
 

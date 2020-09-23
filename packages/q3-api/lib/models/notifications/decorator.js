@@ -19,6 +19,8 @@ function mapHeaders(docs, legend) {
   });
 }
 
+// NAME instead of path??
+
 class NotificationDecorator {
   static async acknowledge(id) {
     const d = await this.findById(id).exec();
