@@ -4,17 +4,15 @@
  */
 const config = require('./config');
 
-const S3Adapter = () => {
-  const {
-    CDN: publicUrl,
-    PRIVATE_BUCKET: PrivateBucket,
-    PUBLIC_BUCKET: PublicBucket,
-    S3_ACCESS_KEY_ID: accessKeyId,
-    S3_SECRET: secretAccessKey,
-    S3_REGION: s3Region,
-    S3_VERSION: signatureVersion,
-  } = process.env;
-
+const S3Adapter = ({
+  publicUrl,
+  PrivateBucket,
+  PublicBucket,
+  accessKeyId,
+  secretAccessKey,
+  s3Region,
+  signatureVersion,
+}) => {
   const s3 = config({
     accessKeyId,
     s3Region,

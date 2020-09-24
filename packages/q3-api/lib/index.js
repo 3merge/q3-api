@@ -84,6 +84,12 @@ const Q3 = {
       args,
     );
 
+    if (args.datasource)
+      // this is key...
+      this.Datasource = args.datasource.define.bind(
+        args.datasource,
+      );
+
     return this;
   },
 
