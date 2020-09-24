@@ -52,11 +52,6 @@ module.exports = (schema, instance) => {
     );
 
     set(this, '$locals.patch', {
-      /**
-       * @NOTE
-       * Ref to q3-core-session.
-       * When enabled, it injects variables into __$q3.
-       */
       ref: this._id,
       modifiedOn: new Date().toISOString(),
       target: this.$locals.$target,

@@ -16,11 +16,6 @@ module.exports = (AdapterInst, Datasource) =>
     .addVirtualGetter(
       'url',
 
-      /**
-       * Gets the http address of the file.
-       * @name url
-       * @type {String}
-       */
       function getHttpAddressOfFilePath(value, v, doc) {
         try {
           return AdapterInst.get({
@@ -35,11 +30,6 @@ module.exports = (AdapterInst, Datasource) =>
     .addPathSetter(
       'name',
 
-      /**
-       * Sets the previous document's name to $locals.prev during hook execution.
-       * @name name
-       * @type {String}
-       */
       function savePreviousFileName(newVal) {
         if (this.$locals && this.name)
           this.$locals.prev = this.name;

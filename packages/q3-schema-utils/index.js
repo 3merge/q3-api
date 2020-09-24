@@ -3,9 +3,6 @@ const moment = require('moment');
 const micromatch = require('micromatch');
 const { compact } = require('lodash');
 
-/**
- * Useful for post-middleware as the first parameters varies depending on op.
- */
 exports.executeOnAsync = async (target, next) => {
   if (!target) return null;
   return Array.isArray(target)
@@ -16,9 +13,6 @@ exports.executeOnAsync = async (target, next) => {
 exports.executeOn = (target, next) =>
   Array.isArray(target) ? target.map(next) : next(target);
 
-/**
- * Drop-in mongoose schemas.
- */
 exports.withDateRange = (schema) => {
   schema.add({
     effectiveFrom: Date,
@@ -96,9 +90,6 @@ exports.withNorthAmericanCurrency = (schema) => {
   return schema;
 };
 
-/**
- * Random helper functions
- */
 const toFixed = (num, fb = 0) =>
   Math.floor(Number.isNaN(num) ? fb : num * 100) / 100;
 
@@ -137,10 +128,6 @@ exports.asNum = (num) =>
     ? 0
     : num;
 
-/**
- * De-duplicated from discounts, orders and rebates.
- * Otherwise, likely useless.
- */
 exports.filters = {
   byObjectId(id, key) {
     return (v) => {

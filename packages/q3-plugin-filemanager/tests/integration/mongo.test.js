@@ -1,3 +1,4 @@
+require('dotenv').config();
 const AdapterMongo = require('adapter-mongo');
 const AdapterS3 = require('adapter-s3');
 const PluginFilemanger = require('../../lib');
@@ -5,9 +6,27 @@ const PluginFilemanger = require('../../lib');
 let inst;
 
 beforeAll(async () => {
+  const {
+    CDN,
+    S3_ACCESS_KEY_ID: accessKeyId,
+    S3_SECRET: secretAccessKey,
+    PRIVATE_BUCKET: PrivateBucket,
+    PUBLIC_BUCKET: PublicBucket,
+  } = process.env;
+
   inst = AdapterMongo(
     process.env.CONNECTION,
-    [PluginFilemanger(AdapterS3({}))],
+    [
+      PluginFilemanger(
+        AdapterS3({
+          PrivateBucket,
+          PublicBucket,
+          accessKeyId,
+          secretAccessKey,
+          publicUrl: CDN,
+        }),
+      ),
+    ],
     {
       disableGlobalSettings: true,
     },
@@ -35,7 +54,10 @@ describe('AdapterMongo', () => {
     expect(res).toHaveProperty('handleReq');
     await res.handleReq({
       files: {
-        // here we go!
+        test: {
+          name: 'test.txt',
+          data: Buffer.from('Test'),
+        },
       },
     });
   });

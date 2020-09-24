@@ -16,7 +16,7 @@ exports.mapAsFileObject = (files, prefix, options = {}) =>
   isObject(files)
     ? Object.values(files).map((file) => ({
         filename: join(prefix, file.name),
-        data: file,
+        ...file,
         ...options,
       }))
     : [];

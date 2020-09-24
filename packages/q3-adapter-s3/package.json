@@ -1,0 +1,23 @@
+{
+  "name": "q3-adapter-s3",
+  "version": "1.0.0",
+  "description": "S3 object storage integration",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.754.0",
+    "dotenv": "^8.2.0"
+  },
+  "devDependencies": {
+    "aws-sdk-mock": "^5.1.0",
+    "q3-test-utils": "^1.3.28"
+  },
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node",
+    "preset": "q3-test-utils",
+    "setupFilesAfterEnv": [
+      "q3-test-utils/jest-setup.js"
+    ]
+  }
+}

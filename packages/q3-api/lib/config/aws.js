@@ -74,11 +74,6 @@ module.exports = () => {
       );
     },
 
-    /**
-     * @TODO
-     * Refactor with above methods.
-     * This was brought in temporarily from a separate project.
-     */
     getFrom(Key) {
       return s3
         .getObject({

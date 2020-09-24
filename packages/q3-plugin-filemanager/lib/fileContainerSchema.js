@@ -21,7 +21,7 @@ module.exports = (AdapterInst, Datasource) =>
       this.featuredUpload = await AdapterInst.add({
         filename: `${this.id}/${file.name}`,
         sensitive: false,
-        data: file,
+        ...file,
       });
 
       return this.save();
@@ -111,7 +111,7 @@ module.exports = (AdapterInst, Datasource) =>
             });
         }
 
-        if (body.featuredUpload === null)
+        if (body && body.featuredUpload === null)
           this.set({
             featuredUpload: undefined,
             photo: undefined,
