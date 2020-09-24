@@ -1,5 +1,17 @@
 /**
+ * The primary export for implementations of Q3 API framework.
  * @module Q3
+ * @example
+ * const Q3 = require('q3-api');
+ *
+ * Q3
+ *    .initDatasource(Q3.Adapters.Mongo(
+          process.env.CONNECTION
+        ))
+ *    .start()
+ *    .then(() => {
+ *        // noop
+ *    });
  */
 require('dotenv').config();
 require('q3-locale');
@@ -21,9 +33,6 @@ const io = require('./config/socket');
 const mongoose = require('./config/mongoose');
 const models = require('./models');
 
-/**
- * When testing, frameworks like supertest attach listeners.
- */
 const connectToDB = (res, rej) => (err) => {
   if (err) return rej(err);
   app.use(handleUncaughtExceptions);
@@ -46,10 +55,6 @@ const registerLocale = ({ location }) => () =>
     resolve();
   });
 
-/**
- * See q3-core-mailer for more details.
- * Essentially, it uses the location to register event handlers by the file system architecture.
- */
 const registerChores = ({ location, chores }) =>
   chores && location ? config(chores).walk(location) : null;
 
@@ -65,6 +70,33 @@ const locate = () => {
 };
 
 const Q3 = {
+  /**
+   * Configures the underlying database utilities and exposes the "Datasource" export.
+   * @memberof Q3
+   * @param {Object} DatasourceAdapater An instance of Q3 datasource adapter (i.e adapter-mongo)
+   */
+  initDatasource(DatasourceAdapater) {
+    if (
+      !['define', 'end', 'start'].every(
+        (item) =>
+          typeof DatasourceAdapater[item] === 'function',
+      )
+    )
+      throw new Error(
+        'DatasourceAdapter instance not to spec',
+      );
+
+    // used extensively in client applications
+    this.Datasource = DatasourceAdapater.define.bind(
+      DatasourceAdapater,
+    );
+
+    this.Datasource.Types = DatasourceAdapater.Types;
+    this.__$db = DatasourceAdapater;
+
+    return this;
+  },
+
   protect(grants = []) {
     AccessControl.init(grants);
     return this;
@@ -83,12 +115,6 @@ const Q3 = {
       },
       args,
     );
-
-    if (args.datasource)
-      // this is key...
-      this.Datasource = args.datasource.define.bind(
-        args.datasource,
-      );
 
     return this;
   },
@@ -114,14 +140,18 @@ const Q3 = {
     return mongoose.model(name, Schema);
   },
 
-  connect: async (directConnectionString) =>
-    new Promise((resolve, reject) =>
+  connect: async (directConnectionString) => {
+    const method = this.__$db
+      ? this.__$db.start
+      : mongoose.connect;
+
+    return new Promise((resolve, reject) =>
       directConnectionString
-        ? mongoose.connect(directConnectionString, (e) => {
+        ? method(directConnectionString, (e) => {
             if (e) reject(e);
             resolve();
           })
-        : mongoose.connect(
+        : method(
             process.env.CONNECTION,
             connectToDB((data) => {
               // otherwise it doesn't get called
@@ -135,7 +165,8 @@ const Q3 = {
         // eslint-disable-next-line
         console.error(e);
         process.exit(0);
-      }),
+      });
+  },
 };
 
 Q3.$app = app;

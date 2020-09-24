@@ -4,11 +4,11 @@ const EventEmitter = require('events');
 
 const isFn = (value) => typeof value === 'function';
 
-const defaultFn = (value) =>
-  isFn(value) ? value : (a) => a;
-
 module.exports = (SchemaInst) => {
   const emitter = new EventEmitter();
+
+  const virtuals = {};
+  const paths = {};
 
   const decorators = {
     addAfterSaveHook(callback) {
@@ -21,25 +21,55 @@ module.exports = (SchemaInst) => {
       return this;
     },
 
-    addMethod(name, fn) {
-      set(SchemaInst.methods, name, fn);
+    addMethod(fn) {
+      set(SchemaInst.methods, fn.name, fn);
       return this;
     },
 
-    addStatic(name, fn) {
-      set(SchemaInst.statics, name, fn);
+    addStatic(fn) {
+      set(SchemaInst.statics, fn.name, fn);
       return this;
     },
 
-    addVirtualMethod: (name, getter, setter) =>
-      SchemaInst.virtual(name)
-        .get(defaultFn(getter))
-        .set(defaultFn(setter)),
+    addVirtualGetter(name, fn) {
+      set(virtuals, `${name}.get`, fn);
+      return this;
+    },
+
+    addVirtualSetter(name, fn) {
+      set(virtuals, `${name}.set`, fn);
+      return this;
+    },
+
+    addPathGetter(name, fn) {
+      set(paths, `${name}.get`, fn);
+      return this;
+    },
+
+    addPathSetter(name, fn) {
+      set(paths, `${name}.set`, fn);
+      return this;
+    },
 
     build(name) {
-      SchemaInst.set('collectionSingularName', name);
-      SchemaInst.set('collectionPluralName', name);
-      SchemaInst.set('restify', '*');
+      Object.entries(paths).forEach(
+        ([virtualName, props]) => {
+          const p = SchemaInst.path(virtualName);
+
+          if (props.get) p.get(props.get);
+          if (props.set) p.set(props.set);
+        },
+      );
+
+      Object.entries(virtuals).forEach(
+        ([virtualName, props]) => {
+          const v = SchemaInst.virtuals(virtualName);
+
+          if (props.get) v.get(props.get);
+          if (props.set) v.set(props.set);
+        },
+      );
+
       return model(name, SchemaInst);
     },
 

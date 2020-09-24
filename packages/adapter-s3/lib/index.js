@@ -1,6 +1,6 @@
 /**
  * Amazon Web Services S3 cloud storage adpater for Q3 core filemanager.
- * @mixin S3Adapter
+ * @module AdapterS3
  */
 const config = require('./config');
 
@@ -8,22 +8,13 @@ const S3Adapter = ({
   publicUrl,
   PrivateBucket,
   PublicBucket,
-  accessKeyId,
-  secretAccessKey,
-  s3Region,
-  signatureVersion,
+  ...etc
 }) => {
-  const s3 = config({
-    accessKeyId,
-    s3Region,
-    secretAccessKey,
-    signatureVersion,
-  });
+  const s3 = config(etc);
 
   return {
     /**
      * Add file buffer to S3 bucket.
-     * @memberof S3Adapter
      * @param {Object} meta Information about the file object
      * @param {Buffer} meta.data The file buffer data
      * @param {String} meta.filename The S3 "Key"
@@ -71,7 +62,6 @@ const S3Adapter = ({
 
     /**
      * Get the HTTP address where the file can be viewed/downloaded.
-     * @memberof S3Adapter
      * @param {Object} meta Information about the file object
      * @param {String} meta.filename The S3 "Key"
      * @param {Boolean} [meta.sensitive=false] Determines if the file resides in the Public or Private bucket

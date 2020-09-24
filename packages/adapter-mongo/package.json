@@ -1,15 +1,17 @@
 {
-  "name": "adapter-s3",
+  "name": "adapter-mongo",
   "version": "1.0.0",
-  "description": "S3 object storage integration",
+  "description": "Mongoose ORM integration",
   "main": "lib/index.js",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.754.0",
-    "dotenv": "^8.2.0"
+    "mongoose": "^5.10.6",
+    "mongoose-dedupe": "^1.0.10",
+    "mongoose-field-lock": "^1.0.0",
+    "mongoose-field-populate": "^2.2.6",
+    "mongoose-lean-virtuals-v2": "^0.7.0"
   },
   "devDependencies": {
-    "aws-sdk-mock": "^5.1.0",
     "q3-test-utils": "^1.3.28"
   },
   "jest": {

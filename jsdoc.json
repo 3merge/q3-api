@@ -6,7 +6,8 @@
     "readme": "README.md"
   },
   "source": {
-    "include": ["packages"]
+    "include": ["packages"],
+    "excludePattern": "(node_modules)"
   },
   "templates": {
     "name": "Q3 Api",
