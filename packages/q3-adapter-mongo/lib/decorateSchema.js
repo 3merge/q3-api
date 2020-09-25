@@ -59,6 +59,7 @@ module.exports = (SchemaInst) => {
       return this;
     },
 
+    // these need to be exposed...
     addMethod: fn.gen('methods'),
     addStatic: fn.gen('statics'),
 

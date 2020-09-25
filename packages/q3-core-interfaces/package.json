@@ -1,0 +1,15 @@
+{
+  "name": "q3-core-interfaces",
+  "version": "1.0.0",
+  "description": "Interface exports for Q3 adapters",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node",
+    "preset": "q3-test-utils",
+    "setupFilesAfterEnv": [
+      "q3-test-utils/jest-setup.js"
+    ]
+  }
+}
