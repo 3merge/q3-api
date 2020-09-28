@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.1](https://github.com/3merge/q3-api/compare/v1.4.0...v1.4.1) (2020-09-28)
+
+
+### Bug Fixes
+
+* destination cloned file ([0ba577b](https://github.com/3merge/q3-api/commit/0ba577b3aa9a257e422e86ab8581a0a1119e7fe0))
+
+
+
+
+
 # 1.4.0 (2020-09-28)
 
 
