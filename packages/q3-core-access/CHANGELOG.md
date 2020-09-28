@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.4.0 (2020-09-28)
+
+
+### Bug Fixes
+
+* flatten profile post ([#99](https://github.com/3merge/q3-api/issues/99)) ([b37909a](https://github.com/3merge/q3-api/commit/b37909acdd6e8cb34a506c5bcfa613fd35a5b039))
+* **j3-150:** enable access control on all rest-enabled schemas ([56ceaf0](https://github.com/3merge/q3-api/commit/56ceaf0a215fa13ceea715c11f51793b8cb1dcce))
+* access control optional settings ([3a38abf](https://github.com/3merge/q3-api/commit/3a38abfeb3cc78a427ea237154adefba187115c3))
+* access control update op ([d7d97f9](https://github.com/3merge/q3-api/commit/d7d97f908e73238757ebd1fcab5ab8505cb11949))
+* nested ownershipAlias path ([71574df](https://github.com/3merge/q3-api/commit/71574dfbb41c9c44e3229cbdd73efb8f12282cec))
+
+
+
+
+
 ## [1.0.45](https://github.com/3merge/q3-api/compare/q3-core-access@1.0.44...q3-core-access@1.0.45) (2020-09-17)
 
 **Note:** Version bump only for package q3-core-access

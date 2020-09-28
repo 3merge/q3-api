@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.4.0 (2020-09-28)
+
+
+### Bug Fixes
+
+* access control optional settings ([3a38abf](https://github.com/3merge/q3-api/commit/3a38abfeb3cc78a427ea237154adefba187115c3))
+* added post-auth middleware (closes [#5](https://github.com/3merge/q3-api/issues/5)) and temporarily disabled CI ([#10](https://github.com/3merge/q3-api/issues/10)) ([b984d26](https://github.com/3merge/q3-api/commit/b984d26d069568a3cb4a53d9d3df9d4f2791ff35))
+* body required sanitizing ([#34](https://github.com/3merge/q3-api/issues/34)) ([1ec94cb](https://github.com/3merge/q3-api/commit/1ec94cb41dbda85cc34e8631b1ba41b0d121d9ad))
+* duplicate middleware ([7c4c0ca](https://github.com/3merge/q3-api/commit/7c4c0ca988b35086d81e5563d26280b8ad12c2d2))
+* flatten profile post ([#99](https://github.com/3merge/q3-api/issues/99)) ([b37909a](https://github.com/3merge/q3-api/commit/b37909acdd6e8cb34a506c5bcfa613fd35a5b039))
+* subdoc prefix ([#95](https://github.com/3merge/q3-api/issues/95)) ([9248945](https://github.com/3merge/q3-api/commit/924894530afd2544970cbe90469f28a0f84251ef))
+* **redaction:** comma-delimited with spaces only ([7c747d7](https://github.com/3merge/q3-api/commit/7c747d770bc074f999acdf22c02f7fad267a0b2b))
+
+
+
+
+
 ## [1.0.144](https://github.com/3merge/q3-api/compare/q3-core-composer@1.0.143...q3-core-composer@1.0.144) (2020-09-17)
 
 **Note:** Version bump only for package q3-core-composer

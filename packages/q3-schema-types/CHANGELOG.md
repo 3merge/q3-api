@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.4.0 (2020-09-28)
+
+
+### Bug Fixes
+
+* discriminator version-control ([bc5b732](https://github.com/3merge/q3-api/commit/bc5b732aee00c75e4f755a702ca6753d0a769a13))
+* flatten profile post ([#99](https://github.com/3merge/q3-api/issues/99)) ([b37909a](https://github.com/3merge/q3-api/commit/b37909acdd6e8cb34a506c5bcfa613fd35a5b039))
+* linting --fix and test runner ([1b8dc64](https://github.com/3merge/q3-api/commit/1b8dc648b30c8b4faa1041ac449e38b0f745ad52))
+
+
+
+
+
 ## [1.1.120](https://github.com/3merge/q3-api/compare/q3-schema-types@1.1.119...q3-schema-types@1.1.120) (2020-09-17)
 
 **Note:** Version bump only for package q3-schema-types

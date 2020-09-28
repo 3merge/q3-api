@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.4.0 (2020-09-28)
+
+
+### Bug Fixes
+
+* discriminator version-control ([bc5b732](https://github.com/3merge/q3-api/commit/bc5b732aee00c75e4f755a702ca6753d0a769a13))
+* flatten profile post ([#99](https://github.com/3merge/q3-api/issues/99)) ([b37909a](https://github.com/3merge/q3-api/commit/b37909acdd6e8cb34a506c5bcfa613fd35a5b039))
+* scheduling via chron ([3503f66](https://github.com/3merge/q3-api/commit/3503f66e80cf8b83c990af27bfe40a7feac1df11))
+* **version:** constructor methods not available during lean query ([4039287](https://github.com/3merge/q3-api/commit/40392877df42db62418214830d304ea80ccc8f61))
+* **version:** diff utility for storing only changed properties in subdocuments ([60a3e9d](https://github.com/3merge/q3-api/commit/60a3e9d0c56ec11918c678f4a40ad5b3d834a79a))
+* **version:** versioning plugin tests ([25602cb](https://github.com/3merge/q3-api/commit/25602cb23536965611715610f7cfd5737cc1f036))
+* **version:** virtuals need comparing in the diff func ([13c11bb](https://github.com/3merge/q3-api/commit/13c11bb7e03c9446424ed3815477b67b84501105))
+
+
+
+
+
 ## [1.0.16](https://github.com/3merge/q3-api/compare/q3-core-version@1.0.15...q3-core-version@1.0.16) (2020-09-17)
 
 **Note:** Version bump only for package q3-core-version

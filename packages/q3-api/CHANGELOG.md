@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.4.0 (2020-09-28)
+
+
+### Bug Fixes
+
+* access control optional settings ([3a38abf](https://github.com/3merge/q3-api/commit/3a38abfeb3cc78a427ea237154adefba187115c3))
+* authorship on notes, sub-document archiving and caster helpers ([2082a79](https://github.com/3merge/q3-api/commit/2082a79afd8a9080feb4efbfc8fe584d28dc7114))
+* broadcast change to all but sender ([1dadb6e](https://github.com/3merge/q3-api/commit/1dadb6e1d6c14566644990bc2471962768c97e6b))
+* call done on authorization ([#54](https://github.com/3merge/q3-api/issues/54)) ([4d6459f](https://github.com/3merge/q3-api/commit/4d6459f42e4d46d1ec9a4efa81b22db9d0ec7dfe))
+* change to mongose-lean dep ([8d3683c](https://github.com/3merge/q3-api/commit/8d3683c34276bd2e476fd72ab22359d97ee9a998))
+* changed permissions handling (closes [#8](https://github.com/3merge/q3-api/issues/8)), which indirectly fixed the generic 404 error (closes [#7](https://github.com/3merge/q3-api/issues/7)) ([#9](https://github.com/3merge/q3-api/issues/9)) ([9877357](https://github.com/3merge/q3-api/commit/9877357fff642f2f073158ddaea96051dde7a4f2))
+* child process exit ([7b54c26](https://github.com/3merge/q3-api/commit/7b54c26b5225b0eb46c57e94e6c77803d1a8c912))
+* chore registration currying no longer necessary ([4f490ba](https://github.com/3merge/q3-api/commit/4f490bad4073fc4616825767de207d43e2c10193))
+* chores not registering ([6553dde](https://github.com/3merge/q3-api/commit/6553ddeecac18866748bff65c44168e1633f5994))
+* collectionName API route ([38a5f7e](https://github.com/3merge/q3-api/commit/38a5f7e7455cd747a2d47362af5b3e1c293f6565))
+* CSV to buffer ([fc3daf6](https://github.com/3merge/q3-api/commit/fc3daf6e1dcde10910e67b32cde5852df3425d0d))
+* custom buffer argument ([e62bb2f](https://github.com/3merge/q3-api/commit/e62bb2f8d3d20d239bbd9228184a0e49244605ef))
+* discount labels and jest open handles ([8640b6a](https://github.com/3merge/q3-api/commit/8640b6a4c26184e9599a54fcf98dca8f0a15634f))
+* discriminator check in the grant lookup (closes [#4](https://github.com/3merge/q3-api/issues/4)) ([9fe96f9](https://github.com/3merge/q3-api/commit/9fe96f99cc9442654f497c1607a9bfdf0bffe795))
+* duplicate middleware ([7c4c0ca](https://github.com/3merge/q3-api/commit/7c4c0ca988b35086d81e5563d26280b8ad12c2d2))
+* flatten profile post ([#99](https://github.com/3merge/q3-api/issues/99)) ([b37909a](https://github.com/3merge/q3-api/commit/b37909acdd6e8cb34a506c5bcfa613fd35a5b039))
+* socket watchers ([a4ea345](https://github.com/3merge/q3-api/commit/a4ea34595d9da604971cf2d3193161f7933a3bc2))
+* wrap forked process in session middleware ([4ad6ec9](https://github.com/3merge/q3-api/commit/4ad6ec9cd3baa3a4d6361ceae75d838fa60efa5e))
+* **charts:** leave filter query for front-end task ([04f5c51](https://github.com/3merge/q3-api/commit/04f5c515f31e0355cb536cee9ee6e3c71117cf53))
+* **j3-150:** enable access control on all rest-enabled schemas ([56ceaf0](https://github.com/3merge/q3-api/commit/56ceaf0a215fa13ceea715c11f51793b8cb1dcce))
+* **redaction:** comma-delimited with spaces only ([7c747d7](https://github.com/3merge/q3-api/commit/7c747d770bc074f999acdf22c02f7fad267a0b2b))
+* **version:** versioning plugin tests ([25602cb](https://github.com/3merge/q3-api/commit/25602cb23536965611715610f7cfd5737cc1f036))
+* **version:** virtuals need comparing in the diff func ([13c11bb](https://github.com/3merge/q3-api/commit/13c11bb7e03c9446424ed3815477b67b84501105))
+* email URL reference verify ([169e240](https://github.com/3merge/q3-api/commit/169e2401e542cc4f33129d428340b463667beb86))
+* isFresh ISOdate comparison ([aee4f19](https://github.com/3merge/q3-api/commit/aee4f1970989a686c5b6a0ce0d6d5b3ec74c48e8))
+* lean queries ([cd0609e](https://github.com/3merge/q3-api/commit/cd0609eee087b213c1e09fecf55e5aac9457e02f))
+* linting --fix and test runner ([1b8dc64](https://github.com/3merge/q3-api/commit/1b8dc648b30c8b4faa1041ac449e38b0f745ad52))
+* ownership disable prop ([#75](https://github.com/3merge/q3-api/issues/75)) ([aea8570](https://github.com/3merge/q3-api/commit/aea857073abb57c25f9039a21b91f4bced29aef1))
+* routes unit tests ([137e5a0](https://github.com/3merge/q3-api/commit/137e5a0db15a5b1d1746d3441386827216258c23))
+* update sub document undefined values ([176e69d](https://github.com/3merge/q3-api/commit/176e69d57c1c99f5ca7e8373ecc22cabc4296cbc))
+
+
+### Features
+
+* **gom-497:** dynamic access control ([ae28251](https://github.com/3merge/q3-api/commit/ae28251d719f798c5e1e613807b504d830b20ce1))
+* tour/filter on user schema ([6b85cfe](https://github.com/3merge/q3-api/commit/6b85cfe7753cb4477e1c0f9012c155c6fbe0e764))
+
+
+
+
+
 ## [1.2.41](https://github.com/3merge/q3-api/compare/q3-api@1.2.40...q3-api@1.2.41) (2020-09-28)
 
 **Note:** Version bump only for package q3-api

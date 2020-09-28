@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.4.0 (2020-09-28)
+
+
+### Bug Fixes
+
+* access control update op ([d7d97f9](https://github.com/3merge/q3-api/commit/d7d97f908e73238757ebd1fcab5ab8505cb11949))
+* authorship on notes, sub-document archiving and caster helpers ([2082a79](https://github.com/3merge/q3-api/commit/2082a79afd8a9080feb4efbfc8fe584d28dc7114))
+* discriminator version-control ([bc5b732](https://github.com/3merge/q3-api/commit/bc5b732aee00c75e4f755a702ca6753d0a769a13))
+* flatten profile post ([#99](https://github.com/3merge/q3-api/issues/99)) ([b37909a](https://github.com/3merge/q3-api/commit/b37909acdd6e8cb34a506c5bcfa613fd35a5b039))
+* monkey-patched mongoose method ([#93](https://github.com/3merge/q3-api/issues/93)) ([4d22078](https://github.com/3merge/q3-api/commit/4d22078b1a3b740c84cd612a256d4747b0206631))
+* subdoc prefix ([#95](https://github.com/3merge/q3-api/issues/95)) ([9248945](https://github.com/3merge/q3-api/commit/924894530afd2544970cbe90469f28a0f84251ef))
+
+
+### Features
+
+* **gom-497:** dynamic access control ([ae28251](https://github.com/3merge/q3-api/commit/ae28251d719f798c5e1e613807b504d830b20ce1))
+
+
+
+
+
 ## [1.1.41](https://github.com/3merge/q3-api/compare/e2e-tests@1.1.40...e2e-tests@1.1.41) (2020-09-28)
 
 **Note:** Version bump only for package e2e-tests

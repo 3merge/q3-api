@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.4.0 (2020-09-28)
+
+
+### Bug Fixes
+
+* address props searchable ([7c26934](https://github.com/3merge/q3-api/commit/7c26934e32d56766fce9e0d803ec179498bb5d31))
+* address props searchable ([fc7f27a](https://github.com/3merge/q3-api/commit/fc7f27a620733438d16b49eab06a9c4cda7b5b54))
+* call done on authorization ([#54](https://github.com/3merge/q3-api/issues/54)) ([4d6459f](https://github.com/3merge/q3-api/commit/4d6459f42e4d46d1ec9a4efa81b22db9d0ec7dfe))
+* filterByName utility ([0aeecd5](https://github.com/3merge/q3-api/commit/0aeecd52a304dc132e725b936c6a260d8c04cdcf))
+* flatten profile post ([#99](https://github.com/3merge/q3-api/issues/99)) ([b37909a](https://github.com/3merge/q3-api/commit/b37909acdd6e8cb34a506c5bcfa613fd35a5b039))
+* linting --fix and test runner ([1b8dc64](https://github.com/3merge/q3-api/commit/1b8dc648b30c8b4faa1041ac449e38b0f745ad52))
+* routes unit tests ([137e5a0](https://github.com/3merge/q3-api/commit/137e5a0db15a5b1d1746d3441386827216258c23))
+* streetNumber not a required property by default ([#68](https://github.com/3merge/q3-api/issues/68)) ([cf5fa04](https://github.com/3merge/q3-api/commit/cf5fa04f59b44fa3087bb250b57e3b10c049636e))
+
+
+
+
+
 ## [1.1.124](https://github.com/3merge/q3-api/compare/q3-schema-addresses@1.1.123...q3-schema-addresses@1.1.124) (2020-09-17)
 
 **Note:** Version bump only for package q3-schema-addresses

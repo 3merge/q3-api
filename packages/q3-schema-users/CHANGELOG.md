@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.4.0 (2020-09-28)
+
+
+### Bug Fixes
+
+* chores not registering ([6553dde](https://github.com/3merge/q3-api/commit/6553ddeecac18866748bff65c44168e1633f5994))
+* flatten profile post ([#99](https://github.com/3merge/q3-api/issues/99)) ([b37909a](https://github.com/3merge/q3-api/commit/b37909acdd6e8cb34a506c5bcfa613fd35a5b039))
+* **user:** cast emails to lowercase always ([9af0f66](https://github.com/3merge/q3-api/commit/9af0f66523d433c4fa39dc42ea82a4d9180e5260))
+* **version:** versioning plugin tests ([25602cb](https://github.com/3merge/q3-api/commit/25602cb23536965611715610f7cfd5737cc1f036))
+* change to mongose-lean dep ([8d3683c](https://github.com/3merge/q3-api/commit/8d3683c34276bd2e476fd72ab22359d97ee9a998))
+* linting --fix and test runner ([1b8dc64](https://github.com/3merge/q3-api/commit/1b8dc648b30c8b4faa1041ac449e38b0f745ad52))
+* ownership disable prop ([#75](https://github.com/3merge/q3-api/issues/75)) ([aea8570](https://github.com/3merge/q3-api/commit/aea857073abb57c25f9039a21b91f4bced29aef1))
+* routes unit tests ([137e5a0](https://github.com/3merge/q3-api/commit/137e5a0db15a5b1d1746d3441386827216258c23))
+* special character exclusions in auto-generated password ([#76](https://github.com/3merge/q3-api/issues/76)) ([63613a9](https://github.com/3merge/q3-api/commit/63613a91d94d61db00e4476d49e7cda1a2fdfa0f))
+
+
+### Features
+
+* tour/filter on user schema ([6b85cfe](https://github.com/3merge/q3-api/commit/6b85cfe7753cb4477e1c0f9012c155c6fbe0e764))
+
+
+
+
+
 ## [1.1.45](https://github.com/3merge/q3-api/compare/q3-schema-users@1.1.44...q3-schema-users@1.1.45) (2020-09-17)
 
 **Note:** Version bump only for package q3-schema-users

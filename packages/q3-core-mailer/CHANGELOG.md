@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.4.0 (2020-09-28)
+
+
+### Bug Fixes
+
+* flatten profile post ([#99](https://github.com/3merge/q3-api/issues/99)) ([b37909a](https://github.com/3merge/q3-api/commit/b37909acdd6e8cb34a506c5bcfa613fd35a5b039))
+* h prefix for custom headers in mailgun API ([#70](https://github.com/3merge/q3-api/issues/70)) ([96f4b34](https://github.com/3merge/q3-api/commit/96f4b3499e0f32002255af479ef0cd7ae389e775))
+* linting --fix and test runner ([1b8dc64](https://github.com/3merge/q3-api/commit/1b8dc648b30c8b4faa1041ac449e38b0f745ad52))
+* scheduling via chron ([3503f66](https://github.com/3merge/q3-api/commit/3503f66e80cf8b83c990af27bfe40a7feac1df11))
+* start new tasks immediately ([0674b69](https://github.com/3merge/q3-api/commit/0674b6953d53445dc4ab5114f90ac764b18da2ec))
+
+
+### Features
+
+* Distance discounting ([7f83dcc](https://github.com/3merge/q3-api/commit/7f83dcce5e26864b4312d3e12ca7465efe872860))
+* tour/filter on user schema ([6b85cfe](https://github.com/3merge/q3-api/commit/6b85cfe7753cb4477e1c0f9012c155c6fbe0e764))
+
+
+
+
+
 ## [1.2.42](https://github.com/3merge/q3-api/compare/q3-core-mailer@1.2.41...q3-core-mailer@1.2.42) (2020-09-17)
 
 **Note:** Version bump only for package q3-core-mailer

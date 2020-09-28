@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.4.0 (2020-09-28)
+
+
+### Bug Fixes
+
+* access control update op ([d7d97f9](https://github.com/3merge/q3-api/commit/d7d97f908e73238757ebd1fcab5ab8505cb11949))
+* authorship on notes, sub-document archiving and caster helpers ([2082a79](https://github.com/3merge/q3-api/commit/2082a79afd8a9080feb4efbfc8fe584d28dc7114))
+* base fallback in schema discounts ([9e820ee](https://github.com/3merge/q3-api/commit/9e820ee479a50dfb42d7f62e48a4753b941fb0e1))
+* call done on authorization ([#54](https://github.com/3merge/q3-api/issues/54)) ([4d6459f](https://github.com/3merge/q3-api/commit/4d6459f42e4d46d1ec9a4efa81b22db9d0ec7dfe))
+* changed permissions handling (closes [#8](https://github.com/3merge/q3-api/issues/8)), which indirectly fixed the generic 404 error (closes [#7](https://github.com/3merge/q3-api/issues/7)) ([#9](https://github.com/3merge/q3-api/issues/9)) ([9877357](https://github.com/3merge/q3-api/commit/9877357fff642f2f073158ddaea96051dde7a4f2))
+* fallback discounting ([1ef94b6](https://github.com/3merge/q3-api/commit/1ef94b6db290d688e3ffc8e680844a72acf4b1c8))
+* filterByName utility ([0aeecd5](https://github.com/3merge/q3-api/commit/0aeecd52a304dc132e725b936c6a260d8c04cdcf))
+* flatten profile post ([#99](https://github.com/3merge/q3-api/issues/99)) ([b37909a](https://github.com/3merge/q3-api/commit/b37909acdd6e8cb34a506c5bcfa613fd35a5b039))
+* linting --fix and test runner ([1b8dc64](https://github.com/3merge/q3-api/commit/1b8dc648b30c8b4faa1041ac449e38b0f745ad52))
+* onarchive as async ([2b7b5e9](https://github.com/3merge/q3-api/commit/2b7b5e9056e05f9af8c2093b3ac49b2340bb2f60))
+* query ranges for effectiveFrom and expiresOn props ([4a76d43](https://github.com/3merge/q3-api/commit/4a76d43f0050ac37f55c5899ded772539c6ebc32))
+* rebates active query ([7da10af](https://github.com/3merge/q3-api/commit/7da10afd4ceb7eebb8353c088c7b10de11033674))
+* sub document pre-save validation call ([fc3be6b](https://github.com/3merge/q3-api/commit/fc3be6bdf5e636b0c0d600072b0da85db63dad02))
+* update sub document undefined values ([176e69d](https://github.com/3merge/q3-api/commit/176e69d57c1c99f5ca7e8373ecc22cabc4296cbc))
+
+
+
+
+
 ## [1.0.123](https://github.com/3merge/q3-api/compare/q3-schema-utils@1.0.122...q3-schema-utils@1.0.123) (2020-09-17)
 
 **Note:** Version bump only for package q3-schema-utils

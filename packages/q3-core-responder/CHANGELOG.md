@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.4.0 (2020-09-28)
+
+
+### Bug Fixes
+
+* allow for some falsy values in responder ([782fad0](https://github.com/3merge/q3-api/commit/782fad057b0acceb0559c2f8374cc838932574c1))
+* discriminator check in the grant lookup (closes [#4](https://github.com/3merge/q3-api/issues/4)) ([9fe96f9](https://github.com/3merge/q3-api/commit/9fe96f99cc9442654f497c1607a9bfdf0bffe795))
+* flatten profile post ([#99](https://github.com/3merge/q3-api/issues/99)) ([b37909a](https://github.com/3merge/q3-api/commit/b37909acdd6e8cb34a506c5bcfa613fd35a5b039))
+* isFresh ISOdate comparison ([aee4f19](https://github.com/3merge/q3-api/commit/aee4f1970989a686c5b6a0ce0d6d5b3ec74c48e8))
+* linting --fix and test runner ([1b8dc64](https://github.com/3merge/q3-api/commit/1b8dc648b30c8b4faa1041ac449e38b0f745ad52))
+* min values on order conflicts with packages that need to issue credit notes ([80752db](https://github.com/3merge/q3-api/commit/80752db469f3fd8157cf16162da44588bc12dcbb))
+* nested error message extraction when thrown in mongoose validation middleware ([b5610f3](https://github.com/3merge/q3-api/commit/b5610f38997ddc909f95644807ca43f17ce9de93))
+* nullish values in rebate getRemainder helper ([ef5044d](https://github.com/3merge/q3-api/commit/ef5044d7ebe0dfb58070e0dddaee99afe23fb3c3))
+
+
+
+
+
 ## [1.0.151](https://github.com/3merge/q3-api/compare/q3-core-responder@1.0.150...q3-core-responder@1.0.151) (2020-09-17)
 
 **Note:** Version bump only for package q3-core-responder

@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.4.0 (2020-09-28)
+
+
+### Bug Fixes
+
+* flatten profile post ([#99](https://github.com/3merge/q3-api/issues/99)) ([b37909a](https://github.com/3merge/q3-api/commit/b37909acdd6e8cb34a506c5bcfa613fd35a5b039))
+* scheduling via chron ([3503f66](https://github.com/3merge/q3-api/commit/3503f66e80cf8b83c990af27bfe40a7feac1df11))
+* socket watchers ([a4ea345](https://github.com/3merge/q3-api/commit/a4ea34595d9da604971cf2d3193161f7933a3bc2))
+
+
+### Features
+
+* tour/filter on user schema ([6b85cfe](https://github.com/3merge/q3-api/commit/6b85cfe7753cb4477e1c0f9012c155c6fbe0e764))
+
+
+
+
+
 ## [1.1.61](https://github.com/3merge/q3-api/compare/demo@1.1.60...demo@1.1.61) (2020-09-28)
 
 **Note:** Version bump only for package demo

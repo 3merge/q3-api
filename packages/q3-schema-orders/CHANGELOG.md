@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.4.0 (2020-09-28)
+
+
+### Bug Fixes
+
+* call done on authorization ([#54](https://github.com/3merge/q3-api/issues/54)) ([4d6459f](https://github.com/3merge/q3-api/commit/4d6459f42e4d46d1ec9a4efa81b22db9d0ec7dfe))
+* default order values ([3d6d743](https://github.com/3merge/q3-api/commit/3d6d7433841b7555b78fe4ddc80cc8979aaddd6d))
+* flatten profile post ([#99](https://github.com/3merge/q3-api/issues/99)) ([b37909a](https://github.com/3merge/q3-api/commit/b37909acdd6e8cb34a506c5bcfa613fd35a5b039))
+* linting --fix and test runner ([1b8dc64](https://github.com/3merge/q3-api/commit/1b8dc648b30c8b4faa1041ac449e38b0f745ad52))
+* min values on order conflicts with packages that need to issue credit notes ([80752db](https://github.com/3merge/q3-api/commit/80752db469f3fd8157cf16162da44588bc12dcbb))
+* removed hst,gst,pst ref on order model as this isn't an accurate representation of canadian tax table ([cfc69c3](https://github.com/3merge/q3-api/commit/cfc69c364a2f81c5f116d14ebb5b0fea85c40a1a))
+
+
+### Features
+
+* currency method pre-subtotal on order ([#29](https://github.com/3merge/q3-api/issues/29)) ([6347a0c](https://github.com/3merge/q3-api/commit/6347a0c316074dd159e5ed63540ca9110a7e98d1))
+
+
+
+
+
 ## [1.1.130](https://github.com/3merge/q3-api/compare/q3-schema-orders@1.1.129...q3-schema-orders@1.1.130) (2020-09-17)
 
 **Note:** Version bump only for package q3-schema-orders

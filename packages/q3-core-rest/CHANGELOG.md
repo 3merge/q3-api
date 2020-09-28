@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.4.0 (2020-09-28)
+
+
+### Bug Fixes
+
+* added post-auth middleware (closes [#5](https://github.com/3merge/q3-api/issues/5)) and temporarily disabled CI ([#10](https://github.com/3merge/q3-api/issues/10)) ([b984d26](https://github.com/3merge/q3-api/commit/b984d26d069568a3cb4a53d9d3df9d4f2791ff35))
+* body required sanitizing ([#34](https://github.com/3merge/q3-api/issues/34)) ([1ec94cb](https://github.com/3merge/q3-api/commit/1ec94cb41dbda85cc34e8631b1ba41b0d121d9ad))
+* call done on authorization ([#54](https://github.com/3merge/q3-api/issues/54)) ([4d6459f](https://github.com/3merge/q3-api/commit/4d6459f42e4d46d1ec9a4efa81b22db9d0ec7dfe))
+* changed permissions handling (closes [#8](https://github.com/3merge/q3-api/issues/8)), which indirectly fixed the generic 404 error (closes [#7](https://github.com/3merge/q3-api/issues/7)) ([#9](https://github.com/3merge/q3-api/issues/9)) ([9877357](https://github.com/3merge/q3-api/commit/9877357fff642f2f073158ddaea96051dde7a4f2))
+* dep conflict ([66cf1b5](https://github.com/3merge/q3-api/commit/66cf1b5a8287fec469c4cea82c1ca0e9795f15ed))
+* discriminator check in the grant lookup (closes [#4](https://github.com/3merge/q3-api/issues/4)) ([9fe96f9](https://github.com/3merge/q3-api/commit/9fe96f99cc9442654f497c1607a9bfdf0bffe795))
+* flatten profile post ([#99](https://github.com/3merge/q3-api/issues/99)) ([b37909a](https://github.com/3merge/q3-api/commit/b37909acdd6e8cb34a506c5bcfa613fd35a5b039))
+* improper reference causing stack error ([a5d47c3](https://github.com/3merge/q3-api/commit/a5d47c3732b9f10fce3937d62e44320f9d38c6cb))
+* lean queries ([cd0609e](https://github.com/3merge/q3-api/commit/cd0609eee087b213c1e09fecf55e5aac9457e02f))
+* linting --fix and test runner ([1b8dc64](https://github.com/3merge/q3-api/commit/1b8dc648b30c8b4faa1041ac449e38b0f745ad52))
+* monkey-patch countDocuments to apply options ([c0538ad](https://github.com/3merge/q3-api/commit/c0538ad04fb0af505ce82e921914d2594acbdcf7))
+* monkey-patched countDocuments ([e1af2b0](https://github.com/3merge/q3-api/commit/e1af2b0336248535a0cc2f349a733da0f9dd5a35))
+* monkey-patched mongoose method ([#93](https://github.com/3merge/q3-api/issues/93)) ([4d22078](https://github.com/3merge/q3-api/commit/4d22078b1a3b740c84cd612a256d4747b0206631))
+* **version:** virtuals need comparing in the diff func ([13c11bb](https://github.com/3merge/q3-api/commit/13c11bb7e03c9446424ed3815477b67b84501105))
+* ObjectId syntax ([aeaef7f](https://github.com/3merge/q3-api/commit/aeaef7f131788792a992574905dfdf5cacc770cb))
+* ownership disable prop ([#75](https://github.com/3merge/q3-api/issues/75)) ([aea8570](https://github.com/3merge/q3-api/commit/aea857073abb57c25f9039a21b91f4bced29aef1))
+* pagination custom options to correct authorization ([29943f1](https://github.com/3merge/q3-api/commit/29943f134fd1ddf591330f36e3b17deb8f0848cb))
+* sortBy on sub-document rest controllers ([bd9e55c](https://github.com/3merge/q3-api/commit/bd9e55cb970d1d4cadfce7fe0216657abc96d5cf))
+
+
+### Features
+
+* **rest:** casters to simplify client querying ([f7b9d3e](https://github.com/3merge/q3-api/commit/f7b9d3e018b5f6f0fab629e9c329dd0a72b134c3))
+
+
+
+
+
 ## [1.1.38](https://github.com/3merge/q3-api/compare/q3-core-rest@1.1.37...q3-core-rest@1.1.38) (2020-09-17)
 
 **Note:** Version bump only for package q3-core-rest

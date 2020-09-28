@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.4.0 (2020-09-28)
+
+
+### Bug Fixes
+
+* call done on authorization ([#54](https://github.com/3merge/q3-api/issues/54)) ([4d6459f](https://github.com/3merge/q3-api/commit/4d6459f42e4d46d1ec9a4efa81b22db9d0ec7dfe))
+* compact helper on rebate to avoid conditional sku mis-matching ([f198616](https://github.com/3merge/q3-api/commit/f1986169f551802c8cafdc665f67adc5a65b9bc7))
+* fallback discounting ([1ef94b6](https://github.com/3merge/q3-api/commit/1ef94b6db290d688e3ffc8e680844a72acf4b1c8))
+* flatten profile post ([#99](https://github.com/3merge/q3-api/issues/99)) ([b37909a](https://github.com/3merge/q3-api/commit/b37909acdd6e8cb34a506c5bcfa613fd35a5b039))
+* linting --fix and test runner ([1b8dc64](https://github.com/3merge/q3-api/commit/1b8dc648b30c8b4faa1041ac449e38b0f745ad52))
+* nullish values in rebate getRemainder helper ([ef5044d](https://github.com/3merge/q3-api/commit/ef5044d7ebe0dfb58070e0dddaee99afe23fb3c3))
+* rebates active query ([7da10af](https://github.com/3merge/q3-api/commit/7da10afd4ceb7eebb8353c088c7b10de11033674))
+* routes unit tests ([137e5a0](https://github.com/3merge/q3-api/commit/137e5a0db15a5b1d1746d3441386827216258c23))
+
+
+
+
+
 ## [1.1.124](https://github.com/3merge/q3-api/compare/q3-schema-rebates@1.1.123...q3-schema-rebates@1.1.124) (2020-09-17)
 
 **Note:** Version bump only for package q3-schema-rebates

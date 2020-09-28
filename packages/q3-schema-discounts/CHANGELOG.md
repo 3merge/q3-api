@@ -3,6 +3,43 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.4.0 (2020-09-28)
+
+
+### Bug Fixes
+
+* base fallback in schema discounts ([9e820ee](https://github.com/3merge/q3-api/commit/9e820ee479a50dfb42d7f62e48a4753b941fb0e1))
+* call done on authorization ([#54](https://github.com/3merge/q3-api/issues/54)) ([4d6459f](https://github.com/3merge/q3-api/commit/4d6459f42e4d46d1ec9a4efa81b22db9d0ec7dfe))
+* change retail to custom pricing ([5cdf508](https://github.com/3merge/q3-api/commit/5cdf508120f452601d1a51b3466b5a440151526f))
+* discount enum ([78bd3f4](https://github.com/3merge/q3-api/commit/78bd3f4d3041ffa17f593beba57404f3e22c42e0))
+* discount filter should check for empty resource values ([1f39475](https://github.com/3merge/q3-api/commit/1f394751a40e018adf07797672cf04e1e7b81fdb))
+* discount labels and jest open handles ([8640b6a](https://github.com/3merge/q3-api/commit/8640b6a4c26184e9599a54fcf98dca8f0a15634f))
+* discounting target on diff evaluation ([58a8db0](https://github.com/3merge/q3-api/commit/58a8db0e13b15a17c3af669488218b73b9810280))
+* distance comparison of negative vs positive values ([d4a76fa](https://github.com/3merge/q3-api/commit/d4a76fad36e7dd1bbe372c15b7e551aa490c2c53))
+* fallback discounting ([1ef94b6](https://github.com/3merge/q3-api/commit/1ef94b6db290d688e3ffc8e680844a72acf4b1c8))
+* filtered percent discounts ([cc67f59](https://github.com/3merge/q3-api/commit/cc67f5982668270919f491a31cd8d1fba8c4eb26))
+* fixed-price discounting ([7f5a9f8](https://github.com/3merge/q3-api/commit/7f5a9f804f801ccd4224a85e3a103a4b06ea609a))
+* flatten profile post ([#99](https://github.com/3merge/q3-api/issues/99)) ([b37909a](https://github.com/3merge/q3-api/commit/b37909acdd6e8cb34a506c5bcfa613fd35a5b039))
+* incremental discounts expect to be percentages ([436c26a](https://github.com/3merge/q3-api/commit/436c26ab5f6579ca9390da67b4b96b79b946b1c7))
+* linting --fix and test runner ([1b8dc64](https://github.com/3merge/q3-api/commit/1b8dc648b30c8b4faa1041ac449e38b0f745ad52))
+* min values on order conflicts with packages that need to issue credit notes ([80752db](https://github.com/3merge/q3-api/commit/80752db469f3fd8157cf16162da44588bc12dcbb))
+* min values on percent (q3-schema-discounts) ([320b33c](https://github.com/3merge/q3-api/commit/320b33c3f9203210d41edeab947c5bc2e10c0cd8))
+* new formula to prevent conflicts in factor-based pricing (Closes [#46](https://github.com/3merge/q3-api/issues/46)) ([7d26aae](https://github.com/3merge/q3-api/commit/7d26aaed0e29e1634de3dfae9f976896c88c3029))
+* query ranges for effectiveFrom and expiresOn props ([4a76d43](https://github.com/3merge/q3-api/commit/4a76d43f0050ac37f55c5899ded772539c6ebc32))
+* rounding issues in discount module ([#51](https://github.com/3merge/q3-api/issues/51)) ([abe9108](https://github.com/3merge/q3-api/commit/abe9108ab761b226125f859d007efba1f61257af))
+* simple discount rules ([e0ff83b](https://github.com/3merge/q3-api/commit/e0ff83b77e837bf158bc7b1fd73c3b0afa892d61))
+* taxonomy scoping virtual ([7b1d1d7](https://github.com/3merge/q3-api/commit/7b1d1d7c1293da38b02f65e685bb61c5791badf7))
+
+
+### Features
+
+* Distance discounting ([7f83dcc](https://github.com/3merge/q3-api/commit/7f83dcce5e26864b4312d3e12ca7465efe872860))
+* strategy/formula driven discounting ([1eceff1](https://github.com/3merge/q3-api/commit/1eceff1d659424985cac9cd870335badb961e755))
+
+
+
+
+
 ## [1.1.43](https://github.com/3merge/q3-api/compare/q3-schema-discounts@1.1.42...q3-schema-discounts@1.1.43) (2020-09-17)
 
 **Note:** Version bump only for package q3-schema-discounts

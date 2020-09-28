@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.4.0 (2020-09-28)
+
+
+### Bug Fixes
+
+* call done on authorization ([#54](https://github.com/3merge/q3-api/issues/54)) ([4d6459f](https://github.com/3merge/q3-api/commit/4d6459f42e4d46d1ec9a4efa81b22db9d0ec7dfe))
+* default value to 0 ([#57](https://github.com/3merge/q3-api/issues/57)) ([8dcd668](https://github.com/3merge/q3-api/commit/8dcd66818da01116c4f4bef6aaf5aa102194db25))
+* linting --fix and test runner ([1b8dc64](https://github.com/3merge/q3-api/commit/1b8dc648b30c8b4faa1041ac449e38b0f745ad52))
+* routes unit tests ([137e5a0](https://github.com/3merge/q3-api/commit/137e5a0db15a5b1d1746d3441386827216258c23))
+
+
+
+
+
 ## [1.0.122](https://github.com/3merge/q3-api/compare/q3-schema-rates@1.0.121...q3-schema-rates@1.0.122) (2020-09-17)
 
 **Note:** Version bump only for package q3-schema-rates
