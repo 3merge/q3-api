@@ -88,4 +88,11 @@ module.exports = class FileUploadAdapter {
         photo: undefined,
       });
   }
+
+  async moveFileTo(relativePath, targetDocumentID) {
+    return AWSInterface().copyFrom(
+      `${this._id.toString()}/${relativePath}`,
+      `${targetDocumentID}/${relativePath}`,
+    );
+  }
 };
