@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "license": "MIT",
   "dependencies": {
-    "api-query-params": "^4.14.0",
+    "api-query-params": "^5.0.0",
     "body-parser": "^1.19.0",
     "flat": "^5.0.2",
     "i18next-http-middleware": "^3.0.5",
@@ -16,7 +16,7 @@
     "q3-core-composer": "^1.0.144",
     "q3-core-responder": "^1.0.151",
     "q3-schema-utils": "^1.0.123",
-    "sift": "^13.2.0"
+    "sift": "^13.3.5"
   },
   "peerDependencies": {
     "express": "^4.17.1",
@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "q3-test-utils": "^1.3.28",
-    "supertest": "^4.0.2"
+    "supertest": "^5.0.0"
   },
   "jest": {
     "verbose": true,
