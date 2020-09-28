@@ -7,11 +7,11 @@
   },
   "devDependencies": {
     "q3-test-utils": "^1.3.28",
-    "supertest": "^4.0.2"
+    "supertest": "^5.0.0"
   },
   "dependencies": {
     "etag": "^1.8.1",
-    "moment": "^2.28.0"
+    "moment": "^2.29.0"
   },
   "jest": {
     "verbose": true,

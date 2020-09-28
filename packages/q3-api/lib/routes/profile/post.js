@@ -1,4 +1,5 @@
 const { compose, verify } = require('q3-core-composer');
+const flat = require('flat');
 
 const getProfile = async (req, res) => {
   const { body, files, user, marshal } = req;
@@ -8,7 +9,7 @@ const getProfile = async (req, res) => {
     files,
   });
 
-  await user.set(body).save();
+  await user.set(flat.unflatten(body)).save();
 
   res.update({
     profile: marshal(user.obfuscatePrivateFields()),
