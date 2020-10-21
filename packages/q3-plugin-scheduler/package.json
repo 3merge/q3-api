@@ -1,0 +1,19 @@
+{
+  "name": "q3-plugin-scheduler",
+  "version": "1.0.0",
+  "description": "Job scheduling in Q3",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "moment": "^2.29.1",
+    "mongoose": "^5.10.9",
+    "node-cron": "^2.0.3"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "preset": "q3-test-utils",
+    "setupFilesAfterEnv": [
+      "q3-test-utils/jest-setup.js"
+    ]
+  }
+}
