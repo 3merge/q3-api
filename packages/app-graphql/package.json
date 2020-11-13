@@ -1,0 +1,9 @@
+{
+  "name": "@3merge/app-graphql",
+  "version": "1.0.0",
+  "dependencies": {
+    "apollo-server-express": "^2.19.0",
+    "graphql-compose": "^7.22.1",
+    "graphql-compose-mongoose": "^9.0.0"
+  }
+}

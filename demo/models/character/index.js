@@ -5,6 +5,7 @@ const Character = new mongoose.Schema(
     name: {
       type: String,
       searchable: true,
+      required: true,
     },
     role: String,
     gender: String,
