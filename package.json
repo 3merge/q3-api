@@ -4,7 +4,7 @@
   "license": "MIT",
   "engines": {
     "yarn": "^1.x.x",
-    "node": "^12.x.x"
+    "node": "^14.x.x"
   },
   "scripts": {
     "postinstall": "yarnw-sync-deps && yarn-deduplicate",

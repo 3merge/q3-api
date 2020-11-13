@@ -13,6 +13,7 @@ const Character = new mongoose.Schema(
     restify: '*',
     collectionSingularName: 'character',
     collectionPluralName: 'characters',
+    quicksearch: 'name',
   },
 );
 
