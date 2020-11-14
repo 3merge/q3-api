@@ -12,6 +12,10 @@ const clean = (v) =>
 const getName = (model) =>
   model?.collection?.collectionName;
 
+const getResourceName = (model) =>
+  model?.collection?.opts?.schemaUserProvidedOptions
+    ?.collectionPluralName;
+
 const getQuickSearchSearchSelectPreferences = (model) =>
   model?.collection?.opts?.schemaUserProvidedOptions
     ?.quicksearch;
@@ -43,7 +47,7 @@ const redactSearchResultsByCollection = async (
 };
 
 const QuickSearchGetController = async (
-  { user, query: { query: searchTerm } },
+  { t, user, query: { query: searchTerm } },
   res,
 ) => {
   const models = getQuickSearchModels(user);
@@ -51,8 +55,6 @@ const QuickSearchGetController = async (
     const docs = await model
       .find(getQuery(model, searchTerm))
       .limit(8)
-      .select(getQuickSearchSearchSelectPreferences(model))
-      .lean()
       .exec();
 
     return redactSearchResultsByCollection(
@@ -64,10 +66,21 @@ const QuickSearchGetController = async (
 
   const collectionResults = await Promise.all(queries);
   const results = collectionResults.reduce(
-    (acc, curr, i) =>
-      Object.assign(acc, {
-        [getName(models[i])]: curr,
-      }),
+    (acc, curr, i) => {
+      const name = getResourceName(models[i]);
+
+      return Object.assign(acc, {
+        [name]: curr.map((item) => ({
+          id: item._id,
+          title: t(`labels:${name}.title`, item),
+          description: t(
+            `labels:${name}.description`,
+            item,
+          ),
+          photo: item.photo,
+        })),
+      });
+    },
     {},
   );
 

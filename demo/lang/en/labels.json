@@ -1,4 +1,6 @@
 {
   "newCharacters": "Number of new characters",
-  "month": "Month"
+  "month": "Month",
+  "characters.title": "{{name}}",
+  "characters.description": "Role: {{role}}, Gender: {{gender}}"
 }
