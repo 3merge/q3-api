@@ -1,5 +1,26 @@
 [
   {
+    "coll": "components",
+    "op": "Read",
+    "role": "Dev",
+    "ownership": "Any",
+    "fields": "*"
+  },
+  {
+    "coll": "components",
+    "op": "Update",
+    "role": "Dev",
+    "ownership": "Any",
+    "fields": "*"
+  },
+  {
+    "coll": "components",
+    "op": "Create",
+    "role": "Dev",
+    "ownership": "Any",
+    "fields": "*"
+  },
+  {
     "coll": "characters",
     "op": "Read",
     "role": "Public",

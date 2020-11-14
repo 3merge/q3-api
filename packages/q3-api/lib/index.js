@@ -7,7 +7,9 @@ require('q3-locale');
 const { get } = require('lodash');
 const walker = require('q3-core-walker');
 const { AccessControl } = require('q3-core-access');
+const am = require('@3merge/adapter-mongoose');
 const {
+  exception,
   handleUncaughtExceptions,
 } = require('q3-core-responder');
 const i18next = require('i18next');
@@ -94,6 +96,17 @@ const Q3 = {
 
     app.use(walker(__dirname));
     app.use(walker(location));
+
+    return this;
+  },
+
+  sources() {
+    Q3.datasource = am.MongooseProxy.of;
+
+    const { location } = app.locals;
+    am.walk(__dirname);
+    am.walk(location);
+
     return this;
   },
 
@@ -135,6 +148,7 @@ const Q3 = {
 Q3.$app = app;
 Q3.$mongoose = mongoose;
 Q3.$i18 = i18next;
+Q3.Exception = exception;
 
 Object.assign(Q3, models);
 module.exports = Q3;

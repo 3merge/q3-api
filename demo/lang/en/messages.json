@@ -1,5 +1,6 @@
 {
   "sample": "Render this text!",
   "newCharacters": "Number of new characters",
-  "month": "Month"
+  "month": "Month",
+  "Q3-1": "This is a human-friendly error message. Display this instead of the code reference"
 }

@@ -1,0 +1,7 @@
+{
+  "name": "@3merge/adapter-mongoose",
+  "version": "1.0.0",
+  "dependencies": {
+    "pluralize": "^8.0.0"
+  }
+}

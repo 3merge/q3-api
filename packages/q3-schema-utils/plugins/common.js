@@ -192,6 +192,14 @@ function verifyOutput(d) {
   return d;
 }
 
+function list({ limit, projection, where = {} }) {
+  return this.find(where)
+    .select(projection)
+    .limit(limit)
+    .lean()
+    .exec();
+}
+
 const plugin = (schema) => {
   schema.statics.findStrictly = findStrictly;
   schema.methods.getSubDocument = getSubDocument;
@@ -204,6 +212,7 @@ const plugin = (schema) => {
   schema.statics.getRequiredFields = getRequiredFields;
   schema.statics.findOneOrCreate = findOneOrCreate;
   schema.statics.verifyOutput = verifyOutput;
+  schema.statics.list = list;
 
   schema.set('timestamps', true);
 

@@ -16,4 +16,5 @@ module.exports = Q3.config({
   },
 })
   .protect(ac)
+  .sources()
   .routes();
