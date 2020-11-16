@@ -5,6 +5,8 @@
     "@3merge/app-resolvers": "^1.0.0",
     "apollo-server-express": "^2.19.0",
     "graphql-compose": "^7.22.1",
-    "graphql-compose-mongoose": "^9.0.0"
+    "graphql-compose-mongoose": "^9.0.0",
+    "m2e-validator": "^1.3.2",
+    "mongoose": "^5.10.7"
   }
 }
