@@ -1,6 +1,7 @@
 const resolvers = require('@3merge/app-resolvers');
 const { capitalize } = require('lodash');
 const { schemaComposer } = require('graphql-compose');
+const { Redact } = require('q3-core-access');
 const {
   CREATE,
   GET,
@@ -9,38 +10,44 @@ const {
   UPDATE,
   MUTATION,
   QUERY,
-  getOp,
-  mapConstantsToQueryValue,
 } = require('./constants');
 const {
   getCollectionInputName,
   getUpdateArguments,
+  makeMongoQuery,
 } = require('./helpers');
 
 module.exports = (datasource) => {
   const coll = datasource?.collection?.collectionName;
 
-  const makeResolver = (methodName) => async ({ args }) => {
-    const { id, limit, page, filter = {} } = args;
-    const query = Object.entries(filter).reduce(
-      (acc, [field, value]) => {
-        const [key, op] = getOp(field);
-        acc[key] = mapConstantsToQueryValue(op, value);
-        return acc;
-      },
-      {},
-    );
+  const makeResolver = (methodName) => async ({
+    args,
+    context,
+  }) => {
+    const { id, limit, page } = args;
 
-    return resolvers[methodName]({
+    const r = await resolvers[methodName]({
       collectionPluralName: coll,
+      query: makeMongoQuery(args),
       datasource,
       params: {
         resourceID: id,
       },
-      query,
       limit,
       page,
     });
+
+    const execRedaction = async (doc) =>
+      Redact(doc, context.user, coll);
+
+    return r.data
+      ? {
+          ...r,
+          data: await Promise.all(
+            r.data.map(execRedaction),
+          ),
+        }
+      : execRedaction(r);
   };
 
   class ResolverFactory {

@@ -25,42 +25,30 @@ Object.entries(mongoose.models).forEach(
     const type = getCollectionInputName(collectionName);
     const graphql = makeInput(type);
 
-    const resolvers = ResolverFactory(modelInstance)(
-      graphql,
-      schema.base,
-    ).build();
+    schemaComposer.createInputTC({
+      name: getFilterInput(type, schema.base),
+      fields: getOperationDefinitions(schema.base),
+    });
 
-    const shapeComposer = () => {
-      Object.entries(CRUD_MAP).forEach(([t, r]) => {
-        schemaComposer[t].addFields(
-          r.reduce(
-            (acc, curr) =>
-              Object.assign(acc, {
-                [`${curr}${type}`]: graphql.getResolver(
-                  curr,
-                ),
-              }),
-            {},
-          ),
-        );
-      });
-    };
+    graphql.addFields(getFieldDefinitions(schema.base));
 
-    const init = () => {
-      graphql.addFields(getFieldDefinitions(schema.base));
-
-      schemaComposer.createInputTC({
-        name: getFilterInput(type, schema.base),
-        fields: getOperationDefinitions(schema.base),
-      });
-
-      resolvers.forEach((res) => {
+    ResolverFactory(modelInstance)(graphql, schema.base)
+      .build()
+      .forEach((res) => {
         graphql.addResolver(res);
       });
-    };
 
-    init();
-    shapeComposer();
+    Object.entries(CRUD_MAP).forEach(([t, r]) => {
+      schemaComposer[t].addFields(
+        r.reduce(
+          (acc, curr) =>
+            Object.assign(acc, {
+              [`${curr}${type}`]: graphql.getResolver(curr),
+            }),
+          {},
+        ),
+      );
+    });
   },
 );
 

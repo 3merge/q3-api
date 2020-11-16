@@ -80,7 +80,7 @@ function middleware(UserModel) {
     const hasMethod = (method) =>
       method in UserModel && !req.user;
 
-    const host = req.get('host');
+    const host = req?.headers?.host;
     const identity = new Session(req);
     const { token, nonce } = identity;
 

@@ -1,6 +1,10 @@
 const { capitalize } = require('lodash');
 const { schemaComposer } = require('graphql-compose');
-const { makeOperationFieldNames } = require('./constants');
+const {
+  getOp,
+  mapConstantsToQueryValue,
+  makeOperationFieldNames,
+} = require('./constants');
 
 const convertM2eToGraphqlSchemaTypeDef = (
   attributes = {},
@@ -83,6 +87,16 @@ exports.getUpdateArguments = (schema, schemaOptions) =>
         ),
       };
 
+      return acc;
+    },
+    {},
+  );
+
+exports.makeMongoQuery = (args) =>
+  Object.entries(args?.filter || {}).reduce(
+    (acc, [field, value]) => {
+      const [key, op] = getOp(field);
+      acc[key] = mapConstantsToQueryValue(op, value);
       return acc;
     },
     {},
