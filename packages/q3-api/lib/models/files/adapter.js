@@ -67,7 +67,7 @@ module.exports = class FileUploadAdapter {
       return item.relativePath
         ? item.relativePath.startsWith(relativePath)
         : false;
-    }).name;
+    })?.name;
   }
 
   async handleReq({ body, files }) {

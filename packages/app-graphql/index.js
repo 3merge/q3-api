@@ -1,3 +1,14 @@
+require('@3merge/app-resolvers');
+const json = require('../../demo/q3-access.json');
+
+require('dotenv').config({
+  path: require('path').resolve(__dirname, '../../.env'),
+});
+
+require('../../demo/models');
+require('../q3-api/lib/models');
+
+const { AccessControl } = require('q3-core-access');
 const express = require('express');
 const mongoose = require('mongoose');
 const ApolloServerInstance = require('./lib');
@@ -15,11 +26,12 @@ ApolloServerInstance.applyMiddleware({
 });
 
 mongoose
-  .connect(
-    'mongodb+srv://ibberson92:vNyxPbjujYn37s9c@cluster0.v8oab.mongodb.net/<dbname>?retryWrites=true&w=majority',
-    { useNewUrlParser: true, useUnifiedTopology: true },
-  )
+  .connect(process.env.CONNECTION, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
+    AccessControl.init(json);
     app.listen('4000', () => {
       console.log('Server ready');
     });
