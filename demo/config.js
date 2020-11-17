@@ -5,7 +5,7 @@ require('dotenv').config();
 require('./models');
 
 // force production app
-process.env.NODE_ENV = 'production';
+// process.env.NODE_ENV = 'production';
 
 module.exports = Q3.config({
   messages,

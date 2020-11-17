@@ -7,8 +7,8 @@
     "fields": "*"
   },
   {
-    "coll": "characters",
-    "op": "Create",
+    "coll": "q3-api-users",
+    "op": "Read",
     "role": "Public",
     "ownership": "Any",
     "fields": "*"

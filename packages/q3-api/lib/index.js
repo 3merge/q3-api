@@ -11,6 +11,7 @@ const {
   handleUncaughtExceptions,
 } = require('q3-core-responder');
 const i18next = require('i18next');
+const graphql = require('@3merge/app-graphql');
 const { middleware } = require('q3-core-composer');
 const { config } = require('q3-core-mailer');
 const path = require('path');
@@ -94,6 +95,7 @@ const Q3 = {
 
     app.use(walker(__dirname));
     app.use(walker(location));
+
     return this;
   },
 
@@ -124,6 +126,7 @@ const Q3 = {
             }, reject),
           ),
     )
+      .then(() => graphql(app))
       .then(registerLocale(app.locals))
       .catch((e) => {
         // eslint-disable-next-line

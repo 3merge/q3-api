@@ -1,7 +1,8 @@
 const resolvers = require('@3merge/app-resolvers');
 const { capitalize } = require('lodash');
 const { schemaComposer } = require('graphql-compose');
-const { Redact } = require('q3-core-access');
+const { exception } = require('q3-core-responder');
+const { Grant, Redact } = require('q3-core-access');
 const {
   CREATE,
   GET,
@@ -24,30 +25,52 @@ module.exports = (datasource) => {
     args,
     context,
   }) => {
-    const { id, limit, page } = args;
+    try {
+      const { id, limit, page } = args;
 
-    const r = await resolvers[methodName]({
-      collectionPluralName: coll,
-      query: makeMongoQuery(args),
-      datasource,
-      params: {
-        resourceID: id,
-      },
-      limit,
-      page,
-    });
+      if (
+        !new Grant(context.user)
+          .can('Read')
+          .on(coll)
+          .first()
+      )
+        exception('Authorization').msg('GT-123').throw();
 
-    const execRedaction = async (doc) =>
-      Redact(doc, context.user, coll);
+      args.__t = args.discriminatorKey;
+      delete args.discriminatorKey;
 
-    return r.data
-      ? {
-          ...r,
-          data: await Promise.all(
-            r.data.map(execRedaction),
-          ),
-        }
-      : execRedaction(r);
+      const r = await resolvers[methodName]({
+        collectionPluralName: coll,
+        query: makeMongoQuery(args),
+        body: args,
+        datasource,
+        params: {
+          resourceID: id,
+        },
+        limit,
+
+        page,
+      });
+
+      const execRedaction = async (doc) => {
+        const re = await Redact(doc, context.user, coll);
+        re.discriminatorKey = args.__t;
+        delete re.__t;
+        return re;
+      };
+
+      return r.data
+        ? {
+            ...r,
+            data: await Promise.all(
+              r.data.map(execRedaction),
+            ),
+          }
+        : execRedaction(r);
+    } catch (e) {
+      e.message = context.t(`messages:${e.message}`);
+      throw e;
+    }
   };
 
   class ResolverFactory {
@@ -74,7 +97,7 @@ module.exports = (datasource) => {
       ).filter(ResolverFactory.isGetter);
     }
 
-    get create() {
+    get post() {
       return this.withType({
         args: getUpdateArguments(this.__$schema, {
           disableRequirements: false,
@@ -134,7 +157,7 @@ module.exports = (datasource) => {
       });
     }
 
-    get remove() {
+    get delete() {
       return this.withType({
         kind: MUTATION,
         name: REMOVE,

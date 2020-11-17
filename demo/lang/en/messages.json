@@ -1,5 +1,6 @@
 {
   "sample": "Render this text!",
   "newCharacters": "Number of new characters",
-  "month": "Month"
+  "month": "Month",
+  "GT-123": "Custom error message"
 }

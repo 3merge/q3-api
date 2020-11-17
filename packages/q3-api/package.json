@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "license": "MIT",
   "dependencies": {
+    "@3merge/app-graphql": "^1.0.0",
     "api-query-params": "^5.0.0",
     "aws-sdk": "^2.761.0",
     "body-parser": "^1.19.0",

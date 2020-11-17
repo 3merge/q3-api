@@ -7,6 +7,8 @@ const limit = require('express-rate-limit');
 const fileUpload = require('express-fileupload');
 const useragent = require('express-useragent');
 const session = require('q3-core-session');
+const i18next = require('i18next');
+const middleware = require('i18next-http-middleware');
 const corsConfig = require('./express-cors');
 
 const server = express();
@@ -14,7 +16,14 @@ const server = express();
 server.all(session.middleware);
 
 server.enable('trust proxy');
-server.use(helmet());
+server.use(
+  helmet({
+    contentSecurityPolicy:
+      process.env.NODE_ENV === 'production'
+        ? undefined
+        : false,
+  }),
+);
 
 // relies on app.locals to run
 server.use(cors(corsConfig(server)));
@@ -31,6 +40,12 @@ server.use(
 server.use(
   bodyParser.urlencoded({
     extended: true,
+  }),
+);
+
+server.use(
+  middleware.handle(i18next, {
+    removeLngFromUrl: false,
   }),
 );
 

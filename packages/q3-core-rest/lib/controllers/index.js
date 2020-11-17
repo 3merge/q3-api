@@ -23,6 +23,7 @@ module.exports = (app) => (Model) => {
       console.warn(
         `${Model.collection.collectionName} not added to REST`,
       );
+
     return;
   }
 
