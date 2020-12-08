@@ -7,12 +7,17 @@ const coll = 'AccessControlPlugin';
 const role = 'Dev';
 const firstName = 'John';
 
-const Schema = new mongoose.Schema({
-  belongs: mongoose.Types.ObjectId,
-  featured: Boolean,
-  specialCondition: Number,
-  name: String,
-});
+const Schema = new mongoose.Schema(
+  {
+    belongs: mongoose.Schema.Types.Mixed,
+    featured: Boolean,
+    specialCondition: Number,
+    name: String,
+  },
+  {
+    enableOwnership: true,
+  },
+);
 
 /**
  * @NOTE
@@ -46,7 +51,7 @@ const expectProhibitied = (docId) =>
     Model.findById(docId)
       .setOptions({ redact: true })
       .exec(),
-  ).rejects.toThrowError();
+  ).resolves.toBeNull();
 
 const expectAllowed = (docId) =>
   expect(
@@ -113,6 +118,7 @@ describe('AccessControlPlugin integration', () => {
           {
             local: 'belongs',
             foreign: '_id',
+            cast: 'toObject',
           },
         ],
         op: 'Create',
@@ -142,11 +148,13 @@ describe('AccessControlPlugin integration', () => {
 
   it('it should check user conditions', async () => {
     const name = 'OwnershipConditions';
-    const target = await Model.create({ name });
+    const target = await Model.create({
+      name,
+    });
     genPermission([
       {
         ownershipConditions: ['isReady=true'],
-        op: 'Create',
+        op: 'Read',
       },
     ]);
 
@@ -168,7 +176,7 @@ describe('AccessControlPlugin integration', () => {
     const name = 'DocumentConditions';
     const target = await Model.create([
       {
-        name,
+        name: 'SomethingElse',
         specialCondition: 6,
       },
       {
@@ -181,7 +189,9 @@ describe('AccessControlPlugin integration', () => {
       },
     ]);
 
-    return expectAllowed(target.id);
+    await expectAllowed(target[0]._id);
+    await expectProhibitied(target[1]._id);
+    await expectProhibitied(target[2]._id);
   });
 
   it('it should check document conditions on create', async () => {
