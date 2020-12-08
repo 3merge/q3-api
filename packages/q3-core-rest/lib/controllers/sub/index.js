@@ -20,7 +20,9 @@ const appendValidationForMultiOp = (ctrl) => {
   return ctrl;
 };
 
-module.exports = class SubDocumentControllerCommander extends RestRegistration {
+module.exports = class SubDocumentControllerCommander extends (
+  RestRegistration
+) {
   exec() {
     const rootPath = this.getNestedPathName();
     const resourcePath = this.getNestedResourcePathName();

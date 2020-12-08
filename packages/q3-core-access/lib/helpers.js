@@ -10,8 +10,8 @@ const runComparisonEvaluation = (test = [], value) =>
 
 const filterBy = (propertyName, propertyValue) => (
   grants,
-) => {
-  return grants.filter((grant) => {
+) =>
+  grants.filter((grant) => {
     if (!grant[propertyName]) return false;
 
     try {
@@ -23,7 +23,6 @@ const filterBy = (propertyName, propertyValue) => (
       );
     }
   });
-};
 
 exports.hasOptions = (d) =>
   'options' in d ? d.options.redact : d.redact;

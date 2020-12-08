@@ -17,14 +17,13 @@ const mapWithoutIds = (a = []) =>
 exports.getCollectionName = (inst) =>
   get(inst, 'constructor.collection.collectionName');
 
-exports.getUserMeta = (v) => {
-  return pick(get(v, '__$q3.USER', {}), [
+exports.getUserMeta = (v) =>
+  pick(get(v, '__$q3.USER', {}), [
     'id',
     'firstName',
     'lastName',
     'email',
   ]);
-};
 
 exports.hasKeys = (o) =>
   o !== null &&
@@ -46,12 +45,8 @@ exports.insertToPatchHistory = (
   }
 };
 
-exports.getFromPatchHistory = (
-  inst,
-  collectionName,
-  op,
-) => {
-  return new Promise((resolve) => {
+exports.getFromPatchHistory = (inst, collectionName, op) =>
+  new Promise((resolve) => {
     try {
       return inst.connection.db
         .collection(prefixCollectionName(collectionName))
@@ -64,7 +59,6 @@ exports.getFromPatchHistory = (
       return null;
     }
   });
-};
 
 const diff = (a, b, fields = []) => {
   if (!a || !b) return {};

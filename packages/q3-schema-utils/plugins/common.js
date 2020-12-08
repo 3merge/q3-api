@@ -169,12 +169,8 @@ function getReferentialPaths() {
 
 function getRequiredFields() {
   return Object.entries(this.schema.paths)
-    .filter(([, value]) => {
-      return value.isRequired;
-    })
-    .map(([key]) => {
-      return key;
-    });
+    .filter(([, value]) => value.isRequired)
+    .map(([key]) => key);
 }
 
 async function findOneOrCreate(args, options) {

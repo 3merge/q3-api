@@ -62,13 +62,12 @@ const splitCommaDelimited = (a) => {
   return null;
 };
 
-const compareValues = (discounts = [], pricing) => {
-  return discounts.reduce((prev, next) => {
-    return prev.diff(pricing) < next.diff(pricing)
-      ? next
-      : prev;
-  }, discounts[0]);
-};
+const compareValues = (discounts = [], pricing) =>
+  discounts.reduce(
+    (prev, next) =>
+      prev.diff(pricing) < next.diff(pricing) ? next : prev,
+    discounts[0],
+  );
 
 const returnHeaviestDiscountFromSortedArray = (
   a,
