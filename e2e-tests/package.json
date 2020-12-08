@@ -7,9 +7,9 @@
     "dotenv": "^8.2.0",
     "eventsource": "^1.0.7",
     "express": "^4.17.1",
-    "i18next": "^19.1.0",
-    "moment": "^2.29.0",
-    "mongoose": "^5.10.7",
+    "i18next": "^19.8.4",
+    "moment": "^2.29.1",
+    "mongoose": "^5.11.5",
     "q3-api": "^1.4.1",
     "q3-core-access": "^1.4.1",
     "q3-core-composer": "^1.4.1",
@@ -32,11 +32,11 @@
     "q3-schema-users": "^1.4.1",
     "q3-schema-utils": "^1.4.1",
     "q3-test-utils": "^1.4.1",
-    "socket.io-client": "^2.3.0"
+    "socket.io-client": "^3.0.4"
   },
   "devDependencies": {
-    "jest": "^26.4.0",
-    "supertest": "^5.0.0"
+    "jest": "^26.6.3",
+    "supertest": "^6.0.1"
   },
   "scripts": {
     "test": "jest --runInBand --detectOpenHandles --forceExit"

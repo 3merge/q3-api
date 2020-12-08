@@ -1,4 +1,4 @@
-const { compose, verify } = require('q3-core-composer');
+const { compose, redact } = require('q3-core-composer');
 const flat = require('flat');
 
 const getProfile = async (req, res) => {
@@ -16,5 +16,11 @@ const getProfile = async (req, res) => {
   });
 };
 
-getProfile.authorization = [verify];
+getProfile.authorization = [
+  redact('profile')
+    .inRequest('body')
+    .inResponse('profile')
+    .done(),
+];
+
 module.exports = compose(getProfile);

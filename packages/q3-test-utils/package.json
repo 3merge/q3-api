@@ -3,10 +3,10 @@
   "version": "1.4.1",
   "main": "jest-preset.js",
   "dependencies": {
-    "jest-environment-node": "^26.3.0",
-    "mongodb-memory-server": "^6.8.0",
+    "jest-environment-node": "^26.6.2",
+    "mongodb-memory-server": "^6.9.2",
     "q3-schema-types": "^1.4.1",
-    "supertest": "^5.0.0"
+    "supertest": "^6.0.1"
   },
   "jest": {
     "preset": "./jest-preset.js"

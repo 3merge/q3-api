@@ -31,5 +31,17 @@
     "op": "Update",
     "ownership": "Any",
     "fields": ["name", "friends.*", "class"]
+  },
+  {
+    "role": "Developer",
+    "coll": "profile",
+    "op": "Read",
+    "fields": ["email", "firstName"]
+  },
+  {
+    "role": "Developer",
+    "coll": "profile",
+    "op": "Create",
+    "fields": ["!email"]
   }
 ]
