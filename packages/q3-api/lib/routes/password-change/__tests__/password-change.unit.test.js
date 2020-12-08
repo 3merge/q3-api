@@ -36,14 +36,13 @@ describe('PasswordResetCtrl', () => {
   });
 
   describe('handler', () => {
-    it('throw an error without password or token', async () => {
-      return expect(
+    it('throw an error without password or token', async () =>
+      expect(
         passwordChangeController.$og({
           body: { email },
           t: jest.fn(),
         }),
-      ).rejects.toThrowError();
-    });
+      ).rejects.toThrowError());
 
     it('should check by user ID', async () => {
       const setPassword = jest.fn();

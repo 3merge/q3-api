@@ -8,13 +8,10 @@ const getSalts = () => parseInt(process.env.SALTS || 8, 10);
 const generateRandomSecret = (byteSize = 20) =>
   crypto.randomBytes(byteSize).toString('hex');
 
-const createHash = async (str) => {
-  return bcrypt.hash(str, getSalts());
-};
+const createHash = async (str) =>
+  bcrypt.hash(str, getSalts());
 
-const compareWithHash = (a, b) => {
-  return bcrypt.compareSync(a, b);
-};
+const compareWithHash = (a, b) => bcrypt.compareSync(a, b);
 
 const stripPortFromString = (address) => {
   try {

@@ -6,7 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "api-query-params": "^5.0.0",
-    "aws-sdk": "^2.761.0",
+    "aws-sdk": "^2.805.0",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "connect": "^3.7.0",
@@ -16,15 +16,16 @@
     "deep-diff": "^1.0.2",
     "dotenv": "^8.2.0",
     "etag": "^1.8.1",
-    "exceljs": "^4.1.0",
+    "exceljs": "^4.2.0",
     "express-fileupload": "^1.1.7-alpha.3",
-    "express-rate-limit": "^5.0.0",
+    "express-rate-limit": "^5.2.3",
     "express-useragent": "^1.0.13",
     "flat": "^5.0.2",
-    "helmet": "^4.1.1",
-    "i18next": "^19.1.0",
+    "helmet": "^4.2.0",
+    "i18next": "^19.8.4",
     "lodash": "^4.17.20",
-    "moment": "^2.29.0",
+    "micromatch": "^4.0.2",
+    "moment": "^2.29.1",
     "mongodb-cron": "^1.7.0",
     "mongoose-dedupe": "^1.0.0",
     "mongoose-field-lock": "^1.0.0",
@@ -44,7 +45,7 @@
     "q3-schema-notes": "^1.4.1",
     "q3-schema-types": "^1.4.1",
     "q3-schema-users": "^1.4.1",
-    "socket.io": "^2.3.0",
+    "socket.io": "^3.0.4",
     "ssestream": "^1.1.0"
   },
   "peerDependencies": {
@@ -54,7 +55,7 @@
   "devDependencies": {
     "aws-sdk-mock": "^5.1.0",
     "q3-test-utils": "^1.4.1",
-    "supertest": "^5.0.0"
+    "supertest": "^6.0.1"
   },
   "jest": {
     "verbose": true,

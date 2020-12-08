@@ -29,9 +29,13 @@ const clearMap = () =>
 
 const getIn = (obj, v) =>
   isObject(obj) && typeof v === 'string'
-    ? v.split('.').reduce((curr, next) => {
-        return isObject(curr) ? curr[next] : obj;
-      }, obj)
+    ? v
+        .split('.')
+        .reduce(
+          (curr, next) =>
+            isObject(curr) ? curr[next] : obj,
+          obj,
+        )
     : obj;
 
 module.exports = {

@@ -30,13 +30,12 @@ const Schema = new mongoose.Schema(
 );
 
 const hasPassed = (value, date) => {
-  const shouldRestart = (increment, qualifier) => {
-    return date
+  const shouldRestart = (increment, qualifier) =>
+    date
       ? moment().isSameOrAfter(
           moment(date).add(increment, qualifier),
         )
       : true;
-  };
 
   switch (value) {
     case 'annually':

@@ -1,4 +1,4 @@
-const { compose, verify } = require('q3-core-composer');
+const { compose, redact } = require('q3-core-composer');
 const { AccessControl } = require('q3-core-access');
 
 const getProfile = async ({ user, marshal }, res) => {
@@ -11,5 +11,8 @@ const getProfile = async ({ user, marshal }, res) => {
   });
 };
 
-getProfile.authorization = [verify];
+getProfile.authorization = [
+  redact('profile').inResponse('profile').done(),
+];
+
 module.exports = compose(getProfile);

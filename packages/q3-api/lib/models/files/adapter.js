@@ -20,13 +20,13 @@ module.exports = class FileUploadAdapter {
 
     await Promise.all(data.map(method)).then((keys) =>
       Promise.all(
-        keys.map((name) => {
-          return this.uploads.push({
+        keys.map((name) =>
+          this.uploads.push({
             relativePath: pathMap[name],
             sensitive: true,
             name,
-          });
-        }),
+          }),
+        ),
       ),
     );
 
@@ -63,11 +63,11 @@ module.exports = class FileUploadAdapter {
     if (!this.uploads || !Array.isArray(this.uploads))
       return undefined;
 
-    return this.uploads.find((item) => {
-      return item.relativePath
+    return this.uploads.find((item) =>
+      item.relativePath
         ? item.relativePath.startsWith(relativePath)
-        : false;
-    }).name;
+        : false,
+    ).name;
   }
 
   async handleReq({ body, files }) {

@@ -29,35 +29,32 @@ module.exports = (Q3InsanceConfig, executable) => {
         first(get(args, 'user.lang', 'en').split('-')),
       ),
       connection
-        .then(() => {
-          return accept(log);
-        })
-        .catch(() => {
-          return reject(log);
-        }),
+        .then(() => accept(log))
+        .catch(() => reject(log)),
     ])
-      .then(([t]) => {
-        return new Promise((r) => {
-          session.middleware(args, null, () => {
-            return executable(
-              {
-                ...args,
-                filter: toQuery(args),
-                redact: async (data, collectionname) =>
-                  Redact(data, args.user, collectionname),
+      .then(
+        ([t]) =>
+          new Promise((r) => {
+            session.middleware(args, null, () =>
+              executable(
+                {
+                  ...args,
+                  filter: toQuery(args),
+                  redact: async (data, collectionname) =>
+                    Redact(data, args.user, collectionname),
+                  t,
+                },
                 t,
-              },
-              t,
-            )
-              .then((res) =>
-                finish(log).then(() => {
-                  r(res);
-                }),
               )
-              .catch(() => fail(log));
-          });
-        });
-      })
+                .then((res) =>
+                  finish(log).then(() => {
+                    r(res);
+                  }),
+                )
+                .catch(() => fail(log)),
+            );
+          }),
+      )
 
       .then((resp) => {
         process.send(resp);

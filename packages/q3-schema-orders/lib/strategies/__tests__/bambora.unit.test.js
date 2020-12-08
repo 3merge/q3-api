@@ -1,11 +1,13 @@
-jest.mock('bambora-node', () => {
-  return class {
-    // eslint-disable-next-line
+jest.mock(
+  'bambora-node',
+  () =>
+    class {
+      // eslint-disable-next-line
     postPayment() {
-      return { approved: 1 };
-    }
-  };
-});
+        return { approved: 1 };
+      }
+    },
+);
 
 const Bambora = require('../bambora');
 

@@ -2,7 +2,9 @@ const NodeEnvironment = require('jest-environment-node');
 const path = require('path');
 const fs = require('fs');
 
-module.exports = class MongoEnvironment extends NodeEnvironment {
+module.exports = class MongoEnvironment extends (
+  NodeEnvironment
+) {
   async setup() {
     const globalConfig = JSON.parse(
       fs.readFileSync(

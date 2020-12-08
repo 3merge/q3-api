@@ -7,19 +7,19 @@
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
     "express-mung": "^0.5.1",
-    "express-validator": "^6.2.0",
+    "express-validator": "^6.8.0",
     "flat": "^5.0.2",
     "lodash": "^4.17.20",
     "m2e-validator": "^1.3.2",
     "micromatch": "^4.0.2",
-    "mongoose": "^5.10.7",
+    "mongoose": "^5.11.5",
     "q3-core-access": "^1.4.1",
     "q3-core-responder": "^1.4.1",
     "q3-core-session": "^1.0.7"
   },
   "devDependencies": {
     "q3-test-utils": "^1.4.1",
-    "supertest": "^5.0.0"
+    "supertest": "^6.0.1"
   },
   "jest": {
     "verbose": true,

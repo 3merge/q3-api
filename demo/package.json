@@ -7,9 +7,9 @@
   "dependencies": {
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "i18next": "^19.1.0",
-    "moment": "^2.29.0",
-    "mongoose": "^5.10.7",
+    "i18next": "^19.8.4",
+    "moment": "^2.29.1",
+    "mongoose": "^5.11.5",
     "q3-api": "^1.4.1",
     "q3-core-access": "^1.4.1",
     "q3-core-composer": "^1.4.1",

@@ -11,12 +11,8 @@ module.exports = (modelName, path) => {
     return name === 'DocumentArrayPath' ||
       name === 'SingleNestedPath'
       ? Object.entries(schemaType.schema.paths)
-          .filter(([, value]) => {
-            return value.isRequired;
-          })
-          .map(([key]) => {
-            return `${path}.${key}`;
-          })
+          .filter(([, value]) => value.isRequired)
+          .map(([key]) => `${path}.${key}`)
       : path;
   } catch (e) {
     return path;

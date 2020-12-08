@@ -4,7 +4,11 @@ const Comparison = require('comparisons');
 const mongoose = require('mongoose');
 const { exception } = require('q3-core-responder');
 const Grant = require('./core/grant');
-const { hasOptions, extractUser } = require('./helpers');
+const {
+  meetsUserRequirements,
+  hasOptions,
+  extractUser,
+} = require('./helpers');
 
 const reportAccessLevelFailure = (condition) =>
   condition
@@ -63,8 +67,6 @@ module.exports = (schema) => {
         .on(collectionName)
         .first() || {};
 
-    reportAccessLevelFailure(!doc);
-
     const {
       ownership = 'Own',
       ownershipAliasesOnly = false,
@@ -77,6 +79,16 @@ module.exports = (schema) => {
       documentConditions,
     ).query();
 
+    if (
+      doc.ownershipConditions &&
+      !meetsUserRequirements(doc, user)
+    )
+      this.and({
+        // this is a "made up" property that will force the query
+        // to return null
+        __accessControlLock: new Date(),
+      });
+
     if ($and.length) this.and($and);
 
     if (ownership !== 'Any') {
@@ -88,14 +100,15 @@ module.exports = (schema) => {
           // we may need to support other caster functions/presets later
           if (cast === 'ObjectId')
             return {
-              $expr: {
-                $eq: [
-                  { $toString: `$${local}` },
-                  typeof q === 'object'
-                    ? invoke(q, 'toString')
-                    : q,
-                ],
-              },
+              $or: [
+                { [local]: mongoose.Types.ObjectId(q) },
+                {
+                  [local]:
+                    typeof q === 'object'
+                      ? invoke(q, 'toString')
+                      : q,
+                },
+              ],
             };
 
           return {

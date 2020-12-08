@@ -14,7 +14,9 @@ const {
   Upload,
 } = require('./handlers');
 
-module.exports = class DocumentControllerCommander extends RestRegistration {
+module.exports = class DocumentControllerCommander extends (
+  RestRegistration
+) {
   exec() {
     const rootPath = this.getPathName();
     const resourcePath = this.getResourcePathName();
