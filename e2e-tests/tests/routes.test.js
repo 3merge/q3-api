@@ -20,6 +20,10 @@ afterAll(teardown);
 describe('q3-api', () => {
   describe('/profile', () => {
     it('should return redacted profile information', async () => {
+      await user.update({
+        role: 'Developer',
+      });
+
       const {
         body: { profile },
       } = await agent
@@ -31,6 +35,10 @@ describe('q3-api', () => {
     });
 
     it('should prevent profile from updating', async () => {
+      await user.update({
+        role: 'Developer',
+      });
+
       const buffer = Buffer.from('some data');
       const email = 'no@change.com';
       const firstName = 'Mike';
