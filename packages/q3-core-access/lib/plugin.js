@@ -88,14 +88,15 @@ module.exports = (schema) => {
           // we may need to support other caster functions/presets later
           if (cast === 'ObjectId')
             return {
-              $expr: {
-                $eq: [
-                  { $toString: `$${local}` },
-                  typeof q === 'object'
-                    ? invoke(q, 'toString')
-                    : q,
-                ],
-              },
+              $or: [
+                { [local]: mongoose.Types.ObjectId(q) },
+                {
+                  [local]:
+                    typeof q === 'object'
+                      ? invoke(q, 'toString')
+                      : q,
+                },
+              ],
             };
 
           return {

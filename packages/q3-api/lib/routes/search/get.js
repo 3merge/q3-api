@@ -35,7 +35,6 @@ const SearchParams = async (
 
     res.ok({
       collectionName,
-      total: await model.countDocuments(params).exec(),
       fields: fields.reduce((a, c, i) => {
         const val = values[i];
         return val
