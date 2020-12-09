@@ -16,7 +16,12 @@ const verifyMerchantName = (v) => {
 };
 
 const getTraceDetails = (transactionReceipt) => {
-  if (!transactionReceipt.trace) return transactionReceipt;
+  if (
+    !transactionReceipt.trace ||
+    !transactionReceipt.trace.response
+  )
+    return transactionReceipt;
+
   const {
     status,
     statusText,
