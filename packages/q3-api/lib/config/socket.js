@@ -80,7 +80,6 @@ io.use(async (socket, next) => {
 });
 
 io.on('connection', async (socket) => {
-  console.log('CONNECTED');
   const Noti = mongoose.models['q3-api-notifications'];
 
   const makeRoom = ({ collectionName, id }) =>
@@ -104,7 +103,6 @@ io.on('connection', async (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log('LEAVE');
     Object.values(io.sockets.rooms).forEach((room) => {
       socket.leave(room);
     });

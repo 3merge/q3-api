@@ -1,14 +1,19 @@
-jest.mock(
-  'bambora-node',
-  () =>
-    class {
-      // eslint-disable-next-line
-    postPayment() {
-        return { approved: 1 };
-      }
-    },
-);
+jest.mock('bambora-node', () => {
+  const fn = jest.fn();
 
+  class Bn {
+    // eslint-disable-next-line
+    postPayment(...args) {
+      fn(...args);
+      return { approved: 1 };
+    }
+  }
+
+  Bn.mock = fn;
+  return Bn;
+});
+
+const bn = require('bambora-node');
 const Bambora = require('../bambora');
 
 const getShippingStub = () => ({
@@ -28,5 +33,24 @@ describe('Bambora strategy', () => {
     expect(r).toHaveProperty('approved', 1);
     expect(stub.billing.normalize).toHaveBeenCalled();
     expect(stub.shipping.normalize).toHaveBeenCalled();
+  });
+
+  it('should include order number', async () => {
+    await Bambora(
+      {
+        shipping: getShippingStub(),
+        billing: getShippingStub(),
+        // only if included...
+        order_number: 1,
+      },
+      'token',
+    );
+
+    expect(bn.mock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        order_number: 1,
+      }),
+      undefined,
+    );
   });
 });
