@@ -48,5 +48,12 @@
     "role": "Dev",
     "ownership": "Any",
     "fields": "*"
+  },
+  {
+    "coll": "profile",
+    "op": "Read",
+    "role": "Dev",
+    "ownership": "Any",
+    "fields": "*"
   }
 ]
