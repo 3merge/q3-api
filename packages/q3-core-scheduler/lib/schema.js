@@ -5,7 +5,7 @@ const {
   QUEUED,
   STALLED,
   DONE,
-} = require('constants');
+} = require('./constants');
 const {
   getNextDate,
   getInterval,
@@ -65,7 +65,7 @@ Schema.statics.isUnique = async function (name) {
 
 Schema.statics.getQueued = async function () {
   return this.find({
-    due: { $lte: new Date() },
+    due: { $lt: new Date() },
     status: [QUEUED, STALLED],
     locked: false,
   })
