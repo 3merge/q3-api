@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "is-glob": "^4.0.1",
-    "mongoose": "^5.11.5"
+    "mongoose": "^5.11.7"
   },
   "devDependencies": {
     "q3-test-utils": "^1.5.2"
