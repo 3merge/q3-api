@@ -24,8 +24,15 @@ const io = require('./config/socket');
 const mongoose = require('./config/mongoose');
 const models = require('./models');
 
+const isRunning = process.env.NODE_ENV !== 'test';
+
 const concurrent =
   process.env.WEB_CONCURRENCY || os.cpus().length;
+
+if (isRunning && cluster.isMaster) {
+  for (let i = 0; i < concurrent; i += 1) cluster.fork();
+  cluster.on('exit', () => cluster.fork());
+}
 
 /**
  * When testing, frameworks like supertest attach listeners.
@@ -33,15 +40,7 @@ const concurrent =
 const connectToDB = (res, rej) => (err) => {
   if (err) return rej(err);
   app.use(handleUncaughtExceptions);
-  if (process.env.NODE_ENV !== 'test') {
-    if (cluster.isMaster) {
-      for (let i = 0; i < concurrent; i += 1)
-        cluster.fork();
-
-      cluster.on('exit', () => cluster.fork());
-    } else io.listen();
-  }
-
+  if (isRunning && cluster.isWorker) io.listen();
   return res(null);
 };
 
@@ -128,8 +127,9 @@ const Q3 = {
         : mongoose.connect(
             process.env.CONNECTION,
             connectToDB((data) => {
-              // otherwise it doesn't get called
-              registerChores(app.locals);
+              if (cluster.isMaster)
+                // otherwise it doesn't get called
+                registerChores(app.locals);
               return resolve(data);
             }, reject),
           ),
