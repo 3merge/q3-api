@@ -4,7 +4,7 @@
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "mongoose": "^5.11.5",
+    "mongoose": "^5.11.7",
     "q3-core-responder": "^1.5.2",
     "q3-schema-types": "^1.5.2",
     "q3-schema-utils": "^1.5.2"

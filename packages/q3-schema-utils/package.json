@@ -6,7 +6,7 @@
     "lodash": "^4.17.20",
     "micromatch": "^4.0.2",
     "moment": "^2.29.1",
-    "mongoose": "^5.11.5",
+    "mongoose": "^5.11.7",
     "q3-core-responder": "^1.5.2"
   },
   "devDependencies": {

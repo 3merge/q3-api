@@ -1,5 +1,5 @@
 const { compose, check } = require('q3-core-composer');
-const { emit } = require('q3-core-mailer');
+const { queue } = require('q3-core-scheduler');
 const { exception } = require('q3-core-responder');
 const { Users } = require('../../models');
 
@@ -53,8 +53,7 @@ const updatePassword = async (
 
   // force logout on other devices
   await doc.setSecret();
-
-  emit('onPasswordChange', doc);
+  await queue('onPasswordChange', doc);
   res.acknowledge();
 };
 

@@ -1,14 +1,14 @@
-const { on } = require('q3-core-mailer');
+const { on } = require('q3-core-scheduler');
 
 exports.hasEventBeenCalled = (eventName) => {
   const cb = jest.fn();
-  on(eventName, cb);
+  on('queued', cb);
 
   /**
    * @NOTE
    * Call after the logic block to see if it was invoked.
    */
-  return () => expect(cb).toHaveBeenCalled();
+  return () => expect(cb).toHaveBeenCalledWith(eventName);
 };
 
 exports.delay = async (timeout) =>

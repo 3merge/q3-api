@@ -1,6 +1,6 @@
 const { check, compose } = require('q3-core-composer');
 const { exception } = require('q3-core-responder');
-const { emit } = require('q3-core-mailer');
+const { queue } = require('q3-core-scheduler');
 const { checkNewPassword } = require('../../utils');
 const { Users } = require('../../models');
 
@@ -26,7 +26,7 @@ const verify = async (
       .throw();
 
   await doc.setPassword(newPassword);
-  emit('onVerify', doc);
+  await queue('onVerify', doc);
   res.acknowledge();
 };
 

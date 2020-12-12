@@ -35,7 +35,7 @@ const rebates = [
     description: 'Used for incrementing value',
     value: 8,
     maximum: 5,
-    couponCode: 'HELLO',
+    // couponCode: 'HELLO',
     requiredSkus: 'AB89',
     symbol: '=',
     currency: 'CAD',
@@ -234,6 +234,7 @@ describe('RebateDecorator', () => {
         currency: 'CAD',
         name: '12 dollars off',
         description: 'Req',
+        requiredSkus: 'Foo',
       });
 
       expect(r.evaluate({ price: 100 })).toBe(12);
@@ -246,6 +247,7 @@ describe('RebateDecorator', () => {
         currency: 'CAD',
         name: '10 percent off',
         description: 'Req',
+        requiredSkus: 'Foo',
       });
 
       expect(r.evaluate({ price: 100 })).toBe(10);
@@ -258,6 +260,7 @@ describe('RebateDecorator', () => {
         name: '10 dollars off',
         description: 'Req',
         tiers: [{ value: 8, quantity: 5 }],
+        requiredSkus: 'Foo',
       });
 
       expect(

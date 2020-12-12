@@ -1,14 +1,10 @@
 {
-  "name": "q3-schema-types",
-  "version": "1.5.2",
-  "license": "MIT",
+  "name": "q3-core-scheduler",
   "main": "lib/index.js",
+  "version": "1.5.2",
   "dependencies": {
-    "is-glob": "^4.0.1",
-    "mongoose": "^5.11.7"
-  },
-  "devDependencies": {
-    "q3-test-utils": "^1.5.2"
+    "mongoose": "^5.11.7",
+    "moment": "^2.29.1"
   },
   "jest": {
     "verbose": true,

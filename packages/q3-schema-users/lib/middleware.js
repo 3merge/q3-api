@@ -1,4 +1,5 @@
-const { emit } = require('q3-core-mailer');
+// eslint-disable-next-line
+const { queue } = require('q3-core-scheduler');
 const Schema = require('./schema');
 
 Schema.pre('save', function primeNewUserDispatcher() {
@@ -8,6 +9,9 @@ Schema.pre('save', function primeNewUserDispatcher() {
   }
 });
 
-Schema.post('save', function executeNewUserDispatcher() {
-  if (this.$dispatch) emit('onNewUser', this);
-});
+Schema.post(
+  'save',
+  async function executeNewUserDispatcher() {
+    if (this.$dispatch) await queue('onNewUser', this);
+  },
+);
