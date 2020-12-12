@@ -1,3 +1,1 @@
-const Scheduler = require('q3-core-scheduler');
-
-module.exports = Scheduler.start;
+module.exports = require('q3-core-scheduler').start;

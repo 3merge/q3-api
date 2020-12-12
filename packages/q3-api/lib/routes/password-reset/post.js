@@ -1,5 +1,5 @@
 const { compose } = require('q3-core-composer');
-const { emit } = require('q3-core-mailer');
+const { queue } = require('q3-core-scheduler');
 const { Users } = require('../../models');
 const { checkEmail } = require('../../utils');
 
@@ -8,8 +8,7 @@ const resetPassword = async ({ body, t }, res) => {
     const doc = await Users.findVerifiedByEmail(body.email);
     await doc.setPasswordResetToken();
     await doc.save();
-
-    emit('onPasswordReset', doc);
+    await queue('onPasswordReset', doc);
   } catch (err) {
     // noop
   } finally {

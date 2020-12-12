@@ -10,7 +10,11 @@ const walker = require('./walker');
 const chain = (templateName) => new Mailer(templateName);
 
 chain.config = Mailer.config;
-chain.emit = Scheduler.queue;
+chain.emit = (...params) =>
+  Scheduler.queue(...params).finally(() => {
+    // noop
+  });
+
 chain.get = Emitter.eventNames.bind(Emitter);
 chain.on = Emitter.on.bind(Emitter);
 chain.discover = walker;

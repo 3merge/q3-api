@@ -1,5 +1,5 @@
 const { compose } = require('q3-core-composer');
-const { emit } = require('q3-core-mailer');
+const { queue } = require('q3-core-scheduler');
 const { Users } = require('../../models');
 const { checkEmail } = require('../../utils');
 
@@ -10,7 +10,7 @@ const ReverificationController = async (
   const doc = await Users.findUnverifiedByEmail(email);
   const withSecret = await doc.setSecret();
   const userDetails = await withSecret.save();
-  emit('onReverify', userDetails.toJSON());
+  await queue('onReverify', userDetails.toJSON());
   res.acknowledge();
 };
 

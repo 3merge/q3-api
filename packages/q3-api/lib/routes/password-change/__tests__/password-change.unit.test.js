@@ -1,6 +1,6 @@
 jest.unmock('express-validator');
-jest.mock('q3-core-mailer', () => ({
-  emit: jest.fn(),
+jest.mock('q3-core-scheduler', () => ({
+  queue: jest.fn(),
 }));
 
 jest.mock('../../../models', () => ({
@@ -10,7 +10,7 @@ jest.mock('../../../models', () => ({
   },
 }));
 
-const { emit } = require('q3-core-mailer');
+const { queue } = require('q3-core-scheduler');
 const passwordChangeController = require('../post');
 const { Users } = require('../../../models');
 
@@ -69,7 +69,7 @@ describe('PasswordResetCtrl', () => {
       );
 
       expect(setPassword).toHaveBeenCalled();
-      expect(emit).toHaveBeenCalled();
+      expect(queue).toHaveBeenCalled();
       expect(acknowledge).toHaveBeenCalled();
     });
 
@@ -94,7 +94,7 @@ describe('PasswordResetCtrl', () => {
       );
 
       expect(setPassword).toHaveBeenCalled();
-      expect(emit).toHaveBeenCalled();
+      expect(queue).toHaveBeenCalled();
       expect(acknowledge).toHaveBeenCalled();
     });
 

@@ -1,14 +1,14 @@
 const { compose, check } = require('q3-core-composer');
 const { get } = require('lodash');
 const { exception } = require('q3-core-responder');
-const { emit } = require('q3-core-mailer');
+const { queue } = require('q3-core-scheduler');
 const {
   generateIDToken,
 } = require('q3-schema-users/lib/helpers');
 const { Users } = require('../../models');
 const { checkEmail } = require('../../utils');
 
-const getDeviceInfo = (useragent, user) => {
+const getDeviceInfo = async (useragent, user) => {
   try {
     const source = get(useragent, 'source', null);
 
@@ -17,7 +17,7 @@ const getDeviceInfo = (useragent, user) => {
         'Device info not available or applicable',
       );
 
-    emit('onNewDevice', {
+    await queue('onNewDevice', {
       useragent,
       user,
     });
@@ -51,7 +51,7 @@ const LoginIntoAccount = async (
 
   await userResult.update({
     lastLoggedIn: new Date(),
-    ...getDeviceInfo(useragent, userResult),
+    ...(await getDeviceInfo(useragent, userResult)),
   });
 
   res.create(tokens);

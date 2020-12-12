@@ -1,6 +1,6 @@
 jest.unmock('express-validator');
-jest.mock('q3-core-mailer', () => ({
-  emit: jest.fn(),
+jest.mock('q3-core-scheduler', () => ({
+  queue: jest.fn(),
 }));
 
 jest.mock('../../../models', () => ({
@@ -9,7 +9,7 @@ jest.mock('../../../models', () => ({
   },
 }));
 
-const { emit } = require('q3-core-mailer');
+const { queue } = require('q3-core-scheduler');
 const passwordResetController = require('../post');
 const { Users } = require('../../../models');
 
@@ -35,7 +35,7 @@ test('PasswordResetCtrl should issue password token', async () => {
     email,
   );
 
-  expect(emit).toHaveBeenCalledWith(
+  expect(queue).toHaveBeenCalledWith(
     'onPasswordReset',
     expect.any(Object),
   );

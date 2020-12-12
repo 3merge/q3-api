@@ -127,7 +127,7 @@ const Q3 = {
         : mongoose.connect(
             process.env.CONNECTION,
             connectToDB((data) => {
-              if (cluster.isMaster)
+              if (cluster.isMaster && isRunning)
                 // otherwise it doesn't get called
                 registerChores(app.locals);
               return resolve(data);
