@@ -11,6 +11,7 @@ const {
   getInterval,
   getStatus,
   stringify,
+  getFileName,
 } = require('./utils');
 
 const Schema = new mongoose.Schema(
@@ -45,12 +46,14 @@ const Schema = new mongoose.Schema(
 );
 
 Schema.statics.add = async function (props = {}) {
+  const { name, ...rest } = props;
   return this.create({
     locked: false,
     status: QUEUED,
     due: new Date(),
     priority: 2,
-    ...props,
+    name: getFileName(name),
+    ...rest,
   });
 };
 

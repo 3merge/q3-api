@@ -1,3 +1,10 @@
+jest.mock('node-cron', () => ({
+  schedule: jest.fn().mockImplementation((time, fn) => ({
+    stop: jest.fn(),
+    run: async () => fn(),
+  })),
+}));
+
 const mongoose = require('mongoose');
 const Scheduler = require('../../lib');
 const single = require('./chores/onSingle');
@@ -11,7 +18,7 @@ const {
 const wait = (fn) =>
   setTimeout(() => {
     fn();
-  }, 650);
+  }, 1000);
 
 const expectFromScheduler = async (props) =>
   expect(await Scheduler.__$db.find(props)).not.toBeNull();
@@ -31,7 +38,9 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
-  await Scheduler.start(__dirname, 500);
+  // only available via mocking
+  const timer = await Scheduler.start(__dirname);
+  await timer.run();
 });
 
 afterEach(() => {
@@ -43,26 +52,24 @@ afterAll(() => {
 });
 
 describe('Scheduler', () => {
-  it('should walk fixtures directory', async (done) => {
+  it.only('should walk fixtures directory', async (done) => {
     expect(single).not.toHaveBeenCalled();
     expect(recurring).toHaveBeenCalled();
 
-    setTimeout(async () => {
-      await expectFromScheduler({
-        name: 'onRecurring@minutely',
-        status: DONE,
-      });
-
-      await expectFromScheduler({
-        name: 'onRecurring@minutely',
-        status: QUEUED,
-        due: {
-          $gt: new Date(),
-        },
-      });
-
-      done();
+    await expectFromScheduler({
+      name: 'onRecurring@minutely',
+      status: DONE,
     });
+
+    await expectFromScheduler({
+      name: 'onRecurring@minutely',
+      status: QUEUED,
+      due: {
+        $gt: new Date(),
+      },
+    });
+
+    done();
   });
 
   it('should call on chore', async (done) => {

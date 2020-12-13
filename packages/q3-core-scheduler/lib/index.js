@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const EventEmitter = require('events');
-// eslint-disable-next-line
+const cron = require('node-cron');
 const { executeOnAsync } = require('q3-schema-utils');
 const SchedulerSchema = require('./schema');
 const runner = require('./runner');
@@ -10,17 +10,12 @@ let timer;
 const Scheduler = mongoose.model('queue', SchedulerSchema);
 const Emitter = new EventEmitter();
 
-const continuous = (fn, interval = 30000) => {
-  timer = setInterval(async () => fn(), interval);
-  return fn();
-};
-
 const emit = (event, { name }) => {
   Emitter.emit(event, name);
 };
 
 const stop = () => {
-  if (timer) clearInterval(timer);
+  if (timer) timer.stop();
 };
 
 const run = async (fn) =>
@@ -55,6 +50,7 @@ module.exports = {
   queue: async (name, data) => {
     const job = await Scheduler.add({
       payload: makePayload(data),
+      priority: 1,
       name,
     });
 
@@ -62,13 +58,15 @@ module.exports = {
     return job;
   },
 
-  start: async (directory, backgroundInterval) => {
+  start: async (directory, interval = '* * * * *') => {
     const { execute, walk } = runner(directory);
     await seed(walk());
-    return continuous(
-      async () => run(execute),
-      backgroundInterval,
-    );
+
+    timer = cron.schedule(interval, async () => {
+      await run(execute);
+    });
+
+    return timer;
   },
 
   stop,

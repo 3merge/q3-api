@@ -40,10 +40,11 @@ const getInterval = (v) =>
 
 const isJob = (v) => isString(v) && v.startsWith('on');
 
-const isRecurringJob = (name) => {
-  const f = path.basename(name, path.extname(name));
-  return Boolean(getInterval(f) && isJob(f));
-};
+const getFileName = (name) =>
+  path.basename(name, path.extname(name));
+
+const isRecurringJob = (name) =>
+  Boolean(getInterval(name) && isJob(name));
 
 const getStatus = (v = 0) => (v > 3 ? FAILED : STALLED);
 
@@ -69,6 +70,7 @@ module.exports = {
   getStatus,
   getInterval,
   getNextDate,
+  getFileName,
   makePayload,
   stringify,
   parse,
