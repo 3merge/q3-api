@@ -40,7 +40,7 @@ if (isRunning && cluster.isMaster) {
 const connectToDB = (res, rej) => (err) => {
   if (err) return rej(err);
   app.use(handleUncaughtExceptions);
-  if (isRunning) io.listen();
+  if (isRunning && cluster.isWorker) io.listen();
   return res(null);
 };
 

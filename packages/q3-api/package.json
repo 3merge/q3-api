@@ -47,8 +47,7 @@
     "q3-schema-types": "^1.5.6",
     "q3-schema-users": "^1.5.6",
     "socket.io": "^3.0.4",
-    "ssestream": "^1.1.0",
-    "sticky-session": "^1.1.2"
+    "ssestream": "^1.1.0"
   },
   "peerDependencies": {
     "express": "^4.17.1",

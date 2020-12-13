@@ -2,7 +2,6 @@
 const http = require('http').Server(require('./express'));
 const io = require('socket.io')(http);
 const { get } = require('lodash');
-const sticky = require('sticky-session');
 const mongoose = require('./mongoose');
 
 class CollectionWatch {
@@ -120,10 +119,8 @@ io.on('connection', async (socket) => {
 });
 
 io.listen = () => {
-  if (!sticky.listen(http, process.env.PORT))
-    http.once('listening', () => {
-      new CollectionWatch(io).watch(mongoose.models);
-    });
+  http.listen(process.env.PORT);
+  new CollectionWatch(io).watch(mongoose.models);
 };
 
 module.exports = io;
