@@ -48,11 +48,11 @@ const Schema = new mongoose.Schema(
 Schema.statics.add = async function (props = {}) {
   const { name, ...rest } = props;
   return this.create({
+    name: getFileName(name),
     locked: false,
     status: QUEUED,
     due: new Date(),
     priority: 2,
-    name: getFileName(name),
     ...rest,
   });
 };
@@ -60,7 +60,7 @@ Schema.statics.add = async function (props = {}) {
 Schema.statics.isUnique = async function (name) {
   return !(await this.findOne({
     status: { $nin: [DONE, FAILED] },
-    name,
+    name: getFileName(name),
   })
     .lean()
     .exec());

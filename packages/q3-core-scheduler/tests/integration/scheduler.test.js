@@ -15,10 +15,7 @@ const {
   QUEUED,
 } = require('../../lib/constants');
 
-const wait = (fn) =>
-  setTimeout(() => {
-    fn();
-  }, 1000);
+let timer;
 
 const expectFromScheduler = async (props) =>
   expect(await Scheduler.__$db.find(props)).not.toBeNull();
@@ -39,8 +36,7 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   // only available via mocking
-  const timer = await Scheduler.start(__dirname);
-  await timer.run();
+  timer = await Scheduler.start(__dirname);
 });
 
 afterEach(() => {
@@ -52,7 +48,8 @@ afterAll(() => {
 });
 
 describe('Scheduler', () => {
-  it.only('should walk fixtures directory', async (done) => {
+  it('should walk fixtures directory', async () => {
+    await timer.run();
     expect(single).not.toHaveBeenCalled();
     expect(recurring).toHaveBeenCalled();
 
@@ -68,20 +65,15 @@ describe('Scheduler', () => {
         $gt: new Date(),
       },
     });
-
-    done();
   });
 
   it('should call on chore', async (done) => {
     const payload = { name: 'Mike' };
     await Scheduler.queue('onSingle', payload);
+    await timer.run();
 
-    // could not get fake timers to work
-    // so we'll run after the configured interval
-    await wait(async () => {
-      expect(single).toHaveBeenCalledWith(payload);
-      expectSingle(DONE, done);
-    });
+    expect(single).toHaveBeenCalledWith(payload);
+    expectSingle(DONE, done);
   });
 
   it('should stall jobs that error', async (done) => {
@@ -90,8 +82,7 @@ describe('Scheduler', () => {
     });
 
     await Scheduler.queue('onSingle');
-    await wait(async () => {
-      expectSingle(STALLED, done);
-    });
+    await timer.run();
+    expectSingle(STALLED, done);
   });
 });
