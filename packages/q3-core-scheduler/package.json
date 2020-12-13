@@ -1,7 +1,7 @@
 {
   "name": "q3-core-scheduler",
   "main": "lib/index.js",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "dependencies": {
     "moment": "^2.29.1",
     "mongoose": "^5.11.7",
