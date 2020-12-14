@@ -23,8 +23,8 @@ const run = async (fn) =>
     await Scheduler.getQueued(),
     async (res) => {
       try {
-        emit('start', res);
         await res.lock();
+        emit('start', res);
         await fn(res);
         emit('finish', res);
         await res.done();
