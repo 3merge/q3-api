@@ -27,6 +27,11 @@ const updatePassword = async (
   let doc;
 
   if (previousPassword) {
+    if (!user)
+      exception('Authentication')
+        .msg('requiredPasswordResetToken')
+        .throw();
+
     doc = await Users.findVerifiedById(user.id);
     await doc.verifyPassword(previousPassword, true);
   } else if (passwordResetToken) {

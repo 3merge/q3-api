@@ -176,6 +176,39 @@ describe('User authentication flow', () => {
 
         return confirm();
       });
+
+      it('should fail to change the password', async () => {
+        const { body } = await agent
+          .post('/authenticate')
+          .send({
+            email: user.email,
+            password: confirmNewPassword,
+          });
+
+        await agent
+          .post('/password-change')
+          .set({
+            Authorization: `Bearer ${body.token}`,
+            'X-Session-Nonce': body.nonce,
+          })
+          .send({
+            previousPassword: confirmNewPassword,
+            newPassword: confirmNewPassword,
+            confirmNewPassword,
+          })
+          .expect(422);
+      });
+
+      it('should block previous password without logging in', async () => {
+        await agent
+          .post('/password-change')
+          .send({
+            previousPassword: confirmNewPassword,
+            newPassword: confirmNewPassword,
+            confirmNewPassword,
+          })
+          .expect(401);
+      });
     });
 
     describe('/authenticate', () => {
