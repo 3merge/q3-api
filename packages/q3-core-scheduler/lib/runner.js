@@ -9,7 +9,7 @@ module.exports = (directory) => {
     execute: async ({ name, payload = {} }) => {
       // eslint-disable-next-line
       const fn = require(path.join(root, name));
-      await fn(parse(payload));
+      return fn(parse(payload));
     },
 
     walk: () =>

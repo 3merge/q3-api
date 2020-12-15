@@ -1,47 +1,16 @@
 const mongoose = require('mongoose');
 const EventEmitter = require('events');
-const cron = require('node-cron');
 const { executeOnAsync } = require('q3-schema-utils');
 const SchedulerSchema = require('./schema');
 const runner = require('./runner');
 const { makePayload } = require('./utils');
 
-let timer;
-const Scheduler = mongoose.model('queue', SchedulerSchema);
 const Emitter = new EventEmitter();
 
-const emit = (event, { name }) => {
-  Emitter.emit(event, name);
-};
-
-const stop = () => {
-  if (timer) timer.stop();
-};
-
-const run = async (fn) =>
-  executeOnAsync(
-    await Scheduler.getQueued(),
-    async (res) => {
-      try {
-        await res.lock();
-        emit('start', res);
-        await fn(res);
-        emit('finish', res);
-        await res.done();
-      } catch (e) {
-        emit('stall', res);
-        await res.stall(e);
-      }
-    },
-  );
-
-const seed = (jobs) =>
-  executeOnAsync(jobs, async (name) => {
-    if (await Scheduler.isUnique(name))
-      await Scheduler.add({
-        name,
-      });
-  });
+const Scheduler = mongoose.model(
+  process.env.QUEUING_COLLECTION || 'queue',
+  SchedulerSchema,
+);
 
 module.exports = {
   __$db: Scheduler,
@@ -54,20 +23,53 @@ module.exports = {
       name,
     });
 
-    emit('queued', job);
+    Emitter.emit('queued', job.name);
     return job;
   },
 
-  start: async (directory, interval = '* * * * *') => {
-    const { execute, walk } = runner(directory);
-    await seed(walk());
+  seed: async (directory) =>
+    executeOnAsync(
+      runner(directory).walk(),
+      async (name) => {
+        if (await Scheduler.isUnique(name))
+          await Scheduler.add({
+            name,
+          });
+      },
+    ),
 
-    timer = cron.schedule(interval, async () => {
-      await run(execute);
+  start: (directory) => {
+    const Ticker = new EventEmitter();
+    const { execute } = runner(directory);
+    const tick = 'tick';
+
+    let inProgress;
+
+    Ticker.on(tick, async () => {
+      const curr = await Scheduler.getQueued();
+      const emitTo = (name) =>
+        Emitter.emit(name, curr.name);
+
+      try {
+        if (curr) {
+          emitTo('start');
+          await execute(curr);
+          emitTo('finish');
+          await Scheduler.finish(curr);
+        }
+      } catch (e) {
+        emitTo('stall');
+        await Scheduler.stall(curr, e);
+      } finally {
+        inProgress = false;
+      }
     });
 
-    return timer;
+    return setInterval(() => {
+      if (!inProgress) {
+        Ticker.emit(tick);
+        inProgress = true;
+      }
+    }, 200);
   },
-
-  stop,
 };

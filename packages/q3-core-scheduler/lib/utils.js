@@ -47,6 +47,10 @@ const isRecurringJob = (name) =>
   Boolean(getInterval(name) && isJob(name));
 
 const getStatus = (v = 0) => (v > 3 ? FAILED : STALLED);
+const getMessage = (e) =>
+  typeof e === 'object' && e !== null
+    ? e.message
+    : undefined;
 
 const json = (method) => (v) => {
   try {
@@ -69,6 +73,7 @@ module.exports = {
   isRecurringJob,
   getStatus,
   getInterval,
+  getMessage,
   getNextDate,
   getFileName,
   makePayload,

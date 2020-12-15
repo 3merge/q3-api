@@ -10,7 +10,7 @@ const {
   getNextDate,
   getInterval,
   getStatus,
-  stringify,
+  getMessage,
   getFileName,
 } = require('./utils');
 
@@ -67,48 +67,57 @@ Schema.statics.isUnique = async function (name) {
 };
 
 Schema.statics.getQueued = async function () {
-  return this.find({
-    due: { $lt: new Date() },
-    status: [QUEUED, STALLED],
-    locked: false,
-  })
-    .limit(3)
-    .sort({
-      priority: 1,
-      createdAt: 1,
-    })
-    .exec();
+  return this.findOneAndUpdate(
+    {
+      due: { $lt: new Date() },
+      status: [QUEUED, STALLED],
+      locked: false,
+    },
+    {
+      $set: {
+        locked: true,
+      },
+      $inc: {
+        attempt: 1,
+      },
+    },
+    {
+      new: true,
+      order: {
+        priority: 1,
+        _id: 1,
+      },
+    },
+  );
 };
 
-Schema.methods.stall = async function (e) {
-  const attempt = this.attempt + 1;
-
-  return this.update({
-    status: getStatus(attempt),
-    error: stringify(e),
-    locked: false,
-    priority: 3,
-    attempt,
-  });
-};
-
-Schema.methods.lock = async function () {
-  return this.update({ locked: true });
-};
-
-Schema.methods.done = async function () {
-  await this.update({ status: DONE });
-  const due = getNextDate(getInterval(this.name));
+Schema.statics.finish = async function ({ _id, name }) {
+  await this.update({ _id }, { status: DONE });
+  const due = getNextDate(getInterval(name));
 
   return due
-    ? this.constructor.create({
-        name: this.name,
+    ? this.create({
         locked: false,
         priority: 2,
         status: QUEUED,
+        name,
         due,
       })
     : null;
+};
+
+Schema.statics.stall = async function (
+  { _id, attempt = 1 },
+  e,
+) {
+  return this.update(
+    { _id },
+    {
+      status: getStatus(attempt),
+      error: getMessage(e),
+      priority: 3,
+    },
+  );
 };
 
 module.exports = Schema;
