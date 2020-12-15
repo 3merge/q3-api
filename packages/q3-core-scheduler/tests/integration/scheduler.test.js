@@ -1,10 +1,3 @@
-jest.mock('node-cron', () => ({
-  schedule: jest.fn().mockImplementation((time, fn) => ({
-    stop: jest.fn(),
-    run: async () => fn(),
-  })),
-}));
-
 const mongoose = require('mongoose');
 const Scheduler = require('../../lib');
 const single = require('./chores/onSingle');
@@ -15,32 +8,24 @@ const {
   QUEUED,
 } = require('../../lib/constants');
 
+jest.useFakeTimers();
+
 let timer;
 
 const expectFromScheduler = async (props) =>
   expect(await Scheduler.__$db.find(props)).not.toBeNull();
-
-const expectSingle = (status, next) =>
-  setTimeout(async () => {
-    await expectFromScheduler({
-      name: 'onSingle',
-      status,
-    });
-
-    next();
-  });
 
 beforeAll(async () => {
   await mongoose.connect(process.env.CONNECTION);
 });
 
 beforeEach(async () => {
-  // only available via mocking
   timer = await Scheduler.start(__dirname);
 });
 
-afterEach(() => {
-  Scheduler.stop();
+afterEach(async () => {
+  clearInterval(timer);
+  await Scheduler.__$db.deleteMany({});
 });
 
 afterAll(() => {
@@ -49,17 +34,22 @@ afterAll(() => {
 
 describe('Scheduler', () => {
   it('should walk fixtures directory', async () => {
-    await timer.run();
-    expect(single).not.toHaveBeenCalled();
-    expect(recurring).toHaveBeenCalled();
+    const name = 'onRecurring@minutely';
+
+    recurring.mockImplementation((d) => {
+      expect(d).toHaveProperty('name', name);
+    });
+
+    await Scheduler.seed(__dirname);
+    jest.runOnlyPendingTimers();
 
     await expectFromScheduler({
-      name: 'onRecurring@minutely',
+      name,
       status: DONE,
     });
 
     await expectFromScheduler({
-      name: 'onRecurring@minutely',
+      name,
       status: QUEUED,
       due: {
         $gt: new Date(),
@@ -67,22 +57,35 @@ describe('Scheduler', () => {
     });
   });
 
-  it('should call on chore', async (done) => {
+  it('should call on chore', async () => {
     const payload = { name: 'Mike' };
-    await Scheduler.queue('onSingle', payload);
-    await timer.run();
 
-    expect(single).toHaveBeenCalledWith(payload);
-    expectSingle(DONE, done);
+    single.mockImplementation((d) => {
+      expect(d).toHaveProperty('payload', payload);
+    });
+
+    await Scheduler.queue('onSingle', payload);
+    jest.runOnlyPendingTimers();
+
+    expectFromScheduler({
+      name: 'onSingle',
+      status: DONE,
+    });
   });
 
-  it('should stall jobs that error', async (done) => {
+  it('should stall jobs that error', async () => {
+    const err = new Error('Oops!');
+
     single.mockImplementation(() => {
-      throw new Error('Oops!');
+      throw err;
     });
 
     await Scheduler.queue('onSingle');
-    await timer.run();
-    expectSingle(STALLED, done);
+    jest.runOnlyPendingTimers();
+
+    expectFromScheduler({
+      status: STALLED,
+      error: 'Oops!',
+    });
   });
 });
