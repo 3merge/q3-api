@@ -22,6 +22,10 @@ const getShippingStub = () => ({
   }),
 });
 
+beforeEach(() => {
+  bn.mock.mockReset();
+});
+
 describe('Bambora strategy', () => {
   it('should normalize order address lines and submit token', async () => {
     const stub = {
@@ -40,7 +44,6 @@ describe('Bambora strategy', () => {
       {
         shipping: getShippingStub(),
         billing: getShippingStub(),
-        // only if included...
         order_number: 1,
       },
       'token',
@@ -49,6 +52,45 @@ describe('Bambora strategy', () => {
     expect(bn.mock).toHaveBeenCalledWith(
       expect.objectContaining({
         order_number: 1,
+      }),
+      undefined,
+    );
+  });
+
+  it('should include custom name', async () => {
+    await Bambora(
+      {
+        shipping: getShippingStub(),
+        billing: getShippingStub(),
+        card_name: 'Mike',
+      },
+      'token',
+    );
+
+    expect(bn.mock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: 'Mike',
+      }),
+      undefined,
+    );
+  });
+
+  it('should default to billing name', async () => {
+    await Bambora(
+      {
+        shipping: getShippingStub(),
+        billing: {
+          ...getShippingStub(),
+          firstName: 'Jon',
+          lastName: 'Doe',
+        },
+      },
+      'token',
+    );
+
+    expect(bn.mock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: 'Jon Doe',
       }),
       undefined,
     );
