@@ -38,7 +38,7 @@ module.exports = {
       },
     ),
 
-  start: (directory) => {
+  start: (directory, interval = 30000) => {
     const Ticker = new EventEmitter();
     const { execute } = runner(directory);
     const tick = 'tick';
@@ -70,6 +70,6 @@ module.exports = {
         Ticker.emit(tick);
         inProgress = true;
       }
-    }, 200);
+    }, interval);
   },
 };

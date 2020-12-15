@@ -16,7 +16,7 @@ describe('Scheduler', () => {
 
     const timers = await Promise.all(
       Array.from({ length: 5 }).map(() =>
-        Scheduler.start(__dirname),
+        Scheduler.start(__dirname, 10),
       ),
     );
 
@@ -26,6 +26,6 @@ describe('Scheduler', () => {
       expect(single).toHaveBeenCalledTimes(1);
       timers.forEach(clearInterval);
       done();
-    }, 1500);
+    }, 150);
   });
 });
