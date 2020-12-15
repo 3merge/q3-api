@@ -26,6 +26,7 @@
   "verify": "Verify your account",
   "onReverify": "New verification token generated",
   "account": "An account could not be found for this action",
+  "accountVerified": "An account could not be found or has already been verified. If you've already verified, you may either login or change your password.",
   "noPermission": "Account cannot perform this operation",
   "insufficientPermissions": "Account requires a greater permission level to complete this operation",
   "credentials": "Bad credentials. Please try again.",

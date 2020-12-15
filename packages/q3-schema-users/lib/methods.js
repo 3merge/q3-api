@@ -127,11 +127,19 @@ module.exports = class UserAuthDecorator {
   }
 
   static async findUnverifiedByEmail(email) {
-    return this.$findOneStrictly({
-      verified: false,
-      active: true,
-      email,
-    });
+    try {
+      return this.$findOneStrictly({
+        verified: false,
+        active: true,
+        email,
+      });
+    } catch (e) {
+      exception('BadRequest')
+        .msg('accountVerified')
+        .throw();
+
+      return null;
+    }
   }
 
   static async findUserBySecret(id, secret) {
