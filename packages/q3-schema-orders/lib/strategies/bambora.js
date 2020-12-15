@@ -11,12 +11,13 @@ module.exports = (doc, token, callback) => {
 
   return client.postPayment(
     {
-      // allow us to alias any property to map to underlying API spec
       ...(doc.order_number
         ? { order_number: doc.order_number }
         : {}),
+      name: doc.card_name
+        ? doc.card_name
+        : `${doc.billing.firstName} ${doc.billing.lastName}`,
       amount: doc.total,
-      name: `${doc.billing.firstName} ${doc.billing.lastName}`,
       shipping,
       billing,
       token,
