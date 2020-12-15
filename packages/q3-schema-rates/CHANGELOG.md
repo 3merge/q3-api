@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.10](https://github.com/3merge/q3-api/compare/v1.5.9...v1.5.10) (2020-12-15)
+
+**Note:** Version bump only for package q3-schema-rates
+
+
+
+
+
 ## [1.5.9](https://github.com/3merge/q3-api/compare/v1.5.8...v1.5.9) (2020-12-14)
 
 **Note:** Version bump only for package q3-schema-rates

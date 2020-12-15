@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.10](https://github.com/3merge/q3-api/compare/v1.5.9...v1.5.10) (2020-12-15)
+
+
+### Bug Fixes
+
+* improve scheduler locking ([#105](https://github.com/3merge/q3-api/issues/105)) ([4830e08](https://github.com/3merge/q3-api/commit/4830e083a13b1d714599f4d216ecfc1ea60e0515))
+
+
+
+
+
 ## [1.5.9](https://github.com/3merge/q3-api/compare/v1.5.8...v1.5.9) (2020-12-14)
 
 **Note:** Version bump only for package q3-schema-discounts
