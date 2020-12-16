@@ -102,7 +102,7 @@ module.exports = class UserAuthDecorator {
     return verifyToken.apply(this, args);
   }
 
-  static async $findOneStrictly(args) {
+  static async $findOneStrictly(args, msg = 'account') {
     if (typeof args.email === 'string')
       Object.assign(args, {
         email: args.email.toLowerCase(),
@@ -113,9 +113,7 @@ module.exports = class UserAuthDecorator {
       .setOptions({ bypassAuthorization: true })
       .exec();
 
-    if (!doc)
-      exception('BadRequest').msg('account').throw();
-
+    if (!doc) exception('BadRequest').msg(msg).throw();
     return doc;
   }
 
@@ -127,19 +125,14 @@ module.exports = class UserAuthDecorator {
   }
 
   static async findUnverifiedByEmail(email) {
-    try {
-      return this.$findOneStrictly({
+    return this.$findOneStrictly(
+      {
         verified: false,
         active: true,
         email,
-      });
-    } catch (e) {
-      exception('BadRequest')
-        .msg('accountVerified')
-        .throw();
-
-      return null;
-    }
+      },
+      'accountVerified',
+    );
   }
 
   static async findUserBySecret(id, secret) {
