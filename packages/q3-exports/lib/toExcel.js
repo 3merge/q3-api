@@ -58,13 +58,11 @@ const getStartingRow = (ws, title) => {
 const toExcel = (body, opts = {}) => {
   const wb = new ExcelJS.Workbook();
   const ws = wb.addWorksheet();
-  const row = getStartingRow(ws, opts.title);
+
   const values = getHeader(body);
-  const columns = mapColumns(values);
+  ws.columns = mapColumns(values);
 
-  ws.columns = columns;
-
-  Object.assign(ws.getRow(row), {
+  Object.assign(ws.getRow(getStartingRow(ws, opts.title)), {
     ...makeFill('C7C7C7'),
     ...makeFont(),
     ...sharedStyles,
