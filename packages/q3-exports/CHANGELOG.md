@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.1](https://github.com/3merge/q3-api/compare/v1.6.0...v1.6.1) (2020-12-18)
+
+
+### Bug Fixes
+
+* column ordering ([e0ffe3c](https://github.com/3merge/q3-api/commit/e0ffe3c33f95ab8a5821a6f227b6c990a617bf01))
+
+
+
+
+
 # [1.6.0](https://github.com/3merge/q3-api/compare/v1.5.12...v1.6.0) (2020-12-18)
 
 

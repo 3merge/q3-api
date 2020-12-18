@@ -1,6 +1,6 @@
 {
   "name": "q3-exports",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "main": "lib/index.js",
   "dependencies": {
     "csv-writer": "^1.6.0",
