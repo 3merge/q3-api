@@ -1,38 +1,86 @@
 const ExcelJS = require('exceljs');
+const { compose } = require('lodash/fp');
 const { first } = require('lodash');
 
-const headerStyles = {
+const getHeader = compose(Object.keys, first);
+
+const sharedStyles = {
   alignment: {
     vertical: 'middle',
   },
   border: {
     bottom: { style: 'thin' },
   },
+};
+
+const makeFill = (argb) => ({
   fill: {
     type: 'pattern',
     pattern: 'solid',
-    fgColor: { argb: 'C7C7C7' },
+    fgColor: { argb },
   },
-  font: { bold: true },
-};
+});
 
-module.exports = (body) => {
-  const header = Object.keys(first(body));
-  const wb = new ExcelJS.Workbook();
-  const ws = wb.addWorksheet();
+const makeFont = (args = {}) => ({
+  font: {
+    bold: true,
+    ...args,
+  },
+});
 
-  ws.columns = header.map((head) => ({
-    header: head.toUpperCase(),
-    key: head,
+const mapColumns = (a) =>
+  a.map((column) => ({
+    header: column.toUpperCase(),
+    key: column,
     width: 35,
   }));
+
+const makeTitle = (ws, title) => {
+  ws.mergeCells('A1', 'Z1');
+  return Object.assign(ws.getRow(1), {
+    ...makeFill('D7D7D7'),
+    ...makeFont({ size: 14 }),
+    ...sharedStyles,
+    values: [title],
+    height: 36,
+  });
+};
+
+const getStartingRow = (ws, title) => {
+  if (title) {
+    makeTitle(ws, title);
+    return 2;
+  }
+
+  return 1;
+};
+
+const toExcel = (body, opts = {}) => {
+  const wb = new ExcelJS.Workbook();
+  const ws = wb.addWorksheet();
+  const row = getStartingRow(ws, opts.title);
+  const values = getHeader(body);
+  const columns = mapColumns(values);
+
+  ws.columns = columns;
+
+  Object.assign(ws.getRow(row), {
+    ...makeFill('C7C7C7'),
+    ...makeFont(),
+    ...sharedStyles,
+    values,
+  });
 
   body.forEach((r) => {
     ws.addRow(r);
   });
 
-  Object.assign(ws.getRow(1), headerStyles);
-
   ws.properties.defaultRowHeight = 18;
   return wb.xlsx.writeBuffer();
 };
+
+toExcel.getHeader = getHeader;
+toExcel.mapColumns = mapColumns;
+toExcel.makeTitle = makeTitle;
+
+module.exports = toExcel;

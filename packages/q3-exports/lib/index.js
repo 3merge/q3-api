@@ -4,7 +4,8 @@ const Excel = require('./toExcel');
 const Pdf = require('./toPdf');
 
 module.exports = class Q3Export {
-  constructor(strategyName) {
+  constructor(strategyName, options = {}) {
+    this.__$docOpts = options;
     this.$__fn = get(
       {
         csv: CSV,
@@ -24,6 +25,6 @@ module.exports = class Q3Export {
     if (!Array.isArray(data))
       throw new Error('Data must be an array');
 
-    return this.$__fn(data);
+    return this.$__fn(data, this.__$docOpts);
   }
 };

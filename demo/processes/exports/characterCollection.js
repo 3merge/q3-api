@@ -5,10 +5,9 @@ const { execChildProcess } = require('q3-api/lib/helpers');
 const Q3Instance = require('../../config');
 const { Character } = require('../../models');
 
-execChildProcess(Q3Instance, async ({ user, filter }) => {
-  const fileName = 'characters.csv';
-
-  const characters = await Character.find(filter)
+execChildProcess(Q3Instance, async ({ user }) => {
+  const fileName = 'characters.xlsx';
+  const characters = await Character.find({})
     .select('name')
     .lean()
     .exec();
@@ -18,6 +17,7 @@ execChildProcess(Q3Instance, async ({ user, filter }) => {
   const file = await Q3Instance.Notifications.upload(
     {
       name: fileName,
+
       user,
       data,
     },
@@ -25,6 +25,8 @@ execChildProcess(Q3Instance, async ({ user, filter }) => {
       name: 'labels:demo',
     },
   );
+
+  console.log(file);
 
   return file;
 });

@@ -44,7 +44,7 @@ class NotificationDecorator {
   }
 
   static async upload(
-    { name, data, user, buffer },
+    { name, data, user, buffer, options = {} },
     columnMapDef,
   ) {
     const [, ext] = name.split('.');
@@ -55,7 +55,7 @@ class NotificationDecorator {
 
     if (!buffer)
       // eslint-disable-next-line
-      buffer = await new Exporter(ext).toBuffer(
+      buffer = await new Exporter(ext, options).toBuffer(
         columnMapDef
           ? mapHeaders(data, columnMapDef)
           : data,
