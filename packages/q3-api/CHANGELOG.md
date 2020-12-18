@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/3merge/q3-api/compare/v1.5.12...v1.6.0) (2020-12-18)
+
+
+### Features
+
+* title row for excel exports ([7f3a88f](https://github.com/3merge/q3-api/commit/7f3a88fe77799c0fd85b4fd48274b38fe5ee4e4b))
+
+
+
+
+
 ## [1.5.12](https://github.com/3merge/q3-api/compare/v1.5.11...v1.5.12) (2020-12-16)
 
 **Note:** Version bump only for package q3-api
