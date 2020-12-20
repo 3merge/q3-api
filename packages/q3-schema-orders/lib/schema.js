@@ -78,7 +78,6 @@ const OrderSchema = new Schema(
     },
     paymentOption: {
       type: String,
-      searchable: true,
     },
     shippingOption: String,
     status: {
@@ -88,7 +87,6 @@ const OrderSchema = new Schema(
     },
     comments: {
       type: String,
-      searchable: true,
     },
   },
   {

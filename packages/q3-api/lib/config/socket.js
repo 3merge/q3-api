@@ -13,8 +13,7 @@ class CollectionWatch {
     return get(
       params,
       // this will always change so long as timestamps is enabled
-      'updateDescription.updatedFields.updatedAt',
-      new Date(),
+      'documentKey._id',
     );
   }
 

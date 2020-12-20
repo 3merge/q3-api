@@ -10,16 +10,13 @@ module.exports = new Schema({
   firstName: {
     type: String,
     required: true,
-    searchable: true,
   },
   company: {
     type: String,
-    searchable: true,
   },
   lastName: {
     type: String,
     required: true,
-    searchable: true,
   },
   email: Schema.Types.Email,
   branch: {
@@ -28,7 +25,6 @@ module.exports = new Schema({
   },
   streetNumber: {
     type: String,
-    searchable: true,
   },
   streetLine1: {
     type: String,
@@ -54,7 +50,6 @@ module.exports = new Schema({
   postal: {
     type: Schema.Types.Postal,
     required: true,
-    searchable: true,
   },
   country: {
     type: String,
