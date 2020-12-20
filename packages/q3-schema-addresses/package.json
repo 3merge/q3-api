@@ -1,6 +1,6 @@
 {
   "name": "q3-schema-addresses",
-  "version": "1.6.0",
+  "version": "1.6.2",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
