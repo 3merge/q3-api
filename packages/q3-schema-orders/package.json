@@ -1,6 +1,6 @@
 {
   "name": "q3-schema-orders",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
