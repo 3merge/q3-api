@@ -4,7 +4,7 @@
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "bambora-node": "^1.1.2",
+    "bambora-node": "^1.1.3",
     "q3-schema-addresses": "^1.6.2",
     "q3-schema-discounts": "^1.6.0",
     "q3-schema-rates": "^1.6.0",

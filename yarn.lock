@@ -2269,10 +2269,10 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
   integrity sha1-ibTRmasr7kneFk6gK4nORi1xt2c=
 
-bambora-node@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/bambora-node/-/bambora-node-1.1.2.tgz#2c2a24b5b43437e2b1e19631d7b0ac24bc80c041"
-  integrity sha512-9TtPQyA59MWzDxcjabi5rIx+XRdm/zdsSyKJ1lGFXhDTD6vebY7ilukHwUl/CAv7R41Cvq+go18WurVg3ymarw==
+bambora-node@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/bambora-node/-/bambora-node-1.1.3.tgz#41e35fb3d1596eba6677bc7ea01e220df30cb7c1"
+  integrity sha512-1ZDT6awBRnwfdi468xDseobIS6HtyaFrftAGrg1pOa6E2J0TOZPnVWI3zIBYuAsiqm5F9JK1kjWoOjErO0sJYQ==
   dependencies:
     axios "^0.19.1"
     lodash.get "^4.4.2"
@@ -7841,10 +7841,10 @@ mongoose-paginate-v2@^1.3.52:
   resolved "https://registry.yarnpkg.com/mongoose-paginate-v2/-/mongoose-paginate-v2-1.3.52.tgz#e7e6ad89d57b8afaddbf3d81ceea1b72a3096142"
   integrity sha512-jFlmFfnQFC4/PEu8YbvM5dqa98caUdFESqyiuHjzmxCtb90HR7DtDImTS4ZdZHAwS4p9zDhtBOm69P04zXVSLQ==
 
-mongoose-partial-search@^1.0.1:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/mongoose-partial-search/-/mongoose-partial-search-1.0.5.tgz#9ca4315b3aeaaceeb72555be4241d9ed0a729d00"
-  integrity sha512-ff3wr+sCvGhOXVW12sC7k0zm8oHyjXu6vDVVo0j8qQlWeR2kJ7goLhZz2NAU+zsvENHOJ9WOpWVhsxXIDuMg5A==
+mongoose-partial-search@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/mongoose-partial-search/-/mongoose-partial-search-1.0.6.tgz#f4fc32ba70da337ba77fe5682767638b3052be92"
+  integrity sha512-a2k5b3wWf6vQeWM4ZfU8FDwwxX/UQ6UciomI9J6ph9LErMSFDc4gg5xqmYOqvf7UgKagwQscfT8wkmuy/M1wOw==
   dependencies:
     is-glob "^4.0.1"
     minimatch "^3.0.4"
