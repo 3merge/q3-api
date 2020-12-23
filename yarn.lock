@@ -7957,6 +7957,11 @@ mz@^2.5.0:
     object-assign "^4.0.1"
     thenify-all "^1.0.0"
 
+n-gram@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/n-gram/-/n-gram-1.1.2.tgz#69c609a5c83bb32f82774c9e297f8494c7326798"
+  integrity sha512-mBTpWKp0NHdujHmxrskPg2jc108mjyMmVxHN1rZGK/ogTLi9O0debDIXlQPqotNELdNmVGtL4jr7SCig+4OWvQ==
+
 nanomatch@^1.2.9:
   version "1.2.13"
   resolved "https://registry.yarnpkg.com/nanomatch/-/nanomatch-1.2.13.tgz#b87a8aa4fc0de8fe6be88895b38983ff265bd119"
