@@ -1,12 +1,14 @@
 const Q3 = require('q3-api');
 const config = require('./config');
-require('./models');
+const { Character } = require('./models');
 
 config
   .connect()
-  .then(() => {
-    // noop
-  })
+  // .then(() =>
+  //   Character.initializeFuzzySearching().then(() => {
+  //     console.log('DONE');
+  //   }),
+  // )
   .catch((e) => {
     // eslint-disable-next-line
     console.log(e);

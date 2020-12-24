@@ -1,6 +1,8 @@
 const fuzzysearch = require('./fuzzysearch');
-const save = require('./save');
-const setup = require('./setup');
+const {
+  getFieldName,
+  getGramOptions,
+} = require('./helpers');
 
 const NGramsMongoosePlugin = (s) => {
   const fields = [];
@@ -11,7 +13,9 @@ const NGramsMongoosePlugin = (s) => {
         .filter((i = '') => i.trim())
         .join('.');
 
-      if (obj.options.searchable) fields.push(join);
+      if (obj.options.searchable)
+        fields.push(getGramOptions(join, obj.options));
+
       if (obj.schema) iterateSchema(obj.schema, join);
     });
 
@@ -22,11 +26,27 @@ const NGramsMongoosePlugin = (s) => {
       iterateSchema(v),
     );
 
+  const { init, getSearch, saveGrams } = fuzzysearch(
+    fields,
+  );
+
   // eslint-disable-next-line
-  s.statics.fuzzy = fuzzysearch;
+  s.statics.getFuzzyQuery = getSearch;
   // eslint-disable-next-line
-  s.statics.setup = setup(fields);
-  s.pre('save', save(fields));
+  s.statics.initializeFuzzySearching = init;
+  s.pre('save', saveGrams);
+
+  s.add(
+    fields.reduce((acc, curr) => {
+      acc[`${getFieldName(curr)}_ngram`] = {
+        type: [String],
+        select: false,
+      };
+
+      return acc;
+    }, {}),
+  );
+
   return s;
 };
 

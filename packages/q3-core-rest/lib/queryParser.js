@@ -6,9 +6,9 @@ const casters = require('./controllers/casters');
 const execSearchBuildMethod = (a, b, search) => {
   let out;
 
-  if (a) out = a.searchBuilder(search);
-  else if (b) out = b.searchBuilder(search);
-  return out || {};
+  if (a) out = a.getFuzzyQuery(search);
+  else if (b) out = b.getFuzzyQuery(search);
+  return search ? out : {};
 };
 
 module.exports = (req, Model) => {

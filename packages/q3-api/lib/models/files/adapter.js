@@ -63,11 +63,13 @@ module.exports = class FileUploadAdapter {
     if (!this.uploads || !Array.isArray(this.uploads))
       return undefined;
 
-    return this.uploads.find((item) =>
+    const file = this.uploads.find((item) =>
       item.relativePath
         ? item.relativePath.startsWith(relativePath)
         : false,
-    ).name;
+    );
+
+    return file ? file.name : null;
   }
 
   async handleReq({ body, files }) {

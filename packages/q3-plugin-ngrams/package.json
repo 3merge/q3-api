@@ -1,7 +1,7 @@
 {
   "name": "q3-plugin-ngrams",
   "version": "1.0.24",
-  "main": "index.js",
+  "main": "lib/index.js",
   "dependencies": {
     "lodash": "^4.17.20",
     "mongoose": "^5.11.8",

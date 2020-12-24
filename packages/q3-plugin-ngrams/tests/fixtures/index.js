@@ -13,6 +13,9 @@ module.exports = {
       Contact.insertMany(contactJson),
     ]);
 
-    return Promise.all([Article.setup(), Contact.setup()]);
+    return Promise.all([
+      Article.initializeFuzzySearching(),
+      Contact.initializeFuzzySearching(),
+    ]);
   },
 };
