@@ -4,27 +4,19 @@ const NGramsMongoosePlugin = require('../../lib');
 const Schema = new mongoose.Schema({
   firstName: {
     type: String,
-    searchable: true,
-    minGramSize: 2,
-    maxGramSize: 4,
+    gram: 2,
   },
   lastName: {
     type: String,
-    searchable: true,
-    minGramSize: 2,
-    maxGramSize: 4,
+    gram: 2,
   },
   email: {
     type: String,
-    searchable: true,
-    minGramSize: 3,
-    maxGramSize: 5,
+    gram: 3,
   },
   tel: {
     type: String,
-    searchable: true,
-    minGramSize: 3,
-    maxGramSize: 4,
+    gram: 3,
   },
 });
 

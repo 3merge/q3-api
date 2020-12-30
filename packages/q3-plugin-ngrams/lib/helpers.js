@@ -1,5 +1,6 @@
 const ng = require('n-gram');
 const {
+  get,
   isPlainObject,
   lowerCase,
   trim,
@@ -10,37 +11,55 @@ const {
 } = require('lodash');
 const { compose } = require('lodash/fp');
 
+const chunk = (v, num) =>
+  v.match(new RegExp(`.{1,${num}}`, 'g'));
+
+const castToDoubleQuotes = (threshold) => (v) =>
+  v.length === threshold ? `"${v}"` : v;
+
 const clean = compose(
   (v) => v.replace(/[^a-zA-Z0-9]/g, '').replace(/\s/g, ''),
   lowerCase,
   trim,
 );
 
+const filterByLength = (a) =>
+  a.filter((item = '') => item.trim());
+
 const getField = (prop) => (field) =>
   isPlainObject(field) ? field[prop] : field;
 
-const mapFields = (fields = [], prop) =>
-  fields.map(getField(prop));
-
 const getFieldNameOfGram = (f) => `${f}_ngram`;
 
-const getGramOptions = (name, opts = {}) =>
-  opts.minGramSize || opts.maxGramSize
-    ? { ...opts, name }
-    : name;
+const getGrams = (decorator) => (fields) =>
+  decorator(fields.map(getField('gram')));
+
+const getMaxGram = getGrams(max);
+const getMinGram = getGrams(min);
+
+const getGramSize = (obj = {}) =>
+  get(obj, 'options.gram') > 1
+    ? Number(obj.options.gram)
+    : 0;
 
 const getRange = (fields, search = '') => {
-  const maxValue = max(mapFields(fields, 'maxGramSize'));
+  if (!search || !search.length) return [1, 1];
 
+  const maxValue = getMaxGram(fields);
   const minValue = Math.max(
-    min(mapFields(fields, 'minGramSize')),
+    getMinGram(fields),
     max(search.split(' ').map((v) => v.length)),
   );
 
   return [Math.min(minValue, maxValue), maxValue];
 };
 
-const makeGram = (str, minGramSize = 2, maxGramSize = 4) =>
+const hasLengthGreaterThan = (
+  str = '',
+  expectedLength = 0,
+) => str.length > expectedLength;
+
+const makeGram = (str, minGramSize, maxGramSize) =>
   uniq(
     compact(
       Array.from({
@@ -56,6 +75,9 @@ const makeGram = (str, minGramSize = 2, maxGramSize = 4) =>
     ),
   );
 
+const mapWord = (str = '', fn) =>
+  str.split(' ').map(fn).flat(2).join(' ');
+
 const quote = (v) => `"${v}"`;
 
 const reduceIndex = (fields = []) =>
@@ -68,27 +90,30 @@ const reduceIndex = (fields = []) =>
 
 const reduceSearchableFields = (fields = [], doc) =>
   fields.reduce((acc, curr) => {
-    const {
-      maxGramSize,
-      minGramSize,
-      name,
-    } = !isPlainObject(curr) ? { name: curr } : curr;
+    const { gram, name } = !isPlainObject(curr)
+      ? { name: curr }
+      : curr;
 
     acc[getFieldNameOfGram(name)] = makeGram(
       doc[name],
-      minGramSize,
-      maxGramSize,
+      gram,
+      getMaxGram(fields),
     );
 
     return acc;
   }, {});
 
 module.exports = {
+  castToDoubleQuotes,
+  chunk,
   clean,
+  filterByLength,
   getFieldName: getField('name'),
-  getGramOptions,
+  getGramSize,
   getRange,
+  hasLengthGreaterThan,
   makeGram,
+  mapWord,
   quote,
   reduceIndex,
   reduceSearchableFields,

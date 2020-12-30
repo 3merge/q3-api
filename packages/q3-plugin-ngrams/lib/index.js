@@ -1,29 +1,34 @@
 const fuzzysearch = require('./fuzzysearch');
 const {
+  filterByLength,
   getFieldName,
-  getGramOptions,
+  getGramSize,
 } = require('./helpers');
 
 const NGramsMongoosePlugin = (s) => {
   const fields = [];
 
-  const iterateSchema = (schema, prevpath = '') =>
+  const recursivelyFindGrams = (schema, prevpath = '') =>
     schema.eachPath((path, obj) => {
-      const join = [prevpath, path]
-        .filter((i = '') => i.trim())
-        .join('.');
+      const parts = [prevpath, path];
+      const join = filterByLength(parts).join('.');
+      const gSize = getGramSize(obj);
 
-      if (obj.options.searchable)
-        fields.push(getGramOptions(join, obj.options));
+      if (gSize)
+        fields.push({
+          gram: gSize,
+          name: join,
+        });
 
-      if (obj.schema) iterateSchema(obj.schema, join);
+      if (obj.schema)
+        recursivelyFindGrams(obj.schema, join);
     });
 
-  iterateSchema(s);
+  recursivelyFindGrams(s);
 
   if (s.discriminators)
     Object.values(s.discriminators).forEach((v) =>
-      iterateSchema(v),
+      recursivelyFindGrams(v),
     );
 
   const { init, getSearch, saveGrams } = fuzzysearch(

@@ -1,22 +1,33 @@
 const {
+  chunk,
+  castToDoubleQuotes,
   getRange,
-  makeGram,
+  hasLengthGreaterThan,
+  mapWord,
   reduceIndex,
   reduceSearchableFields,
 } = require('./helpers');
 
+const everyEquals = (a = [], v) =>
+  a.every((item) => item === v);
+
 module.exports = (fields = []) => ({
   getSearch: (term) => {
-    console.log(
-      getRange(fields, term),
-      makeGram(term, ...getRange(fields, term)),
-    );
+    const range = getRange(fields, term);
+    if (everyEquals(range, 1)) return {};
+
+    const [, max] = range;
+    const $search = mapWord(term, (word) => {
+      const c = chunk(word, max);
+
+      return hasLengthGreaterThan(c, 1)
+        ? c.map(castToDoubleQuotes(max))
+        : c;
+    });
+
     return {
       $text: {
-        $search: makeGram(
-          term,
-          ...getRange(fields, term),
-        ).join(' '),
+        $search,
       },
     };
   },
