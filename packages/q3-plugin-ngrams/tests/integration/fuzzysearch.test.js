@@ -31,6 +31,12 @@ const makeTableCase = (modelName) => (
 beforeAll(async () => {
   await mongoose.connect(process.env.CONNECTION);
   await Model.seed();
+
+  // console.log(
+  //   await Model.Article.findOne().select(
+  //     '+description_ngram',
+  //   ),
+  // );
 });
 
 afterAll(() => {
@@ -58,9 +64,11 @@ describe.each([
   ['hog', 1],
   ['friends', 1],
   ['of cheese', 1],
-  ['the north wind and sun', 1],
-  ['ong', 1],
-  ['su', 2],
+  ['north wind sun', 2],
+  ['rong', 2],
+  ['su', 4],
+  ['theres', 1],
+  ['accessibl', 1],
 ])('.fuzzy(%s)', makeTableCase('Article'));
 
 describe.each([

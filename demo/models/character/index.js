@@ -4,17 +4,16 @@ const Character = new mongoose.Schema(
   {
     name: {
       type: String,
-      searchable: true,
-      minGramSize: 2,
-      maxGramSize: 4,
+      gram: 2,
     },
-    role: String,
+    role: {
+      type: String,
+      gram: 3,
+    },
     gender: String,
     bio: {
       type: String,
-      searchable: true,
-      minGramSize: 3,
-      maxGramSize: 6,
+      gram: 4,
     },
   },
   {

@@ -1,29 +1,23 @@
 const {
+  clean,
   chunk,
   castToDoubleQuotes,
-  getRange,
   hasLengthGreaterThan,
-  mapWord,
   reduceIndex,
   reduceSearchableFields,
 } = require('./helpers');
 
-const everyEquals = (a = [], v) =>
-  a.every((item) => item === v);
-
 module.exports = (fields = []) => ({
   getSearch: (term) => {
-    const range = getRange(fields, term);
-    if (everyEquals(range, 1)) return {};
+    if (!term || term.length < 2) return {};
 
-    const [, max] = range;
-    const $search = mapWord(term, (word) => {
-      const c = chunk(word, max);
-
-      return hasLengthGreaterThan(c, 1)
-        ? c.map(castToDoubleQuotes(max))
-        : c;
-    });
+    const $search = term
+      .split(' ')
+      .map(clean)
+      .map(chunk)
+      .flat(2)
+      .map(castToDoubleQuotes)
+      .join(' ');
 
     return {
       $text: {
@@ -39,9 +33,17 @@ module.exports = (fields = []) => ({
   },
 
   async init() {
-    await this.collection.createIndex(reduceIndex(fields), {
+    const index = reduceIndex(fields);
+
+    if (!hasLengthGreaterThan(Object.keys(index), 0))
+      throw new Error(
+        'At least one schema property requires a "gram" value greater than 1',
+      );
+
+    await this.collection.createIndex(index, {
       name: 'ngrams',
       sparse: true,
+      default_language: 'none',
     });
 
     return new Promise((resolve, reject) =>

@@ -5,7 +5,8 @@
   "dependencies": {
     "lodash": "^4.17.20",
     "mongoose": "^5.11.8",
-    "n-gram": "^1.1.2"
+    "n-gram": "^1.1.2",
+    "sizeof": "^1.0.0"
   },
   "jest": {
     "verbose": true,

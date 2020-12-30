@@ -4,11 +4,11 @@ const NGramsMongoosePlugin = require('../../lib');
 const Schema = new mongoose.Schema({
   title: {
     type: String,
-    gram: 2,
+    gram: true,
   },
   description: {
     type: String,
-    gram: 4,
+    gram: true,
   },
 });
 

@@ -1,8 +1,8 @@
+const { get } = require('lodash');
 const fuzzysearch = require('./fuzzysearch');
 const {
   filterByLength,
   getFieldName,
-  getGramSize,
 } = require('./helpers');
 
 const NGramsMongoosePlugin = (s) => {
@@ -12,13 +12,9 @@ const NGramsMongoosePlugin = (s) => {
     schema.eachPath((path, obj) => {
       const parts = [prevpath, path];
       const join = filterByLength(parts).join('.');
-      const gSize = getGramSize(obj);
 
-      if (gSize)
-        fields.push({
-          gram: gSize,
-          name: join,
-        });
+      if (get(obj, 'options.gram', false))
+        fields.push(join);
 
       if (obj.schema)
         recursivelyFindGrams(obj.schema, join);
