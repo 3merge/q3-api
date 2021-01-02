@@ -11,7 +11,7 @@ module.exports = (fields = []) => ({
   getSearch: (term) => {
     if (!term || term.length < 2) return {};
 
-    const $search = term
+    const $search = String(term)
       .split(' ')
       .map(clean)
       .map(chunk)

@@ -16,6 +16,11 @@ const between = (a, b, c) => a < b && a > c;
 
 const chunk = (v) => {
   const out = [];
+  const re = new RegExp(
+    `.{${MIN_GRAM_SIZE},${MAX_GRAM_SIZE}}`,
+    'g',
+  );
+
   let remainder = v;
 
   while (remainder.length > 1) {
@@ -31,15 +36,20 @@ const chunk = (v) => {
         0,
       )
     ) {
-      if (divisible) divisible -= 1;
-      if (!divisible) chunkSize -= 1;
+      if (divisible) {
+        divisible -= 1;
+      }
+
+      if (!divisible) {
+        chunkSize -= 1;
+      }
     }
 
     out.push(remainder.substr(0, chunkSize));
     remainder = remainder.substr(chunkSize);
   }
 
-  return out;
+  return uniq(out.concat(v.match(re)));
 };
 
 const castToDoubleQuotes = (v) => `"${v}"`;

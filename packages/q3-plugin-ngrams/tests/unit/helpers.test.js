@@ -27,3 +27,15 @@ describe.each([
       ),
     ).toBeTruthy());
 });
+
+describe('"chunk"', () => {
+  it('should return chunks with lengthiest variations', () => {
+    expect(chunk('Eolande')).toEqual([
+      'Eo',
+      'lan',
+      'de',
+      'Eol',
+      'and',
+    ]);
+  });
+});
