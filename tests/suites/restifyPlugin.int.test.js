@@ -38,7 +38,11 @@ const opts = {
 };
 
 const SubChild = new Schema({
-  name: { type: String, searchable: true },
+  name: {
+    type: String,
+    searchable: true,
+    gram: true,
+  },
 });
 
 const Child = new Schema({
@@ -56,6 +60,7 @@ const Base = new Schema(
       type: String,
       searchable: true,
       required: true,
+      gram: true,
     },
     age: {
       type: Number,
