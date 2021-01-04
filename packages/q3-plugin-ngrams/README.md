@@ -1,4 +1,4 @@
-# 🔌 N-Grams
+# N-grams 🔌
 
 This package brings n-gram, sometimes referred to as fuzzy
 searching, support to Q3's underlying mongoose instance. It
@@ -53,7 +53,10 @@ Schema.plugin(plugin);
 
 const Model = mongoose.model('test', Schema);
 
+// this would all likely happen elsewhere
+// we're simplifying for the sake of this example
 (async () => {
+  await mongoose.connect(process.env.CONNECTION_STRING);
   const search = Model.getFuzzyQuery('foo');
   const res = await Model.find(search).exec();
   console.log(res);
