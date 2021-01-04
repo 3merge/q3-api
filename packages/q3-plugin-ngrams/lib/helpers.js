@@ -1,4 +1,5 @@
 const ng = require('n-gram');
+const flat = require('flat');
 const {
   get,
   lowerCase,
@@ -97,25 +98,35 @@ const reduceIndex = (fields = []) =>
     },
   );
 
-const reduceSearchableFields = (fields = [], doc) => ({
-  ngrams: uniq(
-    fields
-      .map((name) => {
-        const [field, sub] = name.split('.');
-        const value = get(doc, field);
+const castToDotNotation = (doc = {}) => (field) => {
+  const flatten = flat(
+    'toJSON' in doc ? doc.toJSON() : doc,
+  );
 
-        if (sub && Array.isArray(value))
-          return value.map(makeGram).flat();
+  return Object.keys(flatten).filter((f) =>
+    new RegExp(field.replace(/\./g, '\\.(\\d+\\.)?')).test(
+      f,
+    ),
+  );
+};
 
-        return makeGram(value);
-      })
-      .flat(),
-  ),
-});
+const reduceSearchableFields = (fields = [], doc) => {
+  const getIn = (field) => makeGram(get(doc, field));
+
+  const caster = castToDotNotation(doc);
+  const ngrams = uniq(
+    fields.flatMap(caster).flatMap(getIn),
+  );
+
+  return {
+    ngrams,
+  };
+};
 
 module.exports = {
   between,
   castToDoubleQuotes,
+  castToDotNotation,
   chunk,
   clean,
   filterByLength,
