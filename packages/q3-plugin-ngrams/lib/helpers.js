@@ -1,7 +1,6 @@
 const ng = require('n-gram');
 const {
   get,
-  isPlainObject,
   lowerCase,
   trim,
   compact,
@@ -64,12 +63,6 @@ const clean = compose(
 const filterByLength = (a) =>
   a.filter((item = '') => item.trim());
 
-const getField = (prop) => (field) =>
-  isPlainObject(field) ? field[prop] : field;
-
-const getFieldNameOfGram = (f) =>
-  `${f.replace(/(\$\.)/g, '').replace(/\./g, '_')}_ngram`;
-
 const hasLengthGreaterThan = (
   str = '',
   expectedLength = 0,
@@ -126,8 +119,6 @@ module.exports = {
   chunk,
   clean,
   filterByLength,
-  getFieldName: getField('name'),
-  getFieldNameOfGram,
   hasLengthGreaterThan,
   makeGram,
   quote,
