@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const NGramsMongoosePlugin = require('../../lib');
+const meta = require('./Meta');
 
 const Schema = new mongoose.Schema({
   title: {
@@ -10,7 +10,7 @@ const Schema = new mongoose.Schema({
     type: String,
     gram: true,
   },
+  meta,
 });
 
-Schema.plugin(NGramsMongoosePlugin);
 module.exports = mongoose.model('ngram-articles', Schema);

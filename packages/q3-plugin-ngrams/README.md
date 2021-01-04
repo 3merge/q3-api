@@ -1,4 +1,4 @@
-# N-grams 🔌
+# N-grams plugin
 
 This package brings n-gram, sometimes referred to as fuzzy
 searching, support to Q3's underlying mongoose instance. It

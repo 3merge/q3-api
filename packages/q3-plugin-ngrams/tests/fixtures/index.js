@@ -1,3 +1,8 @@
+const mongoose = require('mongoose');
+
+// globally register the plugin
+mongoose.plugin(require('../../lib'));
+
 const Article = require('./Article');
 const articleJson = require('./article.json');
 const Contact = require('./Contact');

@@ -27,10 +27,12 @@ module.exports = (fields = []) => ({
   },
 
   async saveGrams() {
-    if (typeof this.parent !== 'function')
-      await this.update({
-        $set: reduceSearchableFields(fields, this),
-      });
+    const isParent =
+      typeof this.parent !== 'function' ||
+      this.parent() === undefined;
+
+    if (isParent)
+      await this.set(reduceSearchableFields(fields, this));
   },
 
   async init() {

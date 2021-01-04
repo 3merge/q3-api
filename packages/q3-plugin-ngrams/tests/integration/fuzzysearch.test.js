@@ -31,12 +31,6 @@ const makeTableCase = (modelName) => (
 beforeAll(async () => {
   await mongoose.connect(process.env.CONNECTION);
   await Model.seed();
-
-  // console.log(
-  //   await Model.Article.findOne().select(
-  //     '+description_ngram',
-  //   ),
-  // );
 });
 
 afterAll(() => {

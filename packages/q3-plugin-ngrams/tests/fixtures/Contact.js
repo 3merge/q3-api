@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const NGramsMongoosePlugin = require('../../lib');
 
 const Schema = new mongoose.Schema({
   firstName: {
@@ -20,5 +19,4 @@ const Schema = new mongoose.Schema({
   },
 });
 
-Schema.plugin(NGramsMongoosePlugin);
 module.exports = mongoose.model('ngram-contacts', Schema);

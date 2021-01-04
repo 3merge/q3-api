@@ -1,5 +1,6 @@
 const ng = require('n-gram');
 const {
+  get,
   isPlainObject,
   lowerCase,
   trim,
@@ -100,7 +101,9 @@ const reduceIndex = (fields = []) =>
 
 const reduceSearchableFields = (fields = [], doc) =>
   fields.reduce((acc, name) => {
-    acc[getFieldNameOfGram(name)] = makeGram(doc[name]);
+    acc[getFieldNameOfGram(name)] = makeGram(
+      get(doc, name),
+    );
     return acc;
   }, {});
 
