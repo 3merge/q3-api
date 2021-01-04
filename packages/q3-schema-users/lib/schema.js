@@ -8,6 +8,7 @@ const BaseUserModel = new Schema(
       unique: true,
       sparse: true,
       searchable: true,
+      gram: true,
       dedupe: true,
     },
     secret: {
@@ -31,11 +32,13 @@ const BaseUserModel = new Schema(
       type: String,
       required: true,
       searchable: true,
+      gram: true,
     },
     lastName: {
       type: String,
       required: true,
       searchable: true,
+      gram: true,
     },
     lang: {
       type: String,
@@ -64,7 +67,6 @@ const BaseUserModel = new Schema(
     role: {
       type: String,
       required: true,
-      searchable: true,
     },
     password: {
       type: String,

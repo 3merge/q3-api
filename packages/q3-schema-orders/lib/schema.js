@@ -59,6 +59,7 @@ const OrderSchema = new Schema(
     invoice: {
       type: String,
       searchable: true,
+      gram: true,
       unique: true,
       sparse: true,
       lock: true,

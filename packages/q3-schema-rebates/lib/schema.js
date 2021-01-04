@@ -16,16 +16,19 @@ const RebatesSchema = new Schema({
     type: String,
     required: true,
     searchable: true,
+    gram: true,
   },
   description: {
     type: String,
     required: true,
     searchable: true,
+    gram: true,
   },
   couponCode: {
     type: String,
     dedupe: true,
     searchable: true,
+    gram: true,
   },
   value: {
     type: Number,
@@ -36,7 +39,6 @@ const RebatesSchema = new Schema({
   maximumPerHistory: Number,
   requiredSkus: {
     type: Schema.Types.CommaDelimited,
-    searchable: true,
   },
   conditionalSkus: Schema.Types.CommaDelimited,
   conditionalSkuThreshold: {
