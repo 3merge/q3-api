@@ -67,7 +67,8 @@ const filterByLength = (a) =>
 const getField = (prop) => (field) =>
   isPlainObject(field) ? field[prop] : field;
 
-const getFieldNameOfGram = (f) => `${f}_ngram`;
+const getFieldNameOfGram = (f) =>
+  `${f.replace(/(\$\.)/g, '').replace(/\./g, '_')}_ngram`;
 
 const hasLengthGreaterThan = (
   str = '',
@@ -93,19 +94,31 @@ const makeGram = (str) =>
 const quote = (v) => `"${v}"`;
 
 const reduceIndex = (fields = []) =>
-  fields.reduce((acc, name) => {
-    acc[name] = 'text';
-    acc[getFieldNameOfGram(name)] = 'text';
-    return acc;
-  }, {});
+  fields.reduce(
+    (acc, name) =>
+      Object.assign(acc, {
+        [name]: 'text',
+      }),
+    {
+      ngrams: 'text',
+    },
+  );
 
-const reduceSearchableFields = (fields = [], doc) =>
-  fields.reduce((acc, name) => {
-    acc[getFieldNameOfGram(name)] = makeGram(
-      get(doc, name),
-    );
-    return acc;
-  }, {});
+const reduceSearchableFields = (fields = [], doc) => ({
+  ngrams: uniq(
+    fields
+      .map((name) => {
+        const [field, sub] = name.split('.');
+        const value = get(doc, field);
+
+        if (sub && Array.isArray(value))
+          return value.map(makeGram).flat();
+
+        return makeGram(value);
+      })
+      .flat(),
+  ),
+});
 
 module.exports = {
   between,
@@ -114,6 +127,7 @@ module.exports = {
   clean,
   filterByLength,
   getFieldName: getField('name'),
+  getFieldNameOfGram,
   hasLengthGreaterThan,
   makeGram,
   quote,

@@ -1,9 +1,6 @@
 const { get } = require('lodash');
 const fuzzysearch = require('./fuzzysearch');
-const {
-  filterByLength,
-  getFieldName,
-} = require('./helpers');
+const { filterByLength } = require('./helpers');
 
 const NGramsMongoosePlugin = (s) => {
   const fields = [];
@@ -37,16 +34,12 @@ const NGramsMongoosePlugin = (s) => {
   s.statics.initializeFuzzySearching = init;
   s.pre('save', saveGrams);
 
-  s.add(
-    fields.reduce((acc, curr) => {
-      acc[`${getFieldName(curr)}_ngram`] = {
-        type: [String],
-        select: false,
-      };
-
-      return acc;
-    }, {}),
-  );
+  s.add({
+    ngrams: {
+      type: [String],
+      select: false,
+    },
+  });
 };
 
 module.exports = NGramsMongoosePlugin;
