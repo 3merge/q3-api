@@ -68,7 +68,7 @@ describe('Handlers', () => {
 
   describe('List Controller', () => {
     beforeEach(() => {
-      Model.searchBuilder = jest.fn().mockReturnValue({
+      Model.getFuzzyQuery = jest.fn().mockReturnValue({
         hello: 'world',
       });
 
@@ -90,7 +90,7 @@ describe('Handlers', () => {
     it('should isolate the search query', async () => {
       req.originalUrl = '?search=term&range=1';
       await List(req, res);
-      expect(Model.searchBuilder).toHaveBeenCalledWith(
+      expect(Model.getFuzzyQuery).toHaveBeenCalledWith(
         'term',
       );
     });
@@ -100,7 +100,6 @@ describe('Handlers', () => {
       expect(Model.paginate).toHaveBeenCalledWith(
         expect.objectContaining({
           active: true,
-          hello: 'world',
         }),
         expect.objectContaining({
           limit: 25,

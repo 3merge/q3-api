@@ -15,6 +15,7 @@
     "mongoose-partial-search": "^1.0.6",
     "q3-core-composer": "^1.6.0",
     "q3-core-responder": "^1.6.0",
+    "q3-plugin-ngrams": "^1.0.0",
     "q3-schema-utils": "^1.6.0",
     "sift": "^13.4.0"
   },

@@ -6,8 +6,12 @@ const casters = require('./controllers/casters');
 const execSearchBuildMethod = (a, b, search) => {
   let out;
 
-  if (a) out = a.getFuzzyQuery(search);
-  else if (b) out = b.getFuzzyQuery(search);
+  const callOnParam = (param) => {
+    out = param.getFuzzyQuery(search);
+  };
+
+  if (a) callOnParam(a);
+  else if (b) callOnParam(b);
   return search ? out : {};
 };
 

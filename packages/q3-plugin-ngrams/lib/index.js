@@ -47,8 +47,6 @@ const NGramsMongoosePlugin = (s) => {
       return acc;
     }, {}),
   );
-
-  return s;
 };
 
 module.exports = NGramsMongoosePlugin;

@@ -27,9 +27,10 @@ module.exports = (fields = []) => ({
   },
 
   async saveGrams() {
-    await this.update({
-      $set: reduceSearchableFields(fields, this),
-    });
+    if (typeof this.parent !== 'function')
+      await this.update({
+        $set: reduceSearchableFields(fields, this),
+      });
   },
 
   async init() {
