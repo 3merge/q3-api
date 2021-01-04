@@ -2,7 +2,7 @@ const validatorAdapter = require('m2e-validator');
 const i18next = require('i18next');
 const middleware = require('i18next-http-middleware');
 const paginate = require('mongoose-paginate-v2');
-const partialSearch = require('mongoose-partial-search');
+const ngrams = require('q3-plugin-ngrams');
 const commonUtils = require('q3-schema-utils/plugins/common');
 const { statusHelpers } = require('q3-core-responder');
 const { get } = require('lodash');
@@ -43,7 +43,7 @@ module.exports = (app, mongoose) => ({
     app.use(customMessageDispatcherMiddleware(app));
 
     mongoose.plugin(commonUtils);
-    mongoose.plugin(partialSearch);
+    mongoose.plugin(ngrams);
     mongoose.plugin(validatorAdapter);
     mongoose.plugin(paginate);
     return this;

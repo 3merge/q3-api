@@ -4,10 +4,17 @@ const Character = new mongoose.Schema(
   {
     name: {
       type: String,
-      searchable: true,
+      gram: 2,
     },
-    role: String,
+    role: {
+      type: String,
+      gram: 3,
+    },
     gender: String,
+    bio: {
+      type: String,
+      gram: 4,
+    },
   },
   {
     restify: '*',
