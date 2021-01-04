@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const ActivitySchema = require('./Activity');
 
 const Schema = new mongoose.Schema({
   firstName: {
@@ -17,6 +18,7 @@ const Schema = new mongoose.Schema({
     type: String,
     gram: true,
   },
+  activities: [ActivitySchema],
 });
 
 module.exports = mongoose.model('ngram-contacts', Schema);

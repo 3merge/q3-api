@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 const Model = require('../fixtures');
+const {
+  MAX_GRAM_SIZE,
+  MIN_GRAM_SIZE,
+} = require('../../lib/constants');
 
 const expectEvery = (a = [], cb) =>
   expect(a.every(cb)).toBeTruthy();
-
-const expectLength = (attr) =>
-  expect(attr.length).toBeGreaterThan(1);
 
 const expectMax = (a = [], max = 0) =>
   expectEvery(a, (v) => v.length <= max);
@@ -39,17 +40,14 @@ afterAll(() => {
 
 describe('"initializeFuzzySearching"', () => {
   it('should assign ngram fields based on schema options', async () => {
-    const {
-      title_ngram: title,
-      description_ngram: desc,
-    } = await Model.Article.findOne().select(
-      'title_ngram description_ngram',
-    );
+    const { ngrams } = await Model.Article.findOne({
+      description: {
+        $exists: true,
+      },
+    }).select('ngrams');
 
-    expectLength(title);
-    expectMin(title, 2);
-    expectLength(desc);
-    expectMax(desc, 6);
+    expectMin(ngrams, MIN_GRAM_SIZE);
+    expectMax(ngrams, MAX_GRAM_SIZE);
   });
 });
 

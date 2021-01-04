@@ -12,7 +12,9 @@ const price = {
   default: 0,
 };
 
-RateSchema.add({ quantity: price });
+RateSchema.add({
+  quantity: price,
+});
 
 const OrderLineSchema = new Schema(
   {

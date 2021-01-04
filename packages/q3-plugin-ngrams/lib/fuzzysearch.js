@@ -49,21 +49,18 @@ module.exports = (fields = []) => ({
       default_language: 'none',
     });
 
-    return new Promise((resolve, reject) =>
-      this.find()
-        .stream()
-        .on('data', async (doc) =>
-          this.updateOne(
-            { _id: doc._id },
-            { $set: reduceSearchableFields(fields, doc) },
-          ),
-        )
-        .on('error', (e) => {
-          reject(e);
-        })
-        .on('end', (res) => {
-          resolve(res);
-        }),
-    );
+    const cursor = this.find().cursor();
+
+    for (
+      let doc = await cursor.next();
+      doc != null;
+      // eslint-disable-next-line
+      doc = await cursor.next()
+    )
+      // eslint-disable-next-line
+      await this.updateOne(
+        { _id: doc._id },
+        { $set: reduceSearchableFields(fields, doc) },
+      );
   },
 });

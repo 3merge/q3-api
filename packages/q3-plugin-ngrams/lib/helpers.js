@@ -1,7 +1,6 @@
 const ng = require('n-gram');
 const {
   get,
-  isPlainObject,
   lowerCase,
   trim,
   compact,
@@ -64,11 +63,6 @@ const clean = compose(
 const filterByLength = (a) =>
   a.filter((item = '') => item.trim());
 
-const getField = (prop) => (field) =>
-  isPlainObject(field) ? field[prop] : field;
-
-const getFieldNameOfGram = (f) => `${f}_ngram`;
-
 const hasLengthGreaterThan = (
   str = '',
   expectedLength = 0,
@@ -93,19 +87,31 @@ const makeGram = (str) =>
 const quote = (v) => `"${v}"`;
 
 const reduceIndex = (fields = []) =>
-  fields.reduce((acc, name) => {
-    acc[name] = 'text';
-    acc[getFieldNameOfGram(name)] = 'text';
-    return acc;
-  }, {});
+  fields.reduce(
+    (acc, name) =>
+      Object.assign(acc, {
+        [name]: 'text',
+      }),
+    {
+      ngrams: 'text',
+    },
+  );
 
-const reduceSearchableFields = (fields = [], doc) =>
-  fields.reduce((acc, name) => {
-    acc[getFieldNameOfGram(name)] = makeGram(
-      get(doc, name),
-    );
-    return acc;
-  }, {});
+const reduceSearchableFields = (fields = [], doc) => ({
+  ngrams: uniq(
+    fields
+      .map((name) => {
+        const [field, sub] = name.split('.');
+        const value = get(doc, field);
+
+        if (sub && Array.isArray(value))
+          return value.map(makeGram).flat();
+
+        return makeGram(value);
+      })
+      .flat(),
+  ),
+});
 
 module.exports = {
   between,
@@ -113,7 +119,6 @@ module.exports = {
   chunk,
   clean,
   filterByLength,
-  getFieldName: getField('name'),
   hasLengthGreaterThan,
   makeGram,
   quote,

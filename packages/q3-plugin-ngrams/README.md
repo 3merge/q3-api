@@ -18,10 +18,8 @@ autosuggest.
 
 ## Usage
 
-This plugin automatically creates new fields in your schema.
-By default, none is selectable in your queries. However,
-when using a database GUI, you can identify these fields by
-their _\_ngram_ suffix.
+This plugin automatically creates a new field in your
+schema. By default, it is deselected in your queries.
 
 ### API
 
@@ -29,10 +27,10 @@ In addition to configuring middleware that updates the
 n-grams on text modification, this plugin ships two static
 methods.
 
-| Name                               | Description                                      | Arguments | Response |
-| ---------------------------------- | ------------------------------------------------ | --------- | -------- |
-| `getFuzzyQuery`                    | Returns a `$text` query when given a search term | `String`  | `Object` |
-| `initializeFuzzySearching (async)` | Creates n-grams for an existing collection       |           |          |
+| Name                               | Description                                                          | Arguments | Response |
+| ---------------------------------- | -------------------------------------------------------------------- | --------- | -------- |
+| `getFuzzyQuery`                    | Returns a `$text` query when given a search term                     | `String`  | `Object` |
+| `initializeFuzzySearching (async)` | Creates n-grams for an existing collection as well as the text index |           |          |
 
 ### Example
 
