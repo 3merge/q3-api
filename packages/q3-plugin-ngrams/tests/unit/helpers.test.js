@@ -3,6 +3,7 @@ const {
   castToDotNotation,
   chunk,
   clean,
+  makeGram,
 } = require('../../lib/helpers');
 
 const context = castToDotNotation({
@@ -81,3 +82,14 @@ describe.each([
       expect(context(path)).toEqual(expectedPath));
   },
 );
+
+describe.each([
+  [undefined, []],
+  [null, []],
+  [true, []],
+  [false, []],
+  ['foo', ['fo', 'oo', 'foo']],
+])('.makeGram(%s)', (term, expectedGrams) => {
+  it('should make grams', () =>
+    expect(makeGram(term)).toEqual(expectedGrams));
+});

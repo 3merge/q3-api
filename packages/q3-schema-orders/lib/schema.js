@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const AddressSchema = require('q3-schema-addresses');
-const RateSchema = require('q3-schema-rates');
+const RateSchema = require('q3-schema-rates').clone();
 const { STATUS_ENUM, CURRENCY } = require('./constants');
 
 const { Schema } = mongoose;
@@ -14,6 +14,12 @@ const price = {
 
 RateSchema.add({
   quantity: price,
+});
+
+RateSchema.path('name', {
+  ...RateSchema.obj.name,
+  searchable: false,
+  gram: false,
 });
 
 const OrderLineSchema = new Schema(
