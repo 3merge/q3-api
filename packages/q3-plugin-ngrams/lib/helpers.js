@@ -69,8 +69,16 @@ const hasLengthGreaterThan = (
   expectedLength = 0,
 ) => str.length > expectedLength;
 
-const makeGram = (str) =>
-  uniq(
+const makeGram = (str) => {
+  if (
+    !str ||
+    ['false', 'null', 'true', 'undefined'].includes(
+      String(str),
+    )
+  )
+    return [];
+
+  return uniq(
     compact(
       Array.from({
         length: MAX_GRAM_SIZE,
@@ -84,6 +92,7 @@ const makeGram = (str) =>
         .flat(2),
     ),
   );
+};
 
 const quote = (v) => `"${v}"`;
 
@@ -98,17 +107,23 @@ const reduceIndex = (fields = []) =>
     },
   );
 
-const castToDotNotation = (doc = {}) => (field) => {
-  const flatten = flat(
-    'toJSON' in doc ? doc.toJSON() : doc,
+const invokeJson = (d) => ('toJSON' in d ? d.toJSON() : d);
+
+const makeRegexForEmbeddedDocumentPaths = (pathname = '') =>
+  new RegExp(
+    `^${pathname.replace(/\./g, '\\.(\\d+\\.)?')}$`,
   );
 
-  return Object.keys(flatten).filter((f) =>
-    new RegExp(field.replace(/\./g, '\\.(\\d+\\.)?')).test(
-      f,
-    ),
+const makeDocumentPaths = compose(
+  Object.keys,
+  flat,
+  invokeJson,
+);
+
+const castToDotNotation = (doc = {}) => (field) =>
+  makeDocumentPaths(doc).filter((f) =>
+    makeRegexForEmbeddedDocumentPaths(field).test(f),
   );
-};
 
 const reduceSearchableFields = (fields = [], doc) => {
   const getIn = (field) => makeGram(get(doc, field));

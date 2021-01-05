@@ -20,4 +20,17 @@ describe('OrderSchema smoke', () => {
     await order.save();
     expect(order.items).toHaveLength(2);
   });
+
+  it('should save with fees', async () => {
+    const Model = mongoose.model('orders', OrderSchema);
+    const order = await Model.create({});
+
+    order.fees.push({
+      name: 'Test',
+      value: 2,
+    });
+
+    await order.save();
+    expect(order.fees).toHaveLength(1);
+  });
 });
