@@ -1,17 +1,17 @@
 {
   "name": "q3-schema-users",
-  "version": "1.7.3",
+  "version": "1.7.4",
   "main": "lib/index.js",
   "dependencies": {
     "bcrypt": "^5.0.0",
     "generate-password": "^1.4.2",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
-    "q3-core-mailer": "^1.7.3",
-    "q3-core-responder": "^1.7.3"
+    "q3-core-mailer": "^1.7.4",
+    "q3-core-responder": "^1.7.4"
   },
   "devDependencies": {
-    "q3-test-utils": "^1.7.3"
+    "q3-test-utils": "^1.7.4"
   },
   "peerDependencies": {
     "mongoose": "^5.7.1"

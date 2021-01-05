@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.4](https://github.com/3merge/q3-api/compare/v1.7.3...v1.7.4) (2021-01-05)
+
+
+### Bug Fixes
+
+* discriminator ngrams ([3c5af08](https://github.com/3merge/q3-api/commit/3c5af085c98543792825702208966272f410284d))
+
+
+
+
+
 ## [1.5.10](https://github.com/3merge/q3-api/compare/v1.5.9...v1.5.10) (2020-12-15)
 
 
