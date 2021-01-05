@@ -1,3 +1,4 @@
+const getFields = require('./getFields');
 const {
   clean,
   chunk,
@@ -8,7 +9,7 @@ const {
 } = require('./helpers');
 const { MIN_GRAM_SIZE } = require('./constants');
 
-module.exports = (fields = []) => ({
+module.exports = {
   getSearch: (term) => {
     if (!term || term.length < MIN_GRAM_SIZE) return {};
 
@@ -35,10 +36,16 @@ module.exports = (fields = []) => ({
       this.parent() === undefined;
 
     if (isParent)
-      await this.set(reduceSearchableFields(fields, this));
+      await this.set(
+        reduceSearchableFields(
+          getFields(this.schema),
+          this,
+        ),
+      );
   },
 
   async init() {
+    const fields = getFields(this.schema);
     const index = reduceIndex(fields);
 
     if (!hasLengthGreaterThan(Object.keys(index), 0))
@@ -52,7 +59,9 @@ module.exports = (fields = []) => ({
       default_language: 'none',
     });
 
-    const cursor = this.find().cursor();
+    const cursor = this.find()
+      .select(fields.join(' '))
+      .cursor();
 
     for (
       let doc = await cursor.next();
@@ -66,4 +75,4 @@ module.exports = (fields = []) => ({
         { $set: reduceSearchableFields(fields, doc) },
       );
   },
-});
+};

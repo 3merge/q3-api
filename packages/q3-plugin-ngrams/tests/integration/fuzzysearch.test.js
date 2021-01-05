@@ -49,6 +49,14 @@ describe('"initializeFuzzySearching"', () => {
     expectMin(ngrams, MIN_GRAM_SIZE);
     expectMax(ngrams, MAX_GRAM_SIZE);
   });
+
+  it('should assign ngram fields based on discriminated options', async () => {
+    const { ngrams } = await Model.Blog.create({
+      website: 'google.ca',
+    });
+
+    expect(ngrams.length).toBeGreaterThan(1);
+  });
 });
 
 describe.each([

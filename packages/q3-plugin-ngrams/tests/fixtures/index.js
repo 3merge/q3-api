@@ -4,12 +4,14 @@ const mongoose = require('mongoose');
 mongoose.plugin(require('../../lib'));
 
 const Article = require('./Article');
+const Blog = require('./Blog');
 const articleJson = require('./article.json');
 const Contact = require('./Contact');
 const contactJson = require('./contact.json');
 
 module.exports = {
   Article,
+  Blog,
   Contact,
 
   seed: async () => {

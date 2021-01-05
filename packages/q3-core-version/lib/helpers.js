@@ -95,6 +95,7 @@ const diff = (a, b, fields = []) => {
     '!*__t*',
     '!*__v*',
     '!*id*',
+    '!*ngram*',
     '!*updatedAt*',
     '!*createdAt*',
     '!*createdBy*',
