@@ -67,4 +67,5 @@ describe.each([
   ['aferronei@cnn.com', 1],
   ['boo', 2],
   ['416', 2],
+  ['Zsa z', 1],
 ])('.fuzzy(%s)', makeTableCase('Contact'));

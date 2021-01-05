@@ -6,14 +6,17 @@ const {
   reduceIndex,
   reduceSearchableFields,
 } = require('./helpers');
+const { MIN_GRAM_SIZE } = require('./constants');
 
 module.exports = (fields = []) => ({
   getSearch: (term) => {
-    if (!term || term.length < 2) return {};
+    if (!term || term.length < MIN_GRAM_SIZE) return {};
 
     const $search = String(term)
       .split(' ')
       .map(clean)
+      // remove trailing key terms
+      .filter((item) => item.length >= MIN_GRAM_SIZE)
       .map(chunk)
       .flat(2)
       .map(castToDoubleQuotes)
