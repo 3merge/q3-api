@@ -1,10 +1,16 @@
-const { init, getSearch, saveGrams } = require('./plugin');
+/* eslint-disable no-param-reassign */
+const {
+  index,
+  init,
+  getSearch,
+  saveGrams,
+} = require('./plugin');
 
 const NGramsMongoosePlugin = (s) => {
-  // eslint-disable-next-line
+  s.statics.createTextIndex = index;
   s.statics.getFuzzyQuery = getSearch;
-  // eslint-disable-next-line
   s.statics.initializeFuzzySearching = init;
+
   s.pre('save', saveGrams);
 
   s.add({

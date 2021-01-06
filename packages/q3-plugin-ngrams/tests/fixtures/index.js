@@ -20,6 +20,11 @@ module.exports = {
       Contact.insertMany(contactJson),
     ]);
 
+    await Promise.all([
+      Article.createTextIndex(),
+      Contact.createTextIndex(),
+    ]);
+
     return Promise.all([
       Article.initializeFuzzySearching(),
       Contact.initializeFuzzySearching(),

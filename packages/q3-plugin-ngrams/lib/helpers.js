@@ -91,7 +91,7 @@ const makeGram = (str) => {
           const g = ng(size);
           return size >= MIN_GRAM_SIZE ? g(val) : [];
         })
-        .concat(str.match(/\b(\w)/g))
+        .concat(String(str).match(/\b(\w)/g))
         .flat(2),
     ),
   );

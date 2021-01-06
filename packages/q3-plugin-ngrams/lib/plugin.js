@@ -41,7 +41,7 @@ module.exports = {
       );
   },
 
-  async init() {
+  async index() {
     const fields = getFields(this.schema);
     const index = reduceIndex(fields);
 
@@ -55,21 +55,24 @@ module.exports = {
       sparse: true,
       default_language: 'none',
     });
+  },
 
-    const cursor = this.find()
+  async init(query = {}) {
+    const fields = getFields(this.schema);
+
+    const cursor = await this.find(query)
       .select(fields.join(' '))
-      .cursor();
+      .lean()
+      .exec();
 
-    for (
-      let doc = await cursor.next();
-      doc != null;
-      // eslint-disable-next-line
-      doc = await cursor.next()
-    )
-      // eslint-disable-next-line
-      await this.updateOne(
-        { _id: doc._id },
-        { $set: reduceSearchableFields(fields, doc) },
-      );
+    const bulkOp = this.collection.initializeUnorderedBulkOp();
+
+    cursor.forEach((doc) =>
+      bulkOp.find({ _id: doc._id }).updateOne({
+        $set: reduceSearchableFields(fields, doc),
+      }),
+    );
+
+    return bulkOp.execute();
   },
 };
