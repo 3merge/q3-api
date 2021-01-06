@@ -22,7 +22,7 @@ const SearchParams = async (
     } = aqp(rest);
 
     const params = Object.assign(
-      model.searchBuilder(search),
+      model.getFuzzyQuery(search),
       where,
       { active: true },
     );
