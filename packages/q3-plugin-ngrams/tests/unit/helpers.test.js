@@ -66,8 +66,10 @@ describe('clean', () => {
 });
 
 describe.each([
-  ['Eolande', ['Eolan', 'de']],
+  ['Eolande', ['Eolande']],
   ['PVX9000123', ['PVX90', '00123']],
+  ['AA900121', ['AA90', '0121']],
+  ['1HELLOWORLD2020', ['1HELL', 'OWORL', 'D2020']],
 ])('.chunk(%s)', (term, expectedValue) => {
   it('should not make grams', () =>
     expect(chunk(term)).toEqual(expectedValue));

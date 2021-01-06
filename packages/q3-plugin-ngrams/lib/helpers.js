@@ -13,46 +13,46 @@ const {
   MIN_GRAM_SIZE,
 } = require('./constants');
 
+const addLength = (a, b) =>
+  b && b.length ? a + b.length : a;
+
+const averageSize = (a = []) =>
+  a.length ? a.reduce(addLength, 0) / a.length : 0;
+
 const between = (a, b, c) => a < b && a > c;
 
-const chunk = (v) => {
-  if (v.length < MIN_GRAM_SIZE) return v;
-
-  const out = [];
-  const re = new RegExp(
-    `.{${MIN_GRAM_SIZE},${MAX_GRAM_SIZE}}`,
-    'g',
+const splitBestCaseGramSize = (str, offset) =>
+  str.match(
+    new RegExp(`.{${MIN_GRAM_SIZE},${offset}}`, 'g'),
   );
 
-  let remainder = v;
+const meetsGramSizeParameters = (v) =>
+  v.length > MIN_GRAM_SIZE && v.length !== MAX_GRAM_SIZE;
 
-  while (remainder.length > 1) {
-    let chunkSize = MAX_GRAM_SIZE;
-    let divisible = Math.floor(
-      remainder.length / MAX_GRAM_SIZE,
-    );
+const measureLengthOfContents = (a) => a.join('').length;
 
-    while (
-      between(
-        remainder.length % (divisible * chunkSize),
-        MIN_GRAM_SIZE,
-        0,
-      )
-    ) {
-      if (divisible) {
-        divisible -= 1;
-      }
+const chunk = (v) => {
+  let parts = [];
+  let offset = MAX_GRAM_SIZE;
 
-      if (!divisible) {
-        chunkSize -= 1;
-      }
-    }
+  if (!meetsGramSizeParameters(v)) return [v];
 
-    out.push(remainder.substr(0, chunkSize));
-    remainder = remainder.substr(chunkSize);
+  while (offset !== MIN_GRAM_SIZE) {
+    offset -= 1;
+
+    const proposedChunks = splitBestCaseGramSize(v, offset);
+    const acceptedChunks = averageSize(parts);
+
+    if (
+      measureLengthOfContents(proposedChunks) ===
+        v.length &&
+      (averageSize(proposedChunks) >= acceptedChunks ||
+        acceptedChunks === 0)
+    )
+      parts = proposedChunks;
   }
 
-  return uniq(out.concat(v.match(re)));
+  return uniq(parts);
 };
 
 const castToDoubleQuotes = (v) => `"${v}"`;
@@ -153,4 +153,5 @@ module.exports = {
   quote,
   reduceIndex,
   reduceSearchableFields,
+  splitBestCaseGramSize,
 };
