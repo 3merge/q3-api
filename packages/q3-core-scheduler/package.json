@@ -1,12 +1,12 @@
 {
   "name": "q3-core-scheduler",
   "main": "lib/index.js",
-  "version": "1.7.5",
+  "version": "1.7.6",
   "dependencies": {
     "moment": "^2.29.1",
     "mongoose": "^5.11.8",
     "node-cron": "^2.0.3",
-    "q3-schema-utils": "^1.7.5"
+    "q3-schema-utils": "^1.7.6"
   },
   "jest": {
     "verbose": true,
