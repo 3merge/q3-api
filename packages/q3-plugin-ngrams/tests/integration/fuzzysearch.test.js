@@ -1,9 +1,6 @@
 const mongoose = require('mongoose');
 const Model = require('../fixtures');
-const {
-  MAX_GRAM_SIZE,
-  MIN_GRAM_SIZE,
-} = require('../../lib/constants');
+const { MAX_GRAM_SIZE } = require('../../lib/constants');
 
 const expectEvery = (a = [], cb) =>
   expect(a.every(cb)).toBeTruthy();
@@ -46,7 +43,7 @@ describe('"initializeFuzzySearching"', () => {
       },
     }).select('ngrams');
 
-    expectMin(ngrams, MIN_GRAM_SIZE);
+    expectMin(ngrams, 1); // will take the first character
     expectMax(ngrams, MAX_GRAM_SIZE);
   });
 

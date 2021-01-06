@@ -5,6 +5,13 @@ const {
   clean,
   makeGram,
 } = require('../../lib/helpers');
+const {
+  MAX_GRAM_SIZE,
+  MIN_GRAM_SIZE,
+} = require('../../lib/constants');
+
+const includesEach = (a, b) =>
+  b.every((item) => a.includes(item));
 
 const context = castToDotNotation({
   foo: 1,
@@ -38,11 +45,14 @@ describe.each([
   ['professionals'],
   ['the'],
 ])('.chunk(%s)', (word) => {
-  it('should split into chunks of 2 or 3', () =>
+  it('should split into chunks by constant length', () =>
     expect(
       chunk(word).every((item) =>
-        // less than 4 and more than 1
-        between(item.length, 4, 1),
+        between(
+          item.length,
+          MAX_GRAM_SIZE + 1,
+          MIN_GRAM_SIZE - 1,
+        ),
       ),
     ).toBeTruthy());
 });
@@ -55,16 +65,12 @@ describe('clean', () => {
   });
 });
 
-describe('"chunk"', () => {
-  it('should return chunks with lengthiest variations', () => {
-    expect(chunk('Eolande')).toEqual([
-      'Eo',
-      'lan',
-      'de',
-      'Eol',
-      'and',
-    ]);
-  });
+describe.each([
+  ['Eolande', ['Eolan', 'de']],
+  ['PVX9000123', ['PVX90', '00123']],
+])('.chunk(%s)', (term, expectedValue) => {
+  it('should not make grams', () =>
+    expect(chunk(term)).toEqual(expectedValue));
 });
 
 describe.each([
@@ -88,8 +94,24 @@ describe.each([
   [null, []],
   [true, []],
   [false, []],
-  ['foo', ['fo', 'oo', 'foo']],
 ])('.makeGram(%s)', (term, expectedGrams) => {
-  it('should make grams', () =>
+  it('should not make grams', () =>
     expect(makeGram(term)).toEqual(expectedGrams));
 });
+
+describe.each([
+  [
+    'foo bar',
+    ['f', 'fo', 'foo', 'foob', 'fooba', 'b'],
+    ['a', 'foobar'],
+  ],
+])(
+  '.makeGram(%s)',
+  (term, expectedGrams, excludedGrams) => {
+    it('should include/exclude grams', () => {
+      const g = makeGram(term);
+      expect(includesEach(g, expectedGrams)).toBeTruthy();
+      expect(includesEach(g, excludedGrams)).toBeFalsy();
+    });
+  },
+);
