@@ -16,6 +16,8 @@ const {
 const between = (a, b, c) => a < b && a > c;
 
 const chunk = (v) => {
+  if (v.length < MIN_GRAM_SIZE) return v;
+
   const out = [];
   const re = new RegExp(
     `.{${MIN_GRAM_SIZE},${MAX_GRAM_SIZE}}`,
@@ -89,6 +91,7 @@ const makeGram = (str) => {
           const g = ng(size);
           return size >= MIN_GRAM_SIZE ? g(val) : [];
         })
+        .concat(str.match(/\b(\w)/g))
         .flat(2),
     ),
   );
