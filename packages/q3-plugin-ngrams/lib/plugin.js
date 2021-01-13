@@ -28,17 +28,26 @@ module.exports = {
   },
 
   async saveGrams() {
-    const isParent =
-      typeof this.parent !== 'function' ||
-      this.parent() === undefined;
+    try {
+      const isParent =
+        typeof this.parent !== 'function' ||
+        this.parent() === undefined;
 
-    if (isParent)
-      await this.set(
-        reduceSearchableFields(
-          getFields(this.schema),
-          this,
-        ),
-      );
+      if (
+        isParent &&
+        getFields(this.schema).some((item) =>
+          this.isModified(item),
+        )
+      )
+        await this.set(
+          reduceSearchableFields(
+            getFields(this.schema),
+            this,
+          ),
+        );
+    } catch (e) {
+      // noop
+    }
   },
 
   async index() {
