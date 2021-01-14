@@ -12,7 +12,9 @@ execChildProcess(Q3Instance, async ({ user }) => {
     .lean()
     .exec();
 
+  console.log('STARTED');
   const data = await Redact(characters, user, 'characters');
+  return data;
 
   const file = await Q3Instance.Notifications.upload(
     {

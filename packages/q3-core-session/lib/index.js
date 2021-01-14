@@ -52,8 +52,13 @@ module.exports = {
       const getFromReq = (path) =>
         isObject(req) ? req[path] : undefined;
 
-      ns.set(SESSION_KEY, getFromReq('user'));
-      if (req && !req.session) req.session = {};
+      const user = getFromReq('user');
+      ns.set(SESSION_KEY, user);
+
+      if (req && !req.session)
+        req.session = {
+          [SESSION_KEY]: user,
+        };
 
       Promise.all(execMap(req)).then(() => {
         if (typeof getFromReq('onSession') === 'function') {

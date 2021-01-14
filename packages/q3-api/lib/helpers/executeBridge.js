@@ -1,15 +1,15 @@
 const path = require('path');
 const { get, pick } = require('lodash');
 const fs = require('fs');
-const { fork } = require('child_process');
 const { exception } = require('q3-core-responder');
+const Scheduler = require('q3-core-scheduler');
 const {
   compose,
   verify,
   check,
 } = require('q3-core-composer');
+
 const app = require('../config/express');
-const io = require('../config/socket');
 const { toQuery } = require('./casters');
 
 // renamed to "processes"
@@ -31,49 +31,18 @@ const getActionPath = (bridgeType, template) => {
   return action;
 };
 
-const runChildProcess = async (
-  action,
-  bridgeType,
-  brideParamters,
-) => {
-  const forked = fork(action);
-
-  // emit the bridge type (exports, imports, reports)
-  // the client subscribes to these alerts
-  forked.on('message', (data) => {
-    // allow only a single message to dispatch
-    // force kill
-    forked.kill('SIGINT');
-
-    io.emit(
-      // reports and exports both return files
-      'download',
-      {
-        data,
-      },
-    );
-  });
-
-  forked.send(brideParamters);
-};
-
 module.exports = (bridgeType) => {
   const ctrl = async (req, res) => {
     const template = get(req, 'query.template');
     const action = getActionPath(bridgeType, template);
 
     if (bridgeType !== 'pipeline') {
-      await runChildProcess(
-        action,
-        bridgeType,
-        pick(req, [
-          'files',
-          'headers',
-          'originalUrl',
-          'query',
-          'user',
-        ]),
+      // UPLOAD FILES??
+      await Scheduler.queue(
+        'onCharacterCollection',
+        pick(req, ['headers', 'query']),
       );
+
       res.acknowledge();
     } else {
       res.ok({
