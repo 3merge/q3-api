@@ -20,6 +20,19 @@ module.exports = () => {
   });
 
   return {
+    getBuffer(Key) {
+      return new Promise((resolve, reject) =>
+        s3.getObject(
+          {
+            Bucket: process.env.PRIVATE_BUCKET,
+            Key,
+          },
+          (error, data) =>
+            error ? reject(error) : resolve(data.Body),
+        ),
+      );
+    },
+
     getPublic(Key) {
       return `${process.env.CDN}/${Key}`;
     },

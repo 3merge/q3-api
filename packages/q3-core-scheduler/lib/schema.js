@@ -92,7 +92,7 @@ Schema.statics.getQueued = async function () {
 };
 
 Schema.statics.finish = async function ({ _id, name }) {
-  await this.update({ _id }, { status: DONE });
+  await this.updateOne({ _id }, { status: DONE });
   const due = getNextDate(getInterval(name));
 
   return due
@@ -110,7 +110,7 @@ Schema.statics.stall = async function (
   { _id, attempt = 1 },
   e,
 ) {
-  return this.update(
+  return this.updateOne(
     { _id },
     {
       status: getStatus(attempt),

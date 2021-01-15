@@ -1,5 +1,5 @@
 const path = require('path');
-const { get, pick } = require('lodash');
+const { get, pick, isObject } = require('lodash');
 const fs = require('fs');
 const { exception } = require('q3-core-responder');
 const Scheduler = require('q3-core-scheduler');
@@ -8,9 +8,21 @@ const {
   verify,
   check,
 } = require('q3-core-composer');
+const aws = require('../config/aws');
 
 const app = require('../config/express');
 const { toQuery } = require('./casters');
+
+const uploads = async (files) =>
+  isObject(files)
+    ? Promise.all(
+        Object.entries(files).map(async ([key, file]) => {
+          const filename = `queuing/${key}`;
+          await aws().add(filename, file.data);
+          return filename;
+        }),
+      )
+    : [];
 
 // renamed to "processes"
 // will edit the variables eventually
@@ -37,11 +49,10 @@ module.exports = (bridgeType) => {
     const action = getActionPath(bridgeType, template);
 
     if (bridgeType !== 'pipeline') {
-      // UPLOAD FILES??
-      await Scheduler.queue(
-        'onCharacterCollection',
-        pick(req, ['headers', 'query']),
-      );
+      await Scheduler.queue('onCharacterCollection', {
+        ...pick(req, ['query', 'session']),
+        buckets: await uploads(req.files),
+      });
 
       res.acknowledge();
     } else {

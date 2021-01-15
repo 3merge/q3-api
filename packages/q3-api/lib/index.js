@@ -15,7 +15,6 @@ const {
 } = require('q3-core-responder');
 const i18next = require('i18next');
 const { middleware } = require('q3-core-composer');
-const { config } = require('q3-core-mailer');
 const path = require('path');
 const locale = require('q3-locale');
 const runner = require('./config');
@@ -54,13 +53,6 @@ const registerLocale = ({ location }) => () =>
 
     resolve();
   });
-
-/**
- * See q3-core-mailer for more details.
- * Essentially, it uses the location to register event handlers by the file system architecture.
- */
-const registerChores = ({ location, chores }) =>
-  chores && location ? config(chores).walk(location) : null;
 
 const locate = () => {
   try {
@@ -126,12 +118,7 @@ const Q3 = {
           })
         : mongoose.connect(
             process.env.CONNECTION,
-            connectToDB((data) => {
-              if (cluster.isMaster && isRunning)
-                // otherwise it doesn't get called
-                registerChores(app.locals);
-              return resolve(data);
-            }, reject),
+            connectToDB(resolve, reject),
           ),
     )
       .then(registerLocale(app.locals))

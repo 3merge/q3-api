@@ -16,6 +16,7 @@
     "coverage": "lcov-result-merger coverage/coverage_*/lcov.info | codecov --pipe",
     "upload": "lerna publish",
     "demo": "nodemon demo",
+    "demo-worker": "nodemon demo/worker",
     "docs": "jsdoc -c jsdoc.json"
   },
   "workspaces": [

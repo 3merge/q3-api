@@ -1,10 +1,15 @@
-const session = require('q3-core-session');
+const csv = require('fast-csv');
 
-module.exports = async () => {
-  try {
-    console.log('hello???');
-    console.log(session.get('USER'), 'IN JOB');
-  } catch (e) {
-    console.log(e);
-  }
+module.exports = async (e, attachments) => {
+  console.log(attachments);
+
+  // return new Promise((resolve, reject) =>
+  //   csv
+  //     .parseStream(attachments.test)
+  //     .on('error', reject)
+  //     .on('data', rows.push.bind(rows))
+  //     .on('end', () => resolve(rows)),
+  // ).then((resp) => {
+  //   console.log(resp);
+  // });
 };
