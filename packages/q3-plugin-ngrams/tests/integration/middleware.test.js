@@ -33,4 +33,22 @@ describe('"middleware"', () => {
     expectToContain('jo');
     expectToContain('bi');
   });
+
+  it('should run on save', async () => {
+    const resp = await Model.Article.create({
+      title: 'Init',
+    });
+
+    const newDoc = await resp
+      .set({
+        meta: {
+          keywords: ['Delayed'],
+        },
+      })
+      .save({});
+
+    expect(
+      newDoc.ngrams.findIndex((item) => item === 'delayed'),
+    ).not.toBe(-1);
+  });
 });
