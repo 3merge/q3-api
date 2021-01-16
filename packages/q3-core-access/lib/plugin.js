@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign, func-names */
-const { get, invoke } = require('lodash');
+const { get, invoke, isFunction } = require('lodash');
 const Comparison = require('comparisons');
 const mongoose = require('mongoose');
 const { exception } = require('q3-core-responder');
@@ -25,6 +25,16 @@ const getOp = (ctx, options) => {
   if (options.op) return options.op;
   return 'Update';
 };
+
+const enforce = (fn) =>
+  async function () {
+    if (isFunction(this.setOptions))
+      this.setOptions({
+        redact: true,
+      });
+
+    return fn.call(this);
+  };
 
 module.exports = (schema) => {
   /**
@@ -144,9 +154,9 @@ module.exports = (schema) => {
     schema.pre('save', checkOp);
     schema.pre('find', useQuery);
     schema.pre('findOne', useQuery);
-    schema.pre('count', useQuery);
-    schema.pre('countDocuments', useQuery);
-    schema.pre('estimatedDocumentCount', useQuery);
+    schema.pre('count', enforce(useQuery));
+    schema.pre('countDocuments', enforce(useQuery));
+    schema.pre('estimatedDocumentCount', enforce(useQuery));
     schema.pre('distinct', useQuery);
 
     schema.add({

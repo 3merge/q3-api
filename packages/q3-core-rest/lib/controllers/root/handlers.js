@@ -39,17 +39,6 @@ module.exports = {
       page,
     } = queryParser(req);
 
-    const { countDocuments } = datasource;
-    datasource.countDocuments = function monkeyPatchPaginationPluginInternals(
-      params,
-    ) {
-      return countDocuments
-        .call(datasource, params)
-        .setOptions({
-          redact: true,
-        });
-    };
-
     const {
       docs,
       totalDocs,
