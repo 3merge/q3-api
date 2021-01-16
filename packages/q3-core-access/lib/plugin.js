@@ -27,7 +27,7 @@ const getOp = (ctx, options) => {
 };
 
 const enforce = (fn) =>
-  async function () {
+  function () {
     if (isFunction(this.setOptions))
       this.setOptions({
         redact: true,
