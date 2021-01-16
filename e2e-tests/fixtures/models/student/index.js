@@ -8,7 +8,10 @@ const SampleSchema = new mongoose.Schema({
 
 const StudentSchema = new mongoose.Schema(
   {
-    name: String,
+    name: {
+      type: String,
+      gram: true,
+    },
     age: Number,
     socialStatus: String,
     trigger: Boolean,

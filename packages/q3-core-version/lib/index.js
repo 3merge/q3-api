@@ -24,9 +24,19 @@ const getSchemaPaths = (schema) => {
 };
 
 module.exports = (schema, instance) => {
+  const getCurrentVersion = (doc) =>
+    doc.constructor
+      .findById(doc._id)
+      .select(getSchemaPaths(schema))
+      .exec();
+
   schema.add({
     lastModifiedBy: mongoose.SchemaTypes.Mixed,
   });
+
+  schema.post('init', (doc) =>
+    set(doc, '$locals.$original', doc),
+  );
 
   schema.pre('save', async function markModified() {
     if (
@@ -37,10 +47,9 @@ module.exports = (schema, instance) => {
     )
       return;
 
-    const original = await this.constructor
-      .findById(this._id)
-      .select(getSchemaPaths(schema))
-      .exec();
+    const original =
+      this.$locals.$original ||
+      (await getCurrentVersion(this));
 
     if (!original) return;
 
