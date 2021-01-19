@@ -9,7 +9,9 @@ const micromatch = require('micromatch');
 const mongoose = require('../../config/mongoose');
 
 const includes = (a, b) =>
-  a && b && a.toUpperCase().includes(b.toUpperCase());
+  a &&
+  b &&
+  String(a).toUpperCase().includes(String(b).toUpperCase());
 
 const filterByWord = (results = [], search) =>
   results
