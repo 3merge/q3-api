@@ -14,6 +14,10 @@ const M = runner(Schema.Types.Tel, [
   ['982271234325', true],
   ['8001234321', true],
   ['8001234321x1234', true],
+  ['8001234321poste121', true],
+  ['41599986756 PO 123433', true],
+  ['a8415699986756 PO 123433', false],
+  ['905a4561234x987', false],
 ]);
 
 test('Type should normalize tel', () => {
@@ -22,7 +26,12 @@ test('Type should normalize tel', () => {
 });
 
 test('Type should normalize extensions', () => {
-  const doc = new M({ test: '9053331234x123' });
+  const doc = new M({ test: '9053331234ext123' });
+  expect(doc.test).toMatch('(905) 333-1234 x123');
+});
+
+test('Type should normalize french extensions', () => {
+  const doc = new M({ test: '905-333-1234 poste 123' });
   expect(doc.test).toMatch('(905) 333-1234 x123');
 });
 
