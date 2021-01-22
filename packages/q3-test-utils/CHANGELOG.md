@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.14](https://github.com/3merge/q3-api/compare/v1.7.13...v1.7.14) (2021-01-22)
+
+
+### Bug Fixes
+
+* add more special characters to password regex ([1cb9f44](https://github.com/3merge/q3-api/commit/1cb9f44fe5ca01b3c004a7c4436e02e79434aa55))
+
+
+
+
+
 ## [1.7.13](https://github.com/3merge/q3-api/compare/v1.7.12...v1.7.13) (2021-01-21)
 
 **Note:** Version bump only for package q3-test-utils
