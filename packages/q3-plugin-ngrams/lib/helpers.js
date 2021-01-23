@@ -114,7 +114,10 @@ const invokeJson = (d) => ('toJSON' in d ? d.toJSON() : d);
 
 const makeRegexForEmbeddedDocumentPaths = (pathname = '') =>
   new RegExp(
-    `^${pathname.replace(/\./g, '\\.(\\d+\\.)?')}$`,
+    `^${pathname.replace(
+      /\./g,
+      '\\.(\\d+\\.)?',
+    )}((\\.\\d*)$)?$`,
   );
 
 const makeDocumentPaths = compose(

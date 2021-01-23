@@ -27,18 +27,22 @@ module.exports = {
     };
   },
 
-  async saveGrams() {
-    const isParent =
-      typeof this.parent !== 'function' ||
-      this.parent() === undefined;
+  saveGrams() {
+    try {
+      const fields = getFields(this.schema);
 
-    if (isParent)
-      await this.set(
-        reduceSearchableFields(
-          getFields(this.schema),
-          this,
-        ),
-      );
+      const isParent =
+        typeof this.parent !== 'function' ||
+        this.parent() === undefined;
+
+      if (
+        isParent &&
+        fields.some((item) => this.isModified(item))
+      )
+        this.set(reduceSearchableFields(fields, this));
+    } catch (e) {
+      // noop
+    }
   },
 
   async index() {

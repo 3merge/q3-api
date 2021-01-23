@@ -3,6 +3,67 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.14](https://github.com/3merge/q3-api/compare/v1.7.13...v1.7.14) (2021-01-22)
+
+
+### Bug Fixes
+
+* add more special characters to password regex ([1cb9f44](https://github.com/3merge/q3-api/commit/1cb9f44fe5ca01b3c004a7c4436e02e79434aa55))
+
+
+
+
+
+## [1.7.13](https://github.com/3merge/q3-api/compare/v1.7.12...v1.7.13) (2021-01-21)
+
+**Note:** Version bump only for package q3-test-utils
+
+
+
+
+
+## [1.7.12](https://github.com/3merge/q3-api/compare/v1.7.11...v1.7.12) (2021-01-20)
+
+
+### Bug Fixes
+
+* regex ([#116](https://github.com/3merge/q3-api/issues/116)) ([ec20990](https://github.com/3merge/q3-api/commit/ec20990ef8c2a70c0b9ae2bbb99b5c03689b1eb9))
+
+
+
+
+
+## [1.7.11](https://github.com/3merge/q3-api/compare/v1.7.10...v1.7.11) (2021-01-19)
+
+
+### Bug Fixes
+
+* distinct lookup on non-strings ([ae4ca13](https://github.com/3merge/q3-api/commit/ae4ca130f1ac917387209dc96497d41b95b78728))
+
+
+
+
+
+## [1.7.10](https://github.com/3merge/q3-api/compare/v1.7.9...v1.7.10) (2021-01-16)
+
+
+### Bug Fixes
+
+* memory leak in get controller ([#115](https://github.com/3merge/q3-api/issues/115)) ([9970b50](https://github.com/3merge/q3-api/commit/9970b50815341171739f0a0a95a7e58a8f03a447))
+
+
+
+
+
+
+## [1.7.9](https://github.com/3merge/q3-api/compare/v1.7.8...v1.7.9) (2021-01-14)
+
+**Note:** Version bump only for package q3-test-utils
+
+
+
+
+
 ## [1.7.8](https://github.com/3merge/q3-api/compare/v1.7.7...v1.7.8) (2021-01-06)
 
 **Note:** Version bump only for package q3-test-utils

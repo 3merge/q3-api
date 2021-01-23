@@ -87,9 +87,7 @@ describe('static find abstractions', () => {
   it('should query by key', async () => {
     await Decorator.findByApiKey.call(MockModel, '123');
     expect(MockModel.findOne).toHaveBeenCalledWith({
-      password: { $exists: true },
       apiKeys: '123',
-      verified: true,
       active: true,
     });
   });
@@ -124,11 +122,14 @@ describe('static find abstractions', () => {
 
   it('should query unverified users', async () => {
     await Decorator.findUnverifiedByEmail.call(inst, email);
-    expect(findOne).toHaveBeenCalledWith({
-      verified: false,
-      active: true,
-      email,
-    });
+    expect(findOne).toHaveBeenCalledWith(
+      {
+        verified: false,
+        active: true,
+        email,
+      },
+      'accountVerified',
+    );
   });
 });
 
@@ -151,6 +152,29 @@ test('setPassword should hash the string and reset login count', async () => {
   );
   expect(save).toHaveBeenCalled();
 });
+
+test.each([
+  ['TestingMe.12', true],
+  ['4MyTestin!~202', true],
+  ['myfirstEmail@3kg', true],
+  ['myfirstEmail_3kg', true],
+  ['(Secrets)1234', true],
+  ['Testa20Me-', true],
+  ['TestingMe_', false],
+  ['test', false],
+  ['test!2020', false],
+])(
+  '.setPassword(%s) should test strength',
+  async (a, doesPass) => {
+    const cls = new Decorator();
+    Object.assign(cls, { save, set });
+    if (doesPass) {
+      expect(cls.setPassword(a)).resolves.toMatch(a);
+    } else {
+      expect(cls.setPassword(a)).rejects.toThrowError();
+    }
+  },
+);
 
 describe('verifyPassword', () => {
   it('should reset login count on success', async () => {

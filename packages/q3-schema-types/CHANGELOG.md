@@ -3,6 +3,55 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.14](https://github.com/3merge/q3-api/compare/v1.7.13...v1.7.14) (2021-01-22)
+
+**Note:** Version bump only for package q3-schema-types
+
+
+
+
+
+## [1.7.13](https://github.com/3merge/q3-api/compare/v1.7.12...v1.7.13) (2021-01-21)
+
+**Note:** Version bump only for package q3-schema-types
+
+
+
+
+
+## [1.7.12](https://github.com/3merge/q3-api/compare/v1.7.11...v1.7.12) (2021-01-20)
+
+**Note:** Version bump only for package q3-schema-types
+
+
+
+
+
+## [1.7.11](https://github.com/3merge/q3-api/compare/v1.7.10...v1.7.11) (2021-01-19)
+
+**Note:** Version bump only for package q3-schema-types
+
+
+
+
+
+## [1.7.10](https://github.com/3merge/q3-api/compare/v1.7.9...v1.7.10) (2021-01-16)
+
+**Note:** Version bump only for package q3-schema-types
+
+
+
+
+
+
+## [1.7.9](https://github.com/3merge/q3-api/compare/v1.7.8...v1.7.9) (2021-01-14)
+
+**Note:** Version bump only for package q3-schema-types
+
+
+
+
+
 ## [1.7.8](https://github.com/3merge/q3-api/compare/v1.7.7...v1.7.8) (2021-01-06)
 
 **Note:** Version bump only for package q3-schema-types

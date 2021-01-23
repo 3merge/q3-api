@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { set, union } = require('lodash');
+const { pick, set, union } = require('lodash');
 const {
   insertToPatchHistory,
   getFromPatchHistory,
@@ -20,23 +20,26 @@ const getSchemaPaths = (schema) => {
       schema.discriminators,
     ).flatMap((s) => Object.keys(s.paths));
 
-  return union(paths, Object.keys(schema.paths)).join(' ');
+  return union(paths, Object.keys(schema.paths));
 };
 
 module.exports = (schema, instance) => {
   const getCurrentVersion = (doc) =>
     doc.constructor
       .findById(doc._id)
-      .select(getSchemaPaths(schema))
+      .select(getSchemaPaths(schema).join(' '))
+      .lean()
       .exec();
 
   schema.add({
     lastModifiedBy: mongoose.SchemaTypes.Mixed,
   });
 
-  schema.post('init', (doc) =>
-    set(doc, '$locals.$original', doc),
-  );
+  schema.post('init', (doc) => {
+    const selected = doc.toObject ? doc.toObject() : doc;
+    const picked = pick(selected, getSchemaPaths(schema));
+    set(doc, '$locals.$original', picked);
+  });
 
   schema.pre('save', async function markModified() {
     if (
@@ -48,15 +51,14 @@ module.exports = (schema, instance) => {
       return;
 
     const original =
-      this.$locals.$original ||
-      (await getCurrentVersion(this));
+      this.$locals.$original || (await getCurrentVersion());
 
     if (!original) return;
 
     const modifiedBy = getUserMeta(this);
     const modified = diff(
       this.toJSON(),
-      original.toJSON(),
+      original,
       schema.options.versionHistoryWatchers,
     );
 
