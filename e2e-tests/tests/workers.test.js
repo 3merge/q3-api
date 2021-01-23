@@ -1,13 +1,19 @@
+const path = require('path');
+const queue = require('q3-api/lib/startQueue');
 const setup = require('../fixtures');
 const { teardown } = require('../helpers');
 
 let Authorization;
 let agent;
+let __$db;
 
 jest.unmock('express-validator');
 
 beforeAll(async () => {
   ({ Authorization, agent } = await setup());
+  ({ __$db } = await queue(
+    path.resolve(__dirname, '../fixtures'),
+  ));
 });
 
 afterAll(teardown);
@@ -20,20 +26,13 @@ describe('Workers', () => {
       .expect(204);
 
     setTimeout(async () => {
-      const {
-        body: { logs },
-      } = await agent
-        .get('/system-logs')
-        .set({ Authorization })
-        .expect(200);
+      const doc = await __$db.findOne({
+        status: 'Done',
+        name: 'students',
+      });
 
-      expect(logs[0]).toHaveProperty(
-        'event',
-        'students-importer',
-      );
-
+      expect(doc).not.toBeNull();
       done();
-      // let the process finish
     }, 4000);
   });
 });

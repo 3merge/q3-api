@@ -17,6 +17,7 @@ const {
 const Schema = new mongoose.Schema(
   {
     due: Date,
+    completedOn: Date,
     status: {
       type: String,
       enum: [FAILED, QUEUED, STALLED, DONE],
@@ -92,7 +93,11 @@ Schema.statics.getQueued = async function () {
 };
 
 Schema.statics.finish = async function ({ _id, name }) {
-  await this.updateOne({ _id }, { status: DONE });
+  await this.updateOne(
+    { _id },
+    { status: DONE, completedOn: new Date() },
+  );
+
   const due = getNextDate(getInterval(name));
 
   return due

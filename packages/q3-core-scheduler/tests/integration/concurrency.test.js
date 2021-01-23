@@ -26,6 +26,6 @@ describe('Scheduler', () => {
       expect(single).toHaveBeenCalledTimes(1);
       timers.forEach(clearInterval);
       done();
-    }, 150);
+    }, 250);
   });
 });

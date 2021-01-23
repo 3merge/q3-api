@@ -1,10 +1,15 @@
 const moment = require('moment');
 const path = require('path');
+const { get, isObject, isString } = require('lodash');
 const { FAILED, STALLED } = require('./constants');
 
 const add = (...params) => moment().add(...params);
 
-const isString = (v) => typeof v === 'string';
+const composeAsync = (...fns) => (initialValues) =>
+  fns.reduceRight(
+    (sum, fn) => Promise.resolve(sum).then(fn),
+    initialValues,
+  );
 
 const getNextDate = (value) => {
   switch (value) {
@@ -52,25 +57,35 @@ const getMessage = (e) =>
     ? e.message
     : undefined;
 
-const json = (method) => (v) => {
+const stringify = (data) =>
+  isObject(data) ? JSON.stringify(data) : '';
+
+const parse = (v) => {
   try {
-    return JSON[method](v);
+    if (isString(v)) return JSON.parse(v);
+    if (isObject(v)) return v;
+    throw new Error(`Cannot parse ${typeof v}`);
   } catch (e) {
-    return undefined;
+    return {};
   }
 };
 
-const stringify = json('stringify');
-const parse = json('parse');
+const toJson = (data) =>
+  data && 'toJSON' in data ? data.toJSON() : data;
 
-const makePayload = (data) =>
-  stringify(
-    data && 'toJSON' in data ? data.toJSON() : data,
-  );
+const makePayload = (data) => stringify(toJson(data));
+
+const forwardPayload = (fn) => (choreData) =>
+  fn({
+    ...toJson(choreData),
+    data: parse(get(choreData, 'payload')),
+  });
 
 module.exports = {
+  composeAsync,
   isJob,
   isRecurringJob,
+  forwardPayload,
   getStatus,
   getInterval,
   getMessage,

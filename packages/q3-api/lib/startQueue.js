@@ -1,6 +1,6 @@
 require('dotenv').config();
-const mongooseInstance = require('q3-api/lib/config/mongoose');
 const Scheduler = require('q3-core-scheduler');
+const mongooseInstance = require('./config/mongoose');
 
 module.exports = (location) =>
   mongooseInstance
@@ -11,4 +11,6 @@ module.exports = (location) =>
       if (process.env.NODE_ENV !== 'production')
         // eslint-disable-next-line
         console.log('Started queuing service');
+
+      return Scheduler;
     });

@@ -1,5 +1,5 @@
 const path = require('path');
-const { get, pick, isObject } = require('lodash');
+const { get, isFunction, isObject } = require('lodash');
 const fs = require('fs');
 const { exception } = require('q3-core-responder');
 const Scheduler = require('q3-core-scheduler');
@@ -9,7 +9,6 @@ const {
   check,
 } = require('q3-core-composer');
 const aws = require('../config/aws');
-
 const app = require('../config/express');
 const { toQuery } = require('./casters');
 
@@ -23,6 +22,16 @@ const uploads = async (files) =>
         }),
       )
     : [];
+
+const getSession = (req) => {
+  try {
+    return isFunction(get(req, 'app.locals.purgeSession'))
+      ? req.app.locals.purgeSession(req.session)
+      : req.session;
+  } catch (e) {
+    return {};
+  }
+};
 
 // renamed to "processes"
 // will edit the variables eventually
@@ -46,19 +55,22 @@ const getActionPath = (bridgeType, template) => {
 module.exports = (bridgeType) => {
   const ctrl = async (req, res) => {
     const template = get(req, 'query.template');
-    const action = getActionPath(bridgeType, template);
 
     if (bridgeType !== 'pipeline') {
-      await Scheduler.queue('onCharacterCollection', {
-        ...pick(req, ['query', 'session']),
+      await Scheduler.queue(template, {
         buckets: await uploads(req.files),
+        query: req.query,
+        session: getSession(req),
       });
 
       res.acknowledge();
     } else {
       res.ok({
         // eslint-disable-next-line
-        data: await require(action)({
+        data: await require(getActionPath(
+          bridgeType,
+          template,
+        ))({
           $match: toQuery(req),
         }),
       });

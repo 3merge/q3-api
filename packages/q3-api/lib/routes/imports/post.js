@@ -1,3 +1,3 @@
-module.exports = require('../../helpers/executeBridge')(
+module.exports = require('../../helpers/scheduleRouteResponse')(
   'imports',
 );

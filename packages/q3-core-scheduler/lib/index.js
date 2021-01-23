@@ -38,7 +38,7 @@ module.exports = {
       },
     ),
 
-  start: (directory, interval = 30000) => {
+  start: (directory, interval = 1000) => {
     const Ticker = new EventEmitter();
     const { execute } = runner(directory);
     const tick = 'tick';
