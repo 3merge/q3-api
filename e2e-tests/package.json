@@ -31,8 +31,7 @@
     "q3-schema-types": "^1.7.14",
     "q3-schema-users": "^1.7.14",
     "q3-schema-utils": "^1.7.14",
-    "q3-test-utils": "^1.7.14",
-    "socket.io-client": "^3.0.4"
+    "q3-test-utils": "^1.7.14"
   },
   "devDependencies": {
     "jest": "^26.6.3",
