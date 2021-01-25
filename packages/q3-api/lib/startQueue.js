@@ -1,4 +1,7 @@
 require('dotenv').config();
+
+process.env.PURPOSE = 'queue';
+
 const Scheduler = require('q3-core-scheduler');
 const mongooseInstance = require('./config/mongoose');
 

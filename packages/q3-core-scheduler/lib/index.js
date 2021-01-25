@@ -8,7 +8,7 @@ const { makePayload } = require('./utils');
 const Emitter = new EventEmitter();
 
 const Scheduler = mongoose.model(
-  process.env.QUEUING_COLLECTION || 'queue',
+  process.env.QUEUING_COLLECTION || 'queues',
   SchedulerSchema,
 );
 
@@ -47,6 +47,7 @@ module.exports = {
 
     Ticker.on(tick, async () => {
       const curr = await Scheduler.getQueued();
+
       const emitTo = (name) =>
         Emitter.emit(name, curr.name);
 

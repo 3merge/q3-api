@@ -1,7 +1,7 @@
 const casters = require('./casters');
-const sse = require('./sse');
+const DatabaseStream = require('./databaseStream');
 
 module.exports = {
   casters,
-  sse,
+  DatabaseStream,
 };

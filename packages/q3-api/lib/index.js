@@ -5,8 +5,6 @@
 require('dotenv').config();
 require('q3-locale');
 
-const cluster = require('cluster');
-const os = require('os');
 const { get } = require('lodash');
 const walker = require('q3-core-walker');
 const { AccessControl } = require('q3-core-access');
@@ -19,27 +17,20 @@ const path = require('path');
 const locale = require('q3-locale');
 const runner = require('./config');
 const app = require('./config/express');
-const io = require('./config/socket');
 const mongoose = require('./config/mongoose');
 const models = require('./models');
+const { DatabaseStream } = require('./helpers');
+const cluster = require('./config/cluster');
 
-const isRunning = process.env.NODE_ENV !== 'test';
-
-const concurrent =
-  process.env.WEB_CONCURRENCY || os.cpus().length;
-
-if (isRunning && cluster.isMaster) {
-  for (let i = 0; i < concurrent; i += 1) cluster.fork();
-  cluster.on('exit', () => cluster.fork());
-}
-
-/**
- * When testing, frameworks like supertest attach listeners.
- */
 const connectToDB = (res, rej) => (err) => {
   if (err) return rej(err);
   app.use(handleUncaughtExceptions);
-  if (isRunning && cluster.isWorker) io.listen();
+
+  if (cluster.isWorkerEnvironment) {
+    app.set('changestream', new DatabaseStream().init());
+    app.listen(process.env.PORT, () => {});
+  }
+
   return res(null);
 };
 
@@ -77,14 +68,7 @@ const Q3 = {
     if (!location && !args.location)
       throw new Error('App requires a location');
 
-    Object.assign(
-      app.locals,
-      {
-        location,
-      },
-      args,
-    );
-
+    Object.assign(app.locals, { location }, args);
     return this;
   },
 
@@ -127,6 +111,14 @@ const Q3 = {
         console.error(e);
         process.exit(0);
       }),
+
+  saveToSessionNotifications: async (...params) =>
+    models.Notifications.saveToSessionNotifications(
+      ...params,
+    ),
+
+  saveToSessionDownloads: async (...params) =>
+    models.Notifications.saveToSessionDownloads(...params),
 };
 
 Q3.$app = app;

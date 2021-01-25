@@ -6,5 +6,11 @@ exports.toUndefined = (v) =>
 exports.toQuery = (req = {}) => {
   const { query } = parse(req);
   delete query.template;
+
+  if (query.ids) {
+    query._id = query.ids;
+    delete query.ids;
+  }
+
   return query;
 };

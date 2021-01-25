@@ -15,7 +15,7 @@
     "test": "yarn test:packages && yarn test:packages-scheduler && yarn test:packages-ngrams && yarn test:e2e",
     "coverage": "lcov-result-merger coverage/coverage_*/lcov.info | codecov --pipe",
     "upload": "lerna publish",
-    "demo": "nodemon demo",
+    "demo-web": "nodemon demo",
     "demo-worker": "nodemon demo/worker",
     "docs": "jsdoc -c jsdoc.json"
   },

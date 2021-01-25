@@ -33,14 +33,11 @@ const getSession = (req) => {
   }
 };
 
-// renamed to "processes"
-// will edit the variables eventually
-const getActionPath = (bridgeType, template) => {
+const getActionPath = (template) => {
   const action = path.join(
     // default to root directory
     get(app, 'locals.location', process.cwd()),
-    'processes',
-    bridgeType,
+    'reports',
     `${template}.js`,
   );
 
@@ -55,24 +52,24 @@ const getActionPath = (bridgeType, template) => {
 module.exports = (bridgeType) => {
   const ctrl = async (req, res) => {
     const template = get(req, 'query.template');
+    const session = getSession(req);
+    const query = toQuery(req);
 
-    if (bridgeType !== 'pipeline') {
+    if (bridgeType !== 'reports') {
       await Scheduler.queue(template, {
         buckets: await uploads(req.files),
-        query: req.query,
-        session: getSession(req),
+        query,
+        session,
       });
 
       res.acknowledge();
     } else {
       res.ok({
         // eslint-disable-next-line
-        data: await require(getActionPath(
-          bridgeType,
-          template,
-        ))({
-          $match: toQuery(req),
-        }),
+        data: await require(getActionPath(template))(
+          query,
+          session,
+        ),
       });
     }
   };
