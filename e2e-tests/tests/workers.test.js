@@ -8,6 +8,7 @@ let agent;
 let __$db;
 
 jest.unmock('express-validator');
+jest.setTimeout(30000);
 
 beforeAll(async () => {
   ({ Authorization, agent } = await setup());
@@ -33,6 +34,6 @@ describe('Workers', () => {
 
       expect(doc).not.toBeNull();
       done();
-    }, 4500);
+    }, 2000);
   });
 });
