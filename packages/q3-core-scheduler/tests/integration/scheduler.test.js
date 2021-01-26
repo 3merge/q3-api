@@ -1,26 +1,36 @@
 const mongoose = require('mongoose');
 const Scheduler = require('../../lib');
 const single = require('./chores/onSingle');
-const recurring = require('./chores/onRecurring@minutely');
 const {
   DONE,
   STALLED,
   QUEUED,
 } = require('../../lib/constants');
 
-jest.useFakeTimers();
-
 let timer;
 
+const callQueue = (next) =>
+  Scheduler.queue('onSingle').then(
+    () =>
+      new Promise((done) => {
+        setTimeout(async () => {
+          await next();
+          done();
+        }, 20);
+      }),
+  );
+
 const expectFromScheduler = async (props) =>
-  expect(await Scheduler.__$db.find(props)).not.toBeNull();
+  expect(
+    await Scheduler.__$db.findOne(props),
+  ).not.toBeNull();
 
 beforeAll(async () => {
   await mongoose.connect(process.env.CONNECTION);
 });
 
 beforeEach(async () => {
-  timer = await Scheduler.start(__dirname);
+  timer = await Scheduler.start(__dirname, 1);
 });
 
 afterEach(async () => {
@@ -33,28 +43,26 @@ afterAll(() => {
 });
 
 describe('Scheduler', () => {
-  it('should walk fixtures directory', async () => {
+  it('should walk fixtures directory', async (done) => {
     const name = 'onRecurring@minutely';
-
-    recurring.mockImplementation((d) => {
-      expect(d).toHaveProperty('name', name);
-    });
-
     await Scheduler.seed(__dirname);
-    jest.runOnlyPendingTimers();
 
-    await expectFromScheduler({
-      name,
-      status: DONE,
-    });
+    setTimeout(async () => {
+      await expectFromScheduler({
+        name,
+        status: DONE,
+      });
 
-    await expectFromScheduler({
-      name,
-      status: QUEUED,
-      due: {
-        $gt: new Date(),
-      },
-    });
+      await expectFromScheduler({
+        name,
+        status: QUEUED,
+        due: {
+          $gt: new Date(),
+        },
+      });
+
+      done();
+    }, 50);
   });
 
   it('should call on chore', async () => {
@@ -64,13 +72,15 @@ describe('Scheduler', () => {
       expect(d).toHaveProperty('payload', payload);
     });
 
-    await Scheduler.queue('onSingle', payload);
-    jest.runOnlyPendingTimers();
-
-    expectFromScheduler({
-      name: 'onSingle',
-      status: DONE,
-    });
+    callQueue(() =>
+      expectFromScheduler({
+        name: 'onSingle',
+        status: DONE,
+        duration: {
+          $gt: 0.5,
+        },
+      }),
+    );
   });
 
   it('should stall jobs that error', async () => {
@@ -80,12 +90,11 @@ describe('Scheduler', () => {
       throw err;
     });
 
-    await Scheduler.queue('onSingle');
-    jest.runOnlyPendingTimers();
-
-    expectFromScheduler({
-      status: STALLED,
-      error: 'Oops!',
-    });
+    callQueue(() =>
+      expectFromScheduler({
+        status: STALLED,
+        error: 'Oops!',
+      }),
+    );
   });
 });

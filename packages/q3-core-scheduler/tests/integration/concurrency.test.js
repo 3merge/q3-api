@@ -4,6 +4,7 @@ const single = require('./chores/onSingle');
 
 beforeAll(async () => {
   await mongoose.connect(process.env.CONNECTION);
+  await Scheduler.__$db.deleteMany({});
 });
 
 afterAll(() => {

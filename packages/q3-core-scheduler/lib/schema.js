@@ -18,6 +18,7 @@ const Schema = new mongoose.Schema(
   {
     due: Date,
     completedOn: Date,
+    duration: Number,
     status: {
       type: String,
       enum: [FAILED, QUEUED, STALLED, DONE],

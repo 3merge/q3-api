@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const EventEmitter = require('events');
+const { performance } = require('perf_hooks');
 const { executeOnAsync } = require('q3-schema-utils');
 const SchedulerSchema = require('./schema');
 const runner = require('./runner');
@@ -46,17 +47,21 @@ module.exports = {
     let inProgress;
 
     Ticker.on(tick, async () => {
+      const start = performance.now();
       const curr = await Scheduler.getQueued();
 
-      const emitTo = (name) =>
+      const emitTo = (name) => {
         Emitter.emit(name, curr.name);
+      };
 
       try {
         if (curr) {
           emitTo('start');
           await execute(curr);
           emitTo('finish');
-          await Scheduler.finish(curr);
+          await Scheduler.finish(
+            curr.set('duration', performance.now() - start),
+          );
         }
       } catch (e) {
         emitTo('stall');
