@@ -11,11 +11,11 @@
 <h2>🕮 Documentation</h2>
 <h3>Core</h3>
 <ul>
-<li><a href="/packages/q3-plugin-ngrams">Scheduler</a></li>
+<li><a href="/packages/q3-core-scheduler">Scheduler</a></li>
 </ul>
 <h3>Plugins</h3>
 <ul>
-<li><a href="/packages/q3-plugin-ngrams">N-grams plugin</a></li>
+<li><a href="/packages/q3-plugin-ngrams">N-grams</a></li>
 </ul>
 
 <h2>Contributing</h2>
