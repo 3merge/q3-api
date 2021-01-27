@@ -6,15 +6,16 @@
   Q3 API
 </h1>
 
-<p><strong>Q3 is a set of packages for scaffolding APIs.</strong></p>
+<p align="center"><strong>Q3 is a set of packages for scaffolding APIs.</strong></p>
+<h2>🕮 Core Documentation</h2>
 
-<h2>🕮 Documentation</h2>
-<h3>Core</h3>
-<ul>
-<li><a href="/packages/q3-exports">Exports</a></li>
-<li><a href="/packages/q3-core-scheduler">Scheduler</a></li>
-</ul>
-<h3>Plugins</h3>
-<ul>
-<li><a href="/packages/q3-plugin-ngrams">N-grams</a></li>
-</ul>
+| Name                                                 | Description                                    |
+| ---------------------------------------------------- | ---------------------------------------------- |
+| <a  href="/packages/q3-exports">Exports</a>          | Generates simple `csv`, `xlsx` and `pdf` files |
+| <a  href="/packages/q3-core-scheduler">Scheduler</a> | Manages a worker queue for background tasking  |
+
+<h2>🔌 Plugin Documentation</h2>
+
+| Name                                              | Description                                       |
+| ------------------------------------------------- | ------------------------------------------------- |
+| <a  href="/packages/q3-plugin-ngrams">N-grams</a> | Handle mongoose fuzzy searching and text indexing |
