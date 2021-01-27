@@ -6,9 +6,7 @@
   Q3 API
 </h1>
 
-<p align="center">Q3 is a set of packages for scaffolding REST APIs.</p>
-
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#installation)
+<p><strong>Q3 is a set of packages for scaffolding APIs.</strong></p>
 
 <h2>🕮 Documentation</h2>
 <h3>Core</h3>
