@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.16](https://github.com/3merge/q3-api/compare/v1.7.15...v1.7.16) (2021-01-27)
+
+
+### Bug Fixes
+
+* locale in queue ([9cfc342](https://github.com/3merge/q3-api/commit/9cfc3429634f8a15ae7e26d88dd0fd6acc8a6053))
+
+
+
+
+
 ## [1.7.15](https://github.com/3merge/q3-api/compare/v1.7.14...v1.7.15) (2021-01-27)
 
 **Note:** Version bump only for package q3-test-utils
