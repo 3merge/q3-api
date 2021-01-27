@@ -89,11 +89,11 @@ class NotificationDecorator {
     );
   }
 
-  static async saveToSessionNotifications(message) {
+  static async saveToSessionNotifications(label) {
     return this.create({
       hasSeen: false,
       userId: session.get('USER', '_id'),
-      message,
+      label,
     });
   }
 

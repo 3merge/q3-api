@@ -62,4 +62,20 @@ describe('AWS inteface', () => {
       AWSInterface().addToBucket(true)(['1', file]),
     ).resolves.toBe('Foo');
   });
+
+  it('should bulk add files', () => {
+    const inst = AWSInterface();
+    inst.add = jest.fn();
+
+    expect(
+      inst.bulk(
+        {
+          file1: {},
+          file2: {},
+        },
+        'test',
+      ),
+    ).resolves.toEqual(['test/file1', 'test/file2']);
+    expect(inst.add).toHaveBeenCalledTimes(2);
+  });
 });

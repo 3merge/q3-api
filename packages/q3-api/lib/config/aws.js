@@ -142,7 +142,7 @@ module.exports = () => {
             Object.entries(files).map(
               async ([key, file]) => {
                 const filename = `${bucket}/${key}`;
-                await s3.add(filename, file.data);
+                await this.add(filename, file.data);
                 return filename;
               },
             ),
