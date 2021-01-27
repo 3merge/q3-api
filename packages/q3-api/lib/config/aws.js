@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+const { isObject } = require('lodash');
 
 module.exports = () => {
   const {
@@ -133,6 +134,20 @@ module.exports = () => {
           },
         ),
       );
+    },
+
+    bulk(files, bucket) {
+      return isObject(files)
+        ? Promise.all(
+            Object.entries(files).map(
+              async ([key, file]) => {
+                const filename = `${bucket}/${key}`;
+                await s3.add(filename, file.data);
+                return filename;
+              },
+            ),
+          )
+        : [];
     },
   };
 };

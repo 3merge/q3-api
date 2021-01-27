@@ -1,39 +1,43 @@
-const path = require('path');
-const queue = require('q3-api/lib/startQueue');
+jest.unmock('express-validator');
+
 const setup = require('../fixtures');
 const { teardown } = require('../helpers');
 
 let Authorization;
 let agent;
-let __$db;
-
-jest.unmock('express-validator');
-jest.setTimeout(30000);
 
 beforeAll(async () => {
   ({ Authorization, agent } = await setup());
-  ({ __$db } = await queue(
-    path.resolve(__dirname, '../fixtures'),
-  ));
 });
 
 afterAll(teardown);
 
-describe('Workers', () => {
-  it('should run import module', async (done) => {
-    await agent
-      .post('/imports?template=students')
-      .set({ Authorization })
-      .expect(204);
+describe('Template-based routes', () => {
+  describe('io', () => {
+    it('should return 422', () =>
+      agent
+        .post('/io?template=unknown')
+        .set({ Authorization })
+        .expect(422));
 
-    setTimeout(async () => {
-      const doc = await __$db.findOne({
-        status: 'Done',
-        name: 'students',
-      });
+    it('should return 204', () =>
+      agent
+        .post('/io?template=students')
+        .set({ Authorization })
+        .expect(204));
+  });
 
-      expect(doc).not.toBeNull();
-      done();
-    }, 25000);
+  describe('reports', () => {
+    it('should return 422', () =>
+      agent
+        .get('/reports?template=unknown')
+        .set({ Authorization })
+        .expect(422));
+
+    it('should return 200', () =>
+      agent
+        .get('/reports?template=classSchedule')
+        .set({ Authorization })
+        .expect(200));
   });
 });
