@@ -34,6 +34,6 @@ describe('Workers', () => {
 
       expect(doc).not.toBeNull();
       done();
-    }, 2000);
+    }, 25000);
   });
 });

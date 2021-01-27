@@ -9,7 +9,9 @@ const {
   WEB_CONCURRENCY: concurrent,
 } = process.env;
 
-const concurrencySetting = concurrent || os.cpus().length;
+const concurrencySetting = Number(
+  concurrent || os.cpus().length,
+);
 
 const isTestEnvironment = env === 'test';
 
