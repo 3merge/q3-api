@@ -1,12 +1,6 @@
-<p align="center">
-    <img alt="3merge" src="https://github.com/3merge/q3-client/blob/master/logo.png" width="22" />
-</p>
-
-<h1 align="center">
-  Q3 API
-</h1>
-
-<p align="center"><strong>Q3 is a set of packages for scaffolding APIs.</strong></p>
+<p><img alt="3merge" src="https://github.com/3merge/q3-client/blob/master/logo.png" width="22" /></p>
+<h1>Q3 API</h1>
+<p>Q3 is a set of packages for scaffolding APIs.</p>
 <h2>🕮 Core Documentation</h2>
 
 | Name                                                 | Description                                    |
@@ -16,6 +10,6 @@
 
 <h2>🔌 Plugin Documentation</h2>
 
-| Name                                              | Description                                       |
-| ------------------------------------------------- | ------------------------------------------------- |
-| <a  href="/packages/q3-plugin-ngrams">N-grams</a> | Handle mongoose fuzzy searching and text indexing |
+| Name                                              | Description                                        |
+| ------------------------------------------------- | -------------------------------------------------- |
+| <a  href="/packages/q3-plugin-ngrams">N-grams</a> | Handles mongoose fuzzy searching and text indexing |
