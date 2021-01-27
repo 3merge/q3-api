@@ -46,7 +46,6 @@
     "q3-schema-notes": "^1.7.14",
     "q3-schema-types": "^1.7.14",
     "q3-schema-users": "^1.7.14",
-    "socket.io": "^3.0.4",
     "ssestream": "^1.1.0"
   },
   "peerDependencies": {

@@ -1,16 +1,31 @@
 const path = require('path');
 const { readdirSync } = require('fs');
-const { isRecurringJob, parse } = require('./utils');
+const {
+  isRecurringJob,
+  forwardPayload,
+} = require('./utils');
+const {
+  connectToFileStorage,
+  connectToSession,
+} = require('./helpers');
 
 module.exports = (directory) => {
   const root = path.resolve(directory, './chores');
 
+  const invokeRequireOnDirectoryPath = ({
+    attachments,
+    name,
+    data,
+    // eslint-disable-next-line
+  }) => require(path.join(root, name))(data, attachments);
+
   return {
-    execute: async ({ name, payload = {} }) => {
-      // eslint-disable-next-line
-      const fn = require(path.join(root, name));
-      return fn(parse(payload));
-    },
+    execute: forwardPayload(
+      connectToSession(
+        invokeRequireOnDirectoryPath,
+        connectToFileStorage,
+      ),
+    ),
 
     walk: () =>
       readdirSync(root).reduce(

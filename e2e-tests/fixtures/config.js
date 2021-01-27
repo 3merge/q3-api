@@ -6,6 +6,12 @@ module.exports = Q3.config({
   location: __dirname,
   // for testing purposes only..
   onCors: () => true,
+  purgeSession: ({ USER }) => ({
+    USER: {
+      firstName: USER.firstName,
+      lastName: USER.lastName,
+    },
+  }),
 })
   .protect(accessControl)
   .routes();

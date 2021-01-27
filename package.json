@@ -15,7 +15,8 @@
     "test": "yarn test:packages && yarn test:packages-scheduler && yarn test:packages-ngrams && yarn test:e2e",
     "coverage": "lcov-result-merger coverage/coverage_*/lcov.info | codecov --pipe",
     "upload": "lerna publish",
-    "demo": "nodemon demo",
+    "demo-web": "nodemon demo",
+    "demo-worker": "nodemon demo/worker",
     "docs": "jsdoc -c jsdoc.json"
   },
   "workspaces": [
@@ -73,9 +74,5 @@
     "mongoose-field-populate": "^2.2.6",
     "mongoose-partial-search": "^1.0.6",
     "sift": "^13.4.0"
-  },
-  "resolutions": {
-    "socket.io": "2.3.0",
-    "socket.io-client": "2.3.0"
   }
 }

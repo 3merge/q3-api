@@ -83,12 +83,11 @@ describe('Access control plugin', () => {
         .expect(200);
 
       expect(
-        students.every((stu) => {
-          return (
+        students.every(
+          (stu) =>
             stu.socialStatus === undefined &&
-            stu.name !== undefined
-          );
-        }),
+            stu.name !== undefined,
+        ),
       ).toBeTruthy();
 
       expect(student).not.toHaveProperty('socialStatus');

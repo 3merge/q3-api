@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const EventEmitter = require('events');
+const { performance } = require('perf_hooks');
 const { executeOnAsync } = require('q3-schema-utils');
 const SchedulerSchema = require('./schema');
 const runner = require('./runner');
@@ -8,7 +9,7 @@ const { makePayload } = require('./utils');
 const Emitter = new EventEmitter();
 
 const Scheduler = mongoose.model(
-  process.env.QUEUING_COLLECTION || 'queue',
+  process.env.QUEUING_COLLECTION || 'queues',
   SchedulerSchema,
 );
 
@@ -38,7 +39,7 @@ module.exports = {
       },
     ),
 
-  start: (directory, interval = 30000) => {
+  start: (directory, interval = 1000) => {
     const Ticker = new EventEmitter();
     const { execute } = runner(directory);
     const tick = 'tick';
@@ -46,16 +47,21 @@ module.exports = {
     let inProgress;
 
     Ticker.on(tick, async () => {
+      const start = performance.now();
       const curr = await Scheduler.getQueued();
-      const emitTo = (name) =>
+
+      const emitTo = (name) => {
         Emitter.emit(name, curr.name);
+      };
 
       try {
         if (curr) {
           emitTo('start');
           await execute(curr);
           emitTo('finish');
-          await Scheduler.finish(curr);
+          await Scheduler.finish(
+            curr.set('duration', performance.now() - start),
+          );
         }
       } catch (e) {
         emitTo('stall');

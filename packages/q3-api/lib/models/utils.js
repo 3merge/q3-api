@@ -6,7 +6,12 @@ const getId = (user) => get(user, '_id', 'sys');
 
 const getUserPath = (user, fileName) =>
   path
-    .join('reports', getId(user), fileName)
+    .join(
+      'reports',
+      getId(user),
+      String(Date.now()),
+      fileName,
+    )
     .replace(/\\/g, '/');
 
 module.exports = {

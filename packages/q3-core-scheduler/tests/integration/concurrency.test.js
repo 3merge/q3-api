@@ -4,6 +4,7 @@ const single = require('./chores/onSingle');
 
 beforeAll(async () => {
   await mongoose.connect(process.env.CONNECTION);
+  await Scheduler.__$db.deleteMany({});
 });
 
 afterAll(() => {
@@ -26,6 +27,6 @@ describe('Scheduler', () => {
       expect(single).toHaveBeenCalledTimes(1);
       timers.forEach(clearInterval);
       done();
-    }, 150);
+    }, 250);
   });
 });

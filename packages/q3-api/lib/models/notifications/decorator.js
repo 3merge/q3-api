@@ -1,5 +1,6 @@
 /* eslint-disable func-names  */
 const moment = require('moment');
+const session = require('q3-core-session');
 const Exporter = require('q3-exports');
 const { pick } = require('lodash');
 const Schema = require('./schema');
@@ -86,6 +87,22 @@ class NotificationDecorator {
         item.__$appendSignedUrl(),
       ),
     );
+  }
+
+  static async saveToSessionNotifications(message) {
+    return this.create({
+      hasSeen: false,
+      userId: session.get('USER', '_id'),
+      message,
+    });
+  }
+
+  static async saveToSessionDownloads(name, args) {
+    return this.upload({
+      ...args,
+      user: session.get('USER'),
+      name,
+    });
   }
 }
 
