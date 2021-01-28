@@ -6,7 +6,17 @@ const makeSessionObject = (data) => ({
   __$q3: get(data, 'data.session'),
 });
 
-module.exports = (...fns) => (data) =>
-  session.hydrate(makeSessionObject(data), async () =>
-    composeAsync(...fns)(data),
-  );
+module.exports = (...fns) => (data) => {
+  // strangely, the errors will not bubble to the top otherwise
+  // must have something to do with the hydration process
+  let outside;
+
+  return session
+    .hydrate(makeSessionObject(data), () =>
+      composeAsync(...fns)(data).catch((e) => {
+        outside = e;
+        return Promise.reject(e);
+      }),
+    )
+    .catch(() => Promise.reject(outside));
+};

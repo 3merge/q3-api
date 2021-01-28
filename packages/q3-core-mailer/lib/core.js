@@ -1,23 +1,21 @@
 const mailer = require('./strategies');
 const utils = require('./utils');
-const walker = require('./walker');
-
-const settings = {
-  from: '3merge <donotreply@3merge.ca>',
-  strategy: 'Mailgun',
-};
 
 module.exports = class Mailer {
   constructor(template) {
     if (!template)
       throw new Error('Template name required');
 
-    this.meta = { ...settings, template };
-  }
+    const {
+      MAILER_FROM = '3merge <donotreply@3merge.ca>',
+      MAILER_STRATEGY = 'Mailgun',
+    } = process.env;
 
-  static config(options = {}) {
-    Object.assign(settings, options);
-    return { walk: walker };
+    this.meta = {
+      from: MAILER_FROM,
+      strategy: MAILER_STRATEGY,
+      template,
+    };
   }
 
   to(addresses, cc = false, bcc = false) {

@@ -50,10 +50,7 @@ describe('Mailer core', () => {
 
   describe('"send"', () => {
     it('should call strategy', async () => {
-      Mailer.config({
-        strategy: 'Test',
-      });
-
+      process.env.MAILER_STRATEGY = 'Test';
       await new Mailer('f').send();
       expect(strategies).toHaveBeenCalledWith(
         'Test',
