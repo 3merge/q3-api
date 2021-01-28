@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.17](https://github.com/3merge/q3-api/compare/v1.7.16...v1.7.17) (2021-01-28)
+
+
+### Bug Fixes
+
+* error bubbling in scheduler package ([a6acab0](https://github.com/3merge/q3-api/commit/a6acab0160e5c2f5c1b31e117800a1fdd3c49520))
+
+
+
+
+
 ## [1.7.16](https://github.com/3merge/q3-api/compare/v1.7.15...v1.7.16) (2021-01-27)
 
 
