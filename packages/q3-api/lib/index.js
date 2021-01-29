@@ -13,7 +13,7 @@ const core = require('./config/core');
 const app = require('./config/express');
 const mongoose = require('./config/mongoose');
 const models = require('./models');
-const { DatabaseStream } = require('./helpers');
+const { DatabaseStream, ...utils } = require('./helpers');
 const cluster = require('./config/cluster');
 
 const connectToDB = (res, rej) => (err) => {
@@ -102,6 +102,7 @@ const Q3 = {
 Q3.$app = app;
 Q3.$mongoose = mongoose;
 Q3.$i18 = i18next;
+Q3.utils = utils;
 
 Object.assign(Q3, models);
 module.exports = Q3;

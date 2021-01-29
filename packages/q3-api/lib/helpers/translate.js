@@ -16,6 +16,6 @@ const joinMsg = (namespace) => (msg) =>
 
 exports.from = translate;
 
-exports.message = joinMsg('errors');
-exports.message = joinMsg('labels');
-exports.message = joinMsg('messages');
+exports.errors = joinMsg('errors');
+exports.labels = joinMsg('labels');
+exports.messages = joinMsg('messages');
