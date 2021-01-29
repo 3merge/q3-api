@@ -1,21 +1,15 @@
-/**
- * @module Q3
- */
-
 require('dotenv').config();
-require('q3-locale');
 
 const { get } = require('lodash');
 const walker = require('q3-core-walker');
-const { AccessControl } = require('q3-core-access');
 const {
   handleUncaughtExceptions,
 } = require('q3-core-responder');
 const i18next = require('i18next');
 const { middleware } = require('q3-core-composer');
 const path = require('path');
-const locale = require('q3-locale');
 const runner = require('./config');
+const core = require('./config/core');
 const app = require('./config/express');
 const mongoose = require('./config/mongoose');
 const models = require('./models');
@@ -34,17 +28,6 @@ const connectToDB = (res, rej) => (err) => {
   return res(null);
 };
 
-const registerLocale = ({ location }) => () =>
-  new Promise((resolve) => {
-    try {
-      locale(location);
-    } catch (e) {
-      // noop
-    }
-
-    resolve();
-  });
-
 const locate = () => {
   try {
     const root = process.cwd();
@@ -57,11 +40,6 @@ const locate = () => {
 };
 
 const Q3 = {
-  protect(grants = []) {
-    AccessControl.init(grants);
-    return this;
-  },
-
   config(args = {}) {
     const location = locate();
 
@@ -69,6 +47,8 @@ const Q3 = {
       throw new Error('App requires a location');
 
     Object.assign(app.locals, { location }, args);
+    core(app.locals.location);
+
     return this;
   },
 
@@ -104,13 +84,11 @@ const Q3 = {
             process.env.CONNECTION,
             connectToDB(resolve, reject),
           ),
-    )
-      .then(registerLocale(app.locals))
-      .catch((e) => {
-        // eslint-disable-next-line
-        console.error(e);
-        process.exit(0);
-      }),
+    ).catch((e) => {
+      // eslint-disable-next-line
+      console.error(e);
+      process.exit(0);
+    }),
 
   saveToSessionNotifications: async (...params) =>
     models.Notifications.saveToSessionNotifications(

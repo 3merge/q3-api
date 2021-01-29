@@ -4588,7 +4588,7 @@ extsprintf@^1.2.0:
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
   integrity sha1-4mifjzVvrWLMplo6kcXfX5VRaS8=
 
-fast-csv@^4.3.1:
+fast-csv@^4.3.1, fast-csv@^4.3.6:
   version "4.3.6"
   resolved "https://registry.yarnpkg.com/fast-csv/-/fast-csv-4.3.6.tgz#70349bdd8fe4d66b1130d8c91820b64a21bc4a63"
   integrity sha512-2RNSpuwwsJGP0frGsOmTb9oUF+VkFSM4SyLTDgwf2ciHWTarN0lQTC+F2f/t5J9QjW+c65VFIAAu85GsvMIusw==
@@ -9039,6 +9039,11 @@ pupa@^2.0.1:
   integrity sha512-l1jNAspIBSFqbT+y+5FosojNpVpF94nlI+wDUpqP9enwOTfHx9f0gh5nB96vl+6yTpsJsypeNrwfzPrKuHB41A==
   dependencies:
     escape-goat "^2.0.0"
+
+q3-schema-inventory@*:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/q3-schema-inventory/-/q3-schema-inventory-1.0.2.tgz#a45c5f8eeb0a086abd5df8364f5b154d739adaab"
+  integrity sha512-yt6L8fhZLeurEGYvBLOAbrHEQjwYeYHKUjUeZCRn6DXDtGcPK5hTh95Wc3w1qKsueSWBNY2qCRCykIvpGMilQA==
 
 q@^1.5.1:
   version "1.5.1"

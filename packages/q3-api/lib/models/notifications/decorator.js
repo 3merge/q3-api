@@ -97,12 +97,19 @@ class NotificationDecorator {
     });
   }
 
-  static async saveToSessionDownloads(name, args) {
-    return this.upload({
-      ...args,
-      user: session.get('USER'),
-      name,
-    });
+  static async saveToSessionDownloads(
+    name,
+    args,
+    columnMapDef,
+  ) {
+    return this.upload(
+      {
+        ...args,
+        user: session.get('USER'),
+        name,
+      },
+      columnMapDef,
+    );
   }
 }
 

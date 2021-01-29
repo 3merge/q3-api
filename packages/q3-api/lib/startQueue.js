@@ -4,6 +4,7 @@ process.env.PURPOSE = 'queue';
 
 const locale = require('q3-locale');
 const Scheduler = require('q3-core-scheduler');
+const core = require('./config/core');
 const mongooseInstance = require('./config/mongoose');
 
 module.exports = (location) => {
@@ -11,6 +12,7 @@ module.exports = (location) => {
 
   return mongooseInstance
     .connect(process.env.CONNECTION)
+    .then(invokeWithLocation(core))
     .then(invokeWithLocation(locale))
     .then(invokeWithLocation(Scheduler.seed))
     .then(invokeWithLocation(Scheduler.start))
