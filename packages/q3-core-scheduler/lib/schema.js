@@ -119,6 +119,7 @@ Schema.statics.stall = async function (
   return this.updateOne(
     { _id },
     {
+      locked: false,
       status: getStatus(attempt),
       error: getMessage(e),
       priority: 3,
