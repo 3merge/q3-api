@@ -9,7 +9,8 @@
     "node-cron": "^2.0.3",
     "q3-api": "^1.7.22",
     "q3-core-session": "^1.7.15",
-    "q3-schema-utils": "^1.7.22"
+    "q3-schema-utils": "^1.7.22",
+    "set-interval-async": "^1.0.34"
   },
   "jest": {
     "verbose": true,

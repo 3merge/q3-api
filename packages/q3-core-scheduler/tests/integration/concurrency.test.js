@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const {
+  clearIntervalAsync,
+} = require('set-interval-async/dynamic');
 const Scheduler = require('../../lib');
 const single = require('./chores/onSingle');
 
@@ -8,15 +11,25 @@ beforeAll(async () => {
 });
 
 afterAll(() => {
-  mongoose.disconnect();
+  setTimeout(() => {
+    mongoose.disconnect();
+  }, 500);
 });
 
 describe('Scheduler', () => {
   it('should run only once', async (done) => {
     single.mockReset();
+    single.mockImplementation(
+      () =>
+        new Promise((resolve) =>
+          setTimeout(() => {
+            resolve('TEST');
+          }, 5),
+        ),
+    );
 
     const timers = await Promise.all(
-      Array.from({ length: 5 }).map(() =>
+      Array.from({ length: 15 }).map(() =>
         Scheduler.start(__dirname, 10),
       ),
     );
@@ -24,9 +37,9 @@ describe('Scheduler', () => {
     await Scheduler.queue('onSingle');
 
     setTimeout(() => {
+      timers.forEach(clearIntervalAsync);
       expect(single).toHaveBeenCalledTimes(1);
-      timers.forEach(clearInterval);
       done();
-    }, 250);
+    }, 500);
   });
 });

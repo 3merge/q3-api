@@ -1,5 +1,9 @@
 const mongoose = require('mongoose');
 const EventEmitter = require('events');
+const {
+  setIntervalAsync,
+  clearIntervalAsync,
+} = require('set-interval-async/dynamic');
 const { performance } = require('perf_hooks');
 const { executeOnAsync } = require('q3-schema-utils');
 const SchedulerSchema = require('./schema');
@@ -15,6 +19,7 @@ const Scheduler = mongoose.model(
 
 module.exports = {
   __$db: Scheduler,
+  clear: clearIntervalAsync,
   on: Emitter.on.bind(Emitter),
 
   queue: async (name, data) => {
@@ -24,7 +29,7 @@ module.exports = {
       name,
     });
 
-    Emitter.emit('queued', job.name);
+    Emitter.emit('queued', name);
     return job;
   },
 
@@ -40,13 +45,10 @@ module.exports = {
     ),
 
   start: (directory, interval = 1000) => {
-    const Ticker = new EventEmitter();
     const { execute } = runner(directory);
-    const tick = 'tick';
+    const adjustedInterval = Math.max(interval, 10);
 
-    let inProgress;
-
-    Ticker.on(tick, async () => {
+    return setIntervalAsync(async () => {
       const start = performance.now();
       const curr = await Scheduler.getQueued();
 
@@ -67,17 +69,6 @@ module.exports = {
         emitTo('stall');
         await Scheduler.stall(curr, e);
       }
-
-      // no matter the outcome,
-      // release the queue
-      inProgress = false;
-    });
-
-    return setInterval(() => {
-      if (!inProgress) {
-        Ticker.emit(tick);
-        inProgress = true;
-      }
-    }, interval);
+    }, adjustedInterval);
   },
 };
