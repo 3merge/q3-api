@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.23](https://github.com/3merge/q3-api/compare/v1.7.22...v1.7.23) (2021-02-01)
+
+
+### Bug Fixes
+
+* async interval in scheduler ([270598e](https://github.com/3merge/q3-api/commit/270598e5252a740df53b6231b359739a22ad47f6))
+
+
+
+
+
 ## [1.7.22](https://github.com/3merge/q3-api/compare/v1.7.21...v1.7.22) (2021-02-01)
 
 
