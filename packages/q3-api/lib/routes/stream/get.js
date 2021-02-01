@@ -13,26 +13,30 @@ const Stream = (req, res) => {
   res.flushHeaders();
   res.status(200);
 
+  const str = req.app.get('changestream');
+
+  const broadcast = (type, data = {}) => {
+    res.write(`type: ${type}\n`);
+    res.write(`data: ${JSON.stringify(data)}\n\n`);
+    res.flush();
+  };
+
   const interval = setInterval(() => {
-    res.write(':\n');
+    broadcast('ping');
   }, 45000);
+
+  const handleRefresh = (data) => {
+    broadcast('refresh', data);
+  };
 
   const cancel = () => {
     if (interval) clearInterval(interval);
+    str.onLeave(handleRefresh);
     res.end();
   };
 
-  res.on('close', cancel);
-
-  try {
-    req.app.get('changestream').onRefresh((data) => {
-      res.write('type: refresh\n');
-      res.write(`data: ${JSON.stringify(data)}\n\n`);
-      res.flush();
-    });
-  } catch (e) {
-    cancel();
-  }
+  str.onRefresh(handleRefresh);
+  req.on('close', cancel);
 };
 
 module.exports = compose(Stream);

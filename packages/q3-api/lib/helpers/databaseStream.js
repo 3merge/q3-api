@@ -13,6 +13,11 @@ const getModelCollectionName = (model) =>
   get(model, 'collection.collectionName', '');
 
 class CollectionWatch extends EventEmitter {
+  constructor() {
+    super();
+    this.setMaxListeners(0);
+  }
+
   init() {
     Object.values(mongoose.models).forEach((Model) =>
       Model.watch()
@@ -28,6 +33,11 @@ class CollectionWatch extends EventEmitter {
         }),
     );
 
+    return this;
+  }
+
+  onLeave(next) {
+    this.off(REFRESH, next);
     return this;
   }
 
