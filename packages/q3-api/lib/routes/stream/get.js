@@ -10,13 +10,19 @@ const Stream = (req, res) => {
     Connection: 'keep-alive',
   });
 
+  res.flushHeaders();
   res.status(200);
-  res.write(':keep-alive\n\n');
-  res.flush();
 
-  res.on('close', () => {
+  const interval = setInterval(() => {
+    res.write(':\n');
+  }, 45000);
+
+  const cancel = () => {
+    if (interval) clearInterval(interval);
     res.end();
-  });
+  };
+
+  res.on('close', cancel);
 
   try {
     req.app.get('changestream').onRefresh((data) => {
@@ -25,7 +31,7 @@ const Stream = (req, res) => {
       res.flush();
     });
   } catch (e) {
-    res.end();
+    cancel();
   }
 };
 

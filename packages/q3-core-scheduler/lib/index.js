@@ -66,9 +66,11 @@ module.exports = {
       } catch (e) {
         emitTo('stall');
         await Scheduler.stall(curr, e);
-      } finally {
-        inProgress = false;
       }
+
+      // no matter the outcome,
+      // release the queue
+      inProgress = false;
     });
 
     return setInterval(() => {
