@@ -1,5 +1,6 @@
 /* eslint-disable func-names, no-console  */
 const mongoose = require('mongoose');
+const moment = require('moment');
 const {
   FAILED,
   QUEUED,
@@ -66,6 +67,30 @@ Schema.statics.isUnique = async function (name) {
   })
     .lean()
     .exec());
+};
+
+Schema.statics.lookForLockedJobs = async function () {
+  return this.updateMany(
+    {
+      due: {
+        $lte: moment().subtract(20, 'minute').toDate(),
+      },
+      status: QUEUED,
+      locked: true,
+    },
+    {
+      $set: {
+        status: STALLED,
+        locked: false,
+      },
+      $inc: {
+        attempt: 1,
+      },
+    },
+    {
+      multi: true,
+    },
+  );
 };
 
 Schema.statics.getQueued = async function () {

@@ -42,27 +42,46 @@ module.exports = {
 
   start: (directory) => {
     const { execute } = runner(directory);
+    const primary = cron.schedule(
+      '*/5 * * * * *',
+      async () => {
+        const start = performance.now();
+        const curr = await Scheduler.getQueued();
 
-    return cron.schedule('*/5 * * * * *', async () => {
-      const start = performance.now();
-      const curr = await Scheduler.getQueued();
+        const emitTo = (name) =>
+          Emitter.emit(name, curr.name);
 
-      const emitTo = (name) =>
-        Emitter.emit(name, curr.name);
-
-      try {
-        if (curr) {
-          emitTo('start');
-          await execute(curr);
-          emitTo('finish');
-          await Scheduler.finish(
-            curr.set('duration', performance.now() - start),
-          );
+        try {
+          if (curr) {
+            emitTo('start');
+            await execute(curr);
+            emitTo('finish');
+            await Scheduler.finish(
+              curr.set(
+                'duration',
+                performance.now() - start,
+              ),
+            );
+          }
+        } catch (e) {
+          emitTo('stall');
+          await Scheduler.stall(curr, e);
         }
-      } catch (e) {
-        emitTo('stall');
-        await Scheduler.stall(curr, e);
-      }
-    });
+      },
+    );
+
+    const secondary = cron.schedule(
+      '*/20 * * * *',
+      async () => {
+        await Scheduler.lookForLockedJobs();
+      },
+    );
+
+    return {
+      stop: () => {
+        primary.stop();
+        secondary.stop();
+      },
+    };
   },
 };

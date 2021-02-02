@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const moment = require('moment');
 const cron = require('node-cron');
 const Scheduler = require('../../lib');
 const single = require('./chores/onSingle');
@@ -96,5 +97,18 @@ describe('Scheduler', () => {
         done();
       });
     }, 50);
+  });
+
+  it('should re-start jobs', async () => {
+    const { _id } = await Scheduler.__$db.create({
+      name: 'staller',
+      status: 'Queued',
+      due: moment().subtract(30, 'minute').toDate(),
+    });
+
+    await Scheduler.start(__dirname, 10);
+    return expect(
+      Scheduler.__$db.findById(_id),
+    ).resolves.toHaveProperty('status', 'Stalled');
   });
 });
