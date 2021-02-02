@@ -1,9 +1,6 @@
 const mongoose = require('mongoose');
 const EventEmitter = require('events');
-const {
-  setIntervalAsync,
-  clearIntervalAsync,
-} = require('set-interval-async/dynamic');
+const cron = require('node-cron');
 const { performance } = require('perf_hooks');
 const { executeOnAsync } = require('q3-schema-utils');
 const SchedulerSchema = require('./schema');
@@ -19,7 +16,6 @@ const Scheduler = mongoose.model(
 
 module.exports = {
   __$db: Scheduler,
-  clear: clearIntervalAsync,
   on: Emitter.on.bind(Emitter),
 
   queue: async (name, data) => {
@@ -44,17 +40,15 @@ module.exports = {
       },
     ),
 
-  start: (directory, interval = 1000) => {
+  start: (directory) => {
     const { execute } = runner(directory);
-    const adjustedInterval = Math.max(interval, 10);
 
-    return setIntervalAsync(async () => {
+    return cron.schedule('*/5 * * * * *', async () => {
       const start = performance.now();
       const curr = await Scheduler.getQueued();
 
-      const emitTo = (name) => {
+      const emitTo = (name) =>
         Emitter.emit(name, curr.name);
-      };
 
       try {
         if (curr) {
@@ -69,6 +63,6 @@ module.exports = {
         emitTo('stall');
         await Scheduler.stall(curr, e);
       }
-    }, adjustedInterval);
+    });
   },
 };

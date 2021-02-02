@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
-const {
-  clearIntervalAsync,
-} = require('set-interval-async/dynamic');
+const cron = require('node-cron');
 const Scheduler = require('../../lib');
 const single = require('./chores/onSingle');
 const {
@@ -10,23 +8,23 @@ const {
   QUEUED,
 } = require('../../lib/constants');
 
-let timer;
-
 const expectFromScheduler = async (props) =>
   expect(
     await Scheduler.__$db.findOne(props),
   ).not.toBeNull();
 
 beforeAll(async () => {
+  jest
+    .spyOn(cron, 'schedule')
+    .mockImplementation((rule, fn) => {
+      fn();
+    });
+
   await mongoose.connect(process.env.CONNECTION);
 });
 
 beforeEach(async () => {
   await Scheduler.__$db.deleteMany({});
-});
-
-afterEach(async () => {
-  clearIntervalAsync(timer);
 });
 
 afterAll(() => {
@@ -39,7 +37,7 @@ describe('Scheduler', () => {
   it('should walk fixtures directory', async (done) => {
     const name = 'onRecurring@minutely';
     await Scheduler.seed(__dirname);
-    timer = await Scheduler.start(__dirname, 10);
+    await Scheduler.start(__dirname, 10);
 
     setTimeout(async () => {
       await expectFromScheduler({
@@ -67,10 +65,9 @@ describe('Scheduler', () => {
     });
 
     await Scheduler.queue('onSingle', payload);
-    timer = await Scheduler.start(__dirname, 10);
+    await Scheduler.start(__dirname, 10);
 
     return setTimeout(() => {
-      Scheduler.clear(timer);
       expectFromScheduler({
         name: 'onSingle',
         status: DONE,
@@ -89,10 +86,9 @@ describe('Scheduler', () => {
     });
 
     await Scheduler.queue('onSingle');
-    timer = await Scheduler.start(__dirname, 10);
+    await Scheduler.start(__dirname, 10);
 
     return setTimeout(() => {
-      Scheduler.clear(timer);
       expectFromScheduler({
         status: STALLED,
         error: 'Oops!',
