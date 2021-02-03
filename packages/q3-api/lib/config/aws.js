@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk');
 const { isObject } = require('lodash');
+const moment = require('moment');
 
 module.exports = () => {
   const {
@@ -141,7 +142,7 @@ module.exports = () => {
         ? Promise.all(
             Object.entries(files).map(
               async ([key, file]) => {
-                const filename = `${bucket}/${key}`;
+                const filename = `${bucket}/${moment().valueOf()}/${key}`;
                 await this.add(filename, file.data);
                 return filename;
               },

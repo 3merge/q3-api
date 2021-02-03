@@ -1,4 +1,9 @@
+jest.mock('moment', () => () => ({
+  valueOf: () => 1,
+}));
+
 const AWS = require('aws-sdk-mock');
+
 const AWSInterface = require('../aws');
 
 const file = { name: 'Foo', data: 'flestuff' };
@@ -75,7 +80,7 @@ describe('AWS inteface', () => {
         },
         'test',
       ),
-    ).resolves.toEqual(['test/file1', 'test/file2']);
+    ).resolves.toEqual(['test/1/file1', 'test/1/file2']);
     expect(inst.add).toHaveBeenCalledTimes(2);
   });
 });

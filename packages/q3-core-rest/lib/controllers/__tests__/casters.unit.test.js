@@ -22,4 +22,11 @@ describe('Casters', () => {
       $exists: false,
     });
   });
+
+  test.each([
+    ['a,b,c', ['a', 'b', 'c']],
+    ['"hello, world",test', ['hello, world', 'test']],
+  ])('.in(%s)', (a, b) => {
+    expect(casters.in(a)).toEqual(b);
+  });
 });
