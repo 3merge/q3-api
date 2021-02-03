@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.9.0](https://github.com/3merge/q3-api/compare/v1.8.0...v1.9.0) (2021-02-03)
+
+
+### Features
+
+* in caster for arrays with commas ([de75292](https://github.com/3merge/q3-api/commit/de752921aa4310423e3c3b77b2f572242db43b76))
+
+
+
+
+
 # [1.8.0](https://github.com/3merge/q3-api/compare/v1.7.24...v1.8.0) (2021-02-03)
 
 **Note:** Version bump only for package q3-core-rest
