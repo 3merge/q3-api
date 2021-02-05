@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.9.1](https://github.com/3merge/q3-api/compare/v1.9.0...v1.9.1) (2021-02-05)
+
+
+### Bug Fixes
+
+* double-quoting query strings ([4f54ae2](https://github.com/3merge/q3-api/commit/4f54ae22535c43215acc41a7bcc4e0c56e435406))
+
+
+
+
+
 # [1.9.0](https://github.com/3merge/q3-api/compare/v1.8.0...v1.9.0) (2021-02-03)
 
 
