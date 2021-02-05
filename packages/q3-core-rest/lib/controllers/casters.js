@@ -10,6 +10,7 @@ module.exports = {
       : { $exists: false },
   in: (val) =>
     String(val)
-      .match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g)
+      .match(/(".*?"|[^",]+)/g)
       .map(unwrap),
+  string: (v) => String(v).replace(/^"(.*)"$/, '$1'),
 };
