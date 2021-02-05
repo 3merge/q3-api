@@ -1,0 +1,17 @@
+{
+  "name": "q3-plugin-changelog",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "dependencies": {
+    "lodash": "^4.17.20",
+    "mongoose": "^5.11.8"
+  },
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node",
+    "preset": "q3-test-utils",
+    "setupFilesAfterEnv": [
+      "q3-test-utils/jest-setup.js"
+    ]
+  }
+}
