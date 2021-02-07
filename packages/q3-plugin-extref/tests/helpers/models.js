@@ -5,12 +5,12 @@ module.exports = (Schema) => {
     active: Boolean,
   });
 
-  Schema.statics.archive = async function(id) {
+  Schema.statics.archive = async function (id) {
     const doc = await this.findById(id);
     return doc.set({ active: false }).save();
   };
 
-  Schema.statics.findByIdAndModify = async function(
+  Schema.statics.findByIdAndModify = async function (
     id,
     update,
   ) {
@@ -18,7 +18,7 @@ module.exports = (Schema) => {
     return doc.set(update).save();
   };
 
-  Schema.methods.expectPathToHaveProperty = async function(
+  Schema.methods.expectPathToHaveProperty = async function (
     path,
     expectedValue,
   ) {
@@ -27,7 +27,7 @@ module.exports = (Schema) => {
     return doc;
   };
 
-  Schema.methods.expectPathNotToHaveProperty = async function(
+  Schema.methods.expectPathNotToHaveProperty = async function (
     path,
   ) {
     const doc = await this.constructor.findById(this._id);

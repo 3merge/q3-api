@@ -178,9 +178,7 @@ const ReferenceReader = (key, value, context) => {
             this.queryParams,
             this.getUpdate,
             this.getOptions,
-          ].map((fn) => {
-            return fn.call(this, id);
-          })
+          ].map((fn) => fn.call(this, id))
         : [];
     },
   };

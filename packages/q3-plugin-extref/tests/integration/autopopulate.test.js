@@ -81,9 +81,7 @@ describe('Autopopulate', () => {
       discriminatedReference,
     });
 
-    const resp = await M.findById(query)
-      .lean()
-      .exec();
+    const resp = await M.findById(query).lean().exec();
 
     expect(resp.discriminatedReference).toBeDefined();
     expect(resp.discriminatedReference).toHaveProperty(
@@ -114,9 +112,9 @@ describe('Autopopulate', () => {
   });
 
   it('should populate list', async (done) => {
-    const [{ embeddedReference }] = await M.find()
-      .lean()
-      .exec();
+    const [
+      { embeddedReference },
+    ] = await M.find().lean().exec();
 
     expect(embeddedReference).toHaveLength(1);
     expect(

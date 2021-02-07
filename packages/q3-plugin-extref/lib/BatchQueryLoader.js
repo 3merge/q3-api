@@ -186,11 +186,11 @@ class BatchQueryLoader {
         sourceKey,
         { cache, source: Source },
       ) => {
-        const match = cache.find((d) => {
-          return d._id && d._id.equals
+        const match = cache.find((d) =>
+          d._id && d._id.equals
             ? d._id.equals(val)
-            : d._id === val;
-        });
+            : d._id === val,
+        );
 
         if (match) set(doc, pathKey, new Source(match));
       },
