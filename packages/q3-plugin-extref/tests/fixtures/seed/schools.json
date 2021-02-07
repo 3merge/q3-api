@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Delaware State University",
+    "location": "44851 Sundown Avenue",
+    "_id": "601eaab4fc13ae1226000000"
+  },
+  {
+    "name": "Universidad Católica San Antonio",
+    "location": "25912 Moulton Drive",
+    "_id": "601eaab4fc13ae1226000001"
+  },
+  {
+    "name": "International University of Sarajevo",
+    "location": "55584 Clarendon Crossing",
+    "_id": "601eaab4fc13ae1226000007"
+  },
+  {
+    "name": "DeVry Institute of Technology, Pomona",
+    "location": "632 Boyd Junction",
+    "_id": "601eaab4fc13ae1226000008"
+  },
+  {
+    "name": "Institut National des Sciences Appliquées de Rennes",
+    "location": "8 Old Gate Place",
+    "_id": "601eaab4fc13ae1226000009"
+  }
+]

@@ -1,0 +1,36 @@
+{
+  "name": "mongoose-field-populate",
+  "version": "2.2.10",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "jest": {
+    "testEnvironment": "node",
+    "preset": "q3-test-utils"
+  },
+  "scripts": {
+    "test": "jest --runInBand --collectCoverage --detectOpenHandles --forceExit",
+    "lint": "eslint lib/* --fix"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.3",
+    "body-parser": "^1.19.0",
+    "eslint": "6.1.0",
+    "eslint-config-airbnb-base": "14.0.0",
+    "eslint-config-node-3merge": "1.0.1",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-import": "2.18.2",
+    "eslint-plugin-jest": "22.17.0",
+    "eslint-plugin-prettier": "3.1.0",
+    "jest": "^24.9.0",
+    "prettier": "1.18.2",
+    "q3-test-utils": "^1.0.41"
+  },
+  "dependencies": {
+    "cachegoose": "^8.0.0",
+    "flat": "^5.0.0",
+    "lodash.get": "^4.4.2",
+    "lodash.set": "^4.3.2",
+    "lodash.unset": "^4.5.2",
+    "mongoose": "^5.7.12"
+  }
+}
