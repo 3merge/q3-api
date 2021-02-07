@@ -1,0 +1,25 @@
+{
+  "name": "q3-plugin-extref",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest --runInBand --collectCoverage --detectOpenHandles --forceExit",
+    "lint": "eslint lib/* --fix"
+  },
+  "dependencies": {
+    "flat": "^5.0.2",
+    "lodash.get": "^4.4.2",
+    "lodash.set": "^4.3.2",
+    "lodash.unset": "^4.5.2",
+    "mongoose": "^5.11.8"
+  },
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node",
+    "preset": "q3-test-utils",
+    "setupFilesAfterEnv": [
+      "q3-test-utils/jest-setup.js"
+    ]
+  }
+}

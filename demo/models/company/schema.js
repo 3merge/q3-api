@@ -34,6 +34,7 @@ const CompanySchema = new mongoose.Schema(
     restify: '*',
     collectionSingularName: 'company',
     collectionPluralName: 'companies',
+    extends: ['characters'],
   },
 );
 

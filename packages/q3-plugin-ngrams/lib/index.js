@@ -7,6 +7,8 @@ const {
 } = require('./plugin');
 
 const NGramsMongoosePlugin = (s) => {
+  if (s.options.skipPlugins) return;
+
   s.statics.createTextIndex = index;
   s.statics.getFuzzyQuery = getSearch;
   s.statics.initializeFuzzySearching = init;

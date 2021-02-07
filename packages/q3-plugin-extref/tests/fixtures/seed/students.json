@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Delmore Bavidge",
+    "grade": 11,
+    "_id": "601eab20fc13ae782c000000"
+  },
+  {
+    "name": "Byrann Rigmond",
+    "grade": 9,
+    "_id": "601eab20fc13ae782c000001"
+  },
+  {
+    "name": "Vin Beeston",
+    "grade": 11,
+    "_id": "601eab20fc13ae782c000002"
+  },
+  {
+    "name": "Denni Figgs",
+    "grade": 9,
+    "_id": "601eab20fc13ae782c000003"
+  },
+  {
+    "name": "Gerhardine Matfin",
+    "grade": 9,
+    "_id": "601eab20fc13ae782c000004"
+  }
+]
