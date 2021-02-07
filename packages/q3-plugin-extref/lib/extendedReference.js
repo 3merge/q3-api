@@ -24,11 +24,14 @@ async function populateRef() {
   const paths = getSyncPaths(this);
 
   if (
-    this.$locals.populated ||
-    !sync ||
-    (fn && !fn(this)) ||
-    !this.ref
-  )
+    !this.ref ||
+    ['null', 'undefined'].includes(this.ref)
+  ) {
+    this.remove();
+    return;
+  }
+
+  if (this.$locals.populated || !sync || (fn && !fn(this)))
     return;
 
   this.$locals.populated = true;
@@ -171,8 +174,9 @@ module.exports = class Builder {
       sync:
         get(this, '$ref.collection.collectionName') ||
         this.$ref,
-      timestamps: false,
       ...globalOptions,
+      timestamps: false,
+      skipPlugins: true,
     });
 
     output.pre('validate', populateRef);

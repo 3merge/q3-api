@@ -15,6 +15,20 @@
     "fields": "*"
   },
   {
+    "coll": "companies",
+    "op": "Update",
+    "role": "Public",
+    "ownership": "Any",
+    "fields": "*"
+  },
+  {
+    "coll": "companies",
+    "op": "Delete",
+    "role": "Public",
+    "ownership": "Any",
+    "fields": "*"
+  },
+  {
     "coll": "characters",
     "op": "Create",
     "role": "Public",
