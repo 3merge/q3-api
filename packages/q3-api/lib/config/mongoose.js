@@ -5,7 +5,10 @@ const Notes = require('q3-schema-notes');
 const mongoose = require('mongoose');
 const dedupe = require('mongoose-dedupe');
 const locking = require('mongoose-field-lock');
-const { autopopulate } = require('mongoose-field-populate');
+const {
+  autopopulate,
+  ExtendedReference,
+} = require('q3-plugin-extref');
 const version = require('q3-core-version');
 const Files = require('../models/files');
 
@@ -30,6 +33,12 @@ mongoose.plugin(dedupe, {
 mongoose.plugin((schema) => {
   if (schema.options.withVirtuals)
     mongoose.plugin(mongooseLeanVirtuals);
+
+  if (schema.options.extends)
+    ExtendedReference.plugin(
+      schema,
+      schema.options.extends,
+    );
 
   if (schema.options.restify) {
     // most packages assume the existence of this plugin

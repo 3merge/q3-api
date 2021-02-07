@@ -8,11 +8,11 @@
     "lint": "eslint lib/* --fix"
   },
   "dependencies": {
-    "flat": "^5.0.0",
+    "flat": "^5.0.2",
     "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2",
     "lodash.unset": "^4.5.2",
-    "mongoose": "^5.7.12"
+    "mongoose": "^5.11.8"
   },
   "jest": {
     "verbose": true,
