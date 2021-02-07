@@ -1,61 +1,68 @@
-<h1>💫 Mongoose Extended Reference and Autopopulate</h1>
-<p>
-  <img src="https://github.com/MikeIbberson/mongoose-field-populate/workflows/Node%20CI/badge.svg" alt="Status" />
-<a href='https://coveralls.io/github/MikeIbberson/mongoose-field-populate?branch=master'><img src='https://coveralls.io/repos/github/MikeIbberson/mongoose-field-populate/badge.svg?branch=master' alt='Coverage Status' /></a>
-<img src='https://bettercodehub.com/edge/badge/MikeIbberson/mongoose-field-populate?branch=master'>
-</p> 
+# Extended Reference and Autopopulate Plugin
 
-<h2>Extended Reference</h2>
+This plugin implements the
+[Extended Reference Pattern](https://www.mongodb.com/blog/post/building-with-patterns-the-extended-reference-pattern)
+to reduce lookups in your code. It connects to Mongoose's
+save middleware, so it will not fire on update operations.
+It also relies on Q3's archiving functionality, so it will
+only pull or unset on specific document changes.
 
-<p>The extended reference builder provides a plugin for managing stale data updating as well as a builder for assembling extended references. It auto-syncs the target props on save, so you don't have to worry about matching types, setting projects and more.</p>
+```Javascript
+// FILE #1
+const  mongoose = require('mongoose');
+const { ExtendedReference } = require('q3-plugin-extref');
 
-``` Javascript
-  const mongoose = require('mongoose');
-  const { ExtendedReference } = require('mongoose-field-populate');
+const  ReferenceSchema = new  mongoose.Schema({
+    name:  String,
+    age:  Number,
+});
 
-  const ReferenceSchema = new mongoose.Schema({
-    name: String,
-    age: Number,
-  });
-
-  ReferenceSchema.plugin(ExtendedReference.plugin, [
+// tells the plugin which collections to update on save
+ReferenceSchema.plugin(ExtendedReference.plugin, [
     'TARGETS',
-  ]);
+]);
 
-  module.exports = mongoose.model('DEMO_ONLY', ReferenceSchema);
+module.exports = mongoose.model('DEMO_ONLY', ReferenceSchema);
+
+// FILE #2
+const  mongoose = require('mongoose');
+const { ExtendedReference } = require('q3-plugin-extref');
+const  ReferenceModel = require('./reference');
+
+const  TargetSchema = new  mongoose.Schema({
+  friend:  new  ExtendedReference('DEMO_ONLY')
+    .on(['name', 'age'])
+    .set('name', { private:  true })
+    .done(),
+
+  // Saves as:
+  // {
+  //   ref: ObjectId(),
+  //   name: 'Example',
+  //   age: 21
+  // }
+});
+
+module.exports = mongoose.model('TARGETS', TargetSchema);
+
 ```
 
-``` Javascript
-  const mongoose = require('mongoose');
-  const { ExtendedReference } = require('mongoose-field-populate');
-  const ReferenceModel = require('./reference');
+Alternatively, this plugin also ships with a very basic
+autopopulation feature.
 
-  const TargetSchema = new mongoose.Schema({
-    friend: new ExtendedReference(ReferenceModel)
-      .on(['name', 'age'])
-      .set('name', { private: true })
-      .done(),
-  });
+```Javascript
+const  mongoose = require('mongoose');
+const { autopopulate } = require('q3-plugin-extref');
 
-  module.exports = mongoose.model('TARGETS', TargetSchema);
-```
-
-<h2>Autopopulate</h2>
-
-<p>This package also ships with a very basic autopopulation feature. The most common solution on NPM does not suit my needs, though it might fit nicely into your project. Use this only if you require autopopulation on discriminators or embedded arrays.</p>
-
-``` Javascript
-  const mongoose = require('mongoose');
-  const { autopopulate } = require('mongoose-field-populate');
-  
-  const TargetSchema = new mongoose.Schema({
+const  TargetSchema = new  mongoose.Schema({
     email: {
-      type: String,
-      unique: true,
-      autopopulate: true,
-      autopopulateSelect: 'projection path',
+        type:  String,
+        unique:  true,
+        autopopulate:  true,
+        autopopulateSelect:  'projection path',
+        ref: 'DEMO_ONLY'
     }
-  });
+});
 
-  TargetSchema.plugin(autopopulate)
+TargetSchema.plugin(autopopulate)
 ```

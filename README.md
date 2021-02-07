@@ -10,6 +10,7 @@
 
 <h2>🔌 Plugin Documentation</h2>
 
-| Name                                              | Description                                        |
-| ------------------------------------------------- | -------------------------------------------------- |
-| <a  href="/packages/q3-plugin-ngrams">N-grams</a> | Handles mongoose fuzzy searching and text indexing |
+| Name                                                          | Description                                                |
+| ------------------------------------------------------------- | ---------------------------------------------------------- |
+| <a  href="/packages/q3-plugin-extref">Extended References</a> | Handles extended collection references and auto-population |
+| <a  href="/packages/q3-plugin-ngrams">N-grams</a>             | Handles mongoose fuzzy searching and text indexing         |
