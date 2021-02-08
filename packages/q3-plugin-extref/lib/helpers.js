@@ -1,4 +1,9 @@
-const get = require('lodash.get');
+const {
+  isFunction,
+  get,
+  join,
+  compact,
+} = require('lodash');
 const ModelProxy = require('./ModelProxy');
 
 const isObject = (v) => typeof v === 'object' && v !== null;
@@ -37,6 +42,8 @@ exports.getSyncPaths = (v) =>
   Object.keys(get(v, 'schema.paths', {})).filter(
     (name) => !['ref', '_id', '__v'].includes(name),
   );
+
+exports.concatenate = (...a) => join(compact(a), '');
 
 exports.getPreSync = (v) =>
   get(v, 'schema.options.preSync', null);
@@ -106,3 +113,17 @@ exports.executeMiddlewareOnUpdate = (next) => {
         // noop
       };
 };
+
+exports.getFirstTruthySpec = (context) => (
+  conditions,
+  defaultValue,
+) =>
+  Object.entries(conditions).reduce(
+    (acc, [currentKey, currentValue]) => {
+      let match = context[currentKey];
+      if (isFunction(match)) match = match();
+      if (acc || !match) return acc;
+      return currentValue;
+    },
+    undefined,
+  ) || defaultValue;

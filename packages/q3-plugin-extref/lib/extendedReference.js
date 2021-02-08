@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const get = require('lodash.get');
+const { get } = require('lodash');
 const {
   executeMiddlewareOnUpdate,
   getSync,
@@ -13,7 +13,7 @@ const {
 const {
   assembleSyncSchemaPaths,
 } = require('./helpers/assemblePaths');
-const ReferenceReader = require('./ReferenceReader');
+const QueryMaker = require('./helpers/queryMaker');
 
 const { ObjectId } = mongoose.Types;
 
@@ -63,8 +63,9 @@ async function populateRef() {
 function updateRef(...params) {
   const next = forEachCollectionAsync(...params);
 
+  // eslint-disable-next-line
   return executeMiddlewareOnUpdate(async function () {
-    const reader = ReferenceReader.setup(this);
+    const reader = QueryMaker.setup(this);
     const values = getReferenceValues(this);
 
     await next((model) =>
@@ -73,7 +74,7 @@ function updateRef(...params) {
         .map(reader)
         .flatMap((ref) =>
           values.flatMap((id) =>
-            model.proxyUpdate(...ref.spread(id)),
+            model.proxyUpdate(...ref(id)),
           ),
         ),
     );

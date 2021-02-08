@@ -1,5 +1,4 @@
-const get = require('lodash.get');
-const set = require('lodash.set');
+const { get, set } = require('lodash');
 const flat = require('flat');
 const { model } = require('mongoose');
 const { pushUniquely, setPrefix } = require('./helpers');

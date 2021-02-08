@@ -6,24 +6,24 @@ const {
 const {
   assembleAutocompleteSchemaPaths,
 } = require('./helpers/assemblePaths');
-const ReferenceReader = require('./ReferenceReader');
+const QueryMaker = require('./helpers/queryMaker');
 
 function removeAutopopulateRefs(...params) {
   const next = forEachCollectionAsync(...params);
+
+  // eslint-disable-next-line
   return executeMiddlewareOnUpdate(async function () {
     await next((model) => {
       if (!this.active)
         assembleAutocompleteSchemaPaths(model.inst).map(
           async (originalPath) => {
-            const reader = ReferenceReader(
+            const reader = QueryMaker(
               originalPath,
               [],
               this,
             );
 
-            await model.proxyUpdate(
-              ...reader.spread(this._id),
-            );
+            await model.proxyUpdate(...reader(this._id));
           },
         );
     });

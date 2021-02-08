@@ -1,3 +1,5 @@
+const { getFirstTruthySpec } = require('../helpers');
+
 const last = (a) =>
   Array.isArray(a) ? a[a.length - 1] : undefined;
 
@@ -34,7 +36,13 @@ module.exports = (path, includeReferenceField) => {
     return key;
   };
 
-  const makePositionalOperatorIdentifiable = () => {
+  const includesPositionalOperator = () =>
+    optional.includes('$[]');
+
+  const includesPositionalOperatorInLastPosition = () =>
+    optional.endsWith('$[]');
+
+  const makePosOp = () => {
     const s = optional;
 
     const n = s.endsWith('$[]')
@@ -55,41 +63,75 @@ module.exports = (path, includeReferenceField) => {
   };
 
   return {
-    getReferenceField: () => attachReference(optional),
+    getReferenceField: () => {
+      let key = cleanPath(optional);
+      if (!key.endsWith('.')) key += '.';
+      key += 'ref';
+      return key;
+    },
 
-    isRequired: () => str.endsWith('!'),
     makeOptional: () => optional,
+    makePosOp,
 
-    makePositionalOperatorIdentifiable,
+    clean: () => removeTrailing(cleanPath(optional)),
 
-    normalize: () => removeTrailing(cleanPath(optional)),
+    cleanAndAppendReference: () =>
+      attachReference(removeTrailing(cleanPath(optional))),
 
-    includesPositionalOperator: () =>
-      optional.includes('$[]'),
-    includesPositionalOperatorInLastPosition: () =>
-      optional.endsWith('$[]'),
-
-    removeFinalPositionalOperator: () =>
+    traverseUp: () =>
       optional.endsWith('.$[]')
         ? optional.substring(0, optional.length - 4)
         : optional,
 
-    makeReferenceToIdentifiablePositionalOperator: () =>
+    makePosOpFilter: () =>
       getEmbeddedFilterPath(getSinglePath(optional)),
 
-    shapeIdentifiablePositionalOperator: (value) => {
-      const [
-        top,
-        bottom,
-      ] = makePositionalOperatorIdentifiable(
-        optional,
-      ).split('.$[embed].');
+    split: (value) => {
+      const [top, bottom] = makePosOp(optional).split(
+        '.$[embed].',
+      );
 
       return {
         [top]: {
           [attachReference(bottom)]: value,
         },
       };
+    },
+
+    getMatchPath: (context = {}) => {
+      const isEmbedded = includesPositionalOperator();
+      let param =
+        (!isEmbedded && !context.active) || !isEmbedded
+          ? attachReference(optional)
+          : 'ref';
+
+      if (!includeReferenceField) param = optional;
+      return param;
+    },
+
+    buildSpecRunner: ({ active }) => {
+      const andActive = (a) => a && active;
+      const andInactive = (a) => a && !active;
+
+      const isEmbedded = includesPositionalOperator();
+      const isEmbeddedPullOp = andInactive(isEmbedded);
+
+      const isEmbeddedUnsetOp =
+        isEmbeddedPullOp &&
+        !includesPositionalOperatorInLastPosition();
+
+      const isEmbeddedSetOp = andActive(isEmbedded);
+
+      return getFirstTruthySpec({
+        isPullOp: andInactive(!isEmbedded),
+        isSetOp: andActive(!isEmbedded),
+        isEmbeddedSetOp,
+        isEmbeddedUnsetOpOnRequiredPath:
+          isEmbeddedUnsetOp && str.endsWith('!'),
+        isEmbeddedUnsetOp,
+        isEmbeddedPullOp,
+        isEmbedded,
+      });
     },
   };
 };
