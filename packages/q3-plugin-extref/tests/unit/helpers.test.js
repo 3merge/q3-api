@@ -93,15 +93,13 @@ describe('Helpers', () => {
 
     it('should append to nested paths', () => {
       expect(appendRef('name')).toMatch('name.ref');
-      expect(appendRef('name.$.inner')).toMatch(
+      expect(appendRef('name.$[].inner')).toMatch(
         'name.inner.ref',
       );
-      expect(appendRef('name.inner')).toMatch(
-        'name.inner.ref',
-      );
-      expect(appendRef('name.inner.$.nested')).toMatch(
-        'name.inner.nested.ref',
-      );
+
+      expect(
+        appendRef('name.$[].inner.$[].nested'),
+      ).toMatch('name.inner.nested.ref');
     });
   });
 });

@@ -1,15 +1,19 @@
 const mongoose = require('mongoose');
-const get = require('lodash.get');
+const { get } = require('lodash');
 const {
-  findSyncOptions,
+  executeMiddlewareOnUpdate,
   getSync,
   getSyncPaths,
   getPreSync,
   filterByPrivateProps,
   isDefined,
+  forEachCollectionAsync,
+  markModifiedLocalVars,
 } = require('./helpers');
-const ModelProxy = require('./ModelProxy');
-const ReferenceReader = require('./ReferenceReader');
+const {
+  assembleSyncSchemaPaths,
+} = require('./helpers/assemblePaths');
+const QueryMaker = require('./helpers/queryMaker');
 
 const { ObjectId } = mongoose.Types;
 
@@ -56,39 +60,25 @@ async function populateRef() {
   );
 }
 
-function updateRef(
-  collections = [],
-  resolveQueryByCollectionName,
-) {
-  const forEachCollectionModel = async (fn) =>
-    Promise.allSettled(
-      collections.map((collection) =>
-        fn(
-          new ModelProxy(
-            collection,
-            resolveQueryByCollectionName,
-          ),
-        ),
-      ),
-    );
+function updateRef(...params) {
+  const next = forEachCollectionAsync(...params);
 
-  return async function collectionRunner() {
-    if (this.$locals && this.$locals.wasNew) return;
-
-    const reader = ReferenceReader.setup(this);
+  // eslint-disable-next-line
+  return executeMiddlewareOnUpdate(async function () {
+    const reader = QueryMaker.setup(this);
     const values = getReferenceValues(this);
 
-    await forEachCollectionModel((model) =>
-      Object.entries(findSyncOptions(model.inst))
+    await next((model) =>
+      Object.entries(assembleSyncSchemaPaths(model.inst))
         .map(filterByPrivateProps)
         .map(reader)
         .flatMap((ref) =>
           values.flatMap((id) =>
-            model.proxyUpdate(...ref.spread(id)),
+            model.proxyUpdate(...ref(id)),
           ),
         ),
     );
-  };
+  });
 }
 
 module.exports = class Builder {
@@ -111,15 +101,12 @@ module.exports = class Builder {
     collections,
     resolveQueryByCollectionName,
   ) {
-    s.pre('save', function markAsNew() {
-      this.$locals.wasNew = this.isNew;
-      this.$locals.wasModifiedPaths = this.modifiedPaths();
-    });
-
+    s.pre('save', markModifiedLocalVars);
     s.post(
       'save',
       updateRef(collections, resolveQueryByCollectionName),
     );
+
     return s;
   }
 

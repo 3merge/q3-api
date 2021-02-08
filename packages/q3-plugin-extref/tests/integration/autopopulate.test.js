@@ -1,125 +1,80 @@
+require('../helpers/lifecycle');
 const mongoose = require('mongoose');
-const { autopopulate } = require('../../lib');
+const { Student, Teacher, School } = require('../fixtures');
 
-let M;
-let D;
-
-beforeAll(async () => {
-  mongoose.plugin(autopopulate);
-  await mongoose.connect(process.env.CONNECTION, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-
-  M = mongoose.model(
-    'Foo',
-    new mongoose.Schema({
-      name: String,
-      reference: {
-        autopopulate: true,
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Foo',
-      },
-      embeddedReference: [
-        new mongoose.Schema({
-          secondReference: {
-            autopopulate: true,
-            autopopulateSelect: 'name',
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Foo',
-          },
-        }),
-      ],
-    }),
-  );
-
-  D = M.discriminator(
-    'FooBar',
-    new mongoose.Schema({
-      code: String,
-      discriminatedReference: {
-        autopopulate: true,
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Foo',
-      },
-    }),
-  );
-});
-
-describe('Autopopulate', () => {
-  it('should return embedded document', async (done) => {
-    const [{ _id: doc }, { _id: ref }] = await M.create([
-      { name: 'First ' },
-      { name: 'Second' },
-    ]);
-
-    const resp = await M.findByIdAndUpdate(
-      doc,
+describe('remove', () => {
+  it('should set', async () => {
+    const teacherId = '601eab32fc13ae12a200006c';
+    const student = await Student.findByIdAndModify(
+      '601eab20fc13ae782c000001',
       {
-        reference: ref,
-        embeddedReference: [{ secondReference: ref }],
+        'teacher': mongoose.Types.ObjectId(teacherId),
       },
-      { new: true },
-    ).exec();
-
-    expect(resp.reference).toBeDefined();
-    expect(resp.reference).toHaveProperty('name');
-    expect(resp.embeddedReference).toHaveLength(1);
-    expect(
-      resp.embeddedReference[0].secondReference,
-    ).toHaveProperty('name');
-    done();
-  });
-
-  it('should return embedded document on discriminator', async (done) => {
-    const { _id: discriminatedReference } = await D.create({
-      name: 'Target',
-    });
-    const { _id: query } = await D.create({
-      name: 'Third',
-      code: '100',
-      discriminatedReference,
-    });
-
-    const resp = await M.findById(query).lean().exec();
-
-    expect(resp.discriminatedReference).toBeDefined();
-    expect(resp.discriminatedReference).toHaveProperty(
-      'name',
     );
-    done();
+
+    await student.expectPathToHaveProperty(
+      'teacher.name',
+      'Art Anstis',
+    );
   });
 
-  it('should return embedded documents on save', async (done) => {
-    const { _id: secondReference } = await M.create({
-      name: 'Target ',
+  it('should replace', async () => {
+    const name = 'Guy';
+    const teacherId = '601eab32fc13ae12a200006d';
+    const student = await Student.findByIdAndModify(
+      '601eab20fc13ae782c000001',
+      {
+        'teacher': mongoose.Types.ObjectId(teacherId),
+      },
+    );
+
+    await Teacher.findByIdAndModify(teacherId, {
+      name,
     });
 
-    const { embeddedReference } = await M.create({
-      name: 'Target',
-      embeddedReference: [
-        {
-          secondReference,
-        },
-      ],
-    });
-
-    expect(embeddedReference).toHaveLength(1);
-    expect(
-      embeddedReference[0].secondReference,
-    ).toHaveProperty('name');
-    done();
+    await student.expectPathToHaveProperty(
+      'teacher.name',
+      name,
+    );
   });
 
-  it('should populate list', async (done) => {
-    const [
-      { embeddedReference },
-    ] = await M.find().lean().exec();
+  it('should remove', async () => {
+    const teacherId = '601eab32fc13ae12a2000064';
+    const student = await Student.findByIdAndModify(
+      '601eab20fc13ae782c000001',
+      {
+        'teacher': mongoose.Types.ObjectId(teacherId),
+      },
+    );
 
-    expect(embeddedReference).toHaveLength(1);
-    expect(
-      embeddedReference[0].secondReference,
-    ).toHaveProperty('name');
-    done();
+    await Teacher.archive(teacherId);
+    await student.expectPathToHaveProperty(
+      'teacher',
+      undefined,
+    );
+  });
+
+  it('should remove nested', async () => {
+    const studentId = '601eab20fc13ae782c000000';
+    const student = await School.findByIdAndModify(
+      '601eaab4fc13ae1226000008',
+      {
+        'honourRoll': [
+          {
+            student: mongoose.Types.ObjectId(studentId),
+          },
+        ],
+      },
+    );
+
+    await student.expectPathToHaveProperty(
+      'honourRoll.0.student.name',
+      'Delmore Bavidge',
+    );
+
+    await Student.archive(studentId);
+    await student.expectPathNotToHaveProperty(
+      'honourRoll.0',
+    );
   });
 });

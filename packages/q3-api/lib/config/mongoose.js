@@ -7,6 +7,7 @@ const dedupe = require('mongoose-dedupe');
 const locking = require('mongoose-field-lock');
 const {
   autopopulate,
+  cleanAutopopulateRefs,
   ExtendedReference,
 } = require('q3-plugin-extref');
 const version = require('q3-core-version');
@@ -38,6 +39,12 @@ mongoose.plugin((schema) => {
     ExtendedReference.plugin(
       schema,
       schema.options.extends,
+    );
+
+  if (schema.options.autopopulates)
+    schema.plugin(
+      cleanAutopopulateRefs,
+      schema.options.autopopulates,
     );
 
   if (schema.options.restify) {
