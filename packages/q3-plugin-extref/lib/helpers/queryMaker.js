@@ -9,7 +9,9 @@ const ReferenceReader = (k, value, context) => {
     value.reduce(
       (acc, curr) =>
         Object.assign(acc, {
-          [concatenate(prefix, curr)]: context[curr],
+          [concatenate(prefix, curr)]: context[
+            curr === 'ref' ? '_id' : curr
+          ],
         }),
       {},
     );

@@ -66,7 +66,6 @@ exports.filterByPrivateProps = ([key, v]) => [
         (val) =>
           ![
             '_id',
-            'ref',
             'updatedAt',
             'createdAt',
             'createdBy',
