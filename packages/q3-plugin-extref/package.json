@@ -1,6 +1,6 @@
 {
   "name": "q3-plugin-extref",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {

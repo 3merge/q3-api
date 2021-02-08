@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.1](https://github.com/3merge/q3-api/compare/v1.10.0...v1.10.1) (2021-02-08)
+
+
+### Bug Fixes
+
+* auto-populate ref removal on archive ([#119](https://github.com/3merge/q3-api/issues/119)) ([a8d283a](https://github.com/3merge/q3-api/commit/a8d283a31c996a437acd09284bd45d0d1b036613))
+
+
+
+
+
 # [1.10.0](https://github.com/3merge/q3-api/compare/v1.9.1...v1.10.0) (2021-02-07)
 
 
