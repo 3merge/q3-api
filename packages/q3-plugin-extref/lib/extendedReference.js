@@ -1,14 +1,18 @@
 const mongoose = require('mongoose');
 const get = require('lodash.get');
 const {
-  findSyncOptions,
+  executeMiddlewareOnUpdate,
   getSync,
   getSyncPaths,
   getPreSync,
   filterByPrivateProps,
   isDefined,
+  forEachCollectionAsync,
+  markModifiedLocalVars,
 } = require('./helpers');
-const ModelProxy = require('./ModelProxy');
+const {
+  assembleSyncSchemaPaths,
+} = require('./helpers/assemblePaths');
 const ReferenceReader = require('./ReferenceReader');
 
 const { ObjectId } = mongoose.Types;
@@ -56,30 +60,15 @@ async function populateRef() {
   );
 }
 
-function updateRef(
-  collections = [],
-  resolveQueryByCollectionName,
-) {
-  const forEachCollectionModel = async (fn) =>
-    Promise.allSettled(
-      collections.map((collection) =>
-        fn(
-          new ModelProxy(
-            collection,
-            resolveQueryByCollectionName,
-          ),
-        ),
-      ),
-    );
+function updateRef(...params) {
+  const next = forEachCollectionAsync(...params);
 
-  return async function collectionRunner() {
-    if (this.$locals && this.$locals.wasNew) return;
-
+  return executeMiddlewareOnUpdate(async function () {
     const reader = ReferenceReader.setup(this);
     const values = getReferenceValues(this);
 
-    await forEachCollectionModel((model) =>
-      Object.entries(findSyncOptions(model.inst))
+    await next((model) =>
+      Object.entries(assembleSyncSchemaPaths(model.inst))
         .map(filterByPrivateProps)
         .map(reader)
         .flatMap((ref) =>
@@ -88,7 +77,7 @@ function updateRef(
           ),
         ),
     );
-  };
+  });
 }
 
 module.exports = class Builder {
@@ -111,15 +100,12 @@ module.exports = class Builder {
     collections,
     resolveQueryByCollectionName,
   ) {
-    s.pre('save', function markAsNew() {
-      this.$locals.wasNew = this.isNew;
-      this.$locals.wasModifiedPaths = this.modifiedPaths();
-    });
-
+    s.pre('save', markModifiedLocalVars);
     s.post(
       'save',
       updateRef(collections, resolveQueryByCollectionName),
     );
+
     return s;
   }
 

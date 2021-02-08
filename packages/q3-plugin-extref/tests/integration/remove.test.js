@@ -61,6 +61,31 @@ describe('remove', () => {
   });
 
   it('should unset (nested complex embedded)', async () => {
+    const teacherId = '601eab32fc13ae12a2000064';
+    const teacher = await Teacher.findByIdAndModify(
+      '601eab32fc13ae12a2000064',
+      {
+        employment: [
+          {
+            awards: [
+              {
+                presentedBy: {
+                  ref: teacherId,
+                },
+              },
+            ],
+          },
+        ],
+      },
+    );
+
+    await Teacher.archive(teacherId);
+    await teacher.expectPathNotToHaveProperty(
+      'employment.0.awards.0.award.presentedBy',
+    );
+  });
+
+  it('should pull required (nested complex embedded)', async () => {
     const awardId = '601ffd5afc13ae6eae000003';
     const teacher = await Teacher.findByIdAndModify(
       '601eab32fc13ae12a2000064',
@@ -81,7 +106,7 @@ describe('remove', () => {
 
     await Award.archive(awardId);
     await teacher.expectPathNotToHaveProperty(
-      'employment.0.awards.0.award.name',
+      'employment.0.awards.0',
     );
   });
 });

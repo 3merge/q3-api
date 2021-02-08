@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
-const { ExtendedReference } = require('../../../lib');
+const {
+  cleanAutopopulateRefs,
+  ExtendedReference,
+} = require('../../../lib');
 const helpers = require('../../helpers/models');
 
 const EmploymentHistory = new mongoose.Schema({
@@ -11,6 +14,7 @@ const EmploymentHistory = new mongoose.Schema({
     {
       award: new ExtendedReference('awards')
         .on(['name'])
+        .isRequired()
         .done(),
       reason: String,
       presentedBy: new ExtendedReference('teachers')
@@ -19,9 +23,12 @@ const EmploymentHistory = new mongoose.Schema({
     },
   ],
   references: [
-    new ExtendedReference('students')
-      .on(['name', 'grade'])
-      .done(),
+    {
+      type: new ExtendedReference('students')
+        .on(['name', 'grade'])
+        .done(),
+      sync: true,
+    },
   ],
 });
 
@@ -34,6 +41,7 @@ const Teacher = new mongoose.Schema({
 });
 
 ExtendedReference.plugin(Teacher, ['schools', 'students']);
+Teacher.plugin(cleanAutopopulateRefs, ['students']);
 Teacher.plugin(helpers);
 
 module.exports = mongoose.model('teachers', Teacher);

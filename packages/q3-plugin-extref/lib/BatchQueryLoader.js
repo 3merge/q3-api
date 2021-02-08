@@ -117,7 +117,7 @@ class BatchQueryLoader {
         async ([key, { source, projection, ids }]) => {
           if (ids && ids.length) {
             const res = await source
-              .find({ _id: ids })
+              .find({ _id: ids, active: true })
               .select(projection)
               .exec();
 
