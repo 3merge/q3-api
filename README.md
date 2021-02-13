@@ -3,9 +3,10 @@
 <p>Q3 is a set of packages for scaffolding APIs.</p>
 
 <h2>🔗 Adapter Documentation</h2>
-| Name                                                 | Description                                    |
-| ---------------------------------------------------- | ---------------------------------------------- |
-| <a  href="/packages/q3-adapter-mongoose">Mongoose</a>                  | The only datasource adapter for Q3 apps           |
+
+| Name                                                  | Description                             |
+| ----------------------------------------------------- | --------------------------------------- |
+| <a  href="/packages/q3-adapter-mongoose">Mongoose</a> | The only datasource adapter for Q3 apps |
 
 <h2>🕮 Core Documentation</h2>
 
