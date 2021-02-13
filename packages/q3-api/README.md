@@ -35,9 +35,9 @@ PUBLIC_BUCKET=
 CDN=
 
 # Mailing configurations
-MAILGUN_ACCESS_TOKEN=key-17ef9c2cecbcd8f854048df235cc9d4e
-MAILGUN_DOMAIN=sandbox114a64c98a5b4f9081d308abb2d2a3d0.mailgun.org
-MAILGUN_DEV_RECIPIENT=mibberson@3merge.ca
+MAILGUN_ACCESS_TOKEN=
+MAILGUN_DOMAIN=
+MAILGUN_DEV_RECIPIENT=
 
 # Development variables
 DEBUG_CONTROLLER=true
