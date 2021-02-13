@@ -5,6 +5,7 @@
 
 | Name                                                 | Description                                    |
 | ---------------------------------------------------- | ---------------------------------------------- |
+| <a  href="/packages/q3-api">API</a>                  | The primary package of this project            |
 | <a  href="/packages/q3-exports">Exports</a>          | Generates simple `csv`, `xlsx` and `pdf` files |
 | <a  href="/packages/q3-core-scheduler">Scheduler</a> | Manages a worker queue for background tasking  |
 
