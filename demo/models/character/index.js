@@ -1,4 +1,3 @@
-const Q3 = require('q3-api');
 const mongoose = require('mongoose');
 
 const Character = new mongoose.Schema(
@@ -16,7 +15,9 @@ const Character = new mongoose.Schema(
       type: String,
       gram: 4,
     },
-    company: new Q3.utils.ExtendedReference('companies')
+    company: new mongoose.Types.ExtendedReference(
+      'companies',
+    )
       .on(['name'])
       .done(),
   },

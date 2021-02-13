@@ -15,6 +15,8 @@ const Notes = require('q3-schema-notes');
 
 require('q3-schema-types');
 
+mongoose.Types.ExtendedReference = ExtendedReference;
+
 mongoose.pluralize(null);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
