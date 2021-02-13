@@ -14,6 +14,35 @@ so much, a Q3 project is very opiniated in structure.
 However, when it comes to using the underlying tools like
 mongoose, you have free reign over approach.
 
+## Environment
+
+Many Q3 packages pick up environment variables to run
+without code-level configuration. The list below identifies
+the essential variables you'll need to provide.
+
+```
+# Application requirements to connect to DB and run express JS
+CONNECTION=
+PORT=
+SECRET=
+WEB_CONCURRENCY=
+
+# AWS configurations for file sharing
+S3_ACCESS_KEY_ID=
+S3_SECRET=
+PRIVATE_BUCKET=
+PUBLIC_BUCKET=
+CDN=
+
+# Mailing configurations
+MAILGUN_ACCESS_TOKEN=key-17ef9c2cecbcd8f854048df235cc9d4e
+MAILGUN_DOMAIN=sandbox114a64c98a5b4f9081d308abb2d2a3d0.mailgun.org
+MAILGUN_DEV_RECIPIENT=mibberson@3merge.ca
+
+# Development variables
+DEBUG_CONTROLLER=true
+```
+
 ## Project structure
 
 After installing your `node_modules`, you should setup a few
@@ -56,10 +85,12 @@ if there are custom requirements surrounding things like the
 working directory and CORS policy.
 
 ```javascript
-require('dotenv').config();
 const Q3 = require('q3-api');
 const onCors = require('./helpers/cors.js');
 const messages = require('./lang/messages.json');
+
+require('dotenv').config();
+require('./models');
 
 module.exports = Q3.config({
   enableServerToServer: true,
@@ -71,7 +102,7 @@ module.exports = Q3.config({
 
 | Property               | Description                                                                                                                                                                                                                                                                                                                                                                                                                                         | Accepted values  |
 | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| `enableServerToServer` | Unless truthy, requests made to the API without an origin will be denied.                                                                                                                                                                                                                                                                                                                                                                           | 'Boolean`        |
+| `enableServerToServer` | Unless truthy, requests made to the API without an origin will be denied.                                                                                                                                                                                                                                                                                                                                                                           | `Boolean`        |
 | `location`             | If your working directory is not in the same location as your `package.json` file, you'll need to provide Q3 with the directory root.                                                                                                                                                                                                                                                                                                               | `String`         |
 | `messages`             | Any route that Q3 automates will send a standard message back to the client. For example, on PATCH 200, the app will include some sort of acknowledgement message the request was successful. To tailor these messages, you can provide an object that specifies the collection name, the sub-document (if required) and the operation to overwrite. For example, part of the Object might look like: `{ collectionNamePlural: { post: 'Woot!' } }` | `Object`         |
 | `onCors`               | If the environment variable `WHITELIST_CORS` is undefined, then CORS will allow all requests through. If your app requires a dynamic policy, then you can combine the whitelist along with a resolving function. This function receives the origin's value so that you can programmatically accept or deny based on the value.                                                                                                                      | `async Function` |
@@ -107,3 +138,62 @@ file.
 ```javascript
 require('q3-api/lib/startQueue')(__dirname);
 ```
+
+## Methods
+
+Now that you've got your app setup, you can start adding
+some business logic. Q3 ships with a few utilities to help
+in this respect too.
+
+### Mongoose abstractions
+
+Many of mongoose's common methods can be invoked directly
+through Q3. This is mandatory in cases like `connect` and
+more up to convenience for the rest.
+
+#### `connect`
+
+**_Do not call this method with a connection string unless
+for testing._**
+
+Using the `CONNECTION` environment variable, this method
+will connect to our database using mongoose's driver and
+setup the application. By default, the application will
+cluster over however many instances specified by the
+`WEB_CONCURRENCY` environment variable. It will also setup
+the `changestream` app variable, which is a custom
+`EventEmitter` that integrates with mongoose's `watch`
+feature.
+
+#### `getSchemaType`
+
+Q3 appends some common Schema Types to mongoose. You can
+call them directly like `mongoose.Schema.Types.Email` or
+using `Q3.getSchemaType('email')`. For all possible values,
+please reference our
+<a href="../q3-schema-types">q3-schema-types</a> package.
+
+#### `model`
+
+Calling `Q3.model()` allows you to lookup any mongoose model
+without needing to resolve the file path in your code. For
+example, we can invoke a query on the Characters model by
+calling `Q3.model('characters').find()`.
+
+#### `setModel`
+
+Much like the method above, this is just a short cut when
+creating models in mongooses. It takes the same parameters :
+name<`String`> and schema<`Object`>.
+
+#### `saveToSessionDownloads`
+
+Docs coming soon.
+
+#### `saveToSessionNotifications`
+
+Docs coming soon.
+
+### Utils
+
+Docs coming soon.

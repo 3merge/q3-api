@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { get } = require('lodash');
+const { capitalize, get } = require('lodash');
 const walker = require('q3-core-walker');
 const {
   exception,
@@ -64,6 +64,13 @@ const Q3 = {
     return this;
   },
 
+  getSchemaType(type) {
+    return get(
+      mongoose,
+      `Schema.Types.${capitalize(type)}`,
+    );
+  },
+
   model(name) {
     if (!(name in mongoose.models))
       throw new Error('Unknown model');
@@ -105,7 +112,7 @@ Q3.$app = app;
 Q3.$mongoose = mongoose;
 Q3.$i18 = i18next;
 
-Q3.exception = exception;
+utils.exception = exception;
 Q3.utils = utils;
 
 Object.assign(Q3, models);
