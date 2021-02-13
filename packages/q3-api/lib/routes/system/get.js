@@ -1,7 +1,7 @@
 const { get } = require('lodash');
 const { compose, verify } = require('q3-core-composer');
 const Mailer = require('q3-core-mailer');
-const mongoose = require('../../config/mongoose');
+const { mongoose } = require('q3-adapter-mongoose');
 
 const SystemInformationController = async (req, res) => {
   const collections = Object.entries(

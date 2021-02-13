@@ -1,0 +1,23 @@
+{
+  "name": "q3-adapter-aws",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.810.0",
+    "lodash": "^4.17.20",
+    "moment": "^2.29.1"
+  },
+  "devDependencies": {
+    "aws-sdk-mock": "^5.1.0",
+    "q3-test-utils": "^1.10.2"
+  },
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node",
+    "preset": "q3-test-utils",
+    "setupFilesAfterEnv": [
+      "q3-test-utils/jest-setup.js"
+    ]
+  }
+}

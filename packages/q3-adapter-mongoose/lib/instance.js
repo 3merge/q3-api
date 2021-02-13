@@ -1,7 +1,6 @@
 const context = require('q3-core-session/lib/plugin');
 const accessControl = require('q3-core-access/lib/plugin');
 const mongooseLeanVirtuals = require('mongoose-lean-virtuals-v2');
-const Notes = require('q3-schema-notes');
 const mongoose = require('mongoose');
 const dedupe = require('mongoose-dedupe');
 const locking = require('mongoose-field-lock');
@@ -11,7 +10,8 @@ const {
   ExtendedReference,
 } = require('q3-plugin-extref');
 const version = require('q3-core-version');
-const Files = require('../models/files');
+const Files = require('q3-schema-files');
+const Notes = require('q3-schema-notes');
 
 require('q3-schema-types');
 
@@ -48,7 +48,6 @@ mongoose.plugin((schema) => {
     );
 
   if (schema.options.restify) {
-    // most packages assume the existence of this plugin
     schema.set('enableArchive', true);
     schema.set('enableOwnership', true);
     schema.set('versionHistoryWatchers', true);
@@ -60,5 +59,4 @@ mongoose.plugin((schema) => {
 });
 
 mongoose.plugin(accessControl);
-
 module.exports = mongoose;

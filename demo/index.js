@@ -1,3 +1,7 @@
+require('q3-api/lib/setupAdapters')({
+  files: 'aws',
+});
+
 const Q3 = require('q3-api');
 const config = require('./config');
 

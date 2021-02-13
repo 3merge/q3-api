@@ -1,0 +1,36 @@
+{
+  "name": "q3-adapater-mongoose",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.20",
+    "moment": "^2.29.1",
+    "mongoose-dedupe": "^1.0.0",
+    "mongoose-field-lock": "^1.0.0",
+    "mongoose-lean-virtuals-v2": "^0.7.0",
+    "mongoose-unique-validator": "^2.0.3",
+    "q3-core-access": "^1.10.2",
+    "q3-core-session": "^1.7.15",
+    "q3-core-version": "^1.7.10",
+    "q3-plugin-extref": "^1.10.2",
+    "q3-schema-files": "^1.0.0",
+    "q3-schema-notes": "^1.10.2",
+    "q3-schema-types": "^1.10.2",
+    "q3-schema-users": "^1.10.2"
+  },
+  "peerDependencies": {
+    "mongoose": "^5.7.1"
+  },
+  "devDependencies": {
+    "q3-test-utils": "^1.10.2"
+  },
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node",
+    "preset": "q3-test-utils",
+    "setupFilesAfterEnv": [
+      "q3-test-utils/jest-setup.js"
+    ]
+  }
+}

@@ -1,10 +1,9 @@
-const AWSInterface = require('../../config/aws');
+const FileAdapter = require('q3-core-files').adapter;
+const Schema = require('./schema');
 
-module.exports = class FileUploadAdapter {
+class FileUtilities {
   async handleUpload({ files }) {
-    const sdk = AWSInterface();
-
-    const method = sdk.addToBucket(true);
+    const method = FileAdapter.addToBucket(true);
     const pathMap = Object.entries(files).reduce(
       (acc, [next, file]) => {
         acc[file.name] = next;
@@ -34,10 +33,8 @@ module.exports = class FileUploadAdapter {
   }
 
   async handleFeaturedUpload({ files }) {
-    const sdk = AWSInterface();
     const file = files[Object.keys(files)[0]];
-
-    const method = sdk.addToBucket();
+    const method = FileAdapter.addToBucket();
     const response = await method([
       `${this.id}/${file.name}`,
       file,
@@ -48,8 +45,7 @@ module.exports = class FileUploadAdapter {
   }
 
   async uploadFeaturePhotoFile(file) {
-    const sdk = AWSInterface();
-    const method = sdk.addToBucket();
+    const method = FileAdapter.addToBucket();
     const response = await method([
       `${this.id}/${file.name}`,
       file,
@@ -92,9 +88,13 @@ module.exports = class FileUploadAdapter {
   }
 
   async moveFileTo(relativePath, targetDestination) {
-    return AWSInterface().copyFrom(
+    return FileAdapter.copyFrom(
       `${this._id.toString()}/${relativePath}`,
       targetDestination,
     );
   }
-};
+}
+
+Schema.loadClass(FileUtilities);
+
+module.exports = FileUtilities;

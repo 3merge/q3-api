@@ -4,8 +4,8 @@ const session = require('q3-core-session');
 const Exporter = require('q3-exports');
 const { pick } = require('lodash');
 const Schema = require('./schema');
-const aws = require('../../config/aws');
-const { getId, getUserPath } = require('../utils');
+const FileAdapater = require('q3-core-files').adapter;
+const { getId, getUserPath } = require('./utils');
 
 function mapHeaders(docs, legend) {
   return docs.map((doc) => {
@@ -20,7 +20,7 @@ function mapHeaders(docs, legend) {
   });
 }
 
-class NotificationDecorator {
+class NotificationUtils {
   static async acknowledge(id) {
     const d = await this.findById(id).exec();
 
@@ -39,7 +39,9 @@ class NotificationDecorator {
     const j = 'toJSON' in this ? this.toJSON() : this;
 
     return {
-      url: j.path ? await aws().getPrivate(j.path) : null,
+      url: j.path
+        ? await FileAdapater.getPrivate(j.path)
+        : null,
       ...j,
     };
   }
@@ -62,7 +64,7 @@ class NotificationDecorator {
           : data,
       );
 
-    await aws().add(fileName, buffer);
+    await FileAdapater.add(fileName, buffer);
     const doc = await this.create({
       path: fileName,
       userId,
@@ -113,4 +115,5 @@ class NotificationDecorator {
   }
 }
 
-Schema.loadClass(NotificationDecorator);
+Schema.loadClass(NotificationUtils);
+module.exorts = NotificationUtils;

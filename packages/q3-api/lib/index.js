@@ -1,6 +1,5 @@
 require('dotenv').config();
 
-const { capitalize, get } = require('lodash');
 const walker = require('q3-core-walker');
 const {
   exception,
@@ -9,12 +8,16 @@ const {
 const i18next = require('i18next');
 const { middleware } = require('q3-core-composer');
 const path = require('path');
+const {
+  Subscribe,
+  mongoose,
+  ...mongooseUtils
+} = require('q3-adapter-mongoose');
 const runner = require('./config');
 const core = require('./config/core');
 const app = require('./config/express');
-const mongoose = require('./config/mongoose');
 const models = require('./models');
-const { DatabaseStream, ...utils } = require('./helpers');
+const utils = require('./helpers');
 const cluster = require('./config/cluster');
 
 const connectToDB = (res, rej) => (err) => {
@@ -22,7 +25,7 @@ const connectToDB = (res, rej) => (err) => {
   app.use(handleUncaughtExceptions);
 
   if (cluster.isWorkerEnvironment) {
-    app.set('changestream', new DatabaseStream().init());
+    app.set('changestream', new Subscribe().init());
     app.listen(process.env.PORT, () => {});
   }
 
@@ -64,24 +67,6 @@ const Q3 = {
     return this;
   },
 
-  getSchemaType(type) {
-    return get(
-      mongoose,
-      `Schema.Types.${capitalize(type)}`,
-    );
-  },
-
-  model(name) {
-    if (!(name in mongoose.models))
-      throw new Error('Unknown model');
-
-    return get(mongoose.models, name);
-  },
-
-  setModel(name, Schema) {
-    return mongoose.model(name, Schema);
-  },
-
   connect: async (directConnectionString) =>
     new Promise((resolve, reject) =>
       directConnectionString
@@ -116,4 +101,5 @@ utils.exception = exception;
 Q3.utils = utils;
 
 Object.assign(Q3, models);
+Object.assign(Q3, mongooseUtils);
 module.exports = Q3;

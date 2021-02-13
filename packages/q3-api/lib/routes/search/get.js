@@ -2,7 +2,7 @@ const { compose, query } = require('q3-core-composer');
 const aqp = require('api-query-params');
 const { exception } = require('q3-core-responder');
 const { Grant } = require('q3-core-access');
-const mongoose = require('../../config/mongoose');
+const mongoose = require('q3-adapater-mongoose');
 
 const SearchParams = async (
   { user, query: { collectionName, fields, ...rest } },

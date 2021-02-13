@@ -6,7 +6,7 @@ const {
 const { exception } = require('q3-core-responder');
 const { Grant } = require('q3-core-access');
 const micromatch = require('micromatch');
-const mongoose = require('../../config/mongoose');
+const mongoose = require('q3-adapter-mongoose');
 
 const includes = (a, b) =>
   a &&
