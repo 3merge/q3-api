@@ -3,6 +3,7 @@ require('dotenv').config();
 const { get } = require('lodash');
 const walker = require('q3-core-walker');
 const {
+  exception,
   handleUncaughtExceptions,
 } = require('q3-core-responder');
 const i18next = require('i18next');
@@ -49,6 +50,7 @@ const Q3 = {
     Object.assign(app.locals, { location }, args);
     core(app.locals.location);
 
+    this.routes();
     return this;
   },
 
@@ -102,6 +104,8 @@ const Q3 = {
 Q3.$app = app;
 Q3.$mongoose = mongoose;
 Q3.$i18 = i18next;
+
+Q3.exception = exception;
 Q3.utils = utils;
 
 Object.assign(Q3, models);

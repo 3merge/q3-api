@@ -10,4 +10,4 @@ process.env.NODE_ENV = 'production';
 module.exports = Q3.config({
   messages,
   location: __dirname,
-}).routes();
+});
