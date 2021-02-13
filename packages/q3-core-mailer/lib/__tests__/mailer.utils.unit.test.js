@@ -12,10 +12,6 @@ jest.mock('path', () => ({
   extname: jest.fn(),
 }));
 
-jest.mock('../emitter', () => ({
-  on: jest.fn(),
-}));
-
 const {
   filterByEmailValidity,
   prefix,

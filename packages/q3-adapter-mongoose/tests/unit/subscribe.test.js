@@ -23,11 +23,11 @@ jest.mock('mongoose', () => ({
   },
 }));
 
-const DatabaseStream = require('../databaseStream');
+const Subscribe = require('../../lib/subscribe');
 
 describe('DatabaseStream', () => {
   it('should emit event on refresh', (done) => {
-    const ev = new DatabaseStream();
+    const ev = new Subscribe();
     ev.onRefresh((args) => {
       expect(args).toHaveProperty('collection', 'test');
       expect(args).toHaveProperty('id', 1);

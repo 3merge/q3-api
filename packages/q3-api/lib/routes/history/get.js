@@ -3,7 +3,7 @@ const {
   query,
   verify,
 } = require('q3-core-composer');
-const mongoose = require('q3-adapter-mongooses');
+const mongoose = require('q3-adapter-mongoose');
 
 const History = async (
   { query: { collectionName, documentId } },

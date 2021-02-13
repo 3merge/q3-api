@@ -1,3 +1,4 @@
+const { ExtendedReference } = require('q3-plugin-extref');
 const mongoose = require('mongoose');
 const { capitalize, get } = require('lodash');
 const instance = require('./instance');
@@ -12,6 +13,10 @@ module.exports = {
       mongoose,
       `Schema.Types.${capitalize(type)}`,
     );
+  },
+
+  makeExtendedReference(collection) {
+    return new ExtendedReference(collection);
   },
 
   model(name) {

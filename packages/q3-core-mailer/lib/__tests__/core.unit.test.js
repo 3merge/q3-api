@@ -1,7 +1,10 @@
-jest.mock('../strategies', () => jest.fn());
+jest.mock('q3-adapter-mailgun', () =>
+  jest.fn().mockReturnValue({
+    send: jest.fn(),
+  }),
+);
 
 const Mailer = require('../core');
-const strategies = require('../strategies');
 
 let inst;
 
@@ -38,24 +41,17 @@ describe('Mailer core', () => {
     });
   });
 
-  describe('"props"', () => {
-    it('should assign template variables', () => {
-      inst.props({ foo: 1 });
-      expect(inst.meta).toHaveProperty(
-        'h:X-Mailgun-Variables',
-        expect.any(String),
-      );
-    });
-  });
-
   describe('"send"', () => {
-    it('should call strategy', async () => {
+    it('should error', async () => {
       process.env.MAILER_STRATEGY = 'Test';
-      await new Mailer('f').send();
-      expect(strategies).toHaveBeenCalledWith(
-        'Test',
-        expect.any(Object),
-      );
+      expect(new Mailer('f').send()).rejects.toThrowError();
+    });
+
+    it('should resolve', async () => {
+      process.env.MAILER_STRATEGY = 'Mailgun';
+      expect(
+        new Mailer('f').send(),
+      ).resolves.not.toThrowError();
     });
   });
 });

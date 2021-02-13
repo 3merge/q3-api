@@ -143,15 +143,11 @@ require('q3-api/lib/startQueue')(__dirname);
 
 Now that you've got your app setup, you can start adding
 some business logic. Q3 ships with a few utilities to help
-in this respect too.
+in this respect too. As well, everything returned by our
+<a href="../q3-adapter/mongoose">Mongoose Adapter</a> has
+been made available through the Q3 namespace.
 
-### Mongoose abstractions
-
-Many of mongoose's common methods can be invoked directly
-through Q3. This is mandatory in cases like `connect` and
-more up to convenience for the rest.
-
-#### `connect`
+### `connect`
 
 **_Do not call this method with a connection string unless
 for testing._**
@@ -165,35 +161,10 @@ the `changestream` app variable, which is a custom
 `EventEmitter` that integrates with mongoose's `watch`
 feature.
 
-#### `getSchemaType`
-
-Q3 appends some common Schema Types to mongoose. You can
-call them directly like `mongoose.Schema.Types.Email` or
-using `Q3.getSchemaType('email')`. For all possible values,
-please reference our
-<a href="../q3-schema-types">q3-schema-types</a> package.
-
-#### `model`
-
-Calling `Q3.model()` allows you to lookup any mongoose model
-without needing to resolve the file path in your code. For
-example, we can invoke a query on the Characters model by
-calling `Q3.model('characters').find()`.
-
-#### `setModel`
-
-Much like the method above, this is just a short cut when
-creating models in mongooses. It takes the same parameters :
-name<`String`> and schema<`Object`>.
-
-#### `saveToSessionDownloads`
+### `saveToSessionDownloads`
 
 Docs coming soon.
 
-#### `saveToSessionNotifications`
-
-Docs coming soon.
-
-### Utils
+### `saveToSessionNotifications`
 
 Docs coming soon.

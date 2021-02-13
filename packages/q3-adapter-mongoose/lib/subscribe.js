@@ -12,7 +12,7 @@ const getTimeStamp = (args) =>
 const getModelCollectionName = (model) =>
   get(model, 'collection.collectionName', '');
 
-class CollectionWatch extends EventEmitter {
+class Subscribe extends EventEmitter {
   constructor() {
     super();
     this.setMaxListeners(0);
@@ -47,8 +47,8 @@ class CollectionWatch extends EventEmitter {
   }
 }
 
-CollectionWatch.CONSTANTS = {
+Subscribe.CONSTANTS = {
   REFRESH,
 };
 
-module.exports = CollectionWatch;
+module.exports = Subscribe;
