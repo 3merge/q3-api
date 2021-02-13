@@ -1,11 +1,10 @@
 {
-  "name": "q3-core-files",
+  "name": "q3-adapter-mailgun",
   "version": "1.0.0",
   "main": "lib/index.js",
   "license": "MIT",
   "dependencies": {
-    "lodash": "^4.17.20",
-    "q3-adapter-aws": "^1.0.0"
+    "mailgun-js": "0.22.0"
   },
   "jest": {
     "verbose": true,

@@ -1,20 +1,17 @@
-const aws = require('q3-adapter-aws');
-const { get } = require('lodash');
-
-const strategies = { aws };
+const Aws = require('q3-adapter-aws');
+const { isFunction, get } = require('lodash');
 
 module.exports = class FileAdapaterLoader {
   static of() {
-    const instance = new this();
-    instance.strategies = strategies;
-    return instance;
+    return new this();
   }
 
-  init(strategy) {
-    this.strategy = strategy;
+  constructor() {
+    this.strategy = process.env.FILE_STRATEGY;
   }
 
-  get instance() {
-    return get(strategies, this.strategy, aws);
+  get adapter() {
+    const fn = get({ Aws }, this.strategy);
+    return isFunction(fn) ? fn() : Aws();
   }
 };

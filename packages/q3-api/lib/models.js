@@ -1,6 +1,6 @@
 const NotifiationSchema = require('q3-schema-notifications');
 const UserModel = require('q3-schema-users');
-const mongoose = require('q3-adapters-mongoose');
+const mongoose = require('q3-adapter-mongoose');
 const { MODEL_NAMES } = require('./constants');
 
 UserModel.set('restify', '*');

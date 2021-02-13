@@ -1,4 +1,4 @@
-const aws = require('q3-api/lib/config/aws');
+const { adapter } = require('q3-core-files');
 const { get, last, size } = require('lodash');
 const { executeOnAsync } = require('q3-schema-utils');
 const { Readable } = require('stream');
@@ -9,7 +9,7 @@ const bufferToStream = (buffer) =>
 const getFileStreamsFromAws = async (buckets = []) => {
   const buffers = await executeOnAsync(
     buckets,
-    aws().getBuffer,
+    adapter.getBuffer,
   );
 
   return buckets.reduce((acc, curr, i) => {

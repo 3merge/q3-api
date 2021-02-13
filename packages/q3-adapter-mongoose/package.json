@@ -1,5 +1,5 @@
 {
-  "name": "q3-adapater-mongoose",
+  "name": "q3-adapter-mongoose",
   "version": "1.0.0",
   "main": "lib/index.js",
   "license": "MIT",

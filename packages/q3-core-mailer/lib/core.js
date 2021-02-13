@@ -1,5 +1,16 @@
-const mailer = require('./strategies');
+const mailgun = require('q3-adapter-mailgun');
 const utils = require('./utils');
+
+const mailer = async (strategy, data = {}) => {
+  const services = {
+    Mailgun: mailgun(),
+  };
+
+  if (!(strategy in services))
+    throw new Error('Unknown strategy');
+
+  return services[strategy].send(data);
+};
 
 module.exports = class Mailer {
   constructor(template) {
@@ -36,15 +47,7 @@ module.exports = class Mailer {
   }
 
   props(args = {}) {
-    /**
-     * @NOTE
-     * This needs to be implemented on the strategy level.
-     * Too specific to mailgun.
-     */
-    Object.assign(this.meta, {
-      'h:X-Mailgun-Variables': JSON.stringify(args),
-    });
-
+    Object.assign(this.meta.variables, args);
     return this;
   }
 

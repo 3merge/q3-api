@@ -1,9 +1,6 @@
 const { check } = require('q3-core-composer');
 const { exception } = require('q3-core-responder');
 
-/**
- * Common validations.
- */
 const checkMsg = (v, { req, path }) => req.t.val(path, [v]);
 
 const checkEmail = check('email')

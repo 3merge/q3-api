@@ -8,7 +8,7 @@ jest.mock('mailgun-js', () =>
   }),
 );
 
-const mg = require('../mailgun');
+const mg = require('../lib');
 
 describe('Mailgun', () => {
   it('should resolve successfully', () => {
