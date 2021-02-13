@@ -2,7 +2,7 @@
 <h1>Q3 API</h1>
 <p>Q3 is a set of packages for scaffolding APIs.</p>
 
-<h2>🔗 Adapter Documentation</h2>
+<h2>🐙 Adapter Documentation</h2>
 
 | Name                                                  | Description                             |
 | ----------------------------------------------------- | --------------------------------------- |
