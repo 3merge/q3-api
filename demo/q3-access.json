@@ -4,8 +4,7 @@
     "op": "Read",
     "role": "Public",
     "ownership": "Any",
-    "fields": "*",
-    "documentConditions": ["role=Leader"]
+    "fields": "*"
   },
   {
     "coll": "companies",

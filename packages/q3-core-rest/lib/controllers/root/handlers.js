@@ -90,7 +90,7 @@ module.exports = {
       files,
     });
 
-    await doc.snapshotChange(clean(body)).save({
+    await doc.set(clean(body)).save({
       redact: true,
       op: 'Update',
     });

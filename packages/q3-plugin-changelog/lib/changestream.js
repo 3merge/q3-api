@@ -1,52 +1,30 @@
-const { get, pick } = require('lodash');
+const flat = require('flat');
 const mongoose = require('mongoose');
-
-const isUpdateOp = (resp) =>
-  resp.operationType === 'update';
-
-const getUpdatedFields = (resp) =>
-  get(resp, 'updateDescription.updatedFields');
-
-const prefixCollectionName = (name) =>
-  `${name}-patch-history`;
-
-const insertIntoChangelog = (collectionName, op) => {
-  try {
-    return mongoose.connection.db
-      .collection(prefixCollectionName(collectionName))
-      .insertOne(op);
-  } catch (e) {
-    return null;
-  }
-};
-
-const getFromChangelog = (collectionName, op = {}) => {
-  try {
-    return new Promise((resolve, reject) =>
-      mongoose.connection.db
-        .collection(prefixCollectionName(collectionName))
-        .find(op)
-        .sort({ modifiedOn: -1 })
-        .toArray((err, docs) => {
-          if (err) reject(err);
-          else resolve(docs);
-        }),
-    );
-  } catch (e) {
-    return null;
-  }
-};
+const {
+  isUpdateOp,
+  insertIntoChangelog,
+  someMatch,
+} = require('./utils');
 
 Object.values(mongoose.models).forEach((Model) => {
   if (Model.schema.get('changelog'))
-    Model.watch()
+    Model.watch({
+      fullDocument: 'updateLookup',
+    })
       .on('change', async (args) => {
-        if (isUpdateOp(args))
+        const changelog = Model.getChangelogProperties();
+
+        if (isUpdateOp(args) && changelog)
           await insertIntoChangelog(
             Model.collection.collectionName,
-            pick(
-              getUpdatedFields(args),
-              Model.getChangelogProperties(),
+            args.documentKey._id,
+            Object.entries(flat(args.fullDocument)).reduce(
+              (acc, [key, value]) => {
+                if (someMatch(changelog, key))
+                  acc[key] = value;
+                return acc;
+              },
+              {},
             ),
           );
       })
@@ -54,9 +32,3 @@ Object.values(mongoose.models).forEach((Model) => {
         // noop
       });
 });
-
-module.exports = {
-  isUpdateOp,
-  getUpdatedFields,
-  getFromChangelog,
-};

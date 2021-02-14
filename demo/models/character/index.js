@@ -25,6 +25,13 @@ const Character = new mongoose.Schema(
     restify: '*',
     collectionSingularName: 'character',
     collectionPluralName: 'characters',
+    changelog: [
+      'name',
+      'role',
+      'gender',
+      'bio',
+      'company.name',
+    ],
   },
 );
 

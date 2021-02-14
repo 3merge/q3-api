@@ -31,9 +31,11 @@ module.exports = {
   ) {
     suggestPutRequest(parent, fieldName);
 
-    await parent
-      .snapshotUpdateSubdocument(fieldName)
-      .updateSubDocument(fieldName, params.fieldID, body);
+    await parent.updateSubDocument(
+      fieldName,
+      params.fieldID,
+      body,
+    );
 
     res.update({
       message: res.say('subResourceUpdated'),
@@ -57,9 +59,7 @@ module.exports = {
         .field('ids')
         .throw();
 
-    await parent
-      .snapshotUpdateSubdocument(fieldName)
-      .updateSubDocuments(fieldName, ids, body);
+    await parent.updateSubDocuments(fieldName, ids, body);
 
     res.update({
       message: res.say('subResourceUpdated'),
@@ -75,9 +75,7 @@ module.exports = {
       exception('Conflict').msg('usePutRequest').throw();
 
     if (!files) {
-      await parent
-        .snapshotInsertSubdocument(fieldName)
-        .pushSubDocument(fieldName, body);
+      await parent.pushSubDocument(fieldName, body);
     } else {
       await parent.handleUpload({ files, ...body });
     }
@@ -89,10 +87,7 @@ module.exports = {
   },
 
   async Put({ body, marshal, fieldName, parent }, res) {
-    await parent
-      .snapshotInsertSubdocument(fieldName)
-      .set({ [fieldName]: body })
-      .save();
+    await parent.set({ [fieldName]: body }).save();
 
     res.create({
       message: res.say('newSubResourceAdded'),
@@ -101,9 +96,10 @@ module.exports = {
   },
 
   async Remove({ parent, fieldName, params }, res) {
-    await parent
-      .snapshotDeleteSubdocument(fieldName)
-      .removeSubDocument(fieldName, params.fieldID);
+    await parent.removeSubDocument(
+      fieldName,
+      params.fieldID,
+    );
 
     res.acknowledge();
   },

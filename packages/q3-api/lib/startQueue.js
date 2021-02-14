@@ -5,6 +5,7 @@ process.env.PURPOSE = 'queue';
 const locale = require('q3-locale');
 const Scheduler = require('q3-core-scheduler');
 const { mongoose } = require('q3-adapter-mongoose');
+
 const core = require('./config/core');
 
 module.exports = (location) => {
@@ -17,6 +18,9 @@ module.exports = (location) => {
     .then(invokeWithLocation(Scheduler.seed))
     .then(invokeWithLocation(Scheduler.start))
     .then(() => {
+      // eslint-disable-next-line
+      require('q3-plugin-changelog/lib/changestream');
+
       if (process.env.NODE_ENV !== 'production')
         // eslint-disable-next-line
         console.log('Started queuing service');

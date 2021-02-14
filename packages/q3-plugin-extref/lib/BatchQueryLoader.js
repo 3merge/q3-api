@@ -1,4 +1,4 @@
-const { get, set } = require('lodash');
+const { get, set, pick } = require('lodash');
 const flat = require('flat');
 const { model } = require('mongoose');
 const { pushUniquely, setPrefix } = require('./helpers');
@@ -136,7 +136,7 @@ class BatchQueryLoader {
     );
 
     Object.entries(this.$__datasources).forEach(
-      ([Key, { path, ...rest }]) => {
+      ([Key, { path, projection, ...rest }]) => {
         path.forEach((p) => {
           flattened
             .reduce(
@@ -150,7 +150,7 @@ class BatchQueryLoader {
             )
             .forEach((matchedKey) => {
               onDocKey(
-                get(doc, matchedKey),
+                pick(get(doc, matchedKey), projection),
                 matchedKey,
                 Key,
                 rest,

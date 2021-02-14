@@ -31,6 +31,6 @@ History.validation = [
   query('documentId').isMongoId(),
 ];
 
-History.authorization = [verify];
+// History.authorization = [verify];
 
 module.exports = compose(History);
