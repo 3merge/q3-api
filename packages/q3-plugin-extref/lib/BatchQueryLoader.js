@@ -118,6 +118,7 @@ class BatchQueryLoader {
             const res = await source
               .find({ _id: ids, active: true })
               .setOptions({ skipAutocomplete: true })
+              .lean()
               .select(projection)
               .exec();
 
@@ -192,7 +193,13 @@ class BatchQueryLoader {
             : d._id === val,
         );
 
-        if (match) set(doc, pathKey, new Source(match));
+        if (match) {
+          const newValue = new Source({});
+          // the only way to get rid of global virtuals and defaults
+          newValue.overwrite(match);
+
+          set(doc, pathKey, newValue);
+        }
       },
     );
   }
