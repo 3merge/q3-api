@@ -78,6 +78,7 @@ class NotificationDecorator {
         $gte: moment().subtract(1, 'days').toDate(),
       },
     })
+      .setOptions({ skipAutocomplete: true })
       .sort('-createdAt')
       .limit(10)
       .exec();

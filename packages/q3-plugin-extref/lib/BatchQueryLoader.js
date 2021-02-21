@@ -117,6 +117,7 @@ class BatchQueryLoader {
           if (ids && ids.length) {
             const res = await source
               .find({ _id: ids, active: true })
+              .setOptions({ skipAutocomplete: true })
               .select(projection)
               .exec();
 

@@ -110,7 +110,10 @@ module.exports = class UserAuthDecorator {
 
     const doc = await this.findOne(args)
       .select('+apiKeys +uploads')
-      .setOptions({ bypassAuthorization: true })
+      .setOptions({
+        bypassAuthorization: true,
+        skipAutocomplete: true,
+      })
       .exec();
 
     if (!doc) exception('BadRequest').msg(msg).throw();
