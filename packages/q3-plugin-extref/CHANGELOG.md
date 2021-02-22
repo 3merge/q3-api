@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.6](https://github.com/3merge/q3-api/compare/v1.10.5...v1.10.6) (2021-02-22)
+
+
+### Bug Fixes
+
+* id resolution in extended refernce ([690f3c0](https://github.com/3merge/q3-api/commit/690f3c00540f85ee05f92f4939beb9a2f78e4c00))
+
+
+
+
+
 ## [1.10.5](https://github.com/3merge/q3-api/compare/v1.10.4...v1.10.5) (2021-02-21)
 
 **Note:** Version bump only for package q3-plugin-extref
