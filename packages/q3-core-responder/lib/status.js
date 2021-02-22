@@ -1,8 +1,4 @@
-// const etag = require('etag');
-const moment = require('moment');
-
 const statusCodeHelper = (res) => (code) => (body = {}) => {
-  // res.set('ETag', etag(JSON.stringify(body)));
   res.status(code).json(body);
 };
 
@@ -13,17 +9,6 @@ const removeEmpty = (obj = {}) =>
       copy[key] = value;
     return copy;
   }, {});
-
-/*
-const getLastModifiedDate = (arr) =>
-  moment(
-    arr.reduce((a, c) => {
-      const d = typeof c === 'object' ? c.updatedAt : null;
-
-      if (!moment(d).isValid()) return a;
-      return moment(a).isAfter(d) ? a : d;
-    }, ''),
-  ).toISOString(); */
 
 const stripMongoDBProps = (i) => {
   try {
@@ -56,11 +41,9 @@ const decorateResponse = (req, res, next) => {
 
   req.marshal = (o) => {
     if (Array.isArray(o)) {
-      // res.set('Last-Modified', getLastModifiedDate(o));
       return o.map(stripMongoDBProps);
     }
 
-    // res.set('Last-Modified', o.updatedAt);
     return stripMongoDBProps(o);
   };
 

@@ -22,7 +22,6 @@ const History = async (
       versions: await doc.getHistory(),
     });
   } catch (e) {
-    console.log(e);
     res.status(400).send();
   }
 };
