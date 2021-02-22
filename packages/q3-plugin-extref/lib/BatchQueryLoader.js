@@ -194,7 +194,8 @@ class BatchQueryLoader {
         );
 
         if (match) {
-          const newValue = new Source({});
+          // avoid new IDs from being issued
+          const newValue = new Source(match);
           // the only way to get rid of global virtuals and defaults
           newValue.overwrite(match);
 
