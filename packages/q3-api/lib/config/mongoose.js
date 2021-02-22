@@ -10,7 +10,7 @@ const {
   cleanAutopopulateRefs,
   ExtendedReference,
 } = require('q3-plugin-extref');
-const version = require('q3-core-version');
+const versionControl = require('q3-plugin-changelog');
 const Files = require('../models/files');
 
 require('q3-schema-types');
@@ -51,14 +51,12 @@ mongoose.plugin((schema) => {
     // most packages assume the existence of this plugin
     schema.set('enableArchive', true);
     schema.set('enableOwnership', true);
-    schema.set('versionHistoryWatchers', true);
-
-    schema.plugin(version, mongoose);
     schema.add(Files);
     schema.add(Notes);
   }
 });
 
 mongoose.plugin(accessControl);
+mongoose.plugin(versionControl);
 
 module.exports = mongoose;

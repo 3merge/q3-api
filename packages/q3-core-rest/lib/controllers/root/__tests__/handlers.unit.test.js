@@ -123,12 +123,10 @@ describe('Handlers', () => {
 
   describe('Patch Controller', () => {
     it('should return with create code', async () => {
-      const set = jest.fn();
       Model.findStrictly.mockResolvedValue({
         ...Model,
         updatedAt: new Date(),
-        snapshotChange: jest.fn().mockReturnValue(Model),
-        set,
+        set: jest.fn().mockReturnValue(Model),
       });
 
       const args = { name: 'Mike', age: 28 };
@@ -141,22 +139,6 @@ describe('Handlers', () => {
       });
       // expect(set).toHaveBeenCalledWith(args);
       expect(res.update).toHaveBeenCalled();
-    });
-
-    it('should throw an error', async () => {
-      const set = jest.fn();
-      Model.findStrictly.mockResolvedValue({
-        ...Model,
-        updatedAt: new Date(),
-        set,
-      });
-
-      req.params.resourceID = 1;
-      req.isFresh.mockImplementation(() => {
-        throw new Error('NOOP');
-      });
-
-      return expect(Patch(req, res)).rejects.toThrowError();
     });
   });
 

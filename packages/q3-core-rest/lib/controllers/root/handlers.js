@@ -71,7 +71,6 @@ module.exports = {
       datasource,
       marshal,
       params,
-      isFresh,
       files,
     },
     res,
@@ -90,12 +89,9 @@ module.exports = {
       files,
     });
 
-    await doc.snapshotChange(clean(body)).save({
+    await doc.set(clean(body)).save({
       redact: true,
-      op: 'Update',
     });
-
-    isFresh(doc.updatedAt);
 
     res.update({
       message: res.say('resourceUpdated'),

@@ -8,6 +8,7 @@ module.exports = async () => {
   const mongod = new MongoMemoryReplSet({
     autoStart: true,
     retryWrites: false,
+    replSet: { storageEngine: 'wiredTiger' },
   });
 
   await mongod.waitUntilRunning();

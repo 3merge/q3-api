@@ -16,7 +16,7 @@ const History = async (
   try {
     const doc = await mongoose
       .model(collectionName)
-      .findById(documentId);
+      .findStrictly(documentId);
 
     res.ok({
       versions: await doc.getHistory(),
