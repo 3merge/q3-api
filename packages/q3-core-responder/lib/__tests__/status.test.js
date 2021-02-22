@@ -43,39 +43,4 @@ describe('Status decorator', () => {
       today.toISOString(),
     );
   });
-
-  describe('isFresh', () => {
-    test.skip('should response with 412', () => {
-      Decorator(req, res, jest.fn());
-      req.headers = {};
-      res.status = jest.fn().mockReturnValue({
-        send: jest.fn(),
-      });
-
-      req.headers[
-        'if-unmodified-since'
-      ] = previousYesterday;
-
-      req.isFresh(today);
-      expect(res.status).toHaveBeenCalledWith(412);
-    });
-
-    test.skip('should respond as truthy', () => {
-      Decorator(req, res, jest.fn());
-      req.headers = {};
-      res.status = jest.fn().mockReturnValue({
-        send: jest.fn(),
-      });
-
-      req.headers['if-unmodified-since'] = today;
-
-      expect(req.isFresh(previousYesterday)).toBeTruthy();
-    });
-
-    test.skip('should respond as truthy in equal-to situations', () => {
-      Decorator(req, res, jest.fn());
-      req.headers['if-unmodified-since'] = today;
-      expect(req.isFresh(today)).toBeTruthy();
-    });
-  });
 });

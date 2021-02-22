@@ -12,6 +12,8 @@ const addFriend = async (id, name) =>
 
 beforeAll(async () => {
   ({ Authorization, agent } = await setup());
+  // eslint-disable-next-line
+  require('q3-plugin-changelog/lib/changestream')();
 });
 
 afterAll(teardown);
@@ -32,7 +34,7 @@ describe('Version control plugin', () => {
     return versions;
   };
 
-  it('should ignore on create payloads', async () => {
+  it('should capture on create payloads', async () => {
     ({
       body: {
         student: { id },
@@ -49,7 +51,7 @@ describe('Version control plugin', () => {
 
     return expect(
       getStudentVersion(),
-    ).resolves.toHaveLength(0);
+    ).resolves.toHaveLength(1);
   });
 
   it('should capture patch payloads', async () => {
@@ -66,7 +68,7 @@ describe('Version control plugin', () => {
 
     return expect(
       getStudentVersion(),
-    ).resolves.toHaveLength(1);
+    ).resolves.toHaveLength(2);
   });
 
   it('should ignore automated data changes', async () => {
@@ -77,7 +79,7 @@ describe('Version control plugin', () => {
     } = await addFriend(id, 'Angus');
 
     const v = await getStudentVersion();
-    expect(v).toHaveLength(4);
+    expect(v).toHaveLength(5);
 
     await agent
       .patch(`/students/${id}/friends/${friends[1].id}`)
@@ -87,9 +89,11 @@ describe('Version control plugin', () => {
 
     const v2 = await getStudentVersion();
 
-    expect(v2).toHaveLength(5);
-    expect(
-      v2[0].modified['friends%2E1%2Ename'],
-    ).toHaveProperty('prev', 'Christine');
+    expect(v2).toHaveLength(6);
+
+    expect(v2[0].diff[0]).toHaveProperty(
+      'lhs',
+      'Christine',
+    );
   });
 });

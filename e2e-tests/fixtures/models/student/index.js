@@ -27,10 +27,10 @@ const StudentSchema = new mongoose.Schema(
     restify: '*',
     collectionPluralName: 'students',
     collectionSingularName: 'student',
-    versionHistoryWatchers: [
+    changelog: [
       'age',
-      'friends.*.name',
-      'friends.*.age',
+      'friends.$.name',
+      'friends.$.age',
       'class',
     ],
   },

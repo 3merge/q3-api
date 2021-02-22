@@ -14,12 +14,6 @@ let req = {};
 let res = {};
 const api = new ApiMock();
 
-Model.snapshotInsertSubdocument = jest
-  .fn()
-  .mockImplementation(function mock() {
-    return this;
-  });
-
 beforeEach(() => {
   api.inject({
     parent: Model,
@@ -79,13 +73,16 @@ describe('SubController route handlers', () => {
       const args = { name: 'Jon' };
       req.body = args;
       req.fieldName = 'friends';
-      Model.set.mockImplementation(() => ({
-        save: jest.fn(),
-      }));
+
+      req.parent = {
+        set: jest.fn().mockReturnValue({
+          save: jest.fn(),
+        }),
+      };
 
       await Put(req, res);
       expect(res.create).toHaveBeenCalled();
-      expect(Model.snapshotChange).toHaveBeenCalledWith({
+      expect(req.parent.set).toHaveBeenCalledWith({
         friends: args,
       });
     });
@@ -97,14 +94,18 @@ describe('SubController route handlers', () => {
       req.body = args;
       req.fieldName = 'friends';
       req.params.fieldID = '1';
+      req.parent = {
+        updateSubDocument: jest.fn(),
+        schema: {
+          path: undefined,
+        },
+      };
+
       await Patch(req, res);
       expect(res.update).toHaveBeenCalled();
       expect(
-        Model.snapshotChangeOnSubdocument,
-      ).toHaveBeenCalledWith('friends', {
-        id: '1',
-        ...args,
-      });
+        req.parent.updateSubDocument,
+      ).toHaveBeenCalledWith('friends', '1', args);
     });
   });
 
@@ -114,25 +115,30 @@ describe('SubController route handlers', () => {
       req.query = { ids: ['1', '2'] };
       req.body = args;
       req.fieldName = 'friends';
+      req.parent = {
+        updateSubDocuments: jest.fn(),
+        schema: {
+          path: undefined,
+        },
+      };
+
       await PatchMany(req, res);
       expect(res.update).toHaveBeenCalled();
       expect(
-        Model.snapshotChangeOnSubdocument,
-      ).toHaveBeenCalledWith('friends', {
-        ids: ['1', '2'],
-        ...args,
-      });
+        req.parent.updateSubDocuments,
+      ).toHaveBeenCalledWith('friends', ['1', '2'], args);
     });
   });
 
   describe('Post', () => {
-    it.only('should push into the subdocuments', async () => {
+    it('should push into the subdocuments', async () => {
       req.body = {};
       req.fieldName = 'foo';
       await Post(req, res);
-      expect(
-        Model.snapshotInsertSubdocument,
-      ).toHaveBeenCalledWith('foo');
+      expect(Model.pushSubDocument).toHaveBeenCalledWith(
+        'foo',
+        {},
+      );
     });
 
     it('should throw an error', async () => {

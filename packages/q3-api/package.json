@@ -39,7 +39,7 @@
     "q3-core-rest": "^1.10.5",
     "q3-core-scheduler": "^1.10.6",
     "q3-core-session": "^1.7.15",
-    "q3-core-version": "^1.7.10",
+    "q3-plugin-changelog": "^1.0.0",
     "q3-core-walker": "^1.5.0",
     "q3-exports": "^1.10.5",
     "q3-locale": "^1.5.11",

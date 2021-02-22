@@ -12,6 +12,10 @@ module.exports = (location) => {
 
   return mongooseInstance
     .connect(process.env.CONNECTION)
+    .then(
+      // eslint-disable-next-line
+      require('q3-plugin-changelog/lib/changestream'),
+    )
     .then(invokeWithLocation(core))
     .then(invokeWithLocation(locale))
     .then(invokeWithLocation(Scheduler.seed))

@@ -30,7 +30,7 @@ module.exports = class FileUploadAdapter {
       ),
     );
 
-    return this.save();
+    return this;
   }
 
   async handleFeaturedUpload({ files }) {

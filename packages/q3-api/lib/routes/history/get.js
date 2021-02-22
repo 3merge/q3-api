@@ -16,12 +16,13 @@ const History = async (
   try {
     const doc = await mongoose
       .model(collectionName)
-      .findById(documentId);
+      .findStrictly(documentId);
 
     res.ok({
       versions: await doc.getHistory(),
     });
   } catch (e) {
+    console.log(e);
     res.status(400).send();
   }
 };
