@@ -75,5 +75,8 @@
     "mongoose-field-populate": "^2.2.6",
     "mongoose-partial-search": "^1.0.6",
     "sift": "^13.4.0"
+  },
+  "resolutions": {
+    "axios": "^0.21.1"
   }
 }

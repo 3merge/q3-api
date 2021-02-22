@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "flat": "^5.0.2",
-    "lodash": "4.17.20",
+    "lodash": "^4.17.20",
     "mongoose": "^5.11.8"
   },
   "jest": {
