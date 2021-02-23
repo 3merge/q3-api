@@ -17,8 +17,12 @@ const someMatch = (a, b) =>
     ),
   );
 
-const getLast = (col) =>
-  col.find().sort({ _id: -1 }).limit(1).toArray();
+const getLast = (col, reference) =>
+  col
+    .find({ reference })
+    .sort({ _id: -1 })
+    .limit(1)
+    .toArray();
 
 const prefixCollectionName = (name) =>
   `${name}-patch-history`;
@@ -33,10 +37,11 @@ const getChangelogCollection = (collectionName) =>
 
 const compareWithLastSnapshot = async (
   src,
+  reference,
   currentSnapshot,
 ) =>
   diff(
-    get(await getLast(src), '0.snapshot', {}),
+    get(await getLast(src, reference), '0.snapshot', {}),
     currentSnapshot,
   );
 
@@ -51,6 +56,7 @@ const insertIntoChangelog = async (
     const src = getChangelogCollection(collectionName);
     const res = await compareWithLastSnapshot(
       src,
+      reference,
       snapshot,
     );
 
@@ -81,6 +87,7 @@ const getFromChangelog = (collectionName, op = {}) => {
         .sort({
           modifiedOn: -1,
         })
+        .limit(100)
         .toArray((err, docs) => {
           if (err) reject(err);
           else resolve(docs);

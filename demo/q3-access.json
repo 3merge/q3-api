@@ -43,6 +43,13 @@
     "fields": "*"
   },
   {
+    "coll": "companies",
+    "op": "Read",
+    "role": "Dev",
+    "ownership": "Any",
+    "fields": "*"
+  },
+  {
     "coll": "characters",
     "op": "Read",
     "role": "Dev",

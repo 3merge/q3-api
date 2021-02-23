@@ -1,6 +1,11 @@
 const Q3 = require('q3-api');
 const mongoose = require('mongoose');
 
+const Movies = new mongoose.Schema({
+  title: String,
+  year: Date,
+});
+
 const Character = new mongoose.Schema(
   {
     name: {
@@ -19,11 +24,18 @@ const Character = new mongoose.Schema(
     company: new Q3.utils.ExtendedReference('companies')
       .on(['name'])
       .done(),
+    movies: [Movies],
   },
   {
     restify: '*',
     collectionSingularName: 'character',
     collectionPluralName: 'characters',
+    changelog: [
+      'name',
+      'role',
+      'movies.$.title',
+      'movies.$.year',
+    ],
   },
 );
 
