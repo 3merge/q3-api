@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.11.0](https://github.com/3merge/q3-api/compare/v1.10.6...v1.11.0) (2021-02-25)
+
+
+### Bug Fixes
+
+* axios security concern ([433275b](https://github.com/3merge/q3-api/commit/433275ba1f4569ed6620da438bab61e178666717))
+* changestream worker thread ([304d605](https://github.com/3merge/q3-api/commit/304d6055dc8b7a61aba5570e8482e454d39011bf))
+
+
+### Features
+
+* changelog plugin for more accurate version control ([#121](https://github.com/3merge/q3-api/issues/121)) ([4eef275](https://github.com/3merge/q3-api/commit/4eef27592b96c4735a832bfefd068807855cc1a6))
+
+
+
+
+
+
 ## [1.10.6](https://github.com/3merge/q3-api/compare/v1.10.5...v1.10.6) (2021-02-22)
 
 

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.11.0](https://github.com/3merge/q3-api/compare/v1.10.6...v1.11.0) (2021-02-25)
+
+
+### Bug Fixes
+
+* changestream worker thread ([304d605](https://github.com/3merge/q3-api/commit/304d6055dc8b7a61aba5570e8482e454d39011bf))
+
+
+
+
+
+
 ## [1.10.6](https://github.com/3merge/q3-api/compare/v1.10.5...v1.10.6) (2021-02-22)
 
 **Note:** Version bump only for package demo

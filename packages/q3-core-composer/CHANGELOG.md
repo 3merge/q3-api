@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.11.0](https://github.com/3merge/q3-api/compare/v1.10.6...v1.11.0) (2021-02-25)
+
+**Note:** Version bump only for package q3-core-composer
+
+
+
+
+
+
 ## [1.10.5](https://github.com/3merge/q3-api/compare/v1.10.4...v1.10.5) (2021-02-21)
 
 **Note:** Version bump only for package q3-core-composer
