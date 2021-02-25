@@ -33,6 +33,7 @@ const Character = new mongoose.Schema(
     changelog: [
       'name',
       'role',
+      'company.name',
       'movies.$.title',
       'movies.$.year',
     ],

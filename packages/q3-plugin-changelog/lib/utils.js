@@ -12,9 +12,9 @@ const { diff } = require('deep-diff');
 
 const someMatch = (a, b) =>
   some(a, (item) =>
-    new RegExp(String(item).replace(/\$/g, '(\\d)*')).test(
-      b,
-    ),
+    new RegExp(
+      `^${String(item).replace(/\$/g, '(\\d)*')}$`,
+    ).test(b),
   );
 
 const getLast = (col, reference) =>
