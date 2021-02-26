@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const cluster = require('cluster');
-const { get } = require('lodash');
+const { map, get } = require('lodash');
 const {
   insertIntoChangelog,
   reduceByKeyMatch,
@@ -16,9 +16,27 @@ module.exports = () => {
       // do not track discriminators
       if (!changelog || Model.baseModelName) return;
 
-      Model.watch({
-        fullDocument: 'updateLookup',
-      })
+      Model.watch(
+        [
+          {
+            $match: {
+              operationType: {
+                $in: ['insert', 'update'],
+              },
+            },
+          },
+          {
+            $project: {
+              documentKey: 1,
+              'fullDocument.lastModifiedBy': 1,
+              updateDescription: 1,
+            },
+          },
+        ],
+        {
+          fullDocument: 'updateLookup',
+        },
+      )
         .on('change', async (args) => {
           const getFromUpdatedDescription = (f) =>
             reduceByKeyMatch(

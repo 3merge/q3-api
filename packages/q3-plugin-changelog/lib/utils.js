@@ -31,6 +31,19 @@ const hasKeys = (v) => isObject(v) && size(Object.keys(v));
 
 const unwrap = (v) => flat.unflatten(alphabetize(v));
 
+const compactRecursively = (v) => {
+  if (isObject(v)) {
+    Object.entries(v).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        // eslint-disable-next-line
+        v[key] = compact(value.map(compactRecursively));
+      }
+    });
+  }
+
+  return v;
+};
+
 const insertIntoChangelog = async (
   collectionName,
   reference,
@@ -38,7 +51,10 @@ const insertIntoChangelog = async (
   user,
 ) => {
   try {
-    const updatedFields = unwrap(op.updatedFields);
+    const updatedFields = compactRecursively(
+      unwrap(op.updatedFields),
+    );
+
     const removedFields = unwrap(op.removedFields);
 
     if (hasKeys(updatedFields) || hasKeys(removedFields))

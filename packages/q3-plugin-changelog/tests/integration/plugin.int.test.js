@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { map } = require('lodash');
 const Model = require('../fixtures/Model');
 const plugin = require('../../lib');
 
@@ -48,6 +49,7 @@ describe('changelog', () => {
     setTimeout(async () => {
       const logs = await doc.getHistory();
 
+      console.log(map(logs, 'updatedFields'));
       expect(logs).toHaveLength(changeOps.length);
       expect(logs).toHaveProperty(
         '0.modifiedBy',
@@ -55,7 +57,7 @@ describe('changelog', () => {
       );
 
       done();
-    }, 200);
+    }, 500);
   });
 
   it('should return array of paths', async () =>
