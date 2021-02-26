@@ -1,5 +1,4 @@
 const {
-  get,
   some,
   compact,
   join,
@@ -8,7 +7,7 @@ const {
 } = require('lodash');
 const flat = require('flat');
 const mongoose = require('mongoose');
-const { diff } = require('deep-diff');
+const alphabetize = require('alphabetize-object-keys');
 
 const someMatch = (a, b) =>
   some(a, (item) =>
@@ -16,13 +15,6 @@ const someMatch = (a, b) =>
       `^${String(item).replace(/\$/g, '(\\d)*')}$`,
     ).test(b),
   );
-
-const getLast = (col, reference) =>
-  col
-    .find({ reference })
-    .sort({ _id: -1 })
-    .limit(1)
-    .toArray();
 
 const prefixCollectionName = (name) =>
   `${name}-patch-history`;
@@ -35,15 +27,9 @@ const getChangelogCollection = (collectionName) =>
     prefixCollectionName(collectionName),
   );
 
-const compareWithLastSnapshot = async (
-  src,
-  reference,
-  currentSnapshot,
-) =>
-  diff(
-    get(await getLast(src, reference), '0.snapshot', {}),
-    currentSnapshot,
-  );
+const hasKeys = (v) => isObject(v) && size(Object.keys(v));
+
+const unwrap = (v) => flat.unflatten(alphabetize(v));
 
 const insertIntoChangelog = async (
   collectionName,
@@ -52,21 +38,18 @@ const insertIntoChangelog = async (
   user,
 ) => {
   try {
-    const snapshot = flat.unflatten(op);
-    const src = getChangelogCollection(collectionName);
-    const res = await compareWithLastSnapshot(
-      src,
-      reference,
-      snapshot,
-    );
+    const updatedFields = unwrap(op.updatedFields);
+    const removedFields = unwrap(op.removedFields);
 
-    if (isObject(res) && size(Object.keys(res)))
-      await src.insertOne({
+    if (hasKeys(updatedFields) || hasKeys(removedFields))
+      await getChangelogCollection(
+        collectionName,
+      ).insertOne({
         modifiedBy: user ? printName(user) : 'Sys',
         modifiedOn: new Date(),
-        diff: res,
         reference,
-        snapshot,
+        removedFields,
+        updatedFields,
       });
   } catch (e) {
     // noop
@@ -80,7 +63,8 @@ const getFromChangelog = (collectionName, op = {}) => {
         .collection(prefixCollectionName(collectionName))
         .find(op)
         .project({
-          diff: 1,
+          updatedFields: 1,
+          removedFields: 1,
           modifiedOn: 1,
           modifiedBy: 1,
         })
@@ -98,11 +82,18 @@ const getFromChangelog = (collectionName, op = {}) => {
   }
 };
 
-const reduceByKeyMatch = (doc = {}, changelog = []) =>
-  Object.entries(flat(doc)).reduce((acc, [key, value]) => {
-    if (someMatch(changelog, key)) acc[key] = value;
-    return acc;
-  }, {});
+const reduceByKeyMatch = (doc = {}, changelog = []) => {
+  if (isObject(doc))
+    return Object.entries(flat(doc)).reduce(
+      (acc, [key, value]) => {
+        if (someMatch(changelog, key)) acc[key] = value;
+        return acc;
+      },
+      {},
+    );
+
+  return {};
+};
 
 module.exports = {
   getFromChangelog,

@@ -3,10 +3,9 @@
 Leveraging MongoDB's changestream, this plugin aims to track
 choice modifications to a document after they occur. When
 globally installed, the plugin will automatically watch for
-changes in a collection and save their
-<a href="https://www.npmjs.com/package/deep-diff">Deep
-Diff</a> results. It also synchronizes with Q3 session data
-so that we can see who prompted the change and when.
+changes in a collection and save their update description.
+It also synchronizes with Q3 session data so that we can see
+who prompted the change and when.
 
 ## Example usage
 
