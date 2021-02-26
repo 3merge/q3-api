@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.11.2](https://github.com/3merge/q3-api/compare/v1.11.1...v1.11.2) (2021-02-26)
+
+
+### Bug Fixes
+
+* linting ([f9c84c4](https://github.com/3merge/q3-api/commit/f9c84c4233e00bf7dfd51b49bf8516d534b9789b))
+
+
+
+
+
 ## [1.11.1](https://github.com/3merge/q3-api/compare/v1.11.0...v1.11.1) (2021-02-26)
 
 **Note:** Version bump only for package Q3-Api
