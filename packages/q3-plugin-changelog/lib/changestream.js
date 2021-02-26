@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const cluster = require('cluster');
-const { map, get } = require('lodash');
+const { get } = require('lodash');
 const {
   insertIntoChangelog,
   reduceByKeyMatch,
