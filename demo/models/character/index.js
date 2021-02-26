@@ -35,7 +35,6 @@ const Character = new mongoose.Schema(
       'role',
       'company',
       'company.name',
-      //  'movies.$._id.id',
       'movies.$.title',
       'movies.$.year',
     ],

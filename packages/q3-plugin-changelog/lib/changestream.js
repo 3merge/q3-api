@@ -28,7 +28,7 @@ module.exports = () => {
           {
             $project: {
               documentKey: 1,
-              'fullDocument.lastModifiedBy': 1,
+              fullDocument: 1,
               updateDescription: 1,
             },
           },
@@ -37,28 +37,16 @@ module.exports = () => {
           fullDocument: 'updateLookup',
         },
       )
-        .on('change', async (args) => {
-          const getFromUpdatedDescription = (f) =>
-            reduceByKeyMatch(
-              get(args, `updateDescription.${f}`),
-              changelog,
-            );
-
-          await insertIntoChangelog(
+        .on('change', async (args) =>
+          insertIntoChangelog(
             get(Model, 'collection.collectionName'),
             get(args, 'documentKey._id'),
-            {
-              updatedFields: getFromUpdatedDescription(
-                'updatedFields',
-              ),
-              removedFields: getFromUpdatedDescription(
-                'removedFields',
-              ),
-            },
-            get(args, 'updateDescription.lastModifiedBy') ||
-              get(args, 'fullDocument.lastModifiedBy'),
-          );
-        })
+            reduceByKeyMatch(
+              get(args, 'fullDocument'),
+              changelog,
+            ),
+          ),
+        )
         .on('error', () => {
           // noop
         });

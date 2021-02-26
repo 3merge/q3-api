@@ -7,12 +7,11 @@ const {
 } = require('lodash');
 const flat = require('flat');
 const mongoose = require('mongoose');
-const alphabetize = require('alphabetize-object-keys');
 
 const someMatch = (a, b) =>
   some(a, (item) =>
     new RegExp(
-      `^${String(item).replace(/\$/g, '(\\d)*')}$`,
+      `^${String(item).replace(/\$/g, '(\\d)')}$`,
     ).test(b),
   );
 
@@ -29,44 +28,17 @@ const getChangelogCollection = (collectionName) =>
 
 const hasKeys = (v) => isObject(v) && size(Object.keys(v));
 
-const unwrap = (v) => flat.unflatten(alphabetize(v));
-
-const compactRecursively = (v) => {
-  if (isObject(v)) {
-    Object.entries(v).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
-        // eslint-disable-next-line
-        v[key] = compact(value.map(compactRecursively));
-      }
-    });
-  }
-
-  return v;
-};
-
 const insertIntoChangelog = async (
   collectionName,
   reference,
   op,
-  user,
 ) => {
   try {
-    const updatedFields = compactRecursively(
-      unwrap(op.updatedFields),
-    );
-
-    const removedFields = unwrap(op.removedFields);
-
-    if (hasKeys(updatedFields) || hasKeys(removedFields))
-      await getChangelogCollection(
-        collectionName,
-      ).insertOne({
-        modifiedBy: user ? printName(user) : 'Sys',
-        modifiedOn: new Date(),
-        reference,
-        removedFields,
-        updatedFields,
-      });
+    await getChangelogCollection(collectionName).insertOne({
+      nextgen: true,
+      snapshot: flat.unflatten(op),
+      reference,
+    });
   } catch (e) {
     // noop
   }
@@ -79,15 +51,11 @@ const getFromChangelog = (collectionName, op = {}) => {
         .collection(prefixCollectionName(collectionName))
         .find(op)
         .project({
-          updatedFields: 1,
-          removedFields: 1,
-          modifiedOn: 1,
-          modifiedBy: 1,
+          snapshot: 1,
         })
         .sort({
-          modifiedOn: -1,
+          _id: -1,
         })
-        .limit(100)
         .toArray((err, docs) => {
           if (err) reject(err);
           else resolve(docs);
@@ -117,4 +85,5 @@ module.exports = {
   printName,
   someMatch,
   reduceByKeyMatch,
+  hasKeys,
 };

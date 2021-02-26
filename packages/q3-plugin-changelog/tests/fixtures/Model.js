@@ -1,8 +1,13 @@
 const mongoose = require('mongoose');
 const plugin = require('../../lib');
 
+const Publication = new mongoose.Schema({
+  name: String,
+});
+
 const Topic = new mongoose.Schema({
   name: String,
+  publications: [Publication],
 });
 
 const Schema = new mongoose.Schema(

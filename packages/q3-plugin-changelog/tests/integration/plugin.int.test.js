@@ -8,6 +8,12 @@ beforeAll(async () => {
   require('../../lib/changestream')();
 });
 
+afterEach(async () => {
+  await mongoose.connection.db
+    .collection('testing-changelog-patch-history')
+    .deleteMany({});
+});
+
 afterAll(() => {
   mongoose.disconnect();
 });
@@ -18,48 +24,54 @@ describe('changelog', () => {
       title: 'New',
     });
 
-    const changeOps = [
-      {
-        title: 'New Tesla announced',
+    const up = async (args) =>
+      new Promise((r) => {
+        setTimeout(async () => {
+          await Model.updateOne({ _id: doc._id }, args);
+          r();
+        }, 50);
+      });
+
+    await up({
+      title: 'New Tesla announced',
+      lastModifiedBy: {
+        firstName: 'Mike',
       },
-      {
-        topics: [
-          { name: 'Entertainment' },
-          { name: 'Cars' },
-          { name: 'Politics' },
-          { name: 'Energy' },
-        ],
-      },
-      {
-        $pull: {
-          topics: {
-            name: 'Cars',
-          },
+    });
+
+    await up({
+      topics: [
+        { name: 'Entertainment' },
+        { name: 'Cars' },
+        {
+          name: 'Politics',
+          publications: [
+            {
+              name: 'this',
+            },
+          ],
+        },
+      ],
+    });
+
+    await up({
+      $pull: {
+        topics: {
+          name: 'Entertainment',
         },
       },
-    ];
-
-    await Promise.all(
-      changeOps.map((args) =>
-        Model.updateOne({ _id: doc._id }, args),
-      ),
-    );
+    });
 
     setTimeout(async () => {
       const logs = await doc.getHistory();
-
-      expect(logs).toHaveLength(changeOps.length);
-      expect(logs).toHaveProperty(
-        '0.modifiedBy',
-        'Jon Doe',
-      );
-
+      expect(logs).toHaveLength(4);
       done();
     }, 500);
   });
 
   it('should return array of paths', async () =>
-    expect(Model.getChangelogProperties()).toHaveLength(2));
+    // includes lastModifiedBy and updatedAt
+    expect(Model.getChangelogProperties()).toHaveLength(5));
 
   it('should return null', async () => {
     const TempSchema = new mongoose.Schema({});
