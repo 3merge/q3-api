@@ -1,6 +1,6 @@
 {
   "name": "q3-plugin-changelog",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "main": "lib/index.js",
   "dependencies": {
     "alphabetize-object-keys": "^3.0.0",
