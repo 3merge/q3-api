@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.12.1](https://github.com/3merge/q3-api/compare/v1.12.0...v1.12.1) (2021-03-04)
+
+
+### Bug Fixes
+
+* **wip:** extended ref gram update ([91c329d](https://github.com/3merge/q3-api/commit/91c329d3625e37ebad2925e2b4b81b9770046bcd))
+
+
+
+
+
 # [1.12.0](https://github.com/3merge/q3-api/compare/v1.11.3...v1.12.0) (2021-03-02)
 
 
