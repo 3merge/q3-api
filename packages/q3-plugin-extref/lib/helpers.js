@@ -1,15 +1,24 @@
 const {
-  isFunction,
+  first,
   get,
+  groupBy,
+  map,
+  uniq,
+  isObject,
+  isFunction,
   join,
   compact,
 } = require('lodash');
 const ModelProxy = require('./ModelProxy');
 
-const isObject = (v) => typeof v === 'object' && v !== null;
-
 const getPath = (v) =>
   isObject(v) && 'path' in v ? v.path : null;
+
+const getFirst = (method) => (o) =>
+  isObject(o) ? first(Object[method](o)) : undefined;
+
+const getFirstKey = getFirst('keys');
+const getFirstValue = getFirst('values');
 
 const cleanPath = (v) => {
   if (typeof v !== 'string')
@@ -126,3 +135,19 @@ exports.getFirstTruthySpec = (context) => (
     },
     undefined,
   ) || defaultValue;
+
+exports.createQueueData = (queries) =>
+  map(
+    Object.entries(groupBy(queries, 'collection')),
+    ([collection, v]) => {
+      const flatten = map(v, 'query');
+      const keys = uniq(map(flatten, getFirstKey));
+      const id = getFirstValue(first(flatten));
+
+      return {
+        collection,
+        keys,
+        id,
+      };
+    },
+  );

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const { get } = require('lodash');
+const { first, get } = require('lodash');
+const Scheduler = require('q3-core-scheduler');
 const {
   executeMiddlewareOnUpdate,
   getSync,
@@ -9,6 +10,7 @@ const {
   isDefined,
   forEachCollectionAsync,
   markModifiedLocalVars,
+  createQueueData,
 } = require('./helpers');
 const {
   assembleSyncSchemaPaths,
@@ -67,17 +69,33 @@ function updateRef(...params) {
   return executeMiddlewareOnUpdate(async function () {
     const reader = QueryMaker.setup(this);
     const values = getReferenceValues(this);
+    const queries = [];
 
     await next((model) =>
       Object.entries(assembleSyncSchemaPaths(model.inst))
         .map(filterByPrivateProps)
         .map(reader)
         .flatMap((ref) =>
-          values.flatMap((id) =>
-            model.proxyUpdate(...ref(id)),
-          ),
+          values.flatMap((id) => {
+            const updateOp = ref(id);
+
+            queries.push({
+              collection: model.__$collectionName,
+              query: first(updateOp),
+            });
+
+            return model.proxyUpdate(...updateOp);
+          }),
         ),
     );
+
+    try {
+      await Scheduler.queue('onExtendedReference', {
+        data: createQueueData(queries),
+      });
+    } catch (e) {
+      // noop
+    }
   });
 }
 
@@ -135,6 +153,9 @@ module.exports = class Builder {
   }
 
   set(name, options = {}) {
+    if (Object.keys(options).includes('gram'))
+      this.__$chore = true;
+
     if (!this.$opts || !this.$opts[name])
       throw new Error(
         `${name} not included in reference object`,

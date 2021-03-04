@@ -7,6 +7,7 @@ const {
   isFunction,
   set,
 } = require('lodash');
+const mongoose = require('mongoose');
 const parse = require('q3-core-rest/lib/queryParser');
 const { check } = require('q3-core-composer');
 const app = require('../config/express');
@@ -80,9 +81,23 @@ const setExecutableTemplatePathInRequest = (directory) =>
       return exists;
     });
 
+const handleExtRefData = async ({ data }) => {
+  await Promise.all(
+    map(data, async ({ collection, keys, id }) =>
+      mongoose.models[collection].initializeFuzzySearching({
+        $or: keys.flatMap((k) => [
+          { [k]: mongoose.Types.ObjectId(id) },
+          { [k]: id },
+        ]),
+      }),
+    ),
+  );
+};
+
 module.exports = {
   toQuery,
   toUndefined,
+  handleExtRefData,
   execPurgeSessionAppConfig,
   joinJsFileWithAppRoot,
   setExecutableTemplateVariablesInRequest,
