@@ -12,5 +12,15 @@ module.exports = {
     String(val)
       .match(/(".*?"|[^",]+)/g)
       .map(unwrap),
-  string: (v) => String(v).replace(/^"(.*)"$/, '$1'),
+  string: (v) => {
+    const str = String(v);
+    const parts = str.match(/^\/(.*)\/([igm]*)$/);
+
+    return !String(v).startsWith('/') || !parts
+      ? str.replace(/^"(.*)"$/, '$1')
+      : {
+          $regex: parts[1],
+          $options: parts[2] || 'i',
+        };
+  },
 };
