@@ -1,3 +1,4 @@
+const { size } = require('lodash');
 const getFields = require('./getFields');
 const {
   clean,
@@ -68,6 +69,9 @@ module.exports = {
       .select(fields.join(' '))
       .lean()
       .exec();
+
+    // avoid bulk op without results
+    if (!size(cursor)) return null;
 
     const bulkOp = this.collection.initializeUnorderedBulkOp();
 
