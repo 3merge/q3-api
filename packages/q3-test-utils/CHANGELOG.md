@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.12.2](https://github.com/3merge/q3-api/compare/v1.12.1...v1.12.2) (2021-03-15)
+
+
+### Bug Fixes
+
+* string caster ([30f4695](https://github.com/3merge/q3-api/commit/30f4695e2a33525517e46318d4f89bb6897e2c24))
+
+
+
+
+
 ## [1.12.1](https://github.com/3merge/q3-api/compare/v1.12.0...v1.12.1) (2021-03-04)
 
 
