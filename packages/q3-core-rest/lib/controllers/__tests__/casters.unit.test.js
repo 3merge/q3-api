@@ -33,9 +33,17 @@ describe('Casters', () => {
   test.each([
     ['"foo"', 'foo'],
     ['/foo', '/foo'],
-    ['/^foo/', { $regex: '^foo', $options: 'i' }],
-    ['/^foo/gm', { $regex: '^foo', $options: 'gm' }],
+    ['/^foo/', new RegExp('^foo', 'i')],
+    ['/^foo/gm', new RegExp('^foo', 'gm')],
   ])('.string(%s)', (a, b) => {
     expect(casters.string(a)).toEqual(b);
+  });
+
+  test.each([
+    [['"foo"'], ['foo']],
+    [['/^foo/'], [new RegExp('^foo', 'i')]],
+    [['/^foo/gm'], [new RegExp('^foo', 'gm')]],
+  ])('.in(%s)', (a, b) => {
+    expect(casters.in(a)).toEqual(b);
   });
 });
