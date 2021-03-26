@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.12.6](https://github.com/3merge/q3-api/compare/v1.12.5...v1.12.6) (2021-03-26)
+
+
+### Bug Fixes
+
+* merging pdfs and preserving order ([f792077](https://github.com/3merge/q3-api/commit/f7920779862d85f505209203fd71d247a6f3eb9d))
+* reference to undefined path ([181d894](https://github.com/3merge/q3-api/commit/181d894f791840dcd58f6540142993c6657f310d))
+
+
+
+
+
 ## [1.12.5](https://github.com/3merge/q3-api/compare/v1.12.4...v1.12.5) (2021-03-19)
 
 **Note:** Version bump only for package Q3-Api
