@@ -1,7 +1,10 @@
 const { PDFDocument } = require('pdf-lib');
 const PdfPrinter = require('pdfmake');
-const { first } = require('lodash');
+const { flatten, first, forEach } = require('lodash');
 const path = require('path');
+
+// eslint-disable-next-line
+const { executeOnAsync } = require('q3-schema-utils');
 
 const getFontFromDir = (variant) =>
   path.resolve(__dirname, `./fonts/Roboto-${variant}.ttf`);
@@ -48,24 +51,24 @@ const createBufferFromDocumentDefinitions = (file) =>
 async function merge(pdfs = []) {
   const mergedPdf = await PDFDocument.create();
 
-  await Promise.all(
-    pdfs.map(async (pdf) => {
-      const data = await PDFDocument.load(pdf);
-      const copiedPages = await mergedPdf.copyPages(
-        data,
-        data.getPageIndices(),
-      );
+  const copyIntoMergedPdf = (data) =>
+    mergedPdf.copyPages(data, data.getPageIndices());
 
-      copiedPages.forEach((page) => {
-        mergedPdf.addPage(page);
-      });
-    }),
+  forEach(
+    flatten(
+      await executeOnAsync(pdfs, async (pdf) =>
+        copyIntoMergedPdf(await PDFDocument.load(pdf)),
+      ),
+    ),
+    (page) => {
+      mergedPdf.addPage(page);
+    },
   );
 
   return mergedPdf.save();
 }
 
-module.exports = async (body = []) => {
+const ExportToPdf = async (body = []) => {
   try {
     const buffers = await Promise.all(
       body.map(createBufferFromDocumentDefinitions),
@@ -78,3 +81,9 @@ module.exports = async (body = []) => {
     return null;
   }
 };
+
+ExportToPdf.__$utils = {
+  merge,
+};
+
+module.exports = ExportToPdf;
