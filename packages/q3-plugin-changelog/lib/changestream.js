@@ -12,7 +12,7 @@ const {
  * @TODO
  * Refactor with the same code block from q3-core-access.
  */
-const getSeedDataFromPath = (dir) => {
+const getSeedDataFromPath = (dir = '') => {
   const joinPath = (relativity) =>
     path.join(dir, `${relativity}/q3-changelog.json`);
 

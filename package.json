@@ -14,7 +14,7 @@
     "test:packages": "jest \"^(.*?)\\.unit.test.js\"  --detectOpenHandles --forceExit --collectCoverage --coverageDirectory coverage/coverage_units",
     "test:integrations": "jest \"^(.*?)\\.int.test.js\" --runInBand --detectOpenHandles --forceExit --collectCoverage --coverageDirectory coverage/coverage_integrations",
     "test:e2e": "yarn workspace e2e-tests test",
-    "test": "yarn test:packages && yarn test:packages-scheduler && yarn test:packages-ngrams && yarn test:packages-extref && yarn test:e2e",
+    "test": "yarn test:packages && yarn test:packages-scheduler && yarn test:packages-ngrams && yarn test:packages-extref && yarn test:packages-changestream && yarn test:e2e",
     "coverage": "lcov-result-merger coverage/coverage_*/lcov.info | codecov --pipe",
     "upload": "lerna publish",
     "demo-web": "nodemon demo",

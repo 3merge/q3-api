@@ -70,30 +70,4 @@ describe('Version control plugin', () => {
       getStudentVersion(),
     ).resolves.toHaveLength(2);
   });
-
-  it('should ignore automated data changes', async () => {
-    await addFriend(id, 'Barrie');
-    await addFriend(id, 'Christine');
-    const {
-      body: { friends },
-    } = await addFriend(id, 'Angus');
-
-    const v = await getStudentVersion();
-    expect(v).toHaveLength(5);
-
-    await agent
-      .patch(`/students/${id}/friends/${friends[1].id}`)
-      .send({ name: 'Allan' })
-      .set({ Authorization })
-      .expect(200);
-
-    const v2 = await getStudentVersion();
-
-    expect(v2).toHaveLength(6);
-
-    expect(v2[0].diff[0]).toHaveProperty(
-      'lhs',
-      'Christine',
-    );
-  });
 });
