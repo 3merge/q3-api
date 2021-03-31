@@ -13,8 +13,8 @@ const ControllerIo = setExecutableTemplateVariablesInRequest(
       get(req, '$executableTemplatePath'),
       {
         buckets: await aws().bulk(req.files, 'queuing'),
-        query: get(req, '$query'),
         session: get(req, '$session'),
+        originalUrl: get(req, 'originalUrl'),
       },
     );
 
