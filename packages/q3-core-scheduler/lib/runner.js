@@ -6,6 +6,7 @@ const {
 } = require('./utils');
 const {
   connectToFileStorage,
+  connectToQueryParser,
   connectToSession,
 } = require('./helpers');
 
@@ -16,8 +17,12 @@ module.exports = (directory) => {
     attachments,
     name,
     data,
+  }) =>
     // eslint-disable-next-line
-  }) => require(path.join(root, name))(data, attachments);
+    require(path.join(root, name))(
+      connectToQueryParser(data),
+      attachments,
+    );
 
   return {
     execute: forwardPayload(
