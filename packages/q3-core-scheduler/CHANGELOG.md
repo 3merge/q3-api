@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.12.7](https://github.com/3merge/q3-api/compare/v1.12.6...v1.12.7) (2021-03-31)
+
+
+### Bug Fixes
+
+* query object chores ([#123](https://github.com/3merge/q3-api/issues/123)) ([3d2f066](https://github.com/3merge/q3-api/commit/3d2f066ad9803dff291692c33d175b2bf2ac2f4e))
+
+
+
+
+
 ## [1.12.6](https://github.com/3merge/q3-api/compare/v1.12.5...v1.12.6) (2021-03-26)
 
 **Note:** Version bump only for package q3-core-scheduler
