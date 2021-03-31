@@ -54,7 +54,7 @@ describe('Version control plugin', () => {
     ).resolves.toHaveLength(1);
   });
 
-  it('should capture patch payloads', async () => {
+  it.skip('should capture patch payloads', async () => {
     await agent
       .patch(`/students/${id}`)
       .send({
