@@ -1,6 +1,6 @@
-const micromatch = require('micromatch');
 const BigNumber = require('bignumber.js');
 const { compact } = require('lodash');
+const glob = require('glob-to-regexp');
 const { CUSTOM, VOLUME } = require('./constants');
 
 const isFloat = (v) => v === CUSTOM || v === VOLUME;
@@ -42,13 +42,15 @@ const filterByTaxonomy = (id) => (v) => {
 };
 
 const filterByResourceName = (name) => (v) => {
+  const test = (re) => glob(re, { flags: 'i' }).test(name);
   let pattern = compact(v.resource);
+
   if (!pattern) pattern = ['!*'];
   if (!name) return false;
 
-  return micromatch.isMatch(name, pattern, {
-    nocase: true,
-  });
+  return Array.isArray(pattern)
+    ? pattern.some(test)
+    : test(pattern);
 };
 
 const splitCommaDelimited = (a) => {

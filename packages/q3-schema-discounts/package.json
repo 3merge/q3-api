@@ -4,6 +4,7 @@
   "version": "1.12.7",
   "dependencies": {
     "bignumber.js": "^9.0.1",
+    "glob-to-regexp": "^0.4.1",
     "lodash": "^4.17.20",
     "micromatch": "^4.0.2",
     "moment": "^2.29.1",
