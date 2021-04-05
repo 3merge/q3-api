@@ -10,21 +10,18 @@ module.exports = (schema) => {
 
   schema.statics.getChangelogProperties = function () {
     const props = get(this, 'schema.options.changelog');
-    return size(props)
-      ? [
-          ...props,
-          'lastModifiedBy.firstName',
-          'lastModifiedBy.lastName',
-          'updatedAt',
-        ]
-      : null;
+    return size(props) ? props : null;
   };
 
   schema.methods.getHistory = async function () {
     return map(
       await getFromChangelog(
         get(this, 'constructor.collection.collectionName'),
-        { reference: this._id, nextgen: true },
+        {
+          reference: this._id,
+          nextgen: true,
+          'snapshot.updatedAt': { $exists: true },
+        },
       ),
       'snapshot',
     );

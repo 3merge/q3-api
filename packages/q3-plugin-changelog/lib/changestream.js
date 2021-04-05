@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 const cluster = require('cluster');
-const { get } = require('lodash');
+const { get, uniq } = require('lodash');
 const path = require('path');
 const fs = require('fs');
 const {
+  addMetaData,
   insertIntoChangelog,
   reduceByKeyMatch,
 } = require('./utils');
@@ -75,7 +76,7 @@ module.exports = (src) => {
             get(args, 'documentKey._id'),
             reduceByKeyMatch(
               get(args, 'fullDocument'),
-              changelog,
+              uniq(addMetaData(changelog)),
             ),
           ),
         )
