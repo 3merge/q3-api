@@ -24,8 +24,6 @@ describe('changelog', () => {
       title: 'New',
     });
 
-    console.log(doc);
-
     const up = async (args) =>
       new Promise((r) => {
         setTimeout(async () => {

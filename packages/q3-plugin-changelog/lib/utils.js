@@ -73,8 +73,6 @@ const insertIntoChangelog = async (
       reference,
     );
 
-    console.log(snapshot);
-
     if (
       !isEqual(omitMetaData(last), omitMetaData(snapshot))
     )

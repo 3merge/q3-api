@@ -18,6 +18,7 @@ const Schema = new mongoose.Schema(
   },
   {
     changelog: ['title', 'topics.$.name'],
+    timestamps: true,
   },
 );
 
