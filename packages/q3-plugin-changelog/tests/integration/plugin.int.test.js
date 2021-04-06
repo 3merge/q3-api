@@ -70,8 +70,7 @@ describe('changelog', () => {
   });
 
   it('should return array of paths', async () =>
-    // includes lastModifiedBy and updatedAt
-    expect(Model.getChangelogProperties()).toHaveLength(5));
+    expect(Model.getChangelogProperties()).toHaveLength(2));
 
   it('should return null', async () => {
     const TempSchema = new mongoose.Schema({});

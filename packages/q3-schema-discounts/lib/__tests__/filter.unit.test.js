@@ -3,15 +3,7 @@ require('q3-schema-types');
 const mongoose = require('mongoose');
 const DiscountFilter = require('../filter');
 const DiscountSchema = require('..');
-const {
-  expired,
-  foo,
-  upcoming,
-  glob,
-  taxonomy,
-  name,
-  cust,
-} = require('../__fixtures__');
+const { foo } = require('../__fixtures__');
 
 let Model;
 
@@ -37,87 +29,6 @@ afterAll(async () => {
 });
 
 describe('DiscountFilter', () => {
-  describe('getEligibleDiscounts', () => {
-    it('should filter out expired and upcoming discounts', () => {
-      const inst = wrapConstructor([
-        expired,
-        foo,
-        upcoming,
-      ]);
-
-      const result = inst.$getEligibleDiscounts(Boolean);
-      expect(result).toHaveLength(1);
-    });
-  });
-
-  describe('getDiscountByResourceName', () => {
-    it('should find discounts by name', () => {
-      const inst = wrapConstructor([foo, glob]);
-
-      const result = inst.$getDiscountByResourceName('FOO');
-      expect(result).toHaveLength(1);
-    });
-  });
-
-  describe('getDiscountByTaxonomy', () => {
-    it('should get taxonomy discounts', () => {
-      const id = mongoose.Types.ObjectId();
-      const inst = wrapConstructor([
-        foo,
-        glob,
-        {
-          ...taxonomy(id),
-          formula: 'Percent',
-        },
-      ]);
-
-      const result = inst.getDiscountByTaxonomy(id);
-      expect(result).toHaveLength(1);
-    });
-  });
-
-  describe('getGlobalDiscount', () => {
-    it('should get global discounts', () => {
-      const inst = wrapConstructor([foo, glob]);
-      const result = inst.getGlobalDiscount();
-      expect(result).toHaveLength(1);
-    });
-  });
-
-  describe('getIncrementalDiscountByResourceName', () => {
-    it('should get discounts that meet kind and name critera', () => {
-      const product = 'QUUZ';
-      const inst = wrapConstructor([
-        expired,
-        upcoming,
-        foo,
-        glob,
-        name(product),
-      ]);
-      const result = inst.getIncrementalDiscountByResourceName(
-        product,
-      );
-
-      expect(result).toHaveLength(1);
-    });
-  });
-
-  describe('getFixedDiscountByResourceName', () => {
-    it('should get active custom discounts', () => {
-      const product = 'QUUZ';
-      const inst = wrapConstructor([
-        foo,
-        glob,
-        taxonomy(mongoose.Types.ObjectId()),
-        cust(product),
-      ]);
-      const result = inst.getFixedDiscountByResourceName(
-        product,
-      );
-      expect(result).toHaveLength(1);
-    });
-  });
-
   describe('getBaseDiscount', () => {
     it('should return best value discount', () => {
       const resource = 'QUUZ';

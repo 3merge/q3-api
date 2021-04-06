@@ -15,85 +15,61 @@ const filterBySimpleDiscountFormula = (kinds) => ({
   }
 };
 
+const isWithinTimeFrame = (doc) =>
+  doc && !doc.hasExpired() && !doc.hasNotYetBegun();
+
+const isAugmented = filterBySimpleDiscountFormula([
+  'Incremental',
+  'Compound',
+  'Distance',
+  'Fixed',
+]);
+
+const isBase = filterBySimpleDiscountFormula([
+  'Factor',
+  'Percent',
+]);
+
 module.exports = class DiscountFilter {
   constructor(docs = []) {
-    this.discounts = docs;
-  }
+    Object.assign(
+      this,
+      docs.reduce(
+        (acc, curr) => {
+          if (isWithinTimeFrame(curr)) {
+            if (isBase(curr)) acc.__$base.push(curr);
+            else if (isAugmented(curr))
+              acc.__$augmented.push(curr);
+          }
 
-  $getEligibleDiscounts(done = Boolean) {
-    return this.discounts
-      .filter((v) => !v.hasExpired())
-      .filter((v) => !v.hasNotYetBegun())
-      .filter(done);
-  }
-
-  $getDiscountByResourceName(name, done = Boolean) {
-    return this.$getEligibleDiscounts(
-      filterByResourceName(name),
-    ).filter(done);
-  }
-
-  $getDiscountByResourceNameAndKind(name, kinds = []) {
-    return this.$getDiscountByResourceName(
-      name,
-      filterBySimpleDiscountFormula(kinds),
+          return acc;
+        },
+        {
+          __$augmented: [],
+          __$base: [],
+        },
+      ),
     );
-  }
-
-  getDiscountByTaxonomy(taxonomy) {
-    return this.$getEligibleDiscounts(
-      filterByTaxonomy(taxonomy),
-    ).filter(
-      filterBySimpleDiscountFormula(['Factor', 'Percent']),
-    );
-  }
-
-  getGlobalDiscount() {
-    return this.$getEligibleDiscounts(
-      (v) => v.global,
-    ).filter(
-      filterBySimpleDiscountFormula(['Factor', 'Percent']),
-    );
-  }
-
-  getIncrementalDiscountByResourceName(name) {
-    return this.$getDiscountByResourceNameAndKind(name, [
-      'Incremental',
-      'Compound',
-      'Distance',
-    ]);
-  }
-
-  getFixedDiscountByResourceName(name) {
-    return this.$getDiscountByResourceNameAndKind(name, [
-      'Fixed',
-    ]);
-  }
-
-  getDiscountByResourceName(name) {
-    return this.$getDiscountByResourceNameAndKind(name, [
-      'Factor',
-      'Percent',
-    ]);
   }
 
   getBaseDiscount(name, taxonomy, pricing = {}) {
+    const matchesResource = filterByResourceName(name);
+    const matchesTaxonomy = filterByTaxonomy(taxonomy);
+
     return compareValues(
-      [
-        ...this.getDiscountByResourceName(name),
-        ...this.getDiscountByTaxonomy(taxonomy),
-        ...this.getGlobalDiscount(),
-      ],
+      this.__$base.filter(
+        (curr) =>
+          matchesResource(curr) ||
+          matchesTaxonomy(curr) ||
+          curr.global,
+      ),
       pricing,
     );
   }
 
   getAugmentedDiscount(name, pricing = {}) {
     return compareValues(
-      [
-        ...this.getFixedDiscountByResourceName(name),
-        ...this.getIncrementalDiscountByResourceName(name),
-      ],
+      this.__$augmented.filter(filterByResourceName(name)),
       pricing,
     );
   }

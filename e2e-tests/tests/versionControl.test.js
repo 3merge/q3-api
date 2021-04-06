@@ -4,12 +4,6 @@ const { teardown } = require('../helpers');
 let Authorization;
 let agent;
 
-const addFriend = async (id, name) =>
-  agent
-    .post(`/students/${id}/friends`)
-    .send({ name })
-    .set({ Authorization });
-
 beforeAll(async () => {
   ({ Authorization, agent } = await setup());
   // eslint-disable-next-line
@@ -18,56 +12,44 @@ beforeAll(async () => {
 
 afterAll(teardown);
 
-describe('Version control plugin', () => {
-  let id;
+test('Version control', async () => {
+  const {
+    body: {
+      student: { id },
+    },
+  } = await agent
+    .post('/students')
+    .send({ name: 'George' })
+    .set({ Authorization })
+    .expect(201);
 
-  const getStudentVersion = async () => {
-    const {
-      body: { versions },
-    } = await agent
-      .get(
-        `/history?collectionName=students&documentId=${id}`,
-      )
-      .set({ Authorization })
-      .expect(200);
+  await agent
+    .patch(`/students/${id}`)
+    .send({ name: 'Greg' })
+    .set({ Authorization })
+    .expect(200);
 
-    return versions;
-  };
+  await agent
+    .post(`/students/${id}/friends`)
+    .send({ name: 'Jen', age: 21 })
+    .set({ Authorization })
+    .expect(201);
 
-  it('should capture on create payloads', async () => {
-    ({
-      body: {
-        student: { id },
-      },
-    } = await agent
-      .post('/students')
-      .send({
-        '__t': 'teach-assistant',
-        name: 'George',
-        class: 'Science',
-      })
-      .set({ Authorization })
-      .expect(201));
+  // age is not tracked
+  await agent
+    .patch(`/students/${id}`)
+    .send({ age: 22 })
+    .set({ Authorization })
+    .expect(200);
 
-    return expect(
-      getStudentVersion(),
-    ).resolves.toHaveLength(1);
-  });
+  const {
+    body: { versions },
+  } = await agent
+    .get(
+      `/history?collectionName=students&documentId=${id}`,
+    )
+    .set({ Authorization })
+    .expect(200);
 
-  it.skip('should capture patch payloads', async () => {
-    await agent
-      .patch(`/students/${id}`)
-      .send({
-        '__t': 'teach-assistant',
-        name: 'Bobby',
-        age: 21,
-        class: 'Math',
-      })
-      .set({ Authorization })
-      .expect(200);
-
-    return expect(
-      getStudentVersion(),
-    ).resolves.toHaveLength(2);
-  });
+  expect(versions).toHaveLength(3);
 });

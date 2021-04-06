@@ -55,8 +55,10 @@ const execPurgeSessionAppConfig = (req) => {
 const setExecutableTemplateVariablesInRequest = (
   controller,
 ) => (req, res) => {
+  set(req, '$datasource', get(req, 'datasource.modelName'));
   set(req, '$query', toQuery(req));
   set(req, '$session', execPurgeSessionAppConfig(req));
+
   return controller(req, res);
 };
 

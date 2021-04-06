@@ -4,9 +4,15 @@ const {
   join,
   isObject,
   size,
+  get,
+  omit,
+  isEqual,
 } = require('lodash');
 const flat = require('flat');
 const mongoose = require('mongoose');
+
+const omitMetaData = (v) =>
+  omit(v, ['lastModifiedBy', 'updatedAt']);
 
 const someMatch = (a, b) =>
   some(a, (item) =>
@@ -28,17 +34,55 @@ const getChangelogCollection = (collectionName) =>
 
 const hasKeys = (v) => isObject(v) && size(Object.keys(v));
 
+const addMetaData = (props) => [
+  ...props,
+  'lastModifiedBy.firstName',
+  'lastModifiedBy.lastName',
+  'updatedAt',
+];
+
+const getLatestFromChangelog = (
+  collectionName,
+  reference,
+) =>
+  new Promise((resolve, reject) =>
+    getChangelogCollection(collectionName)
+      .find({
+        nextgen: true,
+        reference,
+      })
+      .sort({
+        'snapshot.updatedAt': -1,
+      })
+      .limit(1)
+      .toArray((err, docs) => {
+        if (err) reject(err);
+        else resolve(get(docs, '0.snapshot'));
+      }),
+  );
+
 const insertIntoChangelog = async (
   collectionName,
   reference,
   op,
 ) => {
   try {
-    await getChangelogCollection(collectionName).insertOne({
-      nextgen: true,
-      snapshot: flat.unflatten(op),
+    const snapshot = flat.unflatten(op);
+    const last = await getLatestFromChangelog(
+      collectionName,
       reference,
-    });
+    );
+
+    if (
+      !isEqual(omitMetaData(last), omitMetaData(snapshot))
+    )
+      await getChangelogCollection(
+        collectionName,
+      ).insertOne({
+        nextgen: true,
+        reference,
+        snapshot,
+      });
   } catch (e) {
     // noop
   }
@@ -86,4 +130,5 @@ module.exports = {
   someMatch,
   reduceByKeyMatch,
   hasKeys,
+  addMetaData,
 };
