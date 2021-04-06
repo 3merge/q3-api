@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.13.0](https://github.com/3merge/q3-api/compare/v1.12.8...v1.13.0) (2021-04-06)
+
+
+### Features
+
+* support for mjml ([#125](https://github.com/3merge/q3-api/issues/125)) ([a9d66d3](https://github.com/3merge/q3-api/commit/a9d66d3edf0594dc55bae64e8fbd1fb0400d7cbe))
+
+
+
+
+
 ## [1.12.8](https://github.com/3merge/q3-api/compare/v1.12.7...v1.12.8) (2021-04-06)
 
 
