@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.12.8](https://github.com/3merge/q3-api/compare/v1.12.7...v1.12.8) (2021-04-06)
+
+
+### Bug Fixes
+
+* changelog duplicates and refactored discounting for speed ([#124](https://github.com/3merge/q3-api/issues/124)) ([2bd548c](https://github.com/3merge/q3-api/commit/2bd548ce35174f0db95dee1136889e027ddc03d0))
+
+
+
+
+
 ## [1.12.7](https://github.com/3merge/q3-api/compare/v1.12.6...v1.12.7) (2021-03-31)
 
 **Note:** Version bump only for package e2e-tests
