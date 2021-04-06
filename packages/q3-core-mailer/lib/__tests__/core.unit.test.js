@@ -48,6 +48,16 @@ describe('Mailer core', () => {
     });
   });
 
+  describe('"lang"', () => {
+    it('should default to en', async () => {
+      expect(new Mailer('testing').lang).toMatch('en');
+    });
+
+    it('should get lang prefix', async () => {
+      expect(new Mailer('fr-testing').lang).toMatch('fr');
+    });
+  });
+
   describe('"send"', () => {
     it('should call strategy', async () => {
       process.env.MAILER_STRATEGY = 'Test';
@@ -56,6 +66,18 @@ describe('Mailer core', () => {
         'Test',
         expect.any(Object),
       );
+    });
+
+    it('should delete template name', async () => {
+      process.env.MAILER_STRATEGY = 'Test';
+      const m = new Mailer('f');
+      m.meta.html = '<br />';
+      await m.send();
+
+      expect(strategies).toHaveBeenCalledWith('Test', {
+        from: expect.any(String),
+        html: '<br />',
+      });
     });
   });
 });
