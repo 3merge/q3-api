@@ -1,5 +1,7 @@
 /* eslint-disable func-names, no-console  */
 const mongoose = require('mongoose');
+const cluster = require('cluster');
+const { get } = require('lodash');
 const moment = require('moment');
 const {
   FAILED,
@@ -31,6 +33,7 @@ const Schema = new mongoose.Schema(
       min: 0,
       max: 3,
     },
+    worker: Number,
     attempt: {
       type: Number,
       default: 0,
@@ -108,6 +111,7 @@ Schema.statics.getQueued = async function ($lte = 3) {
     {
       $set: {
         locked: true,
+        worker: get(cluster, 'worker.id'),
       },
       $inc: {
         attempt: 1,

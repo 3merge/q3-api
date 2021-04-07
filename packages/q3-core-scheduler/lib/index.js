@@ -54,6 +54,10 @@ module.exports = {
         const emitTo = (name) =>
           Emitter.emit(name, curr.name);
 
+        // potentially been cleared already
+        // must be lower down as there's a brief delay
+        invoke(primary, 'start');
+
         try {
           if (curr) {
             emitTo('start');
@@ -70,6 +74,8 @@ module.exports = {
           emitTo('stall');
           await Scheduler.stall(curr, e);
         }
+
+        invoke(primary, 'stop');
       },
     );
 
