@@ -1,9 +1,10 @@
 const { find, get, isObject } = require('lodash');
 const { exception } = require('q3-core-responder');
 const Scheduler = require('q3-core-scheduler');
-const path = require('path');
-const fs = require('fs');
 const { compose } = require('q3-core-composer');
+const {
+  findFileTraversingUpwards,
+} = require('q3-schema-utils');
 const aws = require('../../config/aws');
 const {
   setExecutableTemplateVariablesInRequest,
@@ -26,14 +27,11 @@ const checkIoSettingsByRoleType = (
 
 const ControllerIo = setExecutableTemplateVariablesInRequest(
   async (req, res) => {
-    const file = path.join(
-      get(req, 'app.locals.location'),
-      'q3-access-chores.json',
-    );
-
     const settings = find(
-      // eslint-disable-next-line
-      fs.existsSync(file) ? require(file) : [],
+      findFileTraversingUpwards(
+        get(req, 'app.locals.location'),
+        'q3-access-chores.json',
+      ),
       (item) => item.name === get(req, 'query.template'),
     );
 

@@ -10,7 +10,8 @@
     "hyperdiff": "^2.0.8",
     "jsondiffpatch": "^0.4.1",
     "lodash": "^4.17.20",
-    "mongoose": "^5.11.8"
+    "mongoose": "^5.11.8",
+    "q3-schema-utils": "1.14.0"
   },
   "jest": {
     "verbose": true,

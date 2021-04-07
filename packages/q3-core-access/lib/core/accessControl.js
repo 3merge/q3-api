@@ -1,34 +1,17 @@
-const fs = require('fs');
-const path = require('path');
+const {
+  findFileTraversingUpwards,
+} = require('q3-schema-utils');
 const { filterByRoleType } = require('../helpers');
-
-const getSeedDataFromPath = (dir) => {
-  const joinPath = (relativity) =>
-    path.join(dir, `${relativity}/q3-access.json`);
-
-  const loadFrom = (filepath) =>
-    // eslint-disable-next-line
-    fs.existsSync(filepath) ? require(filepath) : null;
-
-  return Array.from({ length: 3 }).reduce(
-    (acc, curr, i) =>
-      loadFrom(
-        joinPath(
-          Array.from({ length: i })
-            .map(() => '.')
-            .join(''),
-        ),
-      ) || acc,
-    [],
-  );
-};
 
 const AccessControl = {
   init(src = []) {
     let grants = [];
 
     if (typeof src === 'string')
-      grants = getSeedDataFromPath(src);
+      grants = findFileTraversingUpwards(
+        src,
+        'q3-access.json',
+      );
     else if (Array.isArray(src)) grants = src;
 
     AccessControl.grants = grants

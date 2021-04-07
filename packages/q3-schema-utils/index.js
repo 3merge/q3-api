@@ -2,6 +2,8 @@
 const moment = require('moment');
 const micromatch = require('micromatch');
 const { compact } = require('lodash');
+const path = require('path');
+const fs = require('fs');
 
 /**
  * Useful for post-middleware as the first parameters varies depending on op.
@@ -166,4 +168,37 @@ exports.filters = {
       return isMatch(name, pattern);
     };
   },
+};
+
+exports.findFileTraversingUpwards = (
+  dir,
+  filename,
+  defaultValue = [],
+  numberOfDirectoriesToCheck = 3,
+) => {
+  const makeRelativePathPrefix = (asc) =>
+    asc > 0
+      ? Array.from({ length: asc })
+          .map(() => '../')
+          .join('')
+      : './';
+
+  const joinPath = (relativity) =>
+    path.join(
+      dir,
+      `${makeRelativePathPrefix(relativity)}${filename}`,
+    );
+
+  const loadFrom = (filepath) =>
+    fs.existsSync(filepath)
+      ? // eslint-disable-next-line
+        require(filepath)
+      : null;
+
+  return Array.from({
+    length: numberOfDirectoriesToCheck,
+  }).reduce(
+    (acc, curr, i) => loadFrom(joinPath(i)) || acc,
+    defaultValue,
+  );
 };

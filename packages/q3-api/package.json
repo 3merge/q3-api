@@ -47,6 +47,7 @@
     "q3-schema-notes": "^1.14.0",
     "q3-schema-types": "^1.14.0",
     "q3-schema-users": "^1.14.0",
+    "q3-schema-utils": "1.14.0",
     "ssestream": "^1.1.0"
   },
   "peerDependencies": {
