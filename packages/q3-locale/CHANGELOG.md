@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.14.0](https://github.com/3merge/q3-api/compare/v1.13.0...v1.14.0) (2021-04-07)
+
+
+### Features
+
+* worker threads for queue process ([bd2da72](https://github.com/3merge/q3-api/commit/bd2da722581d0345b34eee67c62175fb52034f19))
+
+
+
+
+
 ## [1.5.11](https://github.com/3merge/q3-api/compare/v1.5.10...v1.5.11) (2020-12-15)
 
 **Note:** Version bump only for package q3-locale
