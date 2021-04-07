@@ -28,6 +28,8 @@ const Schema = new mongoose.Schema(
     priority: {
       type: Number,
       default: 1,
+      min: 0,
+      max: 3,
     },
     attempt: {
       type: Number,
@@ -93,9 +95,12 @@ Schema.statics.lookForLockedJobs = async function () {
   );
 };
 
-Schema.statics.getQueued = async function () {
+Schema.statics.getQueued = async function ($lte = 3) {
   return this.findOneAndUpdate(
     {
+      priority: {
+        $lte,
+      },
       due: { $lt: new Date() },
       status: [QUEUED, STALLED],
       locked: false,

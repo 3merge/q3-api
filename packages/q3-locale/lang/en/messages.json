@@ -35,5 +35,6 @@
   "validation": "The request failed validation. Please check your data and try again.",
   "expired": "The information used in this request has expired",
   "insufficientAccessLevels": "This role type cannot perform the requested operation",
-  "unknownBridge": "The template requested does not exist"
+  "unknownBridge": "The template requested does not exist",
+  "cannotQueueThisChore": "Access denied for scheduling the requested chore"
 }

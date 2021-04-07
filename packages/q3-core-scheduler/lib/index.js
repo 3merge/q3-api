@@ -3,6 +3,7 @@ const EventEmitter = require('events');
 const cron = require('node-cron');
 const { performance } = require('perf_hooks');
 const { executeOnAsync } = require('q3-schema-utils');
+const { invoke } = require('lodash');
 const SchedulerSchema = require('./schema');
 const runner = require('./runner');
 const { makePayload } = require('./utils');
@@ -18,10 +19,10 @@ module.exports = {
   __$db: Scheduler,
   on: Emitter.on.bind(Emitter),
 
-  queue: async (name, data) => {
+  queue: async (name, data, priority = 1) => {
     const job = await Scheduler.add({
       payload: makePayload(data),
-      priority: 1,
+      priority,
       name,
     });
 
@@ -40,13 +41,15 @@ module.exports = {
       },
     ),
 
-  start: (directory) => {
+  start: (directory, maxPrioritySize) => {
     const { execute } = runner(directory);
     const primary = cron.schedule(
       '*/5 * * * * *',
       async () => {
         const start = performance.now();
-        const curr = await Scheduler.getQueued();
+        const curr = await Scheduler.getQueued(
+          maxPrioritySize,
+        );
 
         const emitTo = (name) =>
           Emitter.emit(name, curr.name);
@@ -70,17 +73,17 @@ module.exports = {
       },
     );
 
-    const secondary = cron.schedule(
-      '*/20 * * * *',
-      async () => {
-        await Scheduler.lookForLockedJobs();
-      },
-    );
+    const secondary =
+      maxPrioritySize === 1
+        ? cron.schedule('*/20 * * * *', async () => {
+            await Scheduler.lookForLockedJobs();
+          })
+        : null;
 
     return {
       stop: () => {
-        primary.stop();
-        secondary.stop();
+        invoke(primary, 'stop');
+        invoke(secondary, 'stop');
       },
     };
   },

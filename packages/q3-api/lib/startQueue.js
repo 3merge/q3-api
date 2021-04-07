@@ -4,35 +4,41 @@ process.env.PURPOSE = 'queue';
 
 const fs = require('fs');
 const path = require('path');
-const locale = require('q3-locale');
+
 const Scheduler = require('q3-core-scheduler');
+const cluster = require('cluster');
 const core = require('./config/core');
 const mongooseInstance = require('./config/mongoose');
 
-module.exports = (location) => {
-  const invokeWithLocation = (fn) => () => fn(location);
+const connectToMongooseInstanceWithDefaultPoolSize = () =>
+  mongooseInstance.connect(process.env.CONNECTION, {
+    poolSize: 5,
+  });
+
+const forkForEachScheduledPriorityLevel = () =>
+  Array.from({ length: 3 }).forEach(cluster.fork);
+
+module.exports = async (location) => {
   const models = path.join(location, './models');
 
   // eslint-disable-next-line
   if (fs.existsSync(models)) require(models);
 
-  return mongooseInstance
-    .connect(process.env.CONNECTION)
-    .then(() =>
-      // eslint-disable-next-line
-      require('q3-plugin-changelog/lib/changestream')(
-        location,
-      ),
-    )
-    .then(invokeWithLocation(core))
-    .then(invokeWithLocation(locale))
-    .then(invokeWithLocation(Scheduler.seed))
-    .then(invokeWithLocation(Scheduler.start))
-    .then(() => {
-      if (process.env.NODE_ENV !== 'production')
-        // eslint-disable-next-line
-        console.log('Started queuing service');
+  await connectToMongooseInstanceWithDefaultPoolSize();
+  core(location);
 
-      return Scheduler;
-    });
+  if (cluster.isMaster) {
+    // eslint-disable-next-line
+    await require('q3-plugin-changelog/lib/changestream')(
+      location,
+    );
+
+    await Scheduler.seed(location);
+    forkForEachScheduledPriorityLevel();
+  } else {
+    await Scheduler.start(location, cluster.worker.id);
+
+    // eslint-disable-next-line
+    console.log(`Queued on worker #${cluster.worker.id}`);
+  }
 };

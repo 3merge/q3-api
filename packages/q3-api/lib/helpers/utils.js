@@ -32,6 +32,7 @@ const toUndefined = (v) =>
 
 const toQuery = (req = {}) => {
   const { query } = parse(req);
+
   delete query.template;
 
   if (query.ids) {
@@ -58,7 +59,6 @@ const setExecutableTemplateVariablesInRequest = (
   set(req, '$datasource', get(req, 'datasource.modelName'));
   set(req, '$query', toQuery(req));
   set(req, '$session', execPurgeSessionAppConfig(req));
-
   return controller(req, res);
 };
 

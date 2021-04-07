@@ -38,7 +38,7 @@ describe('Scheduler', () => {
   it('should walk fixtures directory', async (done) => {
     const name = 'onRecurring@minutely';
     await Scheduler.seed(__dirname);
-    await Scheduler.start(__dirname, 10);
+    await Scheduler.start(__dirname);
 
     setTimeout(async () => {
       await expectFromScheduler({
@@ -66,7 +66,7 @@ describe('Scheduler', () => {
     });
 
     await Scheduler.queue('onSingle', payload);
-    await Scheduler.start(__dirname, 10);
+    await Scheduler.start(__dirname);
 
     return setTimeout(() => {
       expectFromScheduler({
@@ -87,7 +87,7 @@ describe('Scheduler', () => {
     });
 
     await Scheduler.queue('onSingle');
-    await Scheduler.start(__dirname, 10);
+    await Scheduler.start(__dirname);
 
     return setTimeout(() => {
       expectFromScheduler({
@@ -99,16 +99,20 @@ describe('Scheduler', () => {
     }, 50);
   });
 
-  it('should re-start jobs', async () => {
+  it('should re-start jobs', async (done) => {
     const { _id } = await Scheduler.__$db.create({
       name: 'staller',
       status: 'Queued',
       due: moment().subtract(30, 'minute').toDate(),
     });
 
-    await Scheduler.start(__dirname, 10);
-    return expect(
-      Scheduler.__$db.findById(_id),
-    ).resolves.toHaveProperty('status', 'Stalled');
+    await Scheduler.start(__dirname);
+
+    setTimeout(() => {
+      expect(
+        Scheduler.__$db.findById(_id),
+      ).resolves.toHaveProperty('status', 'Stalled');
+      done();
+    }, 150);
   });
 });

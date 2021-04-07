@@ -1,0 +1,7 @@
+[
+  {
+    "role": ["Public"],
+    "name": "onCharacterCollection",
+    "priority": 3
+  }
+]
