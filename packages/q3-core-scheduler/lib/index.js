@@ -56,7 +56,7 @@ module.exports = {
 
         // potentially been cleared already
         // must be lower down as there's a brief delay
-        invoke(primary, 'start');
+        invoke(primary, 'stop');
 
         try {
           if (curr) {
@@ -75,7 +75,7 @@ module.exports = {
           await Scheduler.stall(curr, e);
         }
 
-        invoke(primary, 'stop');
+        invoke(primary, 'start');
       },
     );
 
