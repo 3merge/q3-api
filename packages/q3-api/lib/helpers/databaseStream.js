@@ -19,7 +19,9 @@ class CollectionWatch extends EventEmitter {
   }
 
   init() {
-    Object.values(mongoose.models).forEach((Model) =>
+    Object.values(mongoose.models).forEach((Model) => {
+      if (Model.baseModelName) return;
+
       Model.watch()
         .on('change', (args) => {
           this.emit(REFRESH, {
@@ -30,8 +32,8 @@ class CollectionWatch extends EventEmitter {
         })
         .on('error', () => {
           // noop
-        }),
-    );
+        });
+    });
 
     return this;
   }
