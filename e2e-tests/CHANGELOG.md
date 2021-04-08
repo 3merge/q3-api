@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.14.4](https://github.com/3merge/q3-api/compare/v1.14.3...v1.14.4) (2021-04-08)
+
+**Note:** Version bump only for package e2e-tests
+
+
+
+
+
 ## [1.14.3](https://github.com/3merge/q3-api/compare/v1.14.2...v1.14.3) (2021-04-07)
 
 **Note:** Version bump only for package e2e-tests
