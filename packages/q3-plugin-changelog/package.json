@@ -1,6 +1,6 @@
 {
   "name": "q3-plugin-changelog",
-  "version": "1.14.3",
+  "version": "1.15.0",
   "main": "lib/index.js",
   "dependencies": {
     "alphabetize-object-keys": "^3.0.0",
@@ -11,7 +11,7 @@
     "jsondiffpatch": "^0.4.1",
     "lodash": "^4.17.20",
     "mongoose": "^5.11.8",
-    "q3-schema-utils": "^1.14.3"
+    "q3-schema-utils": "^1.15.0"
   },
   "jest": {
     "verbose": true,

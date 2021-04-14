@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.15.0](https://github.com/3merge/q3-api/compare/v1.14.4...v1.15.0) (2021-04-14)
+
+
+### Features
+
+* acknowledge query flag ([361ef63](https://github.com/3merge/q3-api/commit/361ef63d09f82d4a277bca6096468cb027ce1807))
+
+
+
+
+
 ## [1.14.4](https://github.com/3merge/q3-api/compare/v1.14.3...v1.14.4) (2021-04-08)
 
 
