@@ -1,6 +1,7 @@
 const { exception } = require('q3-core-responder');
 const aqp = require('api-query-params');
 const { executeOn } = require('q3-schema-utils');
+const { get } = require('lodash');
 const sift = require('sift');
 const { isSimpleSubDocument } = require('../../utils');
 
@@ -26,7 +27,7 @@ module.exports = {
   },
 
   async Patch(
-    { marshal, params, body, parent, fieldName },
+    { marshal, params, body, parent, fieldName, query },
     res,
   ) {
     suggestPutRequest(parent, fieldName);
@@ -37,10 +38,12 @@ module.exports = {
       body,
     );
 
-    res.update({
-      message: res.say('subResourceUpdated'),
-      [fieldName]: marshal(parent[fieldName]),
-    });
+    return get(query, 'acknowledge')
+      ? res.acknowledge()
+      : res.update({
+          message: res.say('subResourceUpdated'),
+          [fieldName]: marshal(parent[fieldName]),
+        });
   },
 
   async PatchMany(

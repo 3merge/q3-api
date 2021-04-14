@@ -107,6 +107,26 @@ describe('SubController route handlers', () => {
         req.parent.updateSubDocument,
       ).toHaveBeenCalledWith('friends', '1', args);
     });
+
+    it('should call on acknowledge', async () => {
+      const args = { name: 'Jon' };
+      req.body = args;
+      req.fieldName = 'friends';
+      req.params.fieldID = '1';
+      req.parent = {
+        updateSubDocument: jest.fn(),
+        schema: {
+          path: undefined,
+        },
+      };
+
+      req.query = {
+        acknowledge: true,
+      };
+
+      await Patch(req, res);
+      expect(res.acknowledge).toHaveBeenCalled();
+    });
   });
 
   describe('PatchMany', () => {
