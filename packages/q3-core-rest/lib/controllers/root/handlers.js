@@ -3,7 +3,7 @@ const queryParser = require('../../queryParser');
 
 const clean = (o) => {
   if (Array.isArray(o)) return o.map(clean);
-  if (!isObject(o)) return o;
+  if (!isObject(o) || o instanceof Date) return o;
 
   return Object.entries(o).reduce((acc, [key, v]) => {
     if (v !== undefined)
