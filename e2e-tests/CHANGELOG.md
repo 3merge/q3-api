@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.16.0](https://github.com/3merge/q3-api/compare/v1.15.0...v1.16.0) (2021-04-15)
+
+
+### Features
+
+* sub document query flags ([#126](https://github.com/3merge/q3-api/issues/126)) ([9aafb8f](https://github.com/3merge/q3-api/commit/9aafb8fc8d8321cfd3a44300cb7f8cd71c680429))
+
+
+
+
+
 # [1.15.0](https://github.com/3merge/q3-api/compare/v1.14.4...v1.15.0) (2021-04-14)
 
 **Note:** Version bump only for package e2e-tests
