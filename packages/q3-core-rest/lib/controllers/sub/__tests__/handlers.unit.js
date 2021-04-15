@@ -48,7 +48,6 @@ describe('SubController route handlers', () => {
       req.fieldName = 'foo';
       req.params.fieldID = '1';
       await Remove(req, res);
-      expect(res.acknowledge).toHaveBeenCalled();
       expect(Model.removeSubDocument).toHaveBeenCalledWith(
         'foo',
         '1',
@@ -61,7 +60,6 @@ describe('SubController route handlers', () => {
       req.fieldName = 'foo';
       req.query.ids = ['1', '2'];
       await RemoveMany(req, res);
-      expect(res.acknowledge).toHaveBeenCalled();
       expect(
         Model.removeSubDocument,
       ).toHaveBeenCalledWith('foo', ['1', '2']);
@@ -81,7 +79,6 @@ describe('SubController route handlers', () => {
       };
 
       await Put(req, res);
-      expect(res.create).toHaveBeenCalled();
       expect(req.parent.set).toHaveBeenCalledWith({
         friends: args,
       });
@@ -102,30 +99,9 @@ describe('SubController route handlers', () => {
       };
 
       await Patch(req, res);
-      expect(res.update).toHaveBeenCalled();
       expect(
         req.parent.updateSubDocument,
       ).toHaveBeenCalledWith('friends', '1', args);
-    });
-
-    it('should call on acknowledge', async () => {
-      const args = { name: 'Jon' };
-      req.body = args;
-      req.fieldName = 'friends';
-      req.params.fieldID = '1';
-      req.parent = {
-        updateSubDocument: jest.fn(),
-        schema: {
-          path: undefined,
-        },
-      };
-
-      req.query = {
-        acknowledge: true,
-      };
-
-      await Patch(req, res);
-      expect(res.acknowledge).toHaveBeenCalled();
     });
   });
 
@@ -143,7 +119,7 @@ describe('SubController route handlers', () => {
       };
 
       await PatchMany(req, res);
-      expect(res.update).toHaveBeenCalled();
+
       expect(
         req.parent.updateSubDocuments,
       ).toHaveBeenCalledWith('friends', ['1', '2'], args);

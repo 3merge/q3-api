@@ -52,4 +52,38 @@ describe('q3-core-rest', () => {
     expect(sample).not.toHaveProperty('createdAt');
     expect(sample).not.toHaveProperty('updatedAt');
   });
+
+  it('should return full document', async () => {
+    const {
+      body: {
+        student: { id },
+      },
+    } = await agent
+      .post('/students')
+      .set({ Authorization })
+      .send({})
+      .expect(201);
+
+    const {
+      body: {
+        samples: [{ id: sampleId }],
+      },
+    } = await agent
+      .post(`/students/${id}/samples`)
+      .set({ Authorization })
+      .send({ test: 'Foo' })
+      .expect(201);
+
+    const {
+      body: { full },
+    } = await agent
+      .patch(
+        `/students/${id}/samples/${sampleId}?fullReceipt=true`,
+      )
+      .set({ Authorization })
+      .expect(200);
+
+    expect(full).toHaveProperty('id');
+    expect(full).not.toHaveProperty('socialStatus');
+  });
 });

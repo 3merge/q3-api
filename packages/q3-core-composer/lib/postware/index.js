@@ -9,6 +9,7 @@ exports.request = async (req, res, next) => {
 
 exports.response = mung.jsonAsync(async (body, req) => {
   await runRedaction(req, body, 'response');
+
   kill();
 
   return body;

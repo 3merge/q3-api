@@ -16,6 +16,7 @@ const flatten = (a = [], b = []) => {
   const arr = a.concat(b).flat();
   arr.forEach(m.use.bind(m));
   m.root = arr.pop();
+
   return m;
 };
 
