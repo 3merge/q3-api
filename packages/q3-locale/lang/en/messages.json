@@ -19,6 +19,7 @@
   "resourceUpdated": "Successfully updated in the database",
   "subResourceUpdated": "Successfully updated in the database",
   "newSubResourceAdded": "Successfully added to the database",
+  "subResourceRemoved": "Successfully removed from the database",
   "Authorization": "Forbidden from accessing",
   "Authentication": "Must log in to perform this action",
   "Validation": "Request did not pass server validation",

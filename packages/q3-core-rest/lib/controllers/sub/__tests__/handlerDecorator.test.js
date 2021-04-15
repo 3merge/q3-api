@@ -51,7 +51,11 @@ describe('handlerDecorator', () => {
       query: { fullReceipt: true },
     };
 
-    const res = { acknowledge: jest.fn() };
+    const res = {
+      acknowledge: jest.fn(),
+      ok: jest.fn(),
+    };
+
     const fn = jest.fn().mockReturnValue({
       defaultResponseRouter: 'acknowledge',
       message: 'test',
@@ -62,7 +66,7 @@ describe('handlerDecorator', () => {
 
     await handler(fn)(req, res);
 
-    expect(res.acknowledge).toHaveBeenCalled();
+    expect(res.ok).toHaveBeenCalled();
     expect(req.marshal).toHaveBeenCalledWith({
       foo: 1,
     });

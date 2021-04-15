@@ -23,23 +23,19 @@ module.exports = (Controller) => {
           }
         : args;
 
-    const exec = (rest) =>
-      isFunction(res[defaultResponseRouter])
-        ? invoke(
-            res,
-            defaultResponseRouter,
-            withMessage(rest),
-          )
+    const exec = (method, rest) =>
+      isFunction(res[method])
+        ? invoke(res, method, withMessage(rest))
         : res.update(withMessage(rest));
 
     if (get(query, 'acknowledge')) {
       res.acknowledge();
     } else if (get(query, 'fullReceipt')) {
-      exec({
+      exec('ok', {
         full: marshal(data),
       });
     } else {
-      exec({
+      exec(defaultResponseRouter, {
         [fieldName]: marshal(data[fieldName]),
       });
     }
