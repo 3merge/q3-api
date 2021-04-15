@@ -1,4 +1,9 @@
-const { get, invoke, isFunction } = require('lodash');
+const {
+  get,
+  invoke,
+  isFunction,
+  isString,
+} = require('lodash');
 
 module.exports = (Controller) => {
   const Forwarder = async (req, res) => {
@@ -10,16 +15,22 @@ module.exports = (Controller) => {
 
     const { fieldName, marshal, query } = req;
 
+    const withMessage = (args) =>
+      isString(message) && isFunction(res.say)
+        ? {
+            message: res.say(message),
+            ...args,
+          }
+        : args;
+
     const exec = (rest) =>
       isFunction(res[defaultResponseRouter])
-        ? invoke(res, defaultResponseRouter, {
-            message: res.say(message),
-            ...rest,
-          })
-        : res.update({
-            message: res.say(message),
-            ...rest,
-          });
+        ? invoke(
+            res,
+            defaultResponseRouter,
+            withMessage(rest),
+          )
+        : res.update(withMessage(rest));
 
     if (get(query, 'acknowledge')) {
       res.acknowledge();
