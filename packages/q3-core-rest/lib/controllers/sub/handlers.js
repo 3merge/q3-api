@@ -1,7 +1,6 @@
 const { exception } = require('q3-core-responder');
 const aqp = require('api-query-params');
 const { executeOn } = require('q3-schema-utils');
-const { get } = require('lodash');
 const sift = require('sift');
 const { isSimpleSubDocument } = require('../../utils');
 
@@ -26,10 +25,7 @@ module.exports = {
     });
   },
 
-  async Patch(
-    { marshal, params, body, parent, fieldName, query },
-    res,
-  ) {
+  async Patch({ params, body, parent, fieldName }) {
     suggestPutRequest(parent, fieldName);
 
     await parent.updateSubDocument(
@@ -38,18 +34,14 @@ module.exports = {
       body,
     );
 
-    return get(query, 'acknowledge')
-      ? res.acknowledge()
-      : res.update({
-          message: res.say('subResourceUpdated'),
-          [fieldName]: marshal(parent[fieldName]),
-        });
+    return {
+      data: parent,
+      message: 'subResourceUpdated',
+      defaultResponseRouter: 'update',
+    };
   },
 
-  async PatchMany(
-    { marshal, query, body, parent, fieldName },
-    res,
-  ) {
+  async PatchMany({ query, body, parent, fieldName }) {
     suggestPutRequest(parent, fieldName);
     const ids = sanitizeQueryIds(query.ids);
 
@@ -64,16 +56,14 @@ module.exports = {
 
     await parent.updateSubDocuments(fieldName, ids, body);
 
-    res.update({
-      message: res.say('subResourceUpdated'),
-      [fieldName]: marshal(parent[fieldName]),
-    });
+    return {
+      data: parent,
+      message: 'subResourceUpdated',
+      defaultResponseRouter: 'update',
+    };
   },
 
-  async Post(
-    { body, marshal, files, parent, fieldName },
-    res,
-  ) {
+  async Post({ body, files, parent, fieldName }) {
     if (isSimpleSubDocument(parent, fieldName))
       exception('Conflict').msg('usePutRequest').throw();
 
@@ -84,35 +74,40 @@ module.exports = {
       await parent.save();
     }
 
-    res.create({
-      message: res.say('newSubResourceAdded'),
-      [fieldName]: marshal(parent[fieldName]),
-    });
+    return {
+      data: parent,
+      message: 'newSubResourceAdded',
+      defaultResponseRouter: 'create',
+    };
   },
 
-  async Put({ body, marshal, fieldName, parent }, res) {
+  async Put({ body, fieldName, parent }) {
     await parent.set({ [fieldName]: body }).save();
-
-    res.create({
-      message: res.say('newSubResourceAdded'),
-      [fieldName]: marshal(parent[fieldName]),
-    });
+    return {
+      data: parent,
+      message: 'newSubResourceAdded',
+      defaultResponseRouter: 'update',
+    };
   },
 
-  async Remove({ parent, fieldName, params }, res) {
+  async Remove({ parent, fieldName, params }) {
     await parent.removeSubDocument(
       fieldName,
       params.fieldID,
     );
-
-    res.acknowledge();
+    return {
+      data: parent,
+      message: 'subResourceRemoved',
+      defaultResponseRouter: 'acknowledge',
+    };
   },
 
-  async RemoveMany(
-    { parent, fieldName, query: { ids } },
-    res,
-  ) {
+  async RemoveMany({ parent, fieldName, query: { ids } }) {
     await parent.removeSubDocument(fieldName, ids);
-    res.acknowledge();
+    return {
+      data: parent,
+      message: 'subResourceRemoved',
+      defaultResponseRouter: 'acknowledge',
+    };
   },
 };

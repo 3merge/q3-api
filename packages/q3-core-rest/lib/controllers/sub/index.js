@@ -13,6 +13,7 @@ const {
   Remove,
   RemoveMany,
 } = require('./handlers');
+const deco = require('./handlerDecorator');
 
 const appendValidationForMultiOp = (ctrl) => {
   // eslint-disable-next-line
@@ -64,6 +65,27 @@ module.exports = class SubDocumentControllerCommander extends (
     });
   }
 
+  getAuthorization() {
+    return [
+      redact(this.collectionName)
+        .requireField(this.field)
+        .inRequest('body')
+        .inResponse(this.field)
+        .withPrefix(this.field)
+        .done(),
+
+      redact(this.collectionName).inResponse('full').done(),
+    ];
+  }
+
+  decorateController(Ctrl) {
+    // eslint-disable-next-line
+    Ctrl.authorization = this.getAuthorization();
+    // eslint-disable-next-line
+    Ctrl.validation = this.getChildValidationSchema();
+    return deco(Ctrl);
+  }
+
   getListController(path) {
     List.authorization = [
       redact(this.collectionName)
@@ -81,75 +103,37 @@ module.exports = class SubDocumentControllerCommander extends (
   }
 
   getPostController(path) {
-    Post.authorization = [
-      redact(this.collectionName)
-        .requireField(this.field)
-        .inRequest('body')
-        .inResponse(this.field)
-        .withPrefix(this.field)
-        .done(),
-    ];
-
-    Post.validation = this.getChildValidationSchema();
-    return this.makePost(path, Post);
+    return this.makePost(
+      path,
+      this.decorateController(Post),
+    );
   }
 
   getPutController(path) {
-    Put.authorization = [
-      redact(this.collectionName)
-        .requireField(this.field)
-        .inRequest('body')
-        .inResponse(this.field)
-        .withPrefix(this.field)
-        .done(),
-    ];
-
-    Put.validation = this.getChildValidationSchema();
-    return this.makePut(path, Put);
+    return this.makePut(path, this.decorateController(Put));
   }
 
   getPatchController(path) {
-    Patch.authorization = [
-      redact(this.collectionName)
-        .requireField(this.field)
-        .inRequest('body')
-        .inResponse(this.field)
-        .withPrefix(this.field)
-        .done(),
-    ];
-
-    Patch.validation = this.getChildValidationSchema();
-    return this.makePatch(path, Patch);
+    return this.makePatch(
+      path,
+      this.decorateController(Patch),
+    );
   }
 
   getPatchManyController(path) {
-    PatchMany.authorization = [
-      redact(this.collectionName)
-        .requireField(this.field)
-        .inRequest('body')
-        .inResponse(this.field)
-        .withPrefix(this.field)
-        .done(),
-    ];
-
+    PatchMany.authorization = this.getAuthorization();
     appendValidationForMultiOp(PatchMany);
-    return this.makePatch(path, PatchMany);
+    return this.makePatch(path, deco(PatchMany));
   }
 
   getDeleteController(path) {
-    Remove.authorization = [
-      redact(this.collectionName).done(),
-    ];
-
-    return this.makeDelete(path, Remove);
+    Remove.authorization = this.getAuthorization();
+    return this.makeDelete(path, deco(Remove));
   }
 
   getDeleteManyController(path) {
-    RemoveMany.authorization = [
-      redact(this.collectionName).done(),
-    ];
-
+    RemoveMany.authorization = this.getAuthorization();
     appendValidationForMultiOp(RemoveMany);
-    return this.makeDelete(path, RemoveMany);
+    return this.makeDelete(path, deco(RemoveMany));
   }
 };
