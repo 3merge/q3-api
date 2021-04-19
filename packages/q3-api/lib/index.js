@@ -108,6 +108,8 @@ const Q3 = {
     models.Notifications.saveToSessionDownloads(...params),
 };
 
+Q3.Database = mongoose;
+
 Q3.$app = app;
 Q3.$mongoose = mongoose;
 Q3.$i18 = i18next;

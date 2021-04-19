@@ -84,5 +84,33 @@
     "role": "Dev",
     "ownership": "Any",
     "fields": "*"
+  },
+  {
+    "coll": "tests",
+    "op": "Read",
+    "role": "Public",
+    "ownership": "Any",
+    "fields": "*"
+  },
+  {
+    "coll": "tests",
+    "op": "Create",
+    "role": "Public",
+    "ownership": "Any",
+    "fields": "*"
+  },
+  {
+    "coll": "tests",
+    "op": "Update",
+    "role": "Public",
+    "ownership": "Any",
+    "fields": "*"
+  },
+  {
+    "coll": "tests",
+    "op": "Delete",
+    "role": "Public",
+    "ownership": "Any",
+    "fields": "*"
   }
 ]
