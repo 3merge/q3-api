@@ -86,7 +86,7 @@ module.exports = {
     return {
       data: parent,
       message: 'newSubResourceAdded',
-      defaultResponseRouter: 'update',
+      defaultResponseRouter: 'create',
     };
   },
 
