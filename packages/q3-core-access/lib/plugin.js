@@ -164,7 +164,7 @@ module.exports = (schema) => {
         type: mongoose.Schema.Types.ObjectId,
         autopopulate: true,
         autopopulateSelect:
-          'id _id firstName lastName email',
+          'id _id firstName lastName email photo featuredUpload',
         ref: 'q3-api-users',
         systemOnly: true,
         private: true,
