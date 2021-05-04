@@ -48,7 +48,11 @@ module.exports = class SubDocumentControllerCommander extends (
           params: { resourceID },
         } = req;
 
-        const service = datasource.findById(resourceID);
+        const service = datasource
+          .findById(resourceID)
+          .setOptions({
+            redact: true,
+          });
 
         const doc = await service
           .select(`+${this.field}`)
