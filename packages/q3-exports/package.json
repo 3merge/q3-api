@@ -1,6 +1,6 @@
 {
   "name": "q3-exports",
-  "version": "1.16.5",
+  "version": "1.16.6",
   "main": "lib/index.js",
   "dependencies": {
     "csv-writer": "^1.6.0",
@@ -11,7 +11,7 @@
     "pdfmake": "^0.1.68"
   },
   "devDependencies": {
-    "q3-test-utils": "^1.16.5"
+    "q3-test-utils": "^1.16.6"
   },
   "jest": {
     "verbose": true,
