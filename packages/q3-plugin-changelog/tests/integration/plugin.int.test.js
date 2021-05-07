@@ -27,8 +27,14 @@ describe('changelog', () => {
     const up = async (args) =>
       new Promise((r) => {
         setTimeout(async () => {
-          await Model.updateOne({ _id: doc._id }, args);
-          r();
+          r(
+            await Model.updateOne(
+              {
+                _id: doc._id,
+              },
+              args,
+            ),
+          );
         }, 50);
       });
 
@@ -81,5 +87,25 @@ describe('changelog', () => {
         .model('without-change', TempSchema)
         .getChangelogProperties(),
     ).toBeNull();
+  });
+
+  it('should save the last modified user', async () => {
+    const doc = await Model.create({
+      title: 'New',
+    });
+
+    doc.topics.push({
+      name: 'Debugging',
+    });
+
+    await doc.save();
+
+    expect(doc.get('lastModifiedBy')).toHaveProperty(
+      'firstName',
+    );
+
+    expect(
+      doc.topics[0].get('lastModifiedBy'),
+    ).toBeUndefined();
   });
 });

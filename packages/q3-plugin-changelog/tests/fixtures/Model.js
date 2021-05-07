@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const plugin = require('../../lib');
 
+mongoose.plugin(plugin);
+
 const Publication = new mongoose.Schema({
   name: String,
 });
@@ -30,8 +32,6 @@ Schema.pre('save', function stubSessionDetails() {
     },
   };
 });
-
-Schema.plugin(plugin);
 
 module.exports = mongoose.model(
   'testing-changelog',
