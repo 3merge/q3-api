@@ -1,13 +1,8 @@
 /* eslint-disable no-param-reassign, func-names */
-const { pick, get, size, map } = require('lodash');
-const mongoose = require('mongoose');
+const { pick, get, size, map, invoke } = require('lodash');
 const { getFromChangelog } = require('./utils');
 
 module.exports = (schema) => {
-  schema.add({
-    lastModifiedBy: mongoose.SchemaTypes.Mixed,
-  });
-
   schema.statics.getChangelogProperties = function () {
     const props = get(this, 'schema.options.changelog');
     return size(props) ? props : null;
@@ -28,6 +23,8 @@ module.exports = (schema) => {
   };
 
   schema.pre('save', function copyQ3UserData() {
+    if (invoke(this, 'parent')) return;
+
     this.set(
       'lastModifiedBy',
       pick(get(this, '__$q3.USER', {}), [

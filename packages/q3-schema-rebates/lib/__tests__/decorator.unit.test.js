@@ -240,6 +240,19 @@ describe('RebateDecorator', () => {
       expect(r.evaluate({ price: 100 })).toBe(12);
     });
 
+    it('should reference dynamic price', async () => {
+      const r = await M.create({
+        value: 12,
+        symbol: '%',
+        currency: 'CAD',
+        name: '12% off',
+        description: 'Req',
+        requiredSkus: 'Foo',
+      });
+
+      expect(r.evaluate({ getPrice: () => 50 })).toBe(6);
+    });
+
     it('should reduce by x-percent', async () => {
       const r = await M.create({
         value: 10,
