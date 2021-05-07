@@ -159,7 +159,13 @@ class RebateDecorator {
     return items.sort((a, b) => multiply(b) - multiply(a));
   }
 
-  evaluate({ price, quantity }) {
+  evaluate(args = {}) {
+    const { getPrice, quantity } = args;
+    const price =
+      getPrice && typeof getPrice === 'function'
+        ? getPrice(this)
+        : args.price;
+
     const { tiers = [] } = this;
     let { value } = this;
     let sum = price;
