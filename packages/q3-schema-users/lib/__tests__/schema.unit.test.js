@@ -32,7 +32,7 @@ describe('UserModel validation', () => {
       expect.objectContaining({
         verified: false,
         frozen: false,
-        active: true,
+
         loginAttempts: 0,
         lang: 'en-CA',
       }),

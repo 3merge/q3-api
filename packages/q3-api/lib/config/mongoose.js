@@ -24,12 +24,7 @@ mongoose.set('useUnifiedTopology', true);
 mongoose.plugin(context);
 mongoose.plugin(autopopulate);
 mongoose.plugin(locking);
-
-mongoose.plugin(dedupe, {
-  options: {
-    active: true,
-  },
-});
+mongoose.plugin(dedupe);
 
 mongoose.plugin((schema) => {
   if (schema.options.withVirtuals)

@@ -10,9 +10,6 @@ describe('connectToQueryParser', () => {
     const obj = { originalUrl: '/example?' };
     expect(connectToQueryParser(obj)).toHaveProperty(
       'query',
-      {
-        active: true,
-      },
     );
   });
 
@@ -27,7 +24,6 @@ describe('connectToQueryParser', () => {
         age: { $lte: 30 },
         createdAt: { $gt: new Date('2021-01-01') },
         _id: { $in: [1, 2, 3] },
-        active: true,
       },
     );
   });

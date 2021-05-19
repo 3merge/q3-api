@@ -24,7 +24,6 @@ const SearchParams = async (
     const params = Object.assign(
       model.getFuzzyQuery(search),
       where,
-      { active: true },
     );
 
     const values = await Promise.all(

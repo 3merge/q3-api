@@ -34,7 +34,6 @@ beforeAll(async () => {
   await Q3.connect();
 
   const sup = await Users.create({
-    active: true,
     firstName: 'Mike',
     lastName: 'Ibberson',
     verified: true,

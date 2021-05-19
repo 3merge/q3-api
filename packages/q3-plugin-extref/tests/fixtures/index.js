@@ -18,7 +18,6 @@ module.exports = {
           seed(Model.collection.collectionName).map(
             (item) => ({
               ...item,
-              active: true,
             }),
           ),
         ),

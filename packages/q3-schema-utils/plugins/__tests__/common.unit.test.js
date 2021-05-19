@@ -21,7 +21,6 @@ const pluginSchemaEnabled = new mongoose.Schema(
 );
 
 const stub = {
-  active: true,
   name: 'Foo',
   dogs: [
     { breed: 'Retriever' },

@@ -99,9 +99,6 @@ describe('Handlers', () => {
       await List(req, res);
       expect(Model.paginate).toHaveBeenCalledWith(
         expect.objectContaining({
-          active: true,
-        }),
-        expect.objectContaining({
           limit: 25,
           page: 1,
         }),

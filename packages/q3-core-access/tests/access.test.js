@@ -133,7 +133,6 @@ describe('AccessControlPlugin integration', () => {
         {
           name: firstName,
           specialCondition: 4,
-          active: true,
           featured: false,
           belongs: userID,
         },

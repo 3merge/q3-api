@@ -59,7 +59,6 @@ async function archiveMany(ids) {
 async function findStrictly(id, options = {}) {
   const doc = await this.findOne({
     _id: id,
-    active: true,
   })
     .setOptions({
       redact: true,

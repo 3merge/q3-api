@@ -32,9 +32,6 @@ module.exports = (req, Model) => {
     query: Object.assign(
       execSearchBuildMethod(Model, datasource, search),
       castObjectIds(where),
-      {
-        active: true,
-      },
     ),
     select,
     limit,

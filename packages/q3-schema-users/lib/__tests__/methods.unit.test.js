@@ -88,14 +88,12 @@ describe('static find abstractions', () => {
     await Decorator.findByApiKey.call(MockModel, '123');
     expect(MockModel.findOne).toHaveBeenCalledWith({
       apiKeys: '123',
-      active: true,
     });
   });
 
   it('should query active users', async () => {
     await Decorator.findByEmail.call(inst, email);
     expect(findOne).toHaveBeenCalledWith({
-      active: true,
       email,
     });
   });
@@ -106,7 +104,6 @@ describe('static find abstractions', () => {
       password: { $exists: true },
       email,
       verified: true,
-      active: true,
     });
   });
 
@@ -115,7 +112,6 @@ describe('static find abstractions', () => {
     expect(findOne).toHaveBeenCalledWith({
       password: { $exists: true },
       verified: true,
-      active: true,
       _id: id,
     });
   });
@@ -125,7 +121,6 @@ describe('static find abstractions', () => {
     expect(findOne).toHaveBeenCalledWith(
       {
         verified: false,
-        active: true,
         email,
       },
       'accountVerified',
@@ -259,7 +254,6 @@ describe('isPermitted getter', () => {
   it('should return truthy', () => {
     const cls = new Decorator();
     Object.assign(cls, {
-      active: true,
       frozen: false,
       loginAttempts: 6,
     });
@@ -269,7 +263,6 @@ describe('isPermitted getter', () => {
   it('should return falsy', () => {
     const cls = new Decorator();
     Object.assign(cls, {
-      active: true,
       frozen: false,
       loginAttempts: 0,
       role: 'HEY',
@@ -284,7 +277,7 @@ test('deactivate should render document as default', async () => {
     set,
     save,
     verified: true,
-    active: true,
+
     password: 'foo!',
     secret: 'bar!',
   });
