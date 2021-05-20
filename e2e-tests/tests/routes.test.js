@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const setup = require('../fixtures');
 const { teardown } = require('../helpers');
 
@@ -18,6 +19,28 @@ beforeAll(async () => {
 afterAll(teardown);
 
 describe('q3-api', () => {
+  describe('/documentation', () => {
+    it('should return token', async () => {
+      process.env.FRESHBOOKS_SECRET = 123;
+      process.env.FRESHBOOKS_ACCOUNT_NAME = 'Foo';
+      process.env.FRESHBOOKS_ACCOUNT_EMAIL = 'Bar';
+
+      const {
+        body: { token },
+      } = await agent
+        .get('/documentation')
+        .set({ Authorization });
+
+      expect(token).toBeDefined();
+      expect(
+        jwt.verify(token, process.env.FRESHBOOKS_SECRET),
+      ).toMatchObject({
+        name: process.env.FRESHBOOKS_ACCOUNT_NAME,
+        email: process.env.FRESHBOOKS_ACCOUNT_EMAIL,
+      });
+    });
+  });
+
   describe('/profile', () => {
     it('should return redacted profile information', async () => {
       const {
