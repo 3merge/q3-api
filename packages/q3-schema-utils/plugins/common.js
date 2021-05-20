@@ -1,5 +1,5 @@
 /* eslint-disable func-names, no-param-reassign */
-const { invoke, get } = require('lodash');
+const { invoke, get, isFunction } = require('lodash');
 const mongoose = require('mongoose');
 const { exception } = require('q3-core-responder');
 const { executeOn } = require('..');
@@ -22,19 +22,17 @@ const getPathsRecursively = ([key, v]) => {
 };
 
 const primeForDeletion = async (doc) => {
-  if (typeof doc.onArchive === 'function') {
-    await doc.onArchive();
-  } else {
-    const r = await mongoose.connection.db
-      .collection(`${doc.constructor.modelName}-archives`)
-      .insert(doc);
+  if (isFunction(doc.onArchive)) await doc.onArchive();
 
-    if (r.result.ok) await doc.remove();
-    else
-      exception('InternalError')
-        .msg('couldNotSaveToArchive')
-        .throw();
-  }
+  const r = await mongoose.connection.db
+    .collection(`${doc.constructor.modelName}-archives`)
+    .insert(doc);
+
+  if (r.result.ok) await doc.remove();
+  else
+    exception('InternalError')
+      .msg('couldNotSaveToArchive')
+      .throw();
 };
 
 async function archive(id) {

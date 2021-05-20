@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { first, get } = require('lodash');
+const { first, get, last } = require('lodash');
 const Scheduler = require('q3-core-scheduler');
 const {
   executeMiddlewareOnUpdate,
@@ -67,7 +67,10 @@ function updateRef(...params) {
 
   // eslint-disable-next-line
   return executeMiddlewareOnUpdate(async function () {
-    const reader = QueryMaker.setup(this);
+    const reader = QueryMaker.setup(
+      Object.assign(this, last(params)),
+    );
+
     const values = getReferenceValues(this);
     const queries = [];
 
@@ -122,7 +125,16 @@ module.exports = class Builder {
     s.pre('save', markModifiedLocalVars);
     s.post(
       'save',
-      updateRef(collections, resolveQueryByCollectionName),
+      updateRef(collections, resolveQueryByCollectionName, {
+        active: true,
+      }),
+    );
+
+    s.post(
+      'remove',
+      updateRef(collections, resolveQueryByCollectionName, {
+        active: false,
+      }),
     );
 
     return s;

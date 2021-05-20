@@ -12,7 +12,7 @@ module.exports = (Schema) => {
     update,
   ) {
     const doc = await this.findById(id);
-    return doc.set(update).save();
+    return doc ? doc.set(update).save() : null;
   };
 
   Schema.methods.expectPathToHaveProperty = async function (
