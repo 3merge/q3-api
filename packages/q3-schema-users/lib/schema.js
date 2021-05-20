@@ -45,10 +45,6 @@ const BaseUserModel = new Schema(
       default: 'en-CA',
       enum: ['en-CA', 'fr-CA'],
     },
-    active: {
-      type: Boolean,
-      default: true,
-    },
     verified: {
       type: Boolean,
       default: false,

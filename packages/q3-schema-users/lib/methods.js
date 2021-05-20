@@ -46,12 +46,7 @@ module.exports = class UserAuthDecorator {
   }
 
   get isPermitted() {
-    return (
-      this.active &&
-      this.role &&
-      !this.frozen &&
-      !this.isBlocked
-    );
+    return this.role && !this.frozen && !this.isBlocked;
   }
 
   get name() {
@@ -218,7 +213,6 @@ module.exports = class UserAuthDecorator {
   async deactivate() {
     this.set({
       verified: false,
-      active: false,
       secret: null,
       password: null,
     });

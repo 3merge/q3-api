@@ -31,10 +31,17 @@ const stub = {
 
 const getIds = (a = []) => a.map(({ _id }) => _id);
 
-const expectInactive = async (id) =>
-  expect(await Model.findById(id).exec()).toMatchObject({
-    active: false,
-  });
+const expectInactive = async (id) => {
+  expect(await Model.findById(id).exec()).toBeNull();
+  const r = await mongoose.connection.db
+    .collection(`${Model.modelName}-archives`)
+    .find({
+      _id: mongoose.Types.ObjectId(id),
+    })
+    .toArray();
+
+  expect(r).toHaveLength(1);
+};
 
 const countDogsAfterPush = async (doc, expected) => {
   const { dogs } = await doc.pushSubDocument('dogs', {
@@ -70,7 +77,6 @@ afterAll(async () => {
 describe('Commons plugin', () => {
   describe('Configuration', () => {
     it('schema configure options and paths', () => {
-      expect(Model.schema.path('active')).toBeDefined();
       expect(Model.schema.path('featured')).toBeDefined();
       expect(Model.schema.get('toJSON')).toBeDefined();
       expect(Model.schema.get('toObject')).toBeDefined();

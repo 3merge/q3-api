@@ -98,6 +98,7 @@ describe('Handlers', () => {
     it('should set default paging options', async () => {
       await List(req, res);
       expect(Model.paginate).toHaveBeenCalledWith(
+        {},
         expect.objectContaining({
           limit: 25,
           page: 1,

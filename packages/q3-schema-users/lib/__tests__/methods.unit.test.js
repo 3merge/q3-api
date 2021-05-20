@@ -277,7 +277,6 @@ test('deactivate should render document as default', async () => {
     set,
     save,
     verified: true,
-
     password: 'foo!',
     secret: 'bar!',
   });
@@ -285,7 +284,6 @@ test('deactivate should render document as default', async () => {
   expect(cls).toMatchObject(
     expect.objectContaining({
       verified: false,
-      active: false,
       password: null,
       secret: null,
     }),
