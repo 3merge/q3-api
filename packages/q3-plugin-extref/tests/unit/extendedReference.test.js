@@ -5,7 +5,7 @@ describe('ExtendedReference', () => {
     it('should register save middleware', (done) => {
       const pre = jest.fn();
       const post = jest.fn().mockImplementation((v, fn) => {
-        expect(v).toBe('save');
+        expect(v === 'save' || v === 'remove').toBeTruthy();
         expect(fn).toEqual(expect.any(Function));
         done();
       });

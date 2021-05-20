@@ -211,9 +211,7 @@ describe('Rester', () => {
   });
 
   it('should update the resource', async () => {
-    const { id } = await Foo.findOne({
-      active: true,
-    }).exec();
+    const { id } = await Foo.findOne({}).exec();
     const { body, status } = await request
       .patch(`/foos/${id}`)
       .send({
@@ -230,7 +228,6 @@ describe('Rester', () => {
 
     beforeAll(async () => {
       ({ id } = await Foo.create({
-        active: true,
         name: 'SubRouting',
         children: [
           { isChild: true, term: 'Hello' },

@@ -1,13 +1,10 @@
 /* eslint-disable func-names,no-param-reassign */
 module.exports = (Schema) => {
-  Schema.add({
-    // expected for use archiving plugins
-    active: Boolean,
-  });
+  Schema.add({});
 
   Schema.statics.archive = async function (id) {
     const doc = await this.findById(id);
-    return doc.set({ active: false }).save();
+    return doc.remove();
   };
 
   Schema.statics.findByIdAndModify = async function (
@@ -15,7 +12,7 @@ module.exports = (Schema) => {
     update,
   ) {
     const doc = await this.findById(id);
-    return doc.set(update).save();
+    return doc ? doc.set(update).save() : null;
   };
 
   Schema.methods.expectPathToHaveProperty = async function (

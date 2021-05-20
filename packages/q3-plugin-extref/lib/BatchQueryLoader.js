@@ -116,7 +116,7 @@ class BatchQueryLoader {
         async ([key, { source, projection, ids }]) => {
           if (ids && ids.length) {
             const res = await source
-              .find({ _id: ids, active: true })
+              .find({ _id: ids })
               .setOptions({ skipAutocomplete: true })
               .lean()
               .select(projection)

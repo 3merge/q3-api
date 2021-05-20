@@ -6,25 +6,25 @@ const seed = require('./seed');
 module.exports = {
   ...Models,
 
-  start: async () => {
+  setup: async () => {
     await mongoose.connect(process.env.CONNECTION, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
+  },
 
-    return Promise.allSettled(
+  start: async () =>
+    Promise.allSettled(
       Object.values(Models).map((Model) =>
         Model.create(
           seed(Model.collection.collectionName).map(
             (item) => ({
               ...item,
-              active: true,
             }),
           ),
         ),
       ),
-    );
-  },
+    ),
 
   stop: async () => {
     await Promise.allSettled(
@@ -32,7 +32,9 @@ module.exports = {
         Model.deleteMany({}),
       ),
     );
+  },
 
+  teardown: () => {
     mongoose.disconnect();
   },
 };

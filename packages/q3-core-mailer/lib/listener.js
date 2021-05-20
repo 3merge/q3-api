@@ -23,7 +23,6 @@ module.exports = (UserModel, url, subjects) => async (
       UserModel.find({
         listens: eventName,
         verified: true,
-        active: true,
       }),
       filterFn,
     ),

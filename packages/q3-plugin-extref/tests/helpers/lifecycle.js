@@ -1,4 +1,11 @@
-const { start, stop } = require('../fixtures');
+const {
+  setup,
+  start,
+  stop,
+  teardown,
+} = require('../fixtures');
 
-beforeAll(start);
-afterAll(stop);
+beforeAll(setup);
+beforeEach(start);
+afterEach(stop);
+afterAll(teardown);

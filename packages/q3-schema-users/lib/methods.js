@@ -11,7 +11,6 @@ const {
 const isVerifiedQuery = {
   password: { $exists: true },
   verified: true,
-  active: true,
 };
 
 const SECRET_EXPIRATION_IN_HRS = 120;
@@ -47,12 +46,7 @@ module.exports = class UserAuthDecorator {
   }
 
   get isPermitted() {
-    return (
-      this.active &&
-      this.role &&
-      !this.frozen &&
-      !this.isBlocked
-    );
+    return this.role && !this.frozen && !this.isBlocked;
   }
 
   get name() {
@@ -91,7 +85,6 @@ module.exports = class UserAuthDecorator {
     if (!str) return null;
     return this.findOne({
       apiKeys: str.trim(),
-      active: true,
     })
       .setOptions({ bypassAuthorization: true })
       .select('+apiKeys +uploads')
@@ -122,7 +115,6 @@ module.exports = class UserAuthDecorator {
 
   static async findByEmail(email) {
     return this.$findOneStrictly({
-      active: true,
       email,
     });
   }
@@ -131,7 +123,6 @@ module.exports = class UserAuthDecorator {
     return this.$findOneStrictly(
       {
         verified: false,
-        active: true,
         email,
       },
       'accountVerified',
@@ -140,7 +131,6 @@ module.exports = class UserAuthDecorator {
 
   static async findUserBySecret(id, secret) {
     return this.$findOneStrictly({
-      active: true,
       _id: id,
       secret,
     });
@@ -223,7 +213,6 @@ module.exports = class UserAuthDecorator {
   async deactivate() {
     this.set({
       verified: false,
-      active: false,
       secret: null,
       password: null,
     });

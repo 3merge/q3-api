@@ -1,5 +1,6 @@
 /* eslint-disable func-names, no-param-reassign */
-const { invoke, get } = require('lodash');
+const { invoke, get, isFunction } = require('lodash');
+const mongoose = require('mongoose');
 const { exception } = require('q3-core-responder');
 const { executeOn } = require('..');
 
@@ -20,16 +21,18 @@ const getPathsRecursively = ([key, v]) => {
   return key;
 };
 
-const primeForDeletion = async (doc, args = {}) => {
-  if (typeof doc.onArchive === 'function') {
-    await doc.onArchive();
-  } else {
-    doc.set({
-      active: false,
-    });
-  }
+const primeForDeletion = async (doc) => {
+  if (isFunction(doc.onArchive)) await doc.onArchive();
 
-  return doc.save(args);
+  const r = await mongoose.connection.db
+    .collection(`${doc.constructor.modelName}-archives`)
+    .insert(doc);
+
+  if (r.result.ok) await doc.remove();
+  else
+    exception('InternalError')
+      .msg('couldNotSaveToArchive')
+      .throw();
 };
 
 async function archive(id) {
@@ -59,7 +62,6 @@ async function archiveMany(ids) {
 async function findStrictly(id, options = {}) {
   const doc = await this.findOne({
     _id: id,
-    active: true,
   })
     .setOptions({
       redact: true,
@@ -216,13 +218,6 @@ const plugin = (schema) => {
   if (schema.options.enableArchive) {
     schema.statics.archive = archive;
     schema.statics.archiveMany = archiveMany;
-
-    schema.add({
-      active: {
-        type: Boolean,
-        default: true,
-      },
-    });
   }
 
   if (schema.options.featured)
