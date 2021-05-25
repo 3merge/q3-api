@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Model = require('../fixtures/Model');
-const plugin = require('../../lib');
 
 beforeAll(async () => {
   await mongoose.connect(process.env.CONNECTION);
@@ -19,7 +18,7 @@ afterAll(() => {
 });
 
 describe('changelog', () => {
-  it('should', async (done) => {
+  it('should capture nested changes', async (done) => {
     const doc = await Model.create({
       title: 'New',
     });
@@ -70,23 +69,9 @@ describe('changelog', () => {
 
     setTimeout(async () => {
       const logs = await doc.getHistory();
-      expect(logs).toHaveLength(4);
+      expect(logs).toHaveLength(7);
       done();
     }, 500);
-  });
-
-  it('should return array of paths', async () =>
-    expect(Model.getChangelogProperties()).toHaveLength(2));
-
-  it('should return null', async () => {
-    const TempSchema = new mongoose.Schema({});
-    TempSchema.plugin(plugin);
-
-    expect(
-      mongoose
-        .model('without-change', TempSchema)
-        .getChangelogProperties(),
-    ).toBeNull();
   });
 
   it('should save the last modified user', async () => {

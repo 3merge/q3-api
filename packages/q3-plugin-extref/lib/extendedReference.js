@@ -183,6 +183,7 @@ module.exports = class Builder {
         get(this, '$ref.collection.collectionName') ||
         this.$ref,
       ...globalOptions,
+      _id: false,
       timestamps: false,
       skipPlugins: true,
     });

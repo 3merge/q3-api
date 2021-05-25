@@ -1,24 +1,15 @@
 /* eslint-disable no-param-reassign, func-names */
-const { pick, get, size, map, invoke } = require('lodash');
+const { pick, get, invoke } = require('lodash');
 const { getFromChangelog } = require('./utils');
 
 module.exports = (schema) => {
-  schema.statics.getChangelogProperties = function () {
-    const props = get(this, 'schema.options.changelog');
-    return size(props) ? props : null;
-  };
-
   schema.methods.getHistory = async function () {
-    return map(
-      await getFromChangelog(
-        get(this, 'constructor.collection.collectionName'),
-        {
-          reference: this._id,
-          nextgen: true,
-          'snapshot.updatedAt': { $exists: true },
-        },
-      ),
-      'snapshot',
+    return getFromChangelog(
+      get(this, 'constructor.collection.collectionName'),
+      {
+        date: { $exists: true },
+        reference: this._id,
+      },
     );
   };
 

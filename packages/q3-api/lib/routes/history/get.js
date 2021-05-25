@@ -1,51 +1,29 @@
-const {
-  compose,
-  query,
-  verify,
-} = require('q3-core-composer');
+const { compose, verify } = require('q3-core-composer');
 const mongoose = require('../../config/mongoose');
 
-const History = async (
-  { query: { collectionName, documentId } },
-  res,
-) => {
+const History = async (req, res) => {
   /**
    * @TODO
    * Permissions on history
    */
   try {
-    const doc = await mongoose
-      .model(collectionName)
-      .findStrictly(documentId);
-
-    const versions = await doc.getHistory({
-      $or: [
-        {
-          updatedFields: {
-            $exists: true,
-          },
-        },
-        {
-          removedFields: {
-            $exists: true,
-          },
-        },
-      ],
-    });
+    const history = await mongoose.connection.db
+      .collection('changelog')
+      .find({})
+      .sort({ date: -1 })
+      .limit(250)
+      .toArray();
 
     res.ok({
-      versions,
+      history,
     });
   } catch (e) {
+    console.log(e);
     res.status(400).send();
   }
 };
 
-History.validation = [
-  query('collectionName').isString(),
-  query('documentId').isMongoId(),
-];
-
 History.authorization = [verify];
+History.validation = [];
 
 module.exports = compose(History);
