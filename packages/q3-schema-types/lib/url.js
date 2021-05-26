@@ -10,16 +10,15 @@ Url.prototype = Object.create(
 
 Url.prototype.cast = function sanitize(val = '') {
   if (!val.length) return val;
-  const output = val.toLowerCase();
 
   if (
     !new RegExp(
-      /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/,
-    ).test(output)
+      /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gim,
+    ).test(val)
   )
     throw new Error(`Url: ${val} is not a valid website`);
 
-  return output;
+  return val;
 };
 
 Url.prototype.castForQuery = function forward(val = '') {
