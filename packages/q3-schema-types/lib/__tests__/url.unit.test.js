@@ -13,3 +13,10 @@ runner(Schema.Types.Url, [
   ['htt://www.yahoo.com', false],
   ['yahoo.com2132.232489', false],
 ]);
+
+describe('URL cast', () => {
+  it('should keep case', () => {
+    const v = 'https://GoogleImages.net';
+    expect(Schema.Types.Url.prototype.cast(v)).toEqual(v);
+  });
+});
