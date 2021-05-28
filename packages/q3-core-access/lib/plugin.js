@@ -1,5 +1,10 @@
 /* eslint-disable no-param-reassign, func-names */
-const { get, invoke, isFunction } = require('lodash');
+const {
+  get,
+  invoke,
+  isFunction,
+  compact,
+} = require('lodash');
 const Comparison = require('comparisons');
 const mongoose = require('mongoose');
 const { exception } = require('q3-core-responder');
@@ -159,12 +164,25 @@ module.exports = (schema) => {
     schema.pre('estimatedDocumentCount', enforce(useQuery));
     schema.pre('distinct', useQuery);
 
+    const userParts = [
+      '_id',
+      'id',
+      'firstName',
+      'lastName',
+      'email',
+      'photo',
+      'featuredUpload',
+    ];
+
     schema.add({
       createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         autopopulate: true,
-        autopopulateSelect:
-          'id _id firstName lastName email photo featuredUpload',
+        autopopulateSelect: compact(
+          userParts.concat(
+            schema.options.createdByAutocompleteProjection,
+          ),
+        ).join(' '),
         ref: 'q3-api-users',
         systemOnly: true,
         private: true,

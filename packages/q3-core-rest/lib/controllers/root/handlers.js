@@ -45,30 +45,34 @@ module.exports = {
       sort,
       page,
     } = queryParser(req);
+    try {
+      const {
+        docs,
+        totalDocs,
+        hasNextPage,
+        hasPrevPage,
+      } = await datasource.paginate(query, {
+        options: { redact: true },
+        page: page >= 0 ? page + 1 : 1,
+        limit: limit > 500 ? 500 : limit,
+        collation: { locale: 'en' },
+        lean: { virtuals: true },
+        sort,
+        select,
+      });
 
-    const {
-      docs,
-      totalDocs,
-      hasNextPage,
-      hasPrevPage,
-    } = await datasource.paginate(query, {
-      options: { redact: true },
-      page: page >= 0 ? page + 1 : 1,
-      limit: limit > 500 ? 500 : limit,
-      collation: { locale: 'en' },
-      lean: { virtuals: true },
-      sort,
-      select,
-    });
+      const payload = marshal(docs);
 
-    const payload = marshal(docs);
-
-    res.ok({
-      [collectionPluralName]: payload,
-      total: totalDocs,
-      hasNextPage,
-      hasPrevPage,
-    });
+      res.ok({
+        [collectionPluralName]: payload,
+        total: totalDocs,
+        hasNextPage,
+        hasPrevPage,
+      });
+    } catch (e) {
+      console.log(e);
+      res.ok({});
+    }
   },
 
   async Patch(

@@ -33,6 +33,7 @@ const StudentSchema = new mongoose.Schema(
       'class',
       'name',
     ],
+    createdByAutocompleteProjection: ['role'],
   },
 );
 

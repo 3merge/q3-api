@@ -40,6 +40,9 @@ const Teacher = new mongoose.Schema({
   employment: [EmploymentHistory],
 });
 
+// SHOULD NOT APPEAR
+Teacher.virtual('testing').get(() => 'TESTING');
+
 ExtendedReference.plugin(Teacher, ['schools', 'students']);
 Teacher.plugin(cleanAutopopulateRefs, ['students']);
 Teacher.plugin(helpers);
