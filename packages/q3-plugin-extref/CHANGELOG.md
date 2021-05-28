@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.16.10](https://github.com/3merge/q3-api/compare/v1.16.9...v1.16.10) (2021-05-28)
+
+
+### Bug Fixes
+
+* schema set on autopopulate ([068ca4d](https://github.com/3merge/q3-api/commit/068ca4d81f7bab7985fda1e31163695b903c5c56))
+
+
+
+
+
 ## [1.16.9](https://github.com/3merge/q3-api/compare/v1.16.8...v1.16.9) (2021-05-28)
 
 
