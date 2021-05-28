@@ -193,7 +193,7 @@ class BatchQueryLoader {
         { source: Source, cache, projection },
       ) => {
         const modifiedProjection = uniq(
-          ['_id'].concat(projection),
+          ['_id', 'id'].concat(projection),
         );
 
         const match = cache.find((d) =>
