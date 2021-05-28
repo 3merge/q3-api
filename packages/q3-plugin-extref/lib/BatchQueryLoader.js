@@ -211,12 +211,19 @@ class BatchQueryLoader {
             : xs;
 
         if (match) {
-          if (doc.schema)
-            doc.schema
-              .path(pathKey.replace(/\.\d\./gi, '.'))
-              .get(hasProjectedKey);
+          const populated = new Source(match);
+          const setOnDoc = (xs) => set(doc, pathKey, xs);
 
-          set(doc, pathKey, new Source(match));
+          if (doc.schema) {
+            const s = doc.schema.path(
+              pathKey.replace(/\.\d\./gi, '.'),
+            );
+
+            if (s) s.get(hasProjectedKey);
+            setOnDoc(populated);
+          } else {
+            setOnDoc(pick(populated, modifiedProjection));
+          }
         }
       },
     );
