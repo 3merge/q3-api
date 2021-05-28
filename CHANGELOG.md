@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.16.9](https://github.com/3merge/q3-api/compare/v1.16.8...v1.16.9) (2021-05-28)
+
+
+### Bug Fixes
+
+* autopopulate virtual leaks ([#134](https://github.com/3merge/q3-api/issues/134)) ([8bb15c3](https://github.com/3merge/q3-api/commit/8bb15c38bf2c91ce7b95bedba0e214055e02dfc2))
+
+
+
+
+
 ## [1.16.8](https://github.com/3merge/q3-api/compare/v1.16.7...v1.16.8) (2021-05-26)
 
 **Note:** Version bump only for package Q3-Api
