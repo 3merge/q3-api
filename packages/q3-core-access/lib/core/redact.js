@@ -17,7 +17,8 @@ const cleanFields = (xs, target) =>
       if (item.wildcard) output = `*${output}*`;
       if (item.negate) output = `!${output}`;
 
-      return new Comparison(item.test).eval(target)
+      return !item.test ||
+        new Comparison(item.test).eval(target)
         ? output
         : null;
     }),
