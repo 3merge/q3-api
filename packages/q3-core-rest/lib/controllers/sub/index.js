@@ -62,6 +62,7 @@ module.exports = class SubDocumentControllerCommander extends (
         req.parent = doc;
         req.fieldName = this.field;
         req.subdocs = doc[this.field];
+        await req.rerunRedactIn('request', req.parent);
         next();
       } catch (e) {
         next(e);
@@ -85,6 +86,7 @@ module.exports = class SubDocumentControllerCommander extends (
   decorateController(Ctrl) {
     // eslint-disable-next-line
     Ctrl.authorization = this.getAuthorization();
+
     // eslint-disable-next-line
     Ctrl.validation = this.getChildValidationSchema();
     return deco(Ctrl);

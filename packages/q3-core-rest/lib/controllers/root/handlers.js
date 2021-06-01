@@ -1,18 +1,4 @@
-const { isObject } = require('lodash');
 const queryParser = require('../../queryParser');
-
-const clean = (o) => {
-  if (Array.isArray(o)) return o.map(clean);
-  if (!isObject(o) || o instanceof Date) return o;
-
-  return Object.entries(o).reduce((acc, [key, v]) => {
-    if (v !== undefined)
-      Object.assign(acc, {
-        [key]: clean(v),
-      });
-    return acc;
-  }, {});
-};
 
 module.exports = {
   async Get(
@@ -70,22 +56,19 @@ module.exports = {
         hasPrevPage,
       });
     } catch (e) {
-      console.log(e);
       res.ok({});
     }
   },
 
-  async Patch(
-    {
-      body,
+  async Patch(req, res) {
+    const {
       collectionSingularName,
       datasource,
       marshal,
       params,
       files,
-    },
-    res,
-  ) {
+    } = req;
+
     // @NOTE - otherwise it picks up on READ permissions
     const doc = await datasource.findStrictly(
       params.resourceID,
@@ -95,12 +78,16 @@ module.exports = {
       },
     );
 
+    // @NOTE - this mutates body
+    await req.rerunRedactIn('request', doc);
+    const { body } = req;
+
     await doc.handleReq({
       body,
       files,
     });
 
-    await doc.set(clean(body)).save({
+    await doc.set(body).save({
       redact: true,
     });
 

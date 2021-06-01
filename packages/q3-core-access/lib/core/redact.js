@@ -1,8 +1,11 @@
 const { flatten, unflatten } = require('flat');
 const Comparison = require('comparisons');
 const micromatch = require('micromatch');
-const { isPlainObject, compact } = require('lodash');
+const { isPlainObject, compact, size } = require('lodash');
 const Grant = require('./grant');
+
+const makeArray = (xs) =>
+  compact(Array.isArray(xs) ? xs : [xs]);
 
 const executeAsArray = (input, next) =>
   !Array.isArray(input) ? next(input) : input.map(next);
@@ -17,8 +20,10 @@ const cleanFields = (xs, target) =>
       if (item.wildcard) output = `*${output}*`;
       if (item.negate) output = `!${output}`;
 
-      return !item.test ||
-        new Comparison(item.test).eval(target)
+      const test = makeArray(item.test);
+
+      return !size(test) ||
+        new Comparison(test).eval(target)
         ? output
         : null;
     }),

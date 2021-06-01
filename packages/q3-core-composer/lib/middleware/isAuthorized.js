@@ -1,5 +1,5 @@
 const micromatch = require('micromatch');
-const { set } = require('lodash');
+const { set, get, merge } = require('lodash');
 const { exception } = require('q3-core-responder');
 const hasField = require('./hasField');
 
@@ -25,11 +25,17 @@ class IsAuthorizedInLocationRef {
       if (!this.meetsFieldRequirements(fields))
         throw new Error('Failed field authorization');
 
-      set(req, `redactions.${m}`, {
-        locations: this.locations,
-        collectionName: m,
-        grant,
-      });
+      const namespace = `redactions.${m}`;
+
+      set(
+        req,
+        namespace,
+        merge(get(req, namespace), {
+          locations: this.locations,
+          collectionName: m,
+          grant,
+        }),
+      );
 
       req.grant = grant;
       next();
