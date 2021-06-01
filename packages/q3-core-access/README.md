@@ -1,9 +1,8 @@
 # Access
 
 Q3's access control system integrates with Mongoose for
-role-based querying. The modules used to automate DB access
-control can also be imported directly to redact data in your
-application logic.
+role-based querying. It also connects to `q3-core-rest` to
+automate authorization in the request and response payloads.
 
 Note that the access control's ledger uses a singleton
 pattern so that grants initialized at run-time can be
@@ -36,12 +35,11 @@ The JSON object below represents all possible fields.
 ### Field
 
 The field property determines the attributes within a
-document a user can access. When left undefined, it defaults
-to allow everything (which is the same as the wildcard,
-"\*"). This module interprets fields as globs so that we can
-define rules and cover datasets. It can support a single
-rule, an array of rules and conditional rules. For examples,
-please see below.
+document a user can access. When left undefined, everything
+is disallowed. This module interprets fields as globs so
+that we can define rules and cover datasets. It can support
+a single rule, an array of rules and conditional rules. For
+examples, please see below.
 
 #### Single rule
 

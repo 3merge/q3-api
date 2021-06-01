@@ -97,3 +97,20 @@ test('should add to the list of inclusions', async () => {
     bar: 1,
   });
 });
+
+test('should default to no access', async () => {
+  Grant.prototype.test = jest.fn().mockReturnValue({
+    fields: [
+      {
+        glob: 'foo',
+        test: ['bar=*'],
+      },
+    ],
+  });
+
+  return expect(
+    redact({
+      foo: 1,
+    }),
+  ).resolves.toEqual({});
+});
