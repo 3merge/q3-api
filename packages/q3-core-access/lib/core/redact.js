@@ -1,7 +1,13 @@
 const { flatten, unflatten } = require('flat');
 const Comparison = require('comparisons');
 const micromatch = require('micromatch');
-const { isPlainObject, compact, size } = require('lodash');
+const {
+  isObject,
+  get,
+  compact,
+  size,
+  map,
+} = require('lodash');
 const Grant = require('./grant');
 
 const makeArray = (xs) =>
@@ -10,21 +16,27 @@ const makeArray = (xs) =>
 const executeAsArray = (input, next) =>
   !Array.isArray(input) ? next(input) : input.map(next);
 
+const toArray = (xs) =>
+  compact(Array.isArray(xs) ? xs : [xs]);
+
+const decorateGlob = (xs) => {
+  let output = xs.glob;
+  if (xs.wildcard) output = `*${output}*`;
+  if (xs.negate) output = `!${output}`;
+  return output;
+};
+
 const cleanFields = (xs, target) =>
   compact(
-    (Array.isArray(xs) ? xs : [xs]).map((item) => {
+    map(xs, (item) => {
       if (!item) return null;
-      if (!isPlainObject(item)) return item;
-
-      let output = item.glob;
-      if (item.wildcard) output = `*${output}*`;
-      if (item.negate) output = `!${output}`;
+      if (!isObject(item)) return item;
 
       const test = makeArray(item.test);
 
       return !size(test) ||
         new Comparison(test).eval(target)
-        ? output
+        ? decorateGlob(item)
         : null;
     }),
   ).sort((a, b) => {
@@ -32,19 +44,29 @@ const cleanFields = (xs, target) =>
     return 0;
   });
 
-const flattenAndReduceByFields = (doc, grant = {}) => {
+const flattenAndReduceByFields = (
+  doc,
+  grant = {},
+  options = {},
+) => {
   if (!doc) return null;
 
+  const { includeConditionalGlobs = false } = options;
   const flat = flatten(doc);
-  const match =
-    isPlainObject(grant) && 'fields' in grant
-      ? micromatch(
-          Object.keys(flat),
-          cleanFields(grant.fields, doc),
-        )
-      : [];
+  const patterns = cleanFields(
+    toArray(get(grant, 'fields')).map((item) => {
+      if (includeConditionalGlobs && isObject(item)) {
+        return decorateGlob(item);
+      }
+      return item;
+    }),
+    doc,
+  );
 
-  const unwind = match.reduce(
+  const unwind = micromatch(
+    Object.keys(flat),
+    patterns,
+  ).reduce(
     (acc, key) =>
       Object.assign(acc, {
         [key]: flat[key],

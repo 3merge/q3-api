@@ -79,7 +79,7 @@ module.exports = {
     );
 
     // @NOTE - this mutates body
-    await req.rerunRedactIn('request', doc);
+    await req.rerunRedactOnRequestBody(doc);
     const { body } = req;
 
     await doc.handleReq({

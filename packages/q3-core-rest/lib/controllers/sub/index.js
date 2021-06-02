@@ -62,7 +62,7 @@ module.exports = class SubDocumentControllerCommander extends (
         req.parent = doc;
         req.fieldName = this.field;
         req.subdocs = doc[this.field];
-        await req.rerunRedactIn('request', req.parent);
+        await req.rerunRedactOnRequestBody(req.parent);
         next();
       } catch (e) {
         next(e);
