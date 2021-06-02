@@ -27,7 +27,6 @@ module.exports = class ControllerMock {
       evoke: jest.fn(),
       get: jest.fn(),
       t: jest.fn().mockImplementation((v) => v),
-      rerunRedactOnRequestBody: jest.fn(),
       marshal: jest.fn().mockImplementation((v) => v),
       isFresh: jest.fn(),
       user,

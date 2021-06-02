@@ -18,34 +18,22 @@ module.exports = {
   },
 
   async List(req, res) {
-    const {
-      marshal,
-      collectionPluralName,
-      datasource,
-    } = req;
+    const { marshal, collectionPluralName, datasource } =
+      req;
 
-    const {
-      query,
-      select,
-      limit,
-      sort,
-      page,
-    } = queryParser(req);
+    const { query, select, limit, sort, page } =
+      queryParser(req);
     try {
-      const {
-        docs,
-        totalDocs,
-        hasNextPage,
-        hasPrevPage,
-      } = await datasource.paginate(query, {
-        options: { redact: true },
-        page: page >= 0 ? page + 1 : 1,
-        limit: limit > 500 ? 500 : limit,
-        collation: { locale: 'en' },
-        lean: { virtuals: true },
-        sort,
-        select,
-      });
+      const { docs, totalDocs, hasNextPage, hasPrevPage } =
+        await datasource.paginate(query, {
+          options: { redact: true },
+          page: page >= 0 ? page + 1 : 1,
+          limit: limit > 500 ? 500 : limit,
+          collation: { locale: 'en' },
+          lean: { virtuals: true },
+          sort,
+          select,
+        });
 
       const payload = marshal(docs);
 
@@ -62,6 +50,7 @@ module.exports = {
 
   async Patch(req, res) {
     const {
+      authorizeBody,
       collectionSingularName,
       datasource,
       marshal,
@@ -78,10 +67,7 @@ module.exports = {
       },
     );
 
-    // @NOTE - this mutates body
-    await req.rerunRedactOnRequestBody(doc);
-    const { body } = req;
-
+    const body = authorizeBody(doc);
     await doc.handleReq({
       body,
       files,
@@ -98,9 +84,15 @@ module.exports = {
   },
 
   async Post(
-    { body, collectionSingularName, datasource, marshal },
+    {
+      authorizeBody,
+      collectionSingularName,
+      datasource,
+      marshal,
+    },
     res,
   ) {
+    const body = authorizeBody();
     const doc = await datasource.create([body], {
       redact: true,
     });

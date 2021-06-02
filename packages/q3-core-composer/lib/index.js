@@ -5,7 +5,7 @@ const {
 const aa = require('express-async-handler');
 const dep = require('express-validator');
 const validateBody = require('m2e-validator/lib/middlewareHelper');
-const { request, response } = require('./postware');
+const response = require('./postware');
 const middleware = require('./middleware');
 const isAuthorized = require('./middleware/isAuthorized');
 const isVerified = require('./middleware/isLoggedIn');
@@ -35,11 +35,7 @@ const check = (...args) => {
 const compose = (ctr) =>
   flatten([
     flatten(ctr.validation, [validateBody]),
-    flatten(ctr.authorization, [
-      isVerified,
-      request,
-      response,
-    ]),
+    flatten(ctr.authorization, [isVerified, response]),
     sessionMiddleware,
     ...(ctr.postAuthorization ? ctr.postAuthorization : []),
     aa(ctr),

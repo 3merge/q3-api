@@ -1,6 +1,5 @@
 const {
   clean,
-  pickByTargetObject,
   removeReservedKeys,
   toJSON,
 } = require('../formatters');
@@ -16,28 +15,6 @@ test.each([
   ],
 ])('.clean', (a, expected) => {
   expect(clean(a)).toEqual(expected);
-});
-
-test.each([
-  [{ foo: 1, bar: 1 }, { foo: 1 }, {}, { foo: 1 }],
-  [
-    { foo: undefined, bar: 1 },
-    { foo: 1 },
-    { clean: true },
-    {},
-  ],
-  [
-    { foo: 1, bar: { baz: 1 } },
-    { bar: 1 },
-    { select: 'bar' },
-    {
-      baz: 1,
-    },
-  ],
-])('.pickByTargetObject', (a, b, options, expected) => {
-  expect(pickByTargetObject(a, b, options)).toEqual(
-    expected,
-  );
 });
 
 test.each([

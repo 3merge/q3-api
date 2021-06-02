@@ -1,3 +1,5 @@
+// eslint-disable-next-line
+const { map } = require('lodash');
 const setup = require('../fixtures');
 const { teardown } = require('../helpers');
 
@@ -62,6 +64,41 @@ describe('Access control plugin', () => {
     it('should permit DELETE op', async () =>
       deleteStudent(204));
 
+    it('should allow updating of grade when age is within a certain range', async () => {
+      const { id } = await genStudent();
+
+      const {
+        body: {
+          student: { age, grade },
+        },
+      } = await agent
+        .patch(`/students/${id}`)
+        .set({ Authorization })
+        .send({
+          grade: 10,
+          age: 18,
+        });
+
+      expect(age).toBe(18);
+      expect(grade).toBe(10);
+
+      const {
+        body: {
+          student: { age: nextAge, grade: nextGrade },
+        },
+      } = await agent
+        .patch(`/students/${id}`)
+        .set({ Authorization })
+        .send({
+          age: 12,
+          grade: 6,
+        })
+        .expect(200);
+
+      expect(nextGrade).toBe(10);
+      expect(nextAge).toBe(12);
+    });
+
     it('should not permit DELETE op on nested field', async () => {
       const { id, friends } = await genStudent();
       const [{ id: friendId }] = friends;
@@ -83,8 +120,8 @@ describe('Access control plugin', () => {
         .set({ Authorization })
         .expect(200);
 
-      expect(age).toBe(student.age);
-      expect(name).not.toBe(student.name);
+      expect(age).not.toBe(student.age);
+      expect(name).toBe(student.name);
     });
 
     it('should redact GET response', async () => {

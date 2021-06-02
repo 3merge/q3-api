@@ -7,6 +7,7 @@ const {
   compact,
   size,
   map,
+  uniq,
 } = require('lodash');
 const Grant = require('./grant');
 
@@ -53,11 +54,25 @@ const flattenAndReduceByFields = (
 
   const { includeConditionalGlobs = false } = options;
   const flat = flatten(doc);
+
   const patterns = cleanFields(
-    toArray(get(grant, 'fields')).map((item) => {
+    uniq([
+      ...toArray(get(grant, 'fields')),
+      ...[
+        ['Create', 'Update'].includes(grant.op)
+          ? [
+              '!*updatedAt*',
+              '!*createdAt*',
+              '!*createdBy*',
+              '!*lastModifiedBy*',
+            ]
+          : [],
+      ],
+    ]).map((item) => {
       if (includeConditionalGlobs && isObject(item)) {
         return decorateGlob(item);
       }
+
       return item;
     }),
     doc,

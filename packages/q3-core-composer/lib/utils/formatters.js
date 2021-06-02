@@ -5,7 +5,6 @@ const {
   isFunction,
   isObject,
   isString,
-  pick,
   size,
 } = require('lodash');
 
@@ -36,34 +35,6 @@ const moveWithinPropertyName = (prefix, xs) =>
       }
     : xs;
 
-const pickByTargetObject = (a, b, options = {}) => {
-  const getIn = (xs) =>
-    options.select ? get(xs, options.select, xs) : xs;
-
-  const pickFrom = (xs) =>
-    isObject(b) ? pick(xs, Object.keys(b)) : xs;
-
-  const out =
-    isObject(a) && !Array.isArray(a)
-      ? getIn(pickFrom(a))
-      : a;
-
-  return options.clean ? clean(out) : out;
-};
-
-const removeReservedKeys = (xs) =>
-  isObject(xs)
-    ? [
-        'updatedAt',
-        'createdAt',
-        'createdBy',
-        'lastModifiedBy',
-      ].forEach((item) => {
-        // eslint-disable-next-line
-        if (item in xs) delete xs[item];
-      })
-    : undefined;
-
 const toJSON = (xs) =>
   isObject(xs)
     ? isFunction(get(xs, 'toJSON'))
@@ -76,7 +47,5 @@ module.exports = {
   hasLength,
   mapAsync,
   moveWithinPropertyName,
-  pickByTargetObject,
-  removeReservedKeys,
   toJSON,
 };

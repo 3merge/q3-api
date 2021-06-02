@@ -6,7 +6,6 @@ class IsAuthorizedInLocationRef {
   constructor(modelName) {
     this.source = modelName;
     this.locations = {
-      request: [],
       response: [],
     };
   }
@@ -41,11 +40,6 @@ class IsAuthorizedInLocationRef {
 
   withPrefix(prefix) {
     this.locations.prefix = prefix;
-    return this;
-  }
-
-  inRequest(location) {
-    this.locations.request.push(location);
     return this;
   }
 

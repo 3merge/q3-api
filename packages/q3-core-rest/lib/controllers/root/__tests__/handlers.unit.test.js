@@ -37,7 +37,6 @@ describe('Handlers', () => {
       req.params.resourceID = 1;
       await Remove(req, res);
       expect(Model.archive).toHaveBeenCalledWith(1);
-
       expect(res.acknowledge).toHaveBeenCalled();
     });
   });
@@ -47,8 +46,7 @@ describe('Handlers', () => {
       req.query.ids = [1, 2];
       await RemoveMany(req, res);
       expect(Model.archiveMany).toHaveBeenCalledWith([
-        1,
-        2,
+        1, 2,
       ]);
 
       expect(res.acknowledge).toHaveBeenCalled();
@@ -112,7 +110,8 @@ describe('Handlers', () => {
   describe('Post Controller', () => {
     it('should return with create code', async () => {
       const args = { name: 'Mike', age: 28 };
-      req.body = args;
+      req.authorizeBody = () => args;
+
       await Post(req, res);
       expect(Model.create).toHaveBeenCalledWith([args], {
         redact: true,
@@ -131,7 +130,7 @@ describe('Handlers', () => {
 
       const args = { name: 'Mike', age: 28 };
       req.params.resourceID = 1;
-      req.body = args;
+      req.authorizeBody = () => args;
       await Patch(req, res);
       expect(Model.findStrictly).toHaveBeenCalledWith(1, {
         redact: false,
