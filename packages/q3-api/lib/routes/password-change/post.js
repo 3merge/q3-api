@@ -32,10 +32,10 @@ const updatePassword = async (
         .msg('requiredPasswordResetToken')
         .throw();
 
-    doc = await Users.findVerifiedById(user.id);
+    doc = await Users.findByEmail(user.id);
     await doc.verifyPassword(previousPassword, true);
   } else if (passwordResetToken) {
-    doc = await Users.findVerifiedByEmail(email);
+    doc = await Users.findByEmail(email);
     if (doc.cannotResetPassword)
       exception('Conflict')
         .msg('expired')

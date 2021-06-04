@@ -6,13 +6,7 @@ const {
   generateRandomSecret,
   verifyToken,
   getPassword,
-} = require('./helpers');
-
-const isVerifiedQuery = {
-  password: { $exists: true },
-  verified: true,
-  active: true,
-};
+} = require('../../helpers');
 
 const SECRET_EXPIRATION_IN_HRS = 120;
 
@@ -99,6 +93,7 @@ module.exports = class UserAuthDecorator {
   }
 
   static async findbyBearerToken(...args) {
+    // THROW ERRORS ON VERIFICATION
     return verifyToken.apply(this, args);
   }
 
@@ -127,30 +122,6 @@ module.exports = class UserAuthDecorator {
     });
   }
 
-
-
-  static async findUserBySecret(id, secret) {
-    return this.$findOneStrictly({
-      active: true,
-      _id: id,
-      secret,
-    });
-  }
-
-  static async findVerifiedByEmail(email) {
-    return this.$findOneStrictly({
-      ...isVerifiedQuery,
-      email,
-    });
-  }
-
-  static async findVerifiedById(id) {
-    return this.$findOneStrictly({
-      ...isVerifiedQuery,
-      _id: id,
-    });
-  }
-
   setSecret() {
     this.apiKeys = [];
     return issueTokensAndStamps(
@@ -169,7 +140,8 @@ module.exports = class UserAuthDecorator {
   }
 
   async setPassword(s) {
-    const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[-._+=!@#$%^&()*])(?=.{8,})/;
+    const re =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[-._+=!@#$%^&()*])(?=.{8,})/;
     if (s && !re.test(s)) {
       exception('Validation').field('password').throw();
     }
@@ -213,7 +185,6 @@ module.exports = class UserAuthDecorator {
 
   async deactivate() {
     this.set({
-      verified: false,
       active: false,
       secret: null,
       password: null,

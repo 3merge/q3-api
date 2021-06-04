@@ -7,7 +7,7 @@ const ReverificationController = async (
   { body: { email } },
   res,
 ) => {
-  const doc = await Users.findUnverifiedByEmail(email);
+  const doc = await Users.findByEmail(email);
   const withSecret = await doc.setSecret();
   const userDetails = await withSecret.save();
   await queue('onReverify', userDetails.toJSON());

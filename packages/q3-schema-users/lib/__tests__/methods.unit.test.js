@@ -120,18 +120,7 @@ describe('static find abstractions', () => {
     });
   });
 
-  it('should query unverified users', async () => {
-    await Decorator.findUnverifiedByEmail.call(inst, email);
-    expect(findOne).toHaveBeenCalledWith(
-      {
-        verified: false,
-        active: true,
-        email,
-      },
-      'accountVerified',
-    );
-  });
-});
+  
 
 test('setSecret should save a random string', async () => {
   const cls = new Decorator();
