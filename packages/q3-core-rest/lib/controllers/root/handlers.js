@@ -68,6 +68,7 @@ module.exports = {
     );
 
     const body = authorizeBody(doc);
+
     await doc.handleReq({
       body,
       files,

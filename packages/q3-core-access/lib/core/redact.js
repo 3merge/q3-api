@@ -56,19 +56,21 @@ const flattenAndReduceByFields = (
   const flat = flatten(doc);
 
   const patterns = cleanFields(
-    uniq([
-      ...toArray(get(grant, 'fields')),
-      ...[
+    uniq(
+      [
+        toArray(get(grant, 'fields')),
         ['Create', 'Update'].includes(grant.op)
           ? [
               '!*updatedAt*',
               '!*createdAt*',
               '!*createdBy*',
               '!*lastModifiedBy*',
+              '!*_id*',
+              '!*__t*',
             ]
           : [],
-      ],
-    ]).map((item) => {
+      ].flat(2),
+    ).map((item) => {
       if (includeConditionalGlobs && isObject(item)) {
         return decorateGlob(item);
       }

@@ -1,6 +1,7 @@
 const { Redact } = require('q3-core-access');
 const { merge, isObject, pick, get } = require('lodash');
 const {
+  clean,
   moveWithinPropertyName,
   toJSON,
 } = require('../utils');
@@ -40,9 +41,13 @@ module.exports = (req) =>
         req.authorize(collectionName),
       );
 
-      return pick(
-        fieldName ? get(output, fieldName, output) : output,
-        Object.keys(req.body),
+      return clean(
+        pick(
+          fieldName
+            ? get(output, fieldName, output)
+            : output,
+          Object.keys(req.body),
+        ),
       );
     },
   });

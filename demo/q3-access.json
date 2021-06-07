@@ -88,7 +88,14 @@
     "op": "Update",
     "role": "Dev",
     "ownership": "Any",
-    "fields": "*"
+    "fields": [
+      "*",
+      {
+        "glob": "role",
+        "negate": true,
+        "test": ["company.name=Agimba"]
+      }
+    ]
   },
   {
     "coll": "characters",
