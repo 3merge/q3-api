@@ -3,13 +3,14 @@
 <p>Q3 is a set of packages for scaffolding APIs.</p>
 <h2>🕮 Core Documentation</h2>
 
-| Name                                                   | Description                                             |
-| ------------------------------------------------------ | ------------------------------------------------------- |
-| <a  href="/packages/q3-core-access">Access Control</a> | Maintains all CRUD permissions for the API and DB       |
-| <a  href="/packages/q3-api">API</a>                    | The primary package of this project                     |
-| <a  href="/packages/q3-exports">Exports</a>            | Generates simple `csv`, `xlsx` and `pdf` files          |
-| <a  href="/packages/q3-core-responder">Responder</a>   | Helps report custom and intentional errors over the API |
-| <a  href="/packages/q3-core-scheduler">Scheduler</a>   | Manages a worker queue for background tasking           |
+| Name                                                   | Description                                                         |
+| ------------------------------------------------------ | ------------------------------------------------------------------- |
+| <a  href="/packages/q3-core-access">Access Control</a> | Maintains all CRUD permissions for the API and DB                   |
+| <a  href="/packages/q3-api">API</a>                    | The primary package of this project                                 |
+| <a  href="/packages/q3-core-composer">Composer</a>     | Generates REST endpoints with baked in authorization and validation |
+| <a  href="/packages/q3-exports">Exports</a>            | Generates simple `csv`, `xlsx` and `pdf` files                      |
+| <a  href="/packages/q3-core-responder">Responder</a>   | Helps report custom and intentional errors over the API             |
+| <a  href="/packages/q3-core-scheduler">Scheduler</a>   | Manages a worker queue for background tasking                       |
 
 <h2>🔌 Plugin Documentation</h2>
 
