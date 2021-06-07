@@ -1,84 +1,66 @@
 const moment = require('moment');
 const { exception } = require('q3-core-responder');
+const jwt = require('jsonwebtoken');
+const generatePsw = require('generate-password');
 const {
   compareWithHash,
   createHash,
   generateRandomSecret,
   verifyToken,
-  getPassword,
 } = require('../../helpers');
 
-const SECRET_EXPIRATION_IN_HRS = 120;
-
-const isWithinSecretExpirationHrsWindow = (
-  lastUpdatedOnDateStamp,
-) => {
-  const distanceBetweenLastUpdatedAndToday = moment().diff(
-    lastUpdatedOnDateStamp,
-  );
-  const differenceHelper = moment.duration(
-    distanceBetweenLastUpdatedAndToday,
-  );
-
-  return (
-    differenceHelper.asHours() > SECRET_EXPIRATION_IN_HRS
-  );
-};
-
-const issueTokensAndStamps = (
-  target,
-  tokenPropertyName,
-  tokenIssuedOnPropertyName,
-) =>
-  Object.assign(target, {
-    [tokenPropertyName]: generateRandomSecret(),
-    [tokenIssuedOnPropertyName]: new Date(),
-  });
-
 module.exports = class UserAuthDecorator {
-  get isBlocked() {
-    return 5 - this.loginAttempts <= 0;
+  __$generateTokenAndDate(
+    tokenPropertyName,
+    tokenIssuedOnPropertyName,
+  ) {
+    const token = generateRandomSecret();
+
+    Object.assign(this, {
+      [tokenPropertyName]: token,
+      [tokenIssuedOnPropertyName]: new Date(),
+    });
+
+    return token;
   }
 
-  get isPermitted() {
-    return (
-      this.active &&
-      this.role &&
-      !this.frozen &&
-      !this.isBlocked
+  static async issueBearerTokens(audience) {
+    const secret = process.env.SECRET;
+    const nonce = generateRandomSecret(16);
+    const token = await jwt.sign(
+      { nonce, id: this._id, code: this.secret },
+      secret,
+      { audience },
     );
+
+    return {
+      token,
+      nonce,
+    };
   }
 
-  get name() {
-    const output = [];
-    if (this.firstName) output.push(this.firstName);
-    if (this.lastName) output.push(this.lastName);
-
-    return output.join(' ');
-  }
-
-  get hasExpired() {
-    return isWithinSecretExpirationHrsWindow(
-      this.secretIssuedOn,
+  static async issuePasswordResetToken(email) {
+    const user = await this.constructor.findByEmail(email);
+    const token = user.__$generateTokenAndDate(
+      'passwordResetToken',
+      'passwordResetTokenIssuedOn',
     );
+
+    await user.save();
+    return token;
   }
 
-  get cannotResetPassword() {
-    return isWithinSecretExpirationHrsWindow(
-      this.passwordResetTokenIssuedOn,
-    );
-  }
+  static async login(email, password, { host, useragent }) {
+    const user = await this.constructor.findByEmail(email);
+    await user.verifyPassword(password, true);
 
-  static async isListeningFor(listens = '') {
-    try {
-      const users = await this.find({
-        listens,
-      }).exec();
+    if (useragent) console.log('save new device.');
 
-      return users ? users.map((user) => user.email) : [];
-    } catch (e) {
-      return [];
-    }
+    return !user.isTwoFactor()
+      ? user.issueBearerTokens(host)
+      : {
+          tfa: true,
+        };
   }
 
   static async findByApiKey(str = '') {
@@ -93,17 +75,14 @@ module.exports = class UserAuthDecorator {
   }
 
   static async findbyBearerToken(...args) {
-    // THROW ERRORS ON VERIFICATION
     return verifyToken.apply(this, args);
   }
 
-  static async $findOneStrictly(args, msg = 'account') {
-    if (typeof args.email === 'string')
-      Object.assign(args, {
-        email: args.email.toLowerCase(),
-      });
-
-    const doc = await this.findOne(args)
+  static async findByEmail(email) {
+    const user = await this.findOne({
+      active: true,
+      email,
+    })
       .select('+apiKeys +uploads')
       .setOptions({
         bypassAuthorization: true,
@@ -111,31 +90,17 @@ module.exports = class UserAuthDecorator {
       })
       .exec();
 
-    if (!doc) exception('BadRequest').msg(msg).throw();
-    return doc;
-  }
+    if (!user)
+      exception('BadRequest').msg('account').throw();
 
-  static async findByEmail(email) {
-    return this.$findOneStrictly({
-      active: true,
-      email,
-    });
+    return user;
   }
 
   setSecret() {
     this.apiKeys = [];
-    return issueTokensAndStamps(
-      this,
+    return this.__$generateTokenAndDate(
       'secret',
       'secretIssuedOn',
-    );
-  }
-
-  setPasswordResetToken() {
-    return issueTokensAndStamps(
-      this,
-      'passwordResetToken',
-      'passwordResetTokenIssuedOn',
     );
   }
 
@@ -146,7 +111,17 @@ module.exports = class UserAuthDecorator {
       exception('Validation').field('password').throw();
     }
 
-    const password = s || getPassword();
+    const password =
+      s ||
+      generatePsw.generate({
+        length: 20,
+        numbers: true,
+        symbols: true,
+        uppercase: true,
+        excludeSimilarCharacters: true,
+        exclude: ' ;:+=-(),\'".^{}[]<>/\\|_~',
+        strict: true,
+      });
 
     this.set({
       password: await createHash(password),
@@ -183,8 +158,38 @@ module.exports = class UserAuthDecorator {
     return matches;
   }
 
+  async changePasswordWithPreviousPassword(psw) {
+    await this.verifyPassword(psw, true);
+  }
+
+  async changePasswordWithPasswordResetToken() {
+    if (this.cannotResetPassword)
+      exception('Gone')
+        .msg('expired')
+        .field('passwordResetToken')
+        .throw();
+  }
+
+  async changePassword(
+    previousPassword,
+    passwordResetToken,
+    newPassword,
+  ) {
+
+    if (await this.verifyPassword(newPassword))
+      exception('Validation')
+        .msg('passwordHasBeenUsedBefore')
+        .field('newPassword')
+        .throw();
+
+    await this.setPassword(newPassword);
+    await this.setSecret();
+    return this.save();
+  }
+
   async deactivate() {
     this.set({
+      verified: false,
       active: false,
       secret: null,
       password: null,

@@ -1,6 +1,6 @@
 const { compose, check } = require('q3-core-composer');
 const { checkEmail } = require('../../utils');
-const auth = require('../../auth');
+const { Users } = require('../../models');
 
 const LoginIntoAccount = async (
   {
@@ -10,18 +10,12 @@ const LoginIntoAccount = async (
   },
   res,
 ) => {
-  const authInstance = await auth(email);
-  authInstance.checkPassword(password);
+  const tokens = await Users.login(email, password, {
+    useragent,
+    host,
+  });
 
-  const missingVerification =
-    authInstance.checkVerification();
-
-  if (missingVerification) {
-    res.ok(missingVerification);
-  } else {
-    await authInstance.trackDevice(useragent);
-    res.create(await authInstance.makeToken(host));
-  }
+  res.create(tokens);
 };
 
 LoginIntoAccount.validation = [

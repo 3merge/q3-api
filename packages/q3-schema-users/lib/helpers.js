@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const generatePsw = require('generate-password');
+
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
@@ -21,35 +21,6 @@ const stripPortFromString = (address) => {
   }
 };
 
-const getPassword = () =>
-  generatePsw.generate({
-    length: 20,
-    numbers: true,
-    symbols: true,
-    uppercase: true,
-    excludeSimilarCharacters: true,
-    exclude: ' ;:+=-(),\'".^{}[]<>/\\|_~',
-    strict: true,
-  });
-
-const generateIDToken = async (id, code, audience) => {
-  if (!id)
-    throw new Error('ID required to sign the jwt payload');
-
-  const secret = process.env.SECRET;
-  const nonce = generateRandomSecret(16);
-  const token = await jwt.sign(
-    { nonce, id, code },
-    secret,
-    { audience },
-  );
-
-  return {
-    token,
-    nonce,
-  };
-};
-
 async function verifyToken(token, nonce, host) {
   try {
     const {
@@ -59,7 +30,7 @@ async function verifyToken(token, nonce, host) {
       nonce: secretNonce,
     } = await jwt.verify(token, process.env.SECRET);
 
-    const user = await this.findVerifiedById(id);
+    const user = await this.findById(id);
 
     if (
       nonce !== secretNonce ||
@@ -83,7 +54,5 @@ module.exports = {
   generateRandomSecret,
   createHash,
   compareWithHash,
-  generateIDToken,
   verifyToken,
-  getPassword,
 };
