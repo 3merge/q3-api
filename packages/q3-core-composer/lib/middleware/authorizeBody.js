@@ -1,5 +1,5 @@
 const { Redact } = require('q3-core-access');
-const { pick, get } = require('lodash');
+const { merge, isObject, pick, get } = require('lodash');
 const {
   moveWithinPropertyName,
   toJSON,
@@ -11,17 +11,32 @@ module.exports = (req) =>
       contextDocument = {},
       collectionName = req.collectionName,
       fieldName = req.fieldName,
+      fieldId = get(req, 'params.fieldID'),
     ) => {
+      const parent = toJSON(contextDocument);
       const baseInput = moveWithinPropertyName(
         fieldName,
         req.body,
       );
 
+      if (
+        fieldName &&
+        fieldId &&
+        isObject(parent) &&
+        Array.isArray(parent[fieldName])
+      )
+        parent[fieldName] = parent[fieldName].find(
+          (item) => {
+            try {
+              return item._id.equals(fieldId);
+            } catch (e) {
+              return item._id === fieldId;
+            }
+          },
+        );
+
       const output = Redact.flattenAndReduceByFields(
-        {
-          ...toJSON(contextDocument),
-          ...baseInput,
-        },
+        merge({}, parent, baseInput),
         req.authorize(collectionName),
       );
 

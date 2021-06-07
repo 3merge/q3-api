@@ -60,16 +60,17 @@ describe('SubController route handlers', () => {
       req.fieldName = 'foo';
       req.query.ids = ['1', '2'];
       await RemoveMany(req, res);
-      expect(
-        Model.removeSubDocument,
-      ).toHaveBeenCalledWith('foo', ['1', '2']);
+      expect(Model.removeSubDocument).toHaveBeenCalledWith(
+        'foo',
+        ['1', '2'],
+      );
     });
   });
 
   describe('Put', () => {
     it('should set the property', async () => {
       const args = { name: 'Jon' };
-      req.body = args;
+      req.authorizeBody = jest.fn().mockReturnValue(args);
       req.fieldName = 'friends';
 
       req.parent = {
@@ -88,7 +89,7 @@ describe('SubController route handlers', () => {
   describe('Patch', () => {
     it('should set the property', async () => {
       const args = { name: 'Jon' };
-      req.body = args;
+      req.authorizeBody = jest.fn().mockReturnValue(args);
       req.fieldName = 'friends';
       req.params.fieldID = '1';
       req.parent = {
@@ -110,6 +111,7 @@ describe('SubController route handlers', () => {
       const args = { name: 'Jon' };
       req.query = { ids: ['1', '2'] };
       req.body = args;
+      req.authorizeBody = jest.fn().mockReturnValue(args);
       req.fieldName = 'friends';
       req.parent = {
         updateSubDocuments: jest.fn(),
@@ -129,6 +131,7 @@ describe('SubController route handlers', () => {
   describe('Post', () => {
     it('should push into the subdocuments', async () => {
       req.body = {};
+      req.authorizeBody = jest.fn().mockReturnValue({});
       req.fieldName = 'foo';
       await Post(req, res);
       expect(Model.pushSubDocument).toHaveBeenCalledWith(

@@ -59,12 +59,21 @@ describe('authorizeBody', () => {
 
   it('should wind and unwind body', () => {
     const authorize = jest.fn().mockReturnValue({
-      fields: ['!sub.bar'],
+      fields: [
+        {
+          glob: 'items.bar',
+          negate: true,
+          test: 'items.quuz<2',
+        },
+      ],
     });
 
     const req = {
       authorize,
-      fieldName: 'sub',
+      fieldName: 'items',
+      params: {
+        fieldID: 1,
+      },
       body: {
         foo: 1,
         bar: 1,
@@ -75,7 +84,14 @@ describe('authorizeBody', () => {
 
     expect(
       req.authorizeBody({
-        quuz: 1,
+        items: [
+          {
+            _id: 1,
+            foo: 1,
+            bar: 1,
+            quuz: 1,
+          },
+        ],
       }),
     ).toEqual({
       foo: 1,
