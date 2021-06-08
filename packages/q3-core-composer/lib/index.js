@@ -35,7 +35,7 @@ const check = (...args) => {
 const compose = (ctr) =>
   flatten([
     flatten(ctr.validation, [validateBody]),
-    flatten(ctr.authorization, [isVerified, response]),
+    flatten(ctr.authorization, [response]),
     sessionMiddleware,
     ...(ctr.postAuthorization ? ctr.postAuthorization : []),
     aa(ctr),

@@ -4,8 +4,15 @@
     "op": "Read",
     "role": "Public",
     "ownership": "Any",
-    "fields": "*",
-    "documentConditions": ["role=Leader"]
+    "fields": [
+      "*",
+      {
+        "glob": "movies.*.lastModifiedBy.email",
+        "negate": true,
+        "test": ["movies.lastModifiedBy.firstName=Demi"],
+        "unwind": "movies"
+      }
+    ]
   },
   {
     "coll": "companies",
