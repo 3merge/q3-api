@@ -32,11 +32,11 @@ module.exports = class SubDocumentControllerCommander extends (
     this.getListController(rootPath);
     this.getDeleteManyController(rootPath);
     this.getPatchManyController(rootPath);
-
     this.getPutController(rootPath);
     this.getPostController(rootPath);
     this.getPatchController(resourcePath);
     this.getDeleteController(resourcePath);
+
     return this.app;
   }
 
@@ -62,6 +62,7 @@ module.exports = class SubDocumentControllerCommander extends (
         req.parent = doc;
         req.fieldName = this.field;
         req.subdocs = doc[this.field];
+
         next();
       } catch (e) {
         next(e);
@@ -73,7 +74,6 @@ module.exports = class SubDocumentControllerCommander extends (
     return [
       redact(this.collectionName)
         .requireField(this.field)
-        .inRequest('body')
         .inResponse(this.field)
         .withPrefix(this.field)
         .done(),
@@ -85,6 +85,7 @@ module.exports = class SubDocumentControllerCommander extends (
   decorateController(Ctrl) {
     // eslint-disable-next-line
     Ctrl.authorization = this.getAuthorization();
+
     // eslint-disable-next-line
     Ctrl.validation = this.getChildValidationSchema();
     return deco(Ctrl);

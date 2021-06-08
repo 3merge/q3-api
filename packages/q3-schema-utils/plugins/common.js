@@ -92,9 +92,8 @@ async function pushSubDocument(field, args) {
   }
 
   try {
-    preValidationResult = this[field][
-      this[field].length - 1
-    ].validateSync();
+    preValidationResult =
+      this[field][this[field].length - 1].validateSync();
   } catch (e) {
     // noop
   }

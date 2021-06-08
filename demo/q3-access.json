@@ -12,14 +12,33 @@
     "op": "Read",
     "role": "Public",
     "ownership": "Any",
-    "fields": "*"
+    "fields": ["!*ngrams*"]
+  },
+  {
+    "coll": "companies",
+    "op": "Create",
+    "role": "Public",
+    "ownership": "Any",
+    "fields": ["*"]
   },
   {
     "coll": "companies",
     "op": "Update",
     "role": "Public",
     "ownership": "Any",
-    "fields": "*"
+    "fields": [
+      "*",
+      {
+        "glob": "tel",
+        "negate": true,
+        "test": "ip=54.50.170.56"
+      },
+      {
+        "glob": "employees.role",
+        "negate": true,
+        "test": "name=Test1"
+      }
+    ]
   },
   {
     "coll": "companies",
@@ -69,7 +88,19 @@
     "op": "Update",
     "role": "Dev",
     "ownership": "Any",
-    "fields": "*"
+    "fields": [
+      "*",
+      {
+        "glob": "role",
+        "negate": true,
+        "test": ["company.name=Agimba"]
+      },
+      {
+        "glob": "movies.year",
+        "negate": true,
+        "test": ["movies.title=Season 11"]
+      }
+    ]
   },
   {
     "coll": "characters",
