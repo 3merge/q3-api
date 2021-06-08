@@ -94,6 +94,11 @@
         "glob": "role",
         "negate": true,
         "test": ["company.name=Agimba"]
+      },
+      {
+        "glob": "movies.year",
+        "negate": true,
+        "test": ["movies.title=Season 11"]
       }
     ]
   },
