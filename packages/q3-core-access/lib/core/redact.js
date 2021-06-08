@@ -8,6 +8,7 @@ const {
   size,
   map,
   uniq,
+  set,
 } = require('lodash');
 const Grant = require('./grant');
 
@@ -33,13 +34,56 @@ const cleanFields = (xs, target) =>
       if (!item) return null;
       if (!isObject(item)) return item;
 
+      let { glob } = item;
       const test = makeArray(item.test);
 
-      return !size(test) ||
-        new Comparison(test).eval(target)
-        ? decorateGlob(item)
-        : null;
-    }),
+      const mutateGlob = (idx) => {
+        // eslint-disable-next-line
+        item.glob = String(glob).replace('.*.', `.${idx}.`);
+      };
+
+      const execTest = (evaluationTarget) =>
+        !size(test) ||
+        new Comparison(test).eval(evaluationTarget)
+          ? decorateGlob(item)
+          : null;
+
+      const paths = item.unwind
+        ? String(item.unwind).split('.')
+        : [];
+
+      const execTestForEachPath = (
+        parentTarget,
+        pathIndex,
+      ) => {
+        const currentTarget = { ...parentTarget };
+        const workingIndex = pathIndex + 1;
+        const path = paths.slice(0, workingIndex);
+
+        // reset it with top level
+        glob = item.glob;
+
+        return map(
+          get(currentTarget, path),
+
+          (level, i) => {
+            mutateGlob(i);
+            set(currentTarget, path, level);
+
+            return paths.length === workingIndex
+              ? execTest(currentTarget)
+              : execTestForEachPath(
+                  currentTarget,
+                  workingIndex,
+                );
+          },
+        );
+      };
+
+      return size(paths)
+        ? execTestForEachPath(target, 0)
+        : execTest(target);
+    }).flat(5),
   ).sort((a, b) => {
     if (b.startsWith('!')) return -1;
     return 0;

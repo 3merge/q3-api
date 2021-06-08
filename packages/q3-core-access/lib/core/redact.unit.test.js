@@ -114,3 +114,92 @@ test('should default to no access', async () => {
     }),
   ).resolves.toEqual({});
 });
+
+test('should redact arrays conditionally', async () => {
+  Grant.prototype.test = jest.fn().mockReturnValue({
+    fields: [
+      '*',
+      {
+        glob: 'items.*.bar',
+        negate: true,
+        unwind: 'items',
+        test: ['ok=1', 'items.foo=1', 'items.quuz=1'],
+      },
+    ],
+  });
+
+  return expect(
+    redact({
+      ok: 1,
+      items: [
+        {
+          foo: 2,
+          bar: 1,
+        },
+        {
+          foo: 1,
+          bar: 1,
+          quuz: 1,
+        },
+      ],
+    }),
+  ).resolves.toEqual({
+    ok: 1,
+    items: [
+      {
+        foo: 2,
+        bar: 1,
+      },
+      {
+        foo: 1,
+        quuz: 1,
+      },
+    ],
+  });
+});
+
+test('should redact nested arrays conditionally', async () => {
+  Grant.prototype.test = jest.fn().mockReturnValue({
+    fields: [
+      '*',
+      {
+        glob: 'items.*.sub.*.bar',
+        negate: true,
+        unwind: 'items.sub',
+        test: ['items.sub.foo=1'],
+      },
+    ],
+  });
+
+  return expect(
+    redact({
+      items: [
+        {
+          sub: [
+            {
+              foo: 1,
+              bar: 1,
+            },
+          ],
+        },
+        {
+          sub: [
+            {
+              foo: 2,
+              bar: 1,
+            },
+          ],
+        },
+      ],
+    }),
+  ).resolves.toEqual({
+    items: [
+      {
+        sub: [{ foo: 1 }],
+      },
+      {
+        sub: [{ foo: 2, bar: 1 }],
+      },
+    ],
+  });
+});
