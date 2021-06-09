@@ -35,6 +35,7 @@ const cleanFields = (xs, target) =>
       if (!isObject(item)) return item;
 
       let { glob } = item;
+      const { glob: originalGlob } = item;
       const test = makeArray(item.test);
 
       const mutateGlob = (idx) => {
@@ -42,11 +43,17 @@ const cleanFields = (xs, target) =>
         item.glob = String(glob).replace('.*.', `.${idx}.`);
       };
 
-      const execTest = (evaluationTarget) =>
-        !size(test) ||
-        new Comparison(test).eval(evaluationTarget)
-          ? decorateGlob(item)
-          : null;
+      const execTest = (evaluationTarget) => {
+        const output =
+          !size(test) ||
+          new Comparison(test).eval(evaluationTarget)
+            ? decorateGlob(item)
+            : null;
+
+        // eslint-disable-next-line
+        item.glob = originalGlob;
+        return output;
+      };
 
       const paths = item.unwind
         ? String(item.unwind).split('.')

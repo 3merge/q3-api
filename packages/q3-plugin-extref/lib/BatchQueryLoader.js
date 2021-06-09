@@ -211,7 +211,7 @@ class BatchQueryLoader {
             : xs;
 
         if (match) {
-          const populated = new Source(match);
+          const populated = Source.hydrate(match);
           const setOnDoc = (xs) => set(doc, pathKey, xs);
 
           if (doc.schema) {
