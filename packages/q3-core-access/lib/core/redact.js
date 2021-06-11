@@ -117,7 +117,6 @@ const flattenAndReduceByFields = (
               '!*createdBy*',
               '!*lastModifiedBy*',
               '!*_id*',
-              '!*__t*',
             ]
           : [],
       ].flat(2),
