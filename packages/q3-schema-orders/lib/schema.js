@@ -68,8 +68,6 @@ const OrderSchema = new Schema(
       type: String,
       searchable: true,
       gram: true,
-      unique: true,
-      sparse: true,
       lock: true,
     },
     billing: AddressSchema,

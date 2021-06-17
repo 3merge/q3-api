@@ -5,8 +5,6 @@ const BaseUserModel = new Schema(
     email: {
       type: Schema.Types.Email,
       required: true,
-      unique: true,
-      sparse: true,
       searchable: true,
       gram: true,
       dedupe: true,
