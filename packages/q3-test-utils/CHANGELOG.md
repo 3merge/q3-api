@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.17.4](https://github.com/3merge/q3-api/compare/v1.17.3...v1.17.4) (2021-06-17)
+
+**Note:** Version bump only for package q3-test-utils
+
+
+
+
+
 ## [1.17.3](https://github.com/3merge/q3-api/compare/v1.17.2...v1.17.3) (2021-06-11)
 
 
