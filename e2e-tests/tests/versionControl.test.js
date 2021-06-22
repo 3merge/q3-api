@@ -23,6 +23,7 @@ test('Version control', async () => {
     .set({ Authorization })
     .expect(201);
 
+  // name not tracked
   await agent
     .patch(`/students/${id}`)
     .send({ name: 'Greg' })
@@ -35,7 +36,7 @@ test('Version control', async () => {
     .set({ Authorization })
     .expect(201);
 
-  // age is not tracked
+  // age is tracked
   await agent
     .patch(`/students/${id}`)
     .send({ age: 22 })
@@ -51,5 +52,5 @@ test('Version control', async () => {
     .set({ Authorization })
     .expect(200);
 
-  expect(versions).toHaveLength(3);
+  expect(versions).toHaveLength(2);
 });

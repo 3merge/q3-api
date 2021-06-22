@@ -31,8 +31,6 @@ describe('IsAuthorized', () => {
 
     const fn = IsAuthorized(model)
       .inResponse('foo')
-      .inRequest('query')
-      .inRequest('body')
       .requireField('bar');
 
     const next = jest.fn();
@@ -40,7 +38,7 @@ describe('IsAuthorized', () => {
     await fn.middleware(req, res, next);
     expect(req.authorize).toHaveBeenCalledWith(model);
     expect(next).toHaveBeenCalledWith();
-    expect(fn.locations.request).toEqual(['query', 'body']);
+    //  expect(fn.locations.request).toEqual(['query', 'body']);
     expect(fn.locations.response).toEqual(['foo']);
     expect(fn.locations.required).toBe('bar');
   });
@@ -54,8 +52,6 @@ describe('IsAuthorized', () => {
 
     const fn = IsAuthorized(model)
       .inResponse('foo')
-      .inRequest('query')
-      .inRequest('body')
       .requireField('bar');
 
     const next = jest.fn();
@@ -63,7 +59,6 @@ describe('IsAuthorized', () => {
     await fn.middleware(req, res, next);
     expect(req.authorize).toHaveBeenCalledWith(model);
     expect(next).toHaveBeenCalledWith();
-    expect(fn.locations.request).toEqual(['query', 'body']);
     expect(fn.locations.response).toEqual(['foo']);
     expect(fn.locations.required).toBe('bar');
   });

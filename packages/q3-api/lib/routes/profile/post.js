@@ -17,10 +17,7 @@ const getProfile = async (req, res) => {
 };
 
 getProfile.authorization = [
-  redact('profile')
-    .inRequest('body')
-    .inResponse('profile')
-    .done(),
+  redact('profile').inResponse('profile').done(),
 ];
 
 module.exports = compose(getProfile);

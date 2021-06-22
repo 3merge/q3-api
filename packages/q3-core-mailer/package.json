@@ -1,21 +1,20 @@
 {
   "name": "q3-core-mailer",
   "main": "lib/index.js",
-  "version": "1.16.8",
+  "version": "1.17.5",
   "dependencies": {
-    "agenda": "^3.1.0",
     "dotenv": "^8.2.0",
     "handlebars": "^4.7.7",
-    "i18next": "^20.1.0",
-    "lodash": "^4.17.21",
+    "i18next": "^19.8.4",
+    "lodash": "^4.17.20",
     "mailgun-js": "^0.22.0",
     "mjml": "^4.9.0",
     "moment": "^2.29.1",
     "mongoose": "^5.11.8",
     "node-cron": "^2.0.3",
-    "q3-core-scheduler": "^1.16.8",
-    "q3-schema-utils": "^1.16.8",
-    "q3-test-utils": "^1.16.8"
+    "q3-core-scheduler": "^1.17.5",
+    "q3-schema-utils": "^1.17.5",
+    "q3-test-utils": "^1.17.5"
   },
   "jest": {
     "verbose": true,

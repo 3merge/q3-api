@@ -1,4 +1,10 @@
-const { get, set } = require('lodash');
+const {
+  get,
+  set,
+  pick,
+  uniq,
+  isObject,
+} = require('lodash');
 const flat = require('flat');
 const { model } = require('mongoose');
 const { pushUniquely, setPrefix } = require('./helpers');
@@ -118,7 +124,6 @@ class BatchQueryLoader {
             const res = await source
               .find({ _id: ids, active: true })
               .setOptions({ skipAutocomplete: true })
-              .lean()
               .select(projection)
               .exec();
 
@@ -185,21 +190,40 @@ class BatchQueryLoader {
         val,
         pathKey,
         sourceKey,
-        { cache, source: Source },
+        { source: Source, cache, projection },
       ) => {
+        const modifiedProjection = uniq(
+          ['_id', 'id'].concat(projection),
+        );
+
         const match = cache.find((d) =>
           d._id && d._id.equals
             ? d._id.equals(val)
             : d._id === val,
         );
 
-        if (match) {
-          // avoid new IDs from being issued
-          const newValue = new Source(match);
-          // the only way to get rid of global virtuals and defaults
-          newValue.overwrite(match);
+        const hasProjectedKey = (xs) =>
+          isObject(xs) &&
+          modifiedProjection
+            .filter((item) => !item.includes('id'))
+            .some((item) => item in xs)
+            ? pick(xs, modifiedProjection)
+            : xs;
 
-          set(doc, pathKey, newValue);
+        if (match) {
+          const populated = Source.hydrate(match);
+          const setOnDoc = (xs) => set(doc, pathKey, xs);
+
+          if (doc.schema) {
+            const s = doc.schema.path(
+              pathKey.replace(/\.\d\./gi, '.'),
+            );
+
+            if (s) s.get(hasProjectedKey);
+            setOnDoc(populated);
+          } else {
+            setOnDoc(pick(populated, modifiedProjection));
+          }
         }
       },
     );

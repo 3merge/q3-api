@@ -25,13 +25,18 @@ module.exports = {
     });
   },
 
-  async Patch({ params, body, parent, fieldName }) {
+  async Patch({
+    params,
+    authorizeBody,
+    parent,
+    fieldName,
+  }) {
     suggestPutRequest(parent, fieldName);
 
     await parent.updateSubDocument(
       fieldName,
       params.fieldID,
-      body,
+      authorizeBody(parent),
     );
 
     return {
@@ -41,7 +46,13 @@ module.exports = {
     };
   },
 
-  async PatchMany({ query, body, parent, fieldName }) {
+  async PatchMany({
+    authorizeBody,
+    query,
+    body,
+    parent,
+    fieldName,
+  }) {
     suggestPutRequest(parent, fieldName);
     const ids = sanitizeQueryIds(query.ids);
 
@@ -54,7 +65,11 @@ module.exports = {
         .field('ids')
         .throw();
 
-    await parent.updateSubDocuments(fieldName, ids, body);
+    await parent.updateSubDocuments(
+      fieldName,
+      ids,
+      authorizeBody(parent),
+    );
 
     return {
       data: parent,
@@ -63,9 +78,11 @@ module.exports = {
     };
   },
 
-  async Post({ body, files, parent, fieldName }) {
+  async Post({ authorizeBody, files, parent, fieldName }) {
     if (isSimpleSubDocument(parent, fieldName))
       exception('Conflict').msg('usePutRequest').throw();
+
+    const body = authorizeBody(parent);
 
     if (!files) {
       await parent.pushSubDocument(fieldName, body);
@@ -81,8 +98,11 @@ module.exports = {
     };
   },
 
-  async Put({ body, fieldName, parent }) {
-    await parent.set({ [fieldName]: body }).save();
+  async Put({ authorizeBody, fieldName, parent }) {
+    await parent
+      .set({ [fieldName]: authorizeBody(parent) })
+      .save();
+
     return {
       data: parent,
       message: 'newSubResourceAdded',

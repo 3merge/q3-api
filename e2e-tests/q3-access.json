@@ -30,7 +30,15 @@
     "coll": "students",
     "op": "Update",
     "ownership": "Any",
-    "fields": ["name", "friends.*", "class"]
+    "fields": [
+      "age",
+      "friends.*",
+      "class",
+      {
+        "glob": "grade",
+        "test": "age>16"
+      }
+    ]
   },
   {
     "role": "Developer",

@@ -1,5 +1,4 @@
 const micromatch = require('micromatch');
-const { set } = require('lodash');
 const { exception } = require('q3-core-responder');
 const hasField = require('./hasField');
 
@@ -7,7 +6,6 @@ class IsAuthorizedInLocationRef {
   constructor(modelName) {
     this.source = modelName;
     this.locations = {
-      request: [],
       response: [],
     };
   }
@@ -23,28 +21,29 @@ class IsAuthorizedInLocationRef {
       const { fields } = grant;
 
       if (!this.meetsFieldRequirements(fields))
-        throw new Error('Failed field authorization');
+        throw new Error('Incomplete grant');
 
-      set(req, `redactions.${m}`, {
+      if (!Array.isArray(req.redactions))
+        req.redactions = [];
+
+      req.redactions.push({
         locations: this.locations,
         collectionName: m,
         grant,
       });
 
-      req.grant = grant;
       next();
     } catch (err) {
-      next(exception('Authorization').boomerang());
+      next(
+        exception(
+          req.user ? 'Authorization' : 'Authentication',
+        ).boomerang(),
+      );
     }
   }
 
   withPrefix(prefix) {
     this.locations.prefix = prefix;
-    return this;
-  }
-
-  inRequest(location) {
-    this.locations.request.push(location);
     return this;
   }
 
