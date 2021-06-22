@@ -1,22 +1,23 @@
 /*  eslint-disable global-require, import/no-dynamic-require */
 const { exception } = require('q3-core-responder');
-const { isFunction, get } = require('lodash');
+const { isObject, get, upperCase } = require('lodash');
+const {
+  STRATEGIES,
+} = require('../plugins/verification/constants');
 
 const Token = {
-  mms: require('./tokenMMS'),
-  sms: require('./tokenSMS'),
-  tfa: require('./tokenTFA'),
+  [STRATEGIES[0]]: require('./tokenSMS'),
+  [STRATEGIES[1]]: require('./tokenMMS'),
+  [STRATEGIES[2]]: require('./tokenTFA'),
 
   getStrategyInterface(strategy) {
     let fn;
+    const formatted = upperCase(strategy);
 
     try {
-      fn = get(
-        require(`./token${String(strategy).toUpperCase()}`),
-        strategy,
-      );
+      fn = get(this, formatted);
 
-      if (!isFunction(fn))
+      if (!isObject(fn))
         throw new Error('Could not load token interface');
     } catch (e) {
       exception('BadRequest')

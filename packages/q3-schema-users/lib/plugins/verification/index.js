@@ -4,8 +4,19 @@ const {
   initVerificationSubDocuments,
 } = require('./middleware');
 const VerificationSchema = require('./schema');
+const { Utils } = require('../../helpers/index');
 
 module.exports = (Schema, options) => {
+  function appendPluginOptionsToMiddlewareLocals() {
+    Object.assign(
+      this.$locals,
+      Utils.capitalizeObjectKeys(options),
+    );
+
+    initVerificationSubDocuments.call(this);
+    checkTotalVerificationState.call(this);
+  }
+
   Schema.add({
     verification: [VerificationSchema],
     isVerified: {
@@ -19,15 +30,7 @@ module.exports = (Schema, options) => {
   });
 
   Schema.loadClass(methods);
-
-  Schema.pre(
-    'save',
-    function runVerificationSchemaAutomation() {
-      Object.assign(this.$locals, options);
-      initVerificationSubDocuments.call(this);
-      checkTotalVerificationState.call(this);
-    },
-  );
+  Schema.pre('save', appendPluginOptionsToMiddlewareLocals);
 
   return Schema;
 };

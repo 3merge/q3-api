@@ -1,5 +1,5 @@
 const { exception } = require('q3-core-responder');
-const { find } = require('lodash');
+const { find, upperCase } = require('lodash');
 const Token = require('../../helpers/token');
 
 class UserVerification {
@@ -17,7 +17,7 @@ class UserVerification {
   getVerificationSubDocByStrategyName(strategy) {
     return find(
       this.verification,
-      (v) => v.strategy === strategy,
+      (v) => v.strategy === upperCase(strategy),
     );
   }
 
@@ -38,7 +38,7 @@ class UserVerification {
     return item;
   }
 
-  async assignSecretToVerificationStrategy(strategy) {
+  async initVerificationSequence(strategy) {
     const item =
       this.getVerificationSubDocByStrategyNameStrictly(
         strategy,

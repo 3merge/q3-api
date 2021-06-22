@@ -18,8 +18,9 @@ exports.checkTotalVerificationState = function () {
 };
 
 exports.initVerificationSubDocuments = function () {
-  STRATEGIES.forEach((item) => {
-    if (get(this, `$locals.${item}.enable`))
-      this.addVerificationStrategy('mms');
-  });
+  if (this.isNew)
+    STRATEGIES.forEach((item) => {
+      if (get(this, `$locals.${item}.enable`))
+        this.addVerificationStrategy(item);
+    });
 };

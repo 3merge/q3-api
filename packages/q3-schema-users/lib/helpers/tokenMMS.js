@@ -1,8 +1,12 @@
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 module.exports = {
   async make() {
-    const secret = crypto.randomBytes(20).toString('hex');
+    const secret = await crypto
+      .randomBytes(20)
+      .toString('hex');
+
     const code = await jwt.sign(
       { secret },
       process.env.SECRET,
@@ -17,6 +21,6 @@ module.exports = {
 
   async decrypt(secret, code) {
     const resp = await jwt.verify(code, process.env.SECRET);
-    return resp.secret === code;
+    return resp.secret === secret;
   },
 };

@@ -1,4 +1,9 @@
 require('./middleware');
-require('./plugins');
 
-module.exports = require('./schema');
+const Plugins = require('./plugins');
+const Schema = require('./schema');
+
+module.exports = {
+  Plugins,
+  Schema,
+};
