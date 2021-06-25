@@ -3,6 +3,8 @@
   "version": "1.17.6",
   "main": "lib/index.js",
   "devDependencies": {
+    "lodash": "^4.17.20",
+    "q3-core-session": "^1.7.15",
     "q3-test-utils": "^1.17.6"
   },
   "peerDependencies": {
