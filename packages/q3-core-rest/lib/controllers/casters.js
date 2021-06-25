@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const isTruthy = (val) => val === 'true';
 const unwrap = (v) => String(v).replace(/^"(.*)"$/, '$1');
 
@@ -9,6 +11,9 @@ const enforceAnchor = (v) => {
 const toString = (v) => {
   const str = String(v);
   const parts = str.match(/^\/(.*)\/([igm]*)$/);
+
+  if (mongoose.isValidObjectId(str))
+    return mongoose.Types.ObjectId(str);
 
   return !String(v).startsWith('/') || !parts
     ? unwrap(str)

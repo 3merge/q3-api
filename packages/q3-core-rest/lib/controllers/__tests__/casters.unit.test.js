@@ -1,4 +1,7 @@
+const mongoose = require('mongoose');
 const casters = require('../casters');
+
+const id = mongoose.Types.ObjectId();
 
 describe('Casters', () => {
   it('should return truthy', () => {
@@ -35,6 +38,7 @@ describe('Casters', () => {
     ['/foo', '/foo'],
     ['/^foo/', new RegExp('^foo', 'i')],
     ['/^foo/gm', new RegExp('^foo', 'gm')],
+    [id.toString(), id],
   ])('.string(%s)', (a, b) => {
     expect(casters.string(a)).toEqual(b);
   });
