@@ -6,6 +6,7 @@ const {
   isObject,
   isString,
   size,
+  mergeWith,
 } = require('lodash');
 
 const clean = (xs) => {
@@ -42,10 +43,22 @@ const toJSON = (xs) =>
       : xs
     : {};
 
+const merge = (...objs) =>
+  mergeWith({}, ...objs, (obj, src) => {
+    if (
+      Array.isArray(src) &&
+      src.every((item) => !isObject(item))
+    )
+      return src;
+
+    return undefined;
+  });
+
 module.exports = {
   clean,
   hasLength,
   mapAsync,
   moveWithinPropertyName,
   toJSON,
+  merge,
 };

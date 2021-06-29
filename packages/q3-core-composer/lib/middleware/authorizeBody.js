@@ -1,9 +1,10 @@
 const { Redact } = require('q3-core-access');
-const { merge, isObject, pick, get } = require('lodash');
+const { isObject, pick, get } = require('lodash');
 const {
   clean,
   moveWithinPropertyName,
   toJSON,
+  merge,
 } = require('../utils');
 
 module.exports = (req) =>
@@ -37,7 +38,7 @@ module.exports = (req) =>
         );
 
       const output = Redact.flattenAndReduceByFields(
-        merge({}, parent, baseInput),
+        merge(parent, baseInput),
         req.authorize(collectionName),
       );
 
