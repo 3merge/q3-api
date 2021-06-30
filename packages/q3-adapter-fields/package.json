@@ -1,0 +1,20 @@
+{
+  "name": "q3-adapter-fields",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "dependencies": {
+    "lodash": "^4.17.20",
+    "mongoose": "^5.11.8"
+  },
+  "devDependencies": {
+    "q3-test-utils": "^1.17.8"
+  },
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node",
+    "preset": "q3-test-utils",
+    "setupFilesAfterEnv": [
+      "q3-test-utils/jest-setup.js"
+    ]
+  }
+}

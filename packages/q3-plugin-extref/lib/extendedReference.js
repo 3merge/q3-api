@@ -108,6 +108,7 @@ module.exports = class Builder {
       // using plain string for now
       ref: {
         type: mongoose.Schema.Types.Mixed,
+        model,
       },
     };
 
