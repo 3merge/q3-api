@@ -24,9 +24,7 @@ module.exports = {
   exists: (val) =>
     isTruthy(val) ? Boolean(val) : { $ne: true },
   has: (val) =>
-    isTruthy(val)
-      ? { $exists: true, $ne: '' }
-      : { $exists: false },
+    isTruthy(val) ? { $exists: true, $ne: '' } : null,
   in: (val) =>
     String(val)
       .match(/(".*?"|[^",]+)/g)
