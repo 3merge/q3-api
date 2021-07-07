@@ -21,9 +21,8 @@ describe('Casters', () => {
   });
 
   it('should return not exists query', () => {
-    expect(casters.has('false')).toMatchObject({
-      $exists: false,
-    });
+    // matches on null and undefined
+    expect(casters.has('false')).toBeNull();
   });
 
   test.each([
