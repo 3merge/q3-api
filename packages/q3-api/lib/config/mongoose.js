@@ -11,6 +11,7 @@ const {
   ExtendedReference,
 } = require('q3-plugin-extref');
 const versionControl = require('q3-plugin-changelog');
+const fieldAdapter = require('q3-adapter-fields');
 const Files = require('../models/files');
 
 require('q3-schema-types');
@@ -57,6 +58,7 @@ mongoose.plugin((schema) => {
 });
 
 mongoose.plugin(accessControl);
+mongoose.plugin(fieldAdapter);
 mongoose.plugin(versionControl);
 
 module.exports = mongoose;

@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const { get, pick, compact } = require('lodash');
 const translateInstanceType = require('./translateInstanceType');
 
@@ -23,8 +24,21 @@ module.exports = {
       };
 
     if (type === 'autocomplete') {
+      const { model } = options.type.obj.ref;
+      const { schema } = mongoose.models[model];
+
+      // eslint-disable-next-line
+      let { alias } = schema;
+
+      if (schema.obj.name) alias = 'name';
+      if (schema.obj.title) alias = 'title';
+
       return {
-        model: options.type.obj.ref.model,
+        endpoint: [
+          `/${model}?limit=8&sort=${alias}`,
+          schema.options.collectionPluralName,
+          alias,
+        ],
       };
     }
 

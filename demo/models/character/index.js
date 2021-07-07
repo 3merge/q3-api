@@ -10,16 +10,19 @@ const Character = new mongoose.Schema(
   {
     name: {
       type: String,
-      gram: 2,
+      required: true,
+      max: 155,
     },
     role: {
       type: String,
-      gram: 3,
+      max: 155,
     },
-    gender: String,
+    gender: {
+      type: String,
+      enum: ['Male', 'Female', 'Neither'],
+    },
     bio: {
       type: String,
-      gram: 4,
     },
     company: new Q3.utils.ExtendedReference('companies')
       .on(['name'])
