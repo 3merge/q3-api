@@ -103,9 +103,12 @@ const flattenAndReduceByFields = (
 ) => {
   if (!doc) return null;
 
-  const { includeConditionalGlobs = false } = options;
-  const flat = flatten(doc);
+  const {
+    includeConditionalGlobs = false,
+    keepFlat = false,
+  } = options;
 
+  const flat = flatten(doc);
   const patterns = cleanFields(
     uniq(
       [
@@ -141,7 +144,7 @@ const flattenAndReduceByFields = (
     {},
   );
 
-  return unflatten(unwind);
+  return !keepFlat ? unflatten(unwind) : unwind;
 };
 
 const clean = (output) =>

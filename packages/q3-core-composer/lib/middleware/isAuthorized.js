@@ -1,6 +1,8 @@
-const micromatch = require('micromatch');
+const { size, compact, flatten } = require('lodash');
 const { exception } = require('q3-core-responder');
+const { Redact } = require('q3-core-access');
 const hasField = require('./hasField');
+const { moveWithinPropertyName } = require('../utils');
 
 class IsAuthorizedInLocationRef {
   constructor(modelName) {
@@ -20,7 +22,7 @@ class IsAuthorizedInLocationRef {
       const grant = req.authorize(m);
       const { fields } = grant;
 
-      if (!this.meetsFieldRequirements(fields))
+      if (!this.meetsFieldRequirements(fields, req.body))
         throw new Error('Incomplete grant');
 
       if (!Array.isArray(req.redactions))
@@ -57,14 +59,42 @@ class IsAuthorizedInLocationRef {
     return this;
   }
 
-  meetsFieldRequirements(fields) {
+  meetsFieldRequirements(fields, body = {}) {
     const { required } = this.locations;
-    if (!required) return true;
+    const requiredPaths = compact(flatten([required]));
 
-    return Array.isArray(required)
-      ? micromatch(required, fields).length ===
-          required.length
-      : micromatch.isMatch(this.locations.required, fields);
+    if (!size(requiredPaths)) return true;
+
+    try {
+      const passedKeys = Object.keys(
+        Redact.flattenAndReduceByFields(
+          {
+            ...requiredPaths.reduce(
+              (acc, curr) =>
+                Object.assign(acc, { [curr]: 1 }),
+              {},
+            ),
+            ...moveWithinPropertyName(
+              this.locations.prefix,
+              body,
+            ),
+          },
+          {
+            fields,
+          },
+          {
+            includeConditionalGlobs: true,
+            keepFlat: true,
+          },
+        ),
+      );
+
+      return requiredPaths.every((item) =>
+        passedKeys.includes(item),
+      );
+    } catch (e) {
+      return false;
+    }
   }
 }
 
