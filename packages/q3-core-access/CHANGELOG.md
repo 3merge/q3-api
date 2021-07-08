@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.17.11](https://github.com/3merge/q3-api/compare/v1.17.10...v1.17.11) (2021-07-08)
+
+
+### Bug Fixes
+
+* field requirements in subcontroller ([c2ebae7](https://github.com/3merge/q3-api/commit/c2ebae7ae9352bb67149def7f0bbd4dacbd7993f))
+
+
+
+
+
 ## [1.17.10](https://github.com/3merge/q3-api/compare/v1.17.9...v1.17.10) (2021-07-07)
 
 **Note:** Version bump only for package q3-core-access
