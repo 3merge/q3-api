@@ -81,11 +81,17 @@ describe('PasswordResetCtrl', () => {
         verifyPassword: jest.fn().mockResolvedValue(false),
         setSecret: jest.fn(),
         setPassword,
+        passwordResetToken:
+          '28b51e6fa5c26f743ede86390bf80f2574b48a45',
       });
 
       await passwordChangeController.$og(
         {
-          body: { passwordResetToken: 'TOKEN!', email },
+          body: {
+            passwordResetToken:
+              '28b51e6fa5c26f743ede86390bf80f2574b48a45',
+            email,
+          },
           t: jest.fn(),
         },
         {

@@ -36,7 +36,12 @@ const updatePassword = async (
     await doc.verifyPassword(previousPassword, true);
   } else if (passwordResetToken) {
     doc = await Users.findVerifiedByEmail(email);
-    if (doc.cannotResetPassword)
+
+    if (
+      doc.cannotResetPassword ||
+      String(passwordResetToken) !==
+        String(doc.passwordResetToken)
+    )
       exception('Conflict')
         .msg('expired')
         .field('passwordResetToken')
@@ -73,7 +78,8 @@ updatePassword.validation = [
 ];
 
 const Ctrl = compose(updatePassword);
-Ctrl.matchesConfirmNewPasswordField = matchesConfirmNewPasswordField;
+Ctrl.matchesConfirmNewPasswordField =
+  matchesConfirmNewPasswordField;
 Ctrl.$og = updatePassword;
 
 module.exports = Ctrl;
