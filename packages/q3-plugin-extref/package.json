@@ -1,6 +1,6 @@
 {
   "name": "q3-plugin-extref",
-  "version": "1.17.11",
+  "version": "1.17.12",
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
@@ -11,7 +11,7 @@
     "flat": "^5.0.2",
     "lodash": "^4.17.20",
     "mongoose": "^5.11.8",
-    "q3-core-scheduler": "^1.17.11"
+    "q3-core-scheduler": "^1.17.12"
   },
   "jest": {
     "verbose": true,
