@@ -74,10 +74,14 @@ class IsAuthorizedInLocationRef {
                 Object.assign(acc, { [curr]: 1 }),
               {},
             ),
-            ...moveWithinPropertyName(
-              this.locations.prefix,
-              body,
-            ),
+            // a non-array indicates we just need a match
+            // at the top-level
+            ...(Array.isArray(required)
+              ? moveWithinPropertyName(
+                  this.locations.prefix,
+                  body,
+                )
+              : body),
           },
           {
             fields,
