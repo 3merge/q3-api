@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.17.13](https://github.com/3merge/q3-api/compare/v1.17.12...v1.17.13) (2021-07-12)
+
+
+### Bug Fixes
+
+* check on simple arrays ([7cfaa9a](https://github.com/3merge/q3-api/commit/7cfaa9a396af7c760ea2a03156d7dfa5545d260b))
+
+
+
+
+
 ## [1.17.12](https://github.com/3merge/q3-api/compare/v1.17.11...v1.17.12) (2021-07-08)
 
 **Note:** Version bump only for package Q3-Api
