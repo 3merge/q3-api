@@ -71,16 +71,18 @@ class NotificationDecorator {
     return doc.__$appendSignedUrl();
   }
 
-  static async recent(sessionUser) {
+  static async recent(sessionUser, numberOfDays = 1) {
     const results = await this.find({
       userId: getId(sessionUser),
       createdAt: {
-        $gte: moment().subtract(1, 'days').toDate(),
+        $gte: moment()
+          .subtract(numberOfDays, 'days')
+          .toDate(),
       },
     })
       .setOptions({ skipAutocomplete: true })
       .sort('-createdAt')
-      .limit(10)
+      .limit(100)
       .exec();
 
     return Promise.all(

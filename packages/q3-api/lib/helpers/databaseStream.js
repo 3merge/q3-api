@@ -21,13 +21,17 @@ class CollectionWatch extends EventEmitter {
   init() {
     Object.values(mongoose.models).forEach((Model) => {
       if (Model.baseModelName) return;
+      const collection = getModelCollectionName(Model);
+
+      // this collection changes WAY to frequently.
+      if (collection === 'queues') return;
 
       Model.watch()
         .on('change', (args) => {
           this.emit(REFRESH, {
             updatedAt: getTimeStamp(args),
-            collection: getModelCollectionName(Model),
             id: getDocumentKey(args),
+            collection,
           });
         })
         .on('error', () => {
