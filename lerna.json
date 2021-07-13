@@ -4,7 +4,7 @@
   "packages": [
     "packages/*"
   ],
-  "version": "1.17.13",
+  "version": "1.17.14",
   "command": {
     "publish": {
       "conventionalCommits": true,
