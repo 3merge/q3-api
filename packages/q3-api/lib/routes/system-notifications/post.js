@@ -20,6 +20,7 @@ const NotificationsPostController = compose(
           $set: {
             hasSeen: true,
             hasDownloaded: true,
+            dismissedOn: new Date(),
           },
         },
       );
