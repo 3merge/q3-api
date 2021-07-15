@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.18.0](https://github.com/3merge/q3-api/compare/v1.17.14...v1.18.0) (2021-07-15)
+
+
+### Features
+
+* ownership document conditions in access control ([84f1692](https://github.com/3merge/q3-api/commit/84f1692f57fb19b99bb63460cf104358be53ccad))
+
+
+
+
+
 ## [1.17.13](https://github.com/3merge/q3-api/compare/v1.17.12...v1.17.13) (2021-07-12)
 
 **Note:** Version bump only for package q3-core-access
