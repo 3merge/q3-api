@@ -4,6 +4,7 @@ const {
   invoke,
   isFunction,
   compact,
+  size,
 } = require('lodash');
 const Comparison = require('comparisons');
 const mongoose = require('mongoose');
@@ -40,6 +41,14 @@ const enforce = (fn) =>
 
     return fn.call(this);
   };
+
+const reduceConditionsIntoObject = (xs) =>
+  size(xs)
+    ? get(new Comparison(xs).query(), '$and', []).reduce(
+        (acc, curr) => Object.assign(acc, curr),
+        {},
+      )
+    : {};
 
 module.exports = (schema) => {
   /**
@@ -108,27 +117,44 @@ module.exports = (schema) => {
 
     if (ownership !== 'Any') {
       const aliases = ownershipAliases.map(
-        ({ foreign, local, cast }) => {
+        ({
+          cast,
+          documentConditions:
+            ownershipAliasDocumentConditions,
+          foreign,
+          local,
+        }) => {
           const q = get(user, foreign);
+
+          const oadc = reduceConditionsIntoObject(
+            ownershipAliasDocumentConditions,
+          );
+
+          const withSubOwnershipAliasConditions = (xs) => ({
+            ...oadc,
+            ...xs,
+          });
 
           // for now, we've only encountered ObjectId references
           // we may need to support other caster functions/presets later
           if (cast === 'ObjectId')
             return {
               $or: [
-                { [local]: mongoose.Types.ObjectId(q) },
-                {
+                withSubOwnershipAliasConditions({
+                  [local]: mongoose.Types.ObjectId(q),
+                }),
+                withSubOwnershipAliasConditions({
                   [local]:
                     typeof q === 'object'
                       ? invoke(q, 'toString')
                       : q,
-                },
+                }),
               ],
             };
 
-          return {
+          return withSubOwnershipAliasConditions({
             [local]: q,
-          };
+          });
         },
       );
       if (aliases.length) {
