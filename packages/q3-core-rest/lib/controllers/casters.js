@@ -8,12 +8,22 @@ const enforceAnchor = (v) => {
   return v;
 };
 
+const isObjectId = (xs) => {
+  try {
+    return (
+      mongoose.isValidObjectId(xs) &&
+      mongoose.Types.ObjectId(xs).toString() === String(xs)
+    );
+  } catch (e) {
+    return false;
+  }
+};
+
 const toString = (v) => {
   const str = String(v);
   const parts = str.match(/^\/(.*)\/([igm]*)$/);
 
-  if (mongoose.isValidObjectId(str))
-    return mongoose.Types.ObjectId(str);
+  if (isObjectId(str)) return mongoose.Types.ObjectId(str);
 
   return !String(v).startsWith('/') || !parts
     ? unwrap(str)

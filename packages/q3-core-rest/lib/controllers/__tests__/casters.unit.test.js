@@ -38,6 +38,7 @@ describe('Casters', () => {
     ['/^foo/', new RegExp('^foo', 'i')],
     ['/^foo/gm', new RegExp('^foo', 'gm')],
     [id.toString(), id],
+    ['Under Review', 'Under Review'],
   ])('.string(%s)', (a, b) => {
     expect(casters.string(a)).toEqual(b);
   });
