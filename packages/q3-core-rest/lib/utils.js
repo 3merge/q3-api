@@ -58,3 +58,11 @@ exports.castObjectIds = (v) =>
 
     return acc;
   }, {});
+
+exports.toJSON = (xs) => {
+  try {
+    return JSON.parse(JSON.stringify(xs));
+  } catch (e) {
+    return {};
+  }
+};

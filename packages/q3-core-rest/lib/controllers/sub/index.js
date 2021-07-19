@@ -3,6 +3,7 @@ const {
   check,
   query,
 } = require('q3-core-composer');
+const { isObject } = require('lodash');
 const RestRegistration = require('../../datasource');
 const {
   List,
@@ -14,6 +15,7 @@ const {
   RemoveMany,
 } = require('./handlers');
 const deco = require('./handlerDecorator');
+const { toJSON } = require('../../utils');
 
 const appendValidationForMultiOp = (ctrl) => {
   // eslint-disable-next-line
@@ -62,6 +64,9 @@ module.exports = class SubDocumentControllerCommander extends (
         req.parent = doc;
         req.fieldName = this.field;
         req.subdocs = doc[this.field];
+
+        if (isObject(req.locals))
+          req.locals.fullParentDocument = toJSON(doc);
 
         next();
       } catch (e) {
