@@ -1,19 +1,39 @@
 const mung = require('express-mung');
 const { kill } = require('q3-core-session');
 const { Redact } = require('q3-core-access');
-const { get } = require('lodash');
+const { isObject, get } = require('lodash');
 const {
   mapAsync,
   moveWithinPropertyName,
 } = require('../utils');
 
 module.exports = mung.jsonAsync(async (body, req) => {
-  const { redactions, user } = req;
+  const { locals, redactions, user } = req;
+
+  const decorateWithLocals = (activeDocument) => {
+    const fullParentDocument = get(
+      locals,
+      'fullParentDocument',
+    );
+
+    const exec = (xs) =>
+      isObject(fullParentDocument) && isObject(xs)
+        ? {
+            ...fullParentDocument,
+            ...xs,
+          }
+        : xs;
+
+    return Array.isArray(activeDocument)
+      ? activeDocument.map(exec)
+      : exec(activeDocument);
+  };
 
   await mapAsync(
     redactions,
     async ({ collectionName, locations }) => {
       const select = get(locations, 'prefix');
+
       const execRedactFn = async (data) => {
         const baseInput = moveWithinPropertyName(
           select,
@@ -21,7 +41,7 @@ module.exports = mung.jsonAsync(async (body, req) => {
         );
 
         const baseOutput = await Redact(
-          baseInput,
+          decorateWithLocals(baseInput),
           user,
           collectionName,
         );
