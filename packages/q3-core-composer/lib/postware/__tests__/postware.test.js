@@ -1,94 +1,124 @@
-const { request, response } = require('..');
-
 jest.mock('q3-core-session', () => ({
   kill: jest.fn(),
+}));
+
+jest.mock('q3-core-access', () => ({
+  Redact: jest.fn().mockResolvedValue({
+    foo: 1,
+  }),
 }));
 
 jest.mock('express-mung', () => ({
   jsonAsync: jest.fn().mockImplementation((fn) => fn),
 }));
 
+const { Redact } = require('q3-core-access');
+const response = require('..');
+
+const makeBodyPayload = (xs) => ({
+  test: { foo: 1, bar: 1, ...xs },
+});
+
+const makeRequest = (xs = {}, prefix) => ({
+  redactions: [
+    {
+      collectionName: 'test',
+      locations: {
+        response: ['test'],
+        prefix,
+      },
+    },
+  ],
+  user: {},
+  ...xs,
+});
+
 describe('postware', () => {
-  it('should redact from the response', async () => {
-    const req = {
-      redactions: {
-        test: {
-          locations: {
-            response: ['test'],
-          },
-          grant: {
-            op: 'Update',
-            fields: ['foo'],
-          },
-        },
-      },
-    };
-
-    const out = await response(
-      {
-        test: {
-          foo: 1,
-          bar: 1,
-        },
-      },
-      req,
-    );
-
-    expect(out).toEqual({
+  it('should output Redact result', () => {
+    const b = makeBodyPayload();
+    expect(response(b, makeRequest())).resolves.toEqual({
       test: {
         foo: 1,
       },
     });
+
+    expect(Redact).toHaveBeenCalledWith(
+      b.test,
+      expect.any(Object),
+      expect.any(String),
+    );
   });
 
-  it('should re-run on body', async () => {
-    const next = jest.fn();
+  it('should output nested Redact result', () => {
+    const b = makeBodyPayload();
 
-    const req = {
-      body: {
-        updatedAt: new Date(),
+    expect(
+      response(b, makeRequest({}, 'thunk')),
+    ).resolves.toEqual({
+      test: {
+        foo: 1,
+      },
+    });
+
+    expect(Redact).toHaveBeenCalledWith(
+      { thunk: b.test },
+      expect.any(Object),
+      expect.any(String),
+    );
+  });
+
+  it('should consider locals in redaction', async () => {
+    await response(
+      makeBodyPayload(),
+      makeRequest({
+        locals: {
+          fullParentDocument: {
+            quuz: 1,
+          },
+        },
+      }),
+    );
+
+    expect(Redact).toHaveBeenCalledWith(
+      {
+        quuz: 1,
         foo: 1,
         bar: 1,
       },
-      redactions: {
-        test: {
-          locations: {
-            request: ['body'],
-          },
-          grant: {
-            op: 'Update',
-            fields: [
-              'foo',
-              {
-                glob: 'bar',
-                test: ['quuz=1'],
-              },
-            ],
-          },
-        },
-      },
-    };
-
-    await request(req, {}, next);
-    expect(req.body).toHaveProperty('foo');
-    expect(req.body).toHaveProperty('bar');
-    expect(req.body).not.toHaveProperty('updatedAt');
-
-    await req.rerunRedactOnRequestBody({
-      quuz: 4,
-    });
-
-    expect(req.body).not.toHaveProperty('bar');
+      expect.any(Object),
+      expect.any(String),
+    );
   });
 
-  it('should move on without redaction commands', async () => {
-    const next = jest.fn();
-    const req = {};
+  it('should map locals in redaction', async () => {
+    await response(
+      {
+        test: [
+          {
+            foo: 1,
+            bar: 1,
+          },
+        ],
+      },
+      makeRequest({
+        locals: {
+          fullParentDocument: {
+            quuz: 1,
+          },
+        },
+      }),
+    );
 
-    await request(req, {}, next);
-    expect(next).toHaveBeenCalled();
-    expect(req.rerunRedactOnRequestBody).toEqual(
-      expect.any(Function),
+    expect(Redact).toHaveBeenCalledWith(
+      [
+        {
+          quuz: 1,
+          foo: 1,
+          bar: 1,
+        },
+      ],
+      expect.any(Object),
+      expect.any(String),
     );
   });
 });

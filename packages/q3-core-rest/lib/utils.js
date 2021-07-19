@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { isObject } = require('lodash');
 const flatten = require('flat');
 
 exports.getColumnsHeadersFromPayload = (o) =>
@@ -58,3 +59,12 @@ exports.castObjectIds = (v) =>
 
     return acc;
   }, {});
+
+exports.toJSON = (xs) => {
+  try {
+    if (!isObject(xs)) throw new Error('Not an object');
+    return JSON.parse(JSON.stringify(xs));
+  } catch (e) {
+    return {};
+  }
+};

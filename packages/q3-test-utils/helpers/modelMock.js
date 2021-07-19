@@ -24,6 +24,7 @@ const Model = {};
   'set',
   'snapshotChange',
   'snapshotChangeOnSubdocument',
+  'verifyOutput',
 ].forEach((name) => {
   Model[name] = jest.fn().mockReturnValue(Model);
 });

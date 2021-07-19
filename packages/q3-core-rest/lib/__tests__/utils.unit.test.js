@@ -73,4 +73,15 @@ describe('Utility functions', () => {
         foo: expect.any(Object),
       }));
   });
+
+  test.each([
+    [null, {}],
+    [undefined, {}],
+    [{ foo: 1 }, { foo: 1 }],
+    [[{ foo: 1 }], [{ foo: 1 }]],
+    ['words', {}],
+    [123, {}],
+  ])('.toJSON(%o)', (a, expected) => {
+    expect(Controller.toJSON(a)).toEqual(expected);
+  });
 });
