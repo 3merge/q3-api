@@ -65,8 +65,8 @@ module.exports = class SubDocumentControllerCommander extends (
         req.fieldName = this.field;
         req.subdocs = doc[this.field];
 
-        if (isObject(req.locals))
-          req.locals.fullParentDocument = toJSON(doc);
+        if (isObject(res.locals))
+          res.locals.fullParentDocument = toJSON(doc);
 
         next();
       } catch (e) {

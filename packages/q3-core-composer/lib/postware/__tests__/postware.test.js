@@ -19,7 +19,7 @@ const makeBodyPayload = (xs) => ({
   test: { foo: 1, bar: 1, ...xs },
 });
 
-const makeRequest = (xs = {}, prefix) => ({
+const makeRequest = (prefix) => ({
   redactions: [
     {
       collectionName: 'test',
@@ -30,7 +30,6 @@ const makeRequest = (xs = {}, prefix) => ({
     },
   ],
   user: {},
-  ...xs,
 });
 
 describe('postware', () => {
@@ -53,7 +52,7 @@ describe('postware', () => {
     const b = makeBodyPayload();
 
     expect(
-      response(b, makeRequest({}, 'thunk')),
+      response(b, makeRequest('thunk')),
     ).resolves.toEqual({
       test: {
         foo: 1,
@@ -68,16 +67,13 @@ describe('postware', () => {
   });
 
   it('should consider locals in redaction', async () => {
-    await response(
-      makeBodyPayload(),
-      makeRequest({
-        locals: {
-          fullParentDocument: {
-            quuz: 1,
-          },
+    await response(makeBodyPayload(), makeRequest(), {
+      locals: {
+        fullParentDocument: {
+          quuz: 1,
         },
-      }),
-    );
+      },
+    });
 
     expect(Redact).toHaveBeenCalledWith(
       {
@@ -100,13 +96,14 @@ describe('postware', () => {
           },
         ],
       },
-      makeRequest({
+      makeRequest(),
+      {
         locals: {
           fullParentDocument: {
             quuz: 1,
           },
         },
-      }),
+      },
     );
 
     expect(Redact).toHaveBeenCalledWith(

@@ -7,13 +7,13 @@ const {
   moveWithinPropertyName,
 } = require('../utils');
 
-module.exports = mung.jsonAsync(async (body, req) => {
-  const { locals, redactions, user } = req;
+module.exports = mung.jsonAsync(async (body, req, res) => {
+  const { redactions, user } = req;
 
   const decorateWithLocals = (activeDocument) => {
     const fullParentDocument = get(
-      locals,
-      'fullParentDocument',
+      res,
+      'locals.fullParentDocument',
     );
 
     const exec = (xs) =>

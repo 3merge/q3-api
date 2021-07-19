@@ -52,13 +52,13 @@ describe('SubController', () => {
       const { invokeFirstPreRoute, init } =
         getSubController();
       const { req, res } = getApiMocks();
-      req.locals = {};
+      res.locals = {};
 
       init();
       await invokeFirstPreRoute(req, res);
       expect(req.parent).toMatchObject(doc);
       expect(req.fieldName).toMatch('name');
-      expect(req.locals).toHaveProperty(
+      expect(res.locals).toHaveProperty(
         'fullParentDocument',
       );
     });
