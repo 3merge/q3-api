@@ -1,16 +1,16 @@
 {
   "name": "q3-schema-utils",
-  "version": "1.18.3",
+  "version": "1.18.4",
   "main": "index.js",
   "dependencies": {
     "lodash": "^4.17.20",
     "micromatch": "^4.0.2",
     "moment": "^2.29.1",
     "mongoose": "^5.11.8",
-    "q3-core-responder": "^1.18.3"
+    "q3-core-responder": "^1.18.4"
   },
   "devDependencies": {
-    "q3-test-utils": "^1.18.3"
+    "q3-test-utils": "^1.18.4"
   },
   "jest": {
     "verbose": true,
