@@ -37,7 +37,7 @@ module.exports = {
     isTruthy(val)
       ? {
           $exists: true,
-          $nin: ['', null],
+          $ne: ['', null],
         }
       : null,
   in: (val) =>

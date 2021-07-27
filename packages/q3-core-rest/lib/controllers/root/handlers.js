@@ -44,7 +44,12 @@ module.exports = {
         hasPrevPage,
       });
     } catch (e) {
-      res.ok({});
+      res.ok({
+        [collectionPluralName]: [],
+        total: 0,
+        hasNextPage: false,
+        hasPrevPage: false,
+      });
     }
   },
 
