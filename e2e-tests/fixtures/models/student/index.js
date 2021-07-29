@@ -4,6 +4,7 @@ const { assignSocialStatus } = require('./middleware');
 
 const SampleSchema = new mongoose.Schema({
   test: String,
+  message: String,
 });
 
 const StudentSchema = new mongoose.Schema(

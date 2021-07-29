@@ -1,169 +1,566 @@
-// eslint-disable-next-line
-const { map } = require('lodash');
+const Q3 = require('q3-api');
+const {
+  compact,
+  first,
+  get,
+  isFunction,
+} = require('lodash');
 const setup = require('../fixtures');
-const { teardown } = require('../helpers');
+const { access, teardown } = require('../helpers');
 
 let agent;
 let Authorization;
-let num = 0;
 
-const genStudent = async () => {
-  // eslint-disable-next-line
-  num++;
+const role = 'Developer';
+const coll = 'students';
 
-  const email = `developer+${num}@3merge.ca`;
-  const { Authorization: DevAuth } = await setup(
-    email,
-    'Developer',
+const genStudentId = async () =>
+  get(await Q3.model(coll).create({}), 'id');
+
+const makeApiPath = (...xs) =>
+  `/${compact([coll].concat(xs.flat())).join('/')}`;
+
+const setDeveloperPermissionOnStudents = (args = {}) =>
+  access.findAndReplace({
+    ownership: 'Any',
+    ...args,
+    role,
+    coll,
+  });
+
+describe('Access control via REST endpoints (user ownership)', () => {
+  afterAll(teardown);
+
+  beforeAll(async () => {
+    ({ Authorization, agent } = await setup(
+      'developer@3merge.ca',
+      role,
+    ));
+  });
+
+  test.each([
+    {
+      expected: 204,
+      grant: {
+        fields: ['*'],
+      },
+    },
+    {
+      expected: 403,
+      grant: {
+        fields: null,
+      },
+    },
+    {
+      expected: 403,
+      grant: {
+        fields: ['friends'],
+      },
+    },
+  ])(
+    'TOP-LEVEL DELETE operations',
+    async ({ grant, expected }) => {
+      setDeveloperPermissionOnStudents({
+        ...grant,
+        op: 'Delete',
+      });
+
+      await agent
+        .delete(makeApiPath(await genStudentId()))
+        .set({ Authorization })
+        .expect(expected);
+    },
   );
 
-  const {
-    body: { student },
-  } = await agent
-    .post('/students')
-    .send({
-      name: 'Mike',
-      age: 24,
-      friends: [
-        {
-          name: 'Hanna',
-          age: 31,
+  test.each([
+    {
+      expected: 204,
+      grant: {
+        fields: ['*'],
+      },
+    },
+    {
+      expected: 204,
+      grant: {
+        fields: ['samples*'],
+      },
+    },
+    {
+      expected: 403,
+      grant: {
+        fields: ['friends*'],
+      },
+    },
+    {
+      expected: 204,
+      grant: {
+        fields: [
+          'friends',
+          {
+            glob: 'samples',
+            wildcard: true,
+            test: [
+              'samples.test=Foo',
+              'samples.message=Bar',
+            ],
+          },
+        ],
+      },
+    },
+    {
+      expected: 403,
+      grant: {
+        fields: [
+          '*',
+          {
+            glob: 'samples',
+            wildcard: true,
+            negate: true,
+            test: ['samples.test=Foo'],
+          },
+        ],
+      },
+    },
+  ])(
+    'SUB_DOCUMENT DELETE operations',
+    async ({ grant, expected }) => {
+      setDeveloperPermissionOnStudents({
+        ...grant,
+        op: 'Delete',
+      });
+
+      const {
+        id,
+        samples: [{ _id: sampleId }],
+      } = await Q3.model(coll).create({
+        name: 'DeleteOp',
+        samples: [
+          {
+            test: 'Foo',
+            message: 'Bar',
+          },
+        ],
+      });
+
+      await agent
+        .delete(makeApiPath(id, 'samples', sampleId))
+        .set({ Authorization })
+        .expect(expected);
+    },
+  );
+
+  test.each([
+    {
+      body: {
+        name: 'Jon',
+      },
+      expected: {
+        status: 201,
+        assertResponse: (student) =>
+          expect(student).toHaveProperty('name', 'Jon'),
+      },
+      grant: {
+        fields: ['*'],
+      },
+    },
+    {
+      body: {
+        name: 'Jon',
+        grade: 12,
+      },
+      expected: {
+        status: 201,
+        assertResponse: (student) => {
+          expect(student).toHaveProperty('name', 'Jon');
+          expect(student).not.toHaveProperty('grade');
         },
-      ],
-    })
-    .set({ Authorization: DevAuth })
-    .expect(201);
-
-  expect(student.createdBy).toHaveProperty('email', email);
-  expect(student.createdBy).toHaveProperty('role');
-  expect(student.createdBy).not.toHaveProperty('isBlocked');
-
-  return student;
-};
-
-const deleteStudent = async (statusCode) => {
-  const { id } = await genStudent();
-
-  return agent
-    .delete(`/students/${id}`)
-    .set({ Authorization })
-    .expect(statusCode);
-};
-
-describe('Access control plugin', () => {
-  describe('Developer role type', () => {
-    afterAll(teardown);
-
-    beforeAll(async () => {
-      ({ Authorization, agent } = await setup(
-        'developer@3merge.ca',
-        'Developer',
-      ));
-    });
-
-    it('should permit DELETE op', async () =>
-      deleteStudent(204));
-
-    it('should allow updating of grade when age is within a certain range', async () => {
-      const { id } = await genStudent();
-
-      const {
-        body: {
-          student: { age, grade },
+      },
+      grant: {
+        fields: ['!grade'],
+      },
+    },
+    {
+      body: {
+        name: 'Jon',
+        grade: 4,
+        age: 11,
+      },
+      expected: {
+        status: 201,
+        assertResponse: (student) => {
+          expect(student).toHaveProperty('name', 'Jon');
+          expect(student).toHaveProperty('grade', 4);
+          expect(student).not.toHaveProperty('age');
         },
-      } = await agent
-        .patch(`/students/${id}`)
+      },
+      grant: {
+        fields: [
+          '*',
+          {
+            test: ['grade<9'],
+            glob: 'age',
+            negate: true,
+          },
+        ],
+      },
+    },
+    {
+      body: {},
+      expected: {
+        status: 403,
+      },
+      grant: {
+        fields: null,
+      },
+    },
+    {
+      body: {},
+      expected: {
+        status: 403,
+      },
+      grant: {
+        fields: ['friends'],
+      },
+    },
+  ])(
+    'TOP-LEVEL CREATE operations',
+    async ({
+      body = {},
+      expected: { status, assertResponse },
+      grant,
+    }) => {
+      setDeveloperPermissionOnStudents({
+        ...grant,
+        op: 'Create',
+      });
+
+      // allows us to ensure the create rules redacted body
+      setDeveloperPermissionOnStudents({
+        fields: ['*'],
+        op: 'Read',
+        ownership: 'Any',
+      });
+
+      const response = await agent
+        .post(`/${coll}`)
+        .send(body)
         .set({ Authorization })
-        .send({
-          grade: 10,
-          age: 18,
-        });
+        .expect(status);
 
-      expect(age).toBe(18);
-      expect(grade).toBe(10);
+      if (isFunction(assertResponse))
+        await assertResponse(
+          get(response, 'body.student', {}),
+        );
+    },
+  );
 
-      const {
-        body: {
-          student: { age: nextAge, grade: nextGrade },
+  test.each([
+    {
+      body: {
+        test: 'Foo',
+        message: 'Ignore',
+      },
+      expected: {
+        status: 201,
+        assertResponse: (friend) => {
+          expect(friend).toHaveProperty('test', 'Foo');
+          expect(friend).not.toHaveProperty('message');
         },
-      } = await agent
-        .patch(`/students/${id}`)
+      },
+      grant: {
+        fields: ['!samples.message'],
+        ownership: 'Any',
+      },
+    },
+    {
+      body: {
+        test: 'Foo',
+        message: 'Ignore',
+      },
+      expected: {
+        status: 201,
+        assertResponse: (friend) => {
+          expect(friend).toEqual(expect.any(Object));
+        },
+      },
+      grant: {
+        fields: [
+          '{foo}',
+          {
+            glob: 'samples',
+            wildcard: true,
+            test: ['name=Test'],
+          },
+        ],
+        ownership: 'Any',
+      },
+    },
+    {
+      body: {
+        test: 'Foo',
+        message: 'Ignore',
+      },
+      expected: {
+        status: 403,
+      },
+      grant: {
+        fields: [
+          '*',
+          {
+            glob: 'samples',
+            wildcard: true,
+            negate: true,
+            test: ['name=Test'],
+          },
+        ],
+        ownership: 'Any',
+      },
+    },
+    {
+      body: {},
+      expected: {
+        status: 403,
+      },
+      grant: {
+        fields: ['uploads*'],
+        ownership: 'Any',
+      },
+    },
+  ])(
+    'SUB-DOCUMENT CREATE operations',
+    async ({
+      body = {},
+      expected: { status, assertResponse },
+      grant,
+    }) => {
+      setDeveloperPermissionOnStudents({
+        ...grant,
+        op: 'Create',
+      });
+
+      // allows us to ensure the create rules redacted body
+      setDeveloperPermissionOnStudents({
+        fields: ['*'],
+        op: 'Read',
+        ownership: 'Any',
+      });
+
+      const student = await Q3.model('students').create({
+        name: 'Test',
+        active: true,
+      });
+
+      const response = await agent
+        .post(`/${coll}/${student._id}/samples`)
+        .send(body)
         .set({ Authorization })
-        .send({
-          age: 12,
-          grade: 6,
-        })
-        .expect(200);
+        .expect(status);
 
-      expect(nextGrade).toBe(10);
-      expect(nextAge).toBe(12);
-    });
+      if (isFunction(assertResponse))
+        await assertResponse(
+          first(get(response, 'body.samples')),
+        );
+    },
+  );
 
-    it('should not permit DELETE op on nested field', async () => {
-      const { id, friends } = await genStudent();
-      const [{ id: friendId }] = friends;
+  test.each([
+    {
+      body: {
+        test: 'Quuz',
+      },
+      expected: {
+        status: 200,
+        assertResponse: (sample) => {
+          expect(sample).toHaveProperty('test', 'Quuz');
+        },
+      },
+      grant: {
+        fields: ['*'],
+      },
+    },
+    {
+      body: {
+        test: 'Quuz',
+      },
+      expected: {
+        status: 403,
+      },
+      grant: {
+        fields: [
+          '*',
+          {
+            glob: 'samples',
+            wildcard: true,
+            negate: true,
+            test: ['samples.test=Foo'],
+          },
+        ],
+      },
+    },
+    {
+      body: {
+        test: 'Quuz',
+      },
+      expected: {
+        status: 403,
+      },
+      grant: {
+        fields: ['name'],
+      },
+    },
+    {
+      body: {
+        test: 'Quuz',
+        message: 'Quuz',
+      },
+      expected: {
+        status: 200,
+        assertResponse: (sample) => {
+          expect(sample).toHaveProperty('test', 'Foo');
+          expect(sample).toHaveProperty('message', 'Quuz');
+        },
+      },
+      grant: {
+        fields: ['!samples.test'],
+      },
+    },
+  ])(
+    'SUB-DOCUMENT UPDATE operations',
+    async ({
+      body = {},
+      expected: { status, assertResponse },
+      grant,
+    }) => {
+      setDeveloperPermissionOnStudents({
+        ...grant,
+        op: 'Update',
+      });
 
-      return agent
-        .delete(`/students/${id}/friends/${friendId}`)
-        .set({ Authorization })
-        .expect(403);
-    });
-
-    it('should not update the age property', async () => {
-      const { id, age, name } = await genStudent();
+      // allows us to ensure the create rules redacted body
+      setDeveloperPermissionOnStudents({
+        fields: ['*'],
+        op: 'Read',
+        ownership: 'Any',
+      });
 
       const {
-        body: { student },
-      } = await agent
-        .patch(`/students/${id}`)
-        .send({ age: 40, name: 'Fred' })
+        id,
+        samples: [{ _id: sampleId }],
+      } = await Q3.model('students').create({
+        name: 'Test',
+        active: true,
+        samples: [
+          {
+            test: 'Foo',
+            message: 'Bar',
+          },
+        ],
+      });
+
+      const response = await agent
+        .patch(makeApiPath(id, 'samples', sampleId))
+        .send(body)
         .set({ Authorization })
-        .expect(200);
+        .expect(status);
 
-      expect(age).not.toBe(student.age);
-      expect(name).toBe(student.name);
-    });
+      if (isFunction(assertResponse))
+        await assertResponse(
+          first(get(response, 'body.samples')),
+        );
+    },
+  );
 
-    it('should redact GET response', async () => {
-      const { id } = await genStudent();
+  test.only.each([
+    {
+      expected: {
+        status: 200,
+        assertResponse: (sample) => {
+          expect(sample).toMatchObject({
+            name: expect.any(String),
+            socialStatus: expect.any(String),
+            active: expect.any(Boolean),
+            grade: expect.any(Number),
+            age: expect.any(Number),
+            trigger: expect.any(Boolean),
+            date: expect.any(String),
+          });
+        },
+      },
+      grant: {
+        fields: ['*'],
+      },
+    },
+    {
+      expected: {
+        status: 200,
+        assertResponse: (sample) => {
+          expect(sample).toMatchObject({
+            name: expect.any(String),
+            grade: expect.any(Number),
+          });
 
-      const {
-        body: { students },
-      } = await agent
-        .get('/students')
+          expect(sample).not.toHaveProperty('date');
+          expect(sample).not.toHaveProperty('socialStatus');
+        },
+      },
+      grant: {
+        fields: [
+          'name',
+          '!socialStatus',
+          {
+            glob: 'date',
+            negate: true,
+            test: ['grade=12'],
+          },
+          {
+            glob: 'grade',
+            test: ['age>19'],
+          },
+        ],
+      },
+    },
+    {
+      expected: {
+        status: 404,
+      },
+      grant: {
+        fields: ['*'],
+        documentConditions: ['name=Real'],
+      },
+    },
+  ])(
+    'GET operations',
+    async ({
+      expected: { status, assertResponse },
+      grant,
+    }) => {
+      setDeveloperPermissionOnStudents({
+        ...grant,
+        op: 'Read',
+      });
+
+      const { id } = await Q3.model('students').create({
+        name: 'Test',
+        active: true,
+        grade: 12,
+        age: 22,
+        trigger: false,
+        date: new Date(),
+        samples: [
+          {
+            test: 'Foo',
+            message: 'Bar',
+          },
+        ],
+      });
+
+      const response = await agent
+        .get(makeApiPath(id))
         .set({ Authorization })
-        .expect(200);
+        .expect(status);
 
-      const {
-        body: { student },
-      } = await agent
-        .get(`/students/${id}`)
-        .set({ Authorization })
-        .expect(200);
-
-      expect(
-        students.every(
-          (stu) =>
-            stu.socialStatus === undefined &&
-            stu.name !== undefined,
-        ),
-      ).toBeTruthy();
-
-      expect(student).not.toHaveProperty('socialStatus');
-    });
-  });
-
-  describe('Developer role type', () => {
-    afterAll(teardown);
-
-    beforeAll(async () => {
-      ({ Authorization, agent } = await setup(
-        'general@3merge.ca',
-        'General',
-      ));
-    });
-
-    it('should not permit DELETE op', async () =>
-      deleteStudent(403));
-  });
+      if (isFunction(assertResponse))
+        await assertResponse(get(response, 'body.student'));
+    },
+  );
 });
