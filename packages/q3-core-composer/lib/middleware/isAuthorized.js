@@ -39,7 +39,9 @@ class IsAuthorizedInLocationRef {
       next(
         exception(
           req.user ? 'Authorization' : 'Authentication',
-        ).boomerang(),
+        )
+          .msg(err.message)
+          .boomerang(),
       );
     }
   }

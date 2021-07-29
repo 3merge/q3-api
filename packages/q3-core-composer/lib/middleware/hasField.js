@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { size } = require('lodash');
 
 module.exports = (modelName, path) => {
   try {
@@ -8,11 +9,17 @@ module.exports = (modelName, path) => {
 
     const { name } = schemaType.constructor;
 
+    const reducePaths = () => {
+      const out = Object.entries(schemaType.schema.paths)
+        .filter(([, value]) => value.isRequired)
+        .map(([key]) => `${path}.${key}`);
+
+      return size(out) ? out : path;
+    };
+
     return name === 'DocumentArrayPath' ||
       name === 'SingleNestedPath'
-      ? Object.entries(schemaType.schema.paths)
-          .filter(([, value]) => value.isRequired)
-          .map(([key]) => `${path}.${key}`)
+      ? reducePaths()
       : path;
   } catch (e) {
     return path;

@@ -1,4 +1,7 @@
+const { get } = require('lodash');
+const micromatch = require('micromatch');
 const AC = require('./accessControl');
+const Field = require('./field');
 
 const {
   filterByColl,
@@ -33,20 +36,30 @@ module.exports = class Grant {
     return this;
   }
 
-  test(doc) {
+  test(doc, options = {}) {
+    const doesTargetIdField = (xs) =>
+      get(options, 'ensureIdIsAvailable', false)
+        ? micromatch.isMatch(
+            '_id',
+            Field(get(xs, 'fields', ['*']), doc, {
+              includeConditionalGlobs: true,
+              user: this.$user,
+            }),
+          )
+        : true;
+
     if (!this.hasCheckedColl)
       throw new Error('Grant must first check collection');
     if (!this.hasCheckedOp)
       throw new Error('Grant must first check operation');
 
-    this.$records = this.$records
-      .filter(hasFields)
-      .filter((grant) =>
-        meetsUserRequirements(grant, this.$user),
-      )
-      .filter((grant) =>
-        meetsDocumentRequirements(grant, doc),
-      );
+    this.$records = this.$records.filter(
+      (grant) =>
+        hasFields(grant) &&
+        meetsUserRequirements(grant, this.$user) &&
+        meetsDocumentRequirements(grant, doc) &&
+        doesTargetIdField(grant),
+    );
 
     return this.first();
   }

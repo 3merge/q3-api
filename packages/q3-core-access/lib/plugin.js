@@ -63,10 +63,20 @@ module.exports = (schema) => {
     if (!collection) return;
 
     const { collectionName } = this.collection;
+    const op = getOp(this, options);
+
+    const requiresIdInGrant = () =>
+      (op === 'Create' && this.isNew) ||
+      (op === 'Delete' &&
+        this.isModified('active') &&
+        !this.active);
+
     const acResult = new Grant(user)
-      .can(getOp(this, options))
+      .can(op)
       .on(collectionName)
-      .test(this.toJSON());
+      .test(this.toJSON(), {
+        ensureIdIsAvailable: requiresIdInGrant(),
+      });
 
     fn(
       reportAccessLevelFailure(
@@ -185,6 +195,7 @@ module.exports = (schema) => {
     schema.pre('save', checkOp);
     schema.pre('find', useQuery);
     schema.pre('findOne', useQuery);
+    schema.pre('findById', useQuery);
     schema.pre('count', enforce(useQuery));
     schema.pre('countDocuments', enforce(useQuery));
     schema.pre('estimatedDocumentCount', enforce(useQuery));

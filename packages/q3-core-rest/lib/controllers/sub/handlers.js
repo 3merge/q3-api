@@ -115,6 +115,7 @@ module.exports = {
       fieldName,
       params.fieldID,
     );
+
     return {
       data: parent,
       message: 'subResourceRemoved',
