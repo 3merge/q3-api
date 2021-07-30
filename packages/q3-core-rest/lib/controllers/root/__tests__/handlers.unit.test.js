@@ -18,6 +18,14 @@ Model.handleReq = function fileHandlerMethod() {
   return this;
 };
 
+Model.authorizeUpdateArguments = jest
+  .fn()
+  .mockImplementation((args) => args);
+
+Model.authorizeCreateArguments = jest
+  .fn()
+  .mockImplementation((args) => args);
+
 beforeEach(() => {
   api.inject({
     datasource: Model,
@@ -109,13 +117,27 @@ describe('Handlers', () => {
 
   describe('Post Controller', () => {
     it('should return with create code', async () => {
-      const args = { name: 'Mike', age: 28 };
-      req.authorizeBody = () => args;
+      req.body = {
+        name: 'Mike',
+        age: 28,
+      };
 
-      await Post(req, res);
-      expect(Model.create).toHaveBeenCalledWith([args], {
-        redact: true,
-      });
+      await Post(
+        {
+          ...req,
+          datasource: class {
+            constructor() {
+              return Model;
+            }
+          },
+        },
+        res,
+      );
+
+      expect(
+        Model.authorizeCreateArguments,
+      ).toHaveBeenCalledWith(req.body);
+
       expect(res.create).toHaveBeenCalled();
     });
   });
@@ -130,7 +152,7 @@ describe('Handlers', () => {
 
       const args = { name: 'Mike', age: 28 };
       req.params.resourceID = 1;
-      req.authorizeBody = () => args;
+
       await Patch(req, res);
       expect(Model.findStrictly).toHaveBeenCalledWith(1, {
         redact: false,

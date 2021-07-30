@@ -15,7 +15,10 @@ const flattenAndReduceByFields = (
 ) => {
   if (!doc) return null;
 
-  const { keepFlat = false } = options;
+  const {
+    keepFlat = false,
+    returnWithPatternsEarly = false,
+  } = options;
 
   const flat = flatten(doc);
   const patterns = Field(
@@ -34,6 +37,9 @@ const flattenAndReduceByFields = (
     doc,
     options,
   );
+
+  // useful for debugging
+  if (returnWithPatternsEarly) return patterns;
 
   const unwind = micromatch(
     Object.keys(flat),
@@ -72,7 +78,10 @@ const Redact = (data, user, collectionName) =>
           // must do this during the callback
           // as not all documents will contain the same alias conditions
           accessControl.test(doc),
-          { user },
+          {
+            includeConditionalGlobs: true,
+            user,
+          },
         );
 
       const output = executeAsArray(data, runTest);

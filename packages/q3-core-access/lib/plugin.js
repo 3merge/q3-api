@@ -17,7 +17,7 @@ const {
   hasOptions,
   extractUser,
 } = require('./helpers');
-const AccessControlSessionBridge = require('./pluginTemp/bridge');
+const AccessControlSessionBridge = require('./pluginTemp/sessionBridge');
 
 const reportAccessLevelFailure = (condition) =>
   condition

@@ -125,6 +125,7 @@ async function removeSubDocument(field, id) {
     );
   };
 
+  if (!this.checkAuthorizationForTotalSubDocument(field));
   await executeOn(id, removeChild);
 
   return this.save({
@@ -134,12 +135,16 @@ async function removeSubDocument(field, id) {
 }
 
 async function updateSubDocuments(field, ids, args) {
-  ids.map((id) => {
-    const d = invoke(get(this, field), 'id', id);
-
-    return d
-      ? d.authorizeUpdateArgumentsOnCurrentSubDocument(args)
-      : null;
+  ids.forEach((id) => {
+    try {
+      return get(this, field)
+        .id(id)
+        .authorizeUpdateArgumentsOnCurrentSubDocument(
+          removeEmpty(args),
+        );
+    } catch (e) {
+      return null;
+    }
   });
 
   return this.save();

@@ -61,6 +61,7 @@ module.exports = class SubDocumentControllerCommander extends (
           .exec();
 
         datasource.verifyOutput(doc);
+
         req.parent = doc;
         req.fieldName = this.field;
         req.subdocs = doc[this.field];
@@ -78,7 +79,6 @@ module.exports = class SubDocumentControllerCommander extends (
   getAuthorization() {
     return [
       redact(this.collectionName)
-        .requireField(this.field)
         .inResponse(this.field)
         .withPrefix(this.field)
         .done(),
@@ -99,7 +99,6 @@ module.exports = class SubDocumentControllerCommander extends (
   getListController(path) {
     List.authorization = [
       redact(this.collectionName)
-        .requireField(this.field)
         .inResponse(this.field)
         .withPrefix(this.field)
         .done(),

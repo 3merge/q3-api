@@ -35,6 +35,9 @@ const filterBy =
 exports.hasOptions = (d) =>
   'options' in d ? d.options.redact : d.redact;
 
+exports.hasKeys = (xs) =>
+  isObject(xs) && size(Object.keys(xs));
+
 exports.hasFields = ({ fields }) =>
   fields && !fields.includes('!*');
 

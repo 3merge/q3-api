@@ -11,7 +11,6 @@ const {
   pick,
   invoke,
   merge,
-  first,
 } = require('lodash');
 const { makeArray } = require('../helpers');
 

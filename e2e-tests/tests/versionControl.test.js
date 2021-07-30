@@ -28,7 +28,7 @@ test('Version control', async () => {
     .patch(`/students/${id}`)
     .send({ name: 'Greg' })
     .set({ Authorization })
-    .expect(200);
+    .expect(403);
 
   await agent
     .post(`/students/${id}/friends`)

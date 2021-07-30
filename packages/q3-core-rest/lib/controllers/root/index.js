@@ -81,9 +81,7 @@ module.exports = class DocumentControllerCommander extends (
 
   getUploadController(path) {
     Upload.authorization = [
-      redact(this.collectionName)
-        .requireField('featuredUpload')
-        .done(),
+      redact(this.collectionName).done(),
     ];
 
     return this.makePost(path, Upload);

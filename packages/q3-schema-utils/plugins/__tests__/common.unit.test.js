@@ -20,6 +20,20 @@ const pluginSchemaEnabled = new mongoose.Schema(
   },
 );
 
+pluginSchemaEnabled.methods.authorizeCreateArguments = (
+  v,
+) => v;
+
+childSchema.methods.authorizeUpdateArgumentsOnCurrentSubDocument =
+  // eslint-disable-next-line
+  function (v) {
+    this.set(v);
+    return this;
+  };
+
+pluginSchemaEnabled.methods.checkAuthorizationForTotalSubDocument =
+  () => false;
+
 const stub = {
   active: true,
   name: 'Foo',

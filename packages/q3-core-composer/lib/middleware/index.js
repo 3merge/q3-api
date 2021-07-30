@@ -1,6 +1,5 @@
 const { Grant } = require('q3-core-access');
 const { get, invoke } = require('lodash');
-const authorizeBody = require('./authorizeBody');
 
 class Session {
   constructor(req) {
@@ -26,48 +25,6 @@ class Session {
 
   get nonce() {
     return this.sessionNonce || this.query.nonce;
-  }
-
-  setOperation() {
-    switch (this.method) {
-      case 'PATCH':
-      case 'PUT':
-        this.op = 'Update';
-        break;
-      case 'GET':
-        this.op = 'Read';
-        break;
-      case 'POST':
-        this.op = 'Create';
-        break;
-      case 'DELETE':
-        this.op = 'Delete';
-        break;
-      default:
-        throw new Error('Method not allowed');
-    }
-
-    return this;
-  }
-
-  getPermission(collectionName, sessionUser) {
-    const gen = (op) =>
-      new Grant(sessionUser)
-        .can(op)
-        .on(collectionName)
-        .first();
-
-    const primary = gen(this.op);
-    const secondary = gen('Read');
-
-    /**
-     * @NOTE
-     * Used to redact responses on non-read operations.
-     */
-    if (primary && secondary)
-      primary.readOnly = secondary.fields;
-
-    return primary;
   }
 }
 
@@ -100,9 +57,10 @@ function middleware(UserModel) {
       );
 
     req.authorize = (collectionName) =>
-      identity
-        .setOperation()
-        .getPermission(collectionName, req.user);
+      new Grant(req.user)
+        .can('Read')
+        .on(collectionName)
+        .first();
 
     next();
   };

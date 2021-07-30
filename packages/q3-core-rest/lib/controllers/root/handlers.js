@@ -100,9 +100,10 @@ module.exports = {
   ) {
     const doc = new Datasource();
 
-    await doc
-      .set(doc.authorizeCreateArguments(body))
-      .save({ redact: true });
+    doc.set(doc.authorizeCreateArguments(body));
+    await doc.save({
+      redact: true,
+    });
 
     res.create({
       message: res.say('resourceCreated'),

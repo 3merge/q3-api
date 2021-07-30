@@ -1,5 +1,6 @@
 const { exception } = require('q3-core-responder');
 const aqp = require('api-query-params');
+const { get } = require('lodash');
 const { executeOn } = require('q3-schema-utils');
 const sift = require('sift');
 const { isSimpleSubDocument } = require('../../utils');
@@ -84,10 +85,17 @@ module.exports = {
     };
   },
 
-  async Put({ authorizeBody, fieldName, parent }) {
-    // await parent
-    //   .set({ [fieldName]: authorizeBody(parent) })
-    //   .save();
+  async Put({ body, fieldName, parent }) {
+    await parent
+      .set({
+        [fieldName]: get(
+          parent.authorizeCreateArguments({
+            [fieldName]: body,
+          }),
+          fieldName,
+        ),
+      })
+      .save();
 
     return {
       data: parent,
