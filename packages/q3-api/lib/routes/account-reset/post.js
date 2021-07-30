@@ -8,9 +8,7 @@ const CreateAPIKeyController = async ({ query }, res) => {
 };
 
 CreateAPIKeyController.authorization = [
-  redact(Users.collection.collectionName)
-    .requireField('secret')
-    .done(),
+  redact(Users.collection.collectionName).done(),
 ];
 
 module.exports = compose(CreateAPIKeyController);

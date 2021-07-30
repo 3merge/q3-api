@@ -143,14 +143,14 @@ describe('Handlers', () => {
   });
 
   describe('Patch Controller', () => {
-    it('should return with create code', async () => {
+    it('should return with update code', async () => {
       Model.findStrictly.mockResolvedValue({
         ...Model,
         updatedAt: new Date(),
         set: jest.fn().mockReturnValue(Model),
       });
 
-      const args = { name: 'Mike', age: 28 };
+      req.body = { name: 'Mike', age: 28 };
       req.params.resourceID = 1;
 
       await Patch(req, res);
@@ -158,7 +158,10 @@ describe('Handlers', () => {
         redact: false,
         select: '+uploads',
       });
-      // expect(set).toHaveBeenCalledWith(args);
+
+      expect(
+        Model.authorizeUpdateArguments,
+      ).toHaveBeenCalledWith(req.body);
       expect(res.update).toHaveBeenCalled();
     });
   });
@@ -169,6 +172,9 @@ describe('Handlers', () => {
       Model.findStrictly.mockResolvedValue({
         ...Model,
         handleFeaturedUpload,
+        checkAuthorizationForTotalSubDocument: jest
+          .fn()
+          .mockReturnValue(true),
       });
 
       req.params.resourceID = 1;

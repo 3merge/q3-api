@@ -127,10 +127,14 @@ module.exports = {
     const doc = await datasource.findStrictly(
       params.resourceID,
     );
+
     if (
       files &&
       Object.keys(files).length &&
-      doc.handleFeaturedUpload
+      doc.handleFeaturedUpload &&
+      doc.checkAuthorizationForTotalSubDocument(
+        'featuredUpload',
+      )
     ) {
       await doc.handleFeaturedUpload({ files });
     }
