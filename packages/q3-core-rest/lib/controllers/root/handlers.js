@@ -44,6 +44,8 @@ module.exports = {
         hasPrevPage,
       });
     } catch (e) {
+      if (e.statusCode === 403) throw e;
+
       res.ok({
         [collectionPluralName]: [],
         total: 0,

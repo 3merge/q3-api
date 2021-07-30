@@ -68,6 +68,12 @@ module.exports = function Field(
             '.*.',
             `.${idx}.`,
           );
+
+          if (item.glob.endsWith('.'))
+            item.glob = item.glob.substring(
+              0,
+              item.glob.length - 1,
+            );
         };
 
         const execTest = (evaluationTarget) => {

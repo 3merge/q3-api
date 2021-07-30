@@ -20,20 +20,6 @@ const pluginSchemaEnabled = new mongoose.Schema(
   },
 );
 
-pluginSchemaEnabled.methods.authorizeCreateArguments = (
-  v,
-) => v;
-
-childSchema.methods.authorizeUpdateArgumentsOnCurrentSubDocument =
-  // eslint-disable-next-line
-  function (v) {
-    this.set(v);
-    return this;
-  };
-
-pluginSchemaEnabled.methods.checkAuthorizationForTotalSubDocument =
-  () => false;
-
 const stub = {
   active: true,
   name: 'Foo',
@@ -50,23 +36,6 @@ const expectInactive = async (id) =>
   expect(await Model.findById(id).exec()).toMatchObject({
     active: false,
   });
-
-const countDogsAfterPush = async (doc, expected) => {
-  const { dogs } = await doc.pushSubDocument('dogs', {
-    breed: 'Terrier',
-  });
-
-  return expect(dogs).toHaveLength(expected);
-};
-
-const countDogsAfterDeletion = async (
-  doc,
-  id,
-  expected,
-) => {
-  const { dogs } = await doc.removeSubDocument('dogs', id);
-  return expect(dogs).toHaveLength(expected);
-};
 
 beforeAll(async () => {
   mongoose.plugin(plugin);
@@ -92,20 +61,6 @@ describe('Commons plugin', () => {
     });
   });
 
-  describe('findStrictly', () => {
-    it('should throw', () =>
-      expect(
-        Model.findStrictly(mongoose.Types.ObjectId()),
-      ).rejects.toThrowError());
-
-    it('should return single result with virtuals', async () => {
-      const { _id: id } = await Model.create(stub);
-      return expect(
-        Model.findStrictly(id),
-      ).resolves.toHaveProperty('id');
-    });
-  });
-
   describe('archive', () => {
     it('should set document active property to false', async () => {
       const { _id: id } = await Model.create(stub);
@@ -118,124 +73,6 @@ describe('Commons plugin', () => {
       const ids = getIds(resp);
       await Model.archiveMany(ids);
       return expectInactive(ids[0]);
-    });
-  });
-
-  describe('getSubDocument', () => {
-    it('should throw an error', async () => {
-      const resp = await Model.create(stub);
-      return expect(() =>
-        resp.getSubDocument(
-          'dogs',
-          mongoose.Types.ObjectId(),
-        ),
-      ).toThrowError();
-    });
-
-    it('should return the sub document', async () => {
-      const resp = await Model.create(stub);
-      const {
-        dogs: [{ _id: id }],
-      } = resp;
-      return expect(
-        resp.getSubDocument('dogs', id),
-      ).toHaveProperty('breed', stub.dogs[0].breed);
-    });
-  });
-
-  describe('pushSubDocument', () => {
-    it('should add a new sub document', async () => {
-      const resp = await Model.create(stub);
-      return countDogsAfterPush(resp, 4);
-    });
-
-    it('should insert first sub document', async () => {
-      const resp = await Model.create({ name: 'Test' });
-      return countDogsAfterPush(resp, 1);
-    });
-
-    it('should catch error before validating the parent', async () => {
-      const resp = await Model.create({ name: 'Test' });
-      return expect(
-        resp.pushSubDocument('dogs', {
-          breed: {
-            type: 'Corgi',
-          },
-        }),
-      ).rejects.toMatchObject({
-        errors: expect.objectContaining({
-          breed: expect.any(Object),
-        }),
-      });
-    });
-  });
-
-  describe('removeSubDocument', () => {
-    it('should remove single subdocument', async () => {
-      const resp = await Model.create(stub);
-      const {
-        dogs: [{ _id: id }],
-      } = resp;
-      return countDogsAfterDeletion(resp, id, 2);
-    });
-
-    it('should remove all subdocument', async () => {
-      const resp = await Model.create(stub);
-      return countDogsAfterDeletion(
-        resp,
-        getIds(resp.dogs),
-        0,
-      );
-    });
-  });
-
-  describe('updateSubDocument', () => {
-    it('should update a single document', async () => {
-      const resp = await Model.create(stub);
-      const {
-        dogs: [{ _id: id }],
-      } = resp;
-      const breed = 'Boston';
-      const { dogs } = await resp.updateSubDocument(
-        'dogs',
-        id,
-        { breed },
-      );
-      return expect(dogs[0].breed).toBe(breed);
-    });
-
-    it('should catch validation errors early', async () => {
-      const resp = await Model.create(stub);
-      const {
-        dogs: [{ _id: id }],
-      } = resp;
-      const breed = { type: 'Boston' };
-      return expect(
-        resp.updateSubDocument('dogs', id, { breed }),
-      ).rejects.toMatchObject({
-        errors: expect.objectContaining({
-          breed: expect.any(Object),
-        }),
-      });
-    });
-  });
-
-  describe('updateSubDocuments', () => {
-    it('should update a single document', async () => {
-      const resp = await Model.create(stub);
-      const {
-        dogs: [{ _id: id1 }, { _id: id2 }],
-      } = resp;
-      const breed = 'Boston';
-      const { dogs } = await resp.updateSubDocuments(
-        'dogs',
-        [id1, id2],
-        { breed },
-      );
-
-      expect(dogs[0].breed).toBe(breed);
-      expect(dogs[1].breed).toBe(breed);
-      expect(dogs[2].breed).not.toBe(breed);
     });
   });
 

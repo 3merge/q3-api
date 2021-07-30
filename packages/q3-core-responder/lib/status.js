@@ -1,6 +1,9 @@
-const statusCodeHelper = (res) => (code) => (body = {}) => {
-  res.status(code).json(body);
-};
+const statusCodeHelper =
+  (res) =>
+  (code) =>
+  (body = {}) => {
+    res.status(code).json(body);
+  };
 
 const removeEmpty = (obj = {}) =>
   Object.entries(obj).reduce((a, [key, value]) => {

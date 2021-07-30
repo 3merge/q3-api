@@ -11,13 +11,15 @@ const {
 const Comparison = require('comparisons');
 const mongoose = require('mongoose');
 const { exception } = require('q3-core-responder');
-const Grant = require('./core/grant');
+const Grant = require('../core/grant');
 const {
   meetsUserRequirements,
   hasOptions,
   extractUser,
-} = require('./helpers');
-const AccessControlSessionBridge = require('./pluginTemp/sessionBridge');
+} = require('../helpers');
+const AccessControlSessionBridge = require('./sessionBridge');
+const QueryDecorators = require('./queryDecorators');
+const MethodDecorators = require('./methodDecorators');
 
 const reportAccessLevelFailure = (condition) =>
   condition
@@ -116,24 +118,16 @@ module.exports = (schema) => {
   function useQuery() {
     if (!hasOptions(this)) return;
 
-    const {
-      collection: { collectionName },
-    } = this.model;
-    const user = extractUser(this);
+    const doc = this.getReadGrant();
+    const user = this.getActiveUser();
     const createdBy = get(user, '_id', null);
 
-    const doc =
-      new Grant(user)
-        .can('Read')
-        .on(collectionName)
-        .first() || {};
-
     const {
-      ownership = 'Own',
-      ownershipAliasesOnly = false,
-      ownershipAliasesWith = false,
-      ownershipAliases = [],
-      documentConditions = [],
+      ownership,
+      ownershipAliasesOnly,
+      ownershipAliasesWith,
+      ownershipAliases,
+      documentConditions,
     } = doc;
 
     const { $and } = new Comparison(
@@ -219,6 +213,8 @@ module.exports = (schema) => {
   }
 
   schema.loadClass(AccessControlSessionBridge);
+  schema.loadClass(MethodDecorators);
+  schema.plugin(QueryDecorators);
 
   if (schema.options.enableOwnership) {
     schema.pre('save', checkOp);

@@ -17,6 +17,7 @@ const {
   extractUser,
   clean,
   hasKeys,
+  concat,
 } = require('../helpers');
 
 const removeSpecialProps = (xs) =>
@@ -44,6 +45,11 @@ const cleanAndPick = (a, b) =>
       ? clean(pick(a, Object.keys(removeSpecialProps(b))))
       : clean(a),
   );
+
+const getAccessFieldError = () =>
+  exception('Authorization')
+    .msg('cannotAccessField')
+    .boomerang();
 
 class AccessControlSessionBridge {
   __$getCollectionName() {
@@ -77,10 +83,35 @@ class AccessControlSessionBridge {
         .msg('missingGrant')
         .throw();
 
+    const getGrantPatterns = () =>
+      Redact.flattenAndReduceByFields(fullDocument, grant, {
+        returnWithPatternsEarly: true,
+        ...options,
+      });
+
     return {
       grant,
       fullDocument,
       options,
+      getGrantPatterns,
+
+      checkFieldAgainst(field) {
+        return (
+          size(micromatch([field], getGrantPatterns())) > 0
+        );
+      },
+
+      getIndexOfSubField(field, id) {
+        try {
+          return String(
+            get(fullDocument, field, []).findIndex((item) =>
+              id.equals(item._id),
+            ) || 0,
+          );
+        } catch (e) {
+          return String(0);
+        }
+      },
     };
   }
 
@@ -117,6 +148,10 @@ class AccessControlSessionBridge {
     return this.__$runGrantAgainstDocument(args, 'Create');
   }
 
+  authorizeDeleteArguments(args = {}) {
+    return this.__$runGrantAgainstDocument(args, 'Delete');
+  }
+
   authorizeUpdateArguments(args = {}) {
     return this.__$runGrantAgainstDocument(args, 'Update');
   }
@@ -144,7 +179,7 @@ class AccessControlSessionBridge {
 
     const redactedSubDocument = get(
       parent.authorizeUpdateArguments(modifiedDocument),
-      [field, index].join('.'),
+      concat([field, index]),
     );
 
     return this.set(
@@ -152,28 +187,28 @@ class AccessControlSessionBridge {
     );
   }
 
-  checkAuthorizationForTotalSubDocument(field) {
-    const { fullDocument, grant, options } =
-      this.__$getInitialGrantAndContext('Delete');
+  authorizeRemovalOnCurrentSubDocument(callback) {
+    const field = this.$__.fullPath;
+    const { checkFieldAgainst, getIndexOfSubField } =
+      this.parent().__$getInitialGrantAndContext('Delete');
 
-    if (
-      !size(
-        micromatch(
-          [field],
-          Redact.flattenAndReduceByFields(
-            fullDocument,
-            grant,
-            {
-              returnWithPatternsEarly: true,
-              ...options,
-            },
-          ),
-        ),
-      )
+    return checkFieldAgainst(
+      concat([field, getIndexOfSubField(field, this._id)]),
     )
-      exception('Authorization')
-        .msg('cannotAccessField')
-        .throw();
+      ? this.remove(callback)
+      : callback(getAccessFieldError());
+  }
+
+  checkAuthorizationForTotalSubDocument(
+    field,
+    op = 'Delete',
+  ) {
+    if (
+      !this.__$getInitialGrantAndContext(
+        op,
+      ).checkFieldAgainst(field)
+    )
+      throw getAccessFieldError();
 
     return true;
   }
@@ -183,8 +218,9 @@ class AccessControlSessionBridge {
 // permission levels
 [
   'authorizeCreateArguments',
-  'authorizeUpdateArgumentsOnCurrentSubDocument',
+  'authorizeDeleteArguments',
   'authorizeUpdateArguments',
+  'authorizeUpdateArgumentsOnCurrentSubDocument',
 ].forEach((method) => {
   const fn = AccessControlSessionBridge.prototype[method];
   AccessControlSessionBridge.prototype[method] = function (

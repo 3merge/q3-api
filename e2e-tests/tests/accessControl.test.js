@@ -656,7 +656,7 @@ describe('Access control via REST endpoints (user ownership)', () => {
   });
 
   describe('bulk', () => {
-    it('should error if bulk contains a non-editable document', async () => {
+    it('should skip documents', async () => {
       setDeveloperPermissionOnStudents({
         fields: ['*'],
         op: 'Create',
@@ -720,6 +720,105 @@ describe('Access control via REST endpoints (user ownership)', () => {
 
       expect(first(samples)).toHaveProperty('test', 'Foo');
       expect(last(samples)).toHaveProperty('test', 'Quuz');
+    });
+
+    it('should skip documents', async () => {
+      setDeveloperPermissionOnStudents({
+        fields: ['*'],
+        op: 'Read',
+      });
+
+      setDeveloperPermissionOnStudents({
+        fields: ['*'],
+        op: 'Create',
+      });
+
+      setDeveloperPermissionOnStudents({
+        fields: [
+          '*',
+          {
+            glob: 'samples.*.',
+            negate: true,
+            wildcard: true,
+            unwind: 'samples',
+            test: ['samples.message=Foo'],
+          },
+        ],
+        op: 'Delete',
+        ownership: 'Own',
+      });
+
+      const studentId = get(
+        await agent
+          .post(makeApiPath())
+          .set({ Authorization })
+          .expect(201),
+        'body.student.id',
+      );
+
+      const getSampleId = async (message) =>
+        get(
+          last(
+            get(
+              await agent
+                .post(makeApiPath(studentId, 'samples'))
+                .set({ Authorization })
+                .send({
+                  message,
+                  test: message,
+                })
+                .expect(201),
+              'body.samples',
+            ),
+          ),
+          'id',
+        );
+
+      await agent
+        .delete(makeApiPath(studentId, 'samples'))
+        .query({
+          ids: [
+            await getSampleId('Foo'),
+            await getSampleId('Bar'),
+          ],
+        })
+        .set({ Authorization })
+        .expect(204);
+
+      const {
+        body: { samples },
+      } = await agent
+        .get(makeApiPath(studentId, 'samples'))
+        .set({ Authorization })
+        .expect(200);
+
+      expect(samples).toHaveLength(1);
+    });
+
+    it('should require read permission', async () => {
+      setDeveloperPermissionOnStudents({
+        op: 'Read',
+        fields: null,
+      });
+
+      const { _id: id } = await Students.create({
+        name: 'Hidden',
+      });
+
+      await agent
+        .get('/students')
+        .set({ Authorization })
+        .expect(403);
+
+      await agent
+        .get(`/students/${id}`)
+        .set({ Authorization })
+        .expect(403);
+
+      await agent
+        .get(`/students/${id}/samples`)
+        .set({ Authorization })
+        .expect(403);
     });
   });
 });

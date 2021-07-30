@@ -89,6 +89,10 @@ exports.filterByRoleType = (a, value) =>
 exports.makeArray = (xs) =>
   compact(Array.isArray(xs) ? xs : [xs]);
 
+exports.concat = (xs) => xs.join('.');
+
+/// ////////////////// WILL CHECK AFTER
+
 const clean = (xs) => {
   if (Array.isArray(xs)) return xs.map(clean);
   if (!isObject(xs) || xs instanceof Date) return xs;
