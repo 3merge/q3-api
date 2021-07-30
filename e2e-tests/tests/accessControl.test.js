@@ -820,5 +820,30 @@ describe('Access control via REST endpoints (user ownership)', () => {
         .set({ Authorization })
         .expect(403);
     });
+
+    it('should convert ownership query', async () => {
+      setDeveloperPermissionOnStudents({
+        op: 'Update',
+        fields: ['*'],
+        ownership: 'Own',
+        ownershipAliases: [
+          {
+            foreign: 'email',
+            local: 'name',
+          },
+        ],
+        ownershipAliasesOnly: true,
+      });
+
+      const { _id: id } = await Students.create({
+        name: email,
+      });
+
+      await agent
+        .patch(`/students/${id}`)
+        .send({ name: 'New' })
+        .set({ Authorization })
+        .expect(200);
+    });
   });
 });

@@ -1,8 +1,8 @@
-const { get } = require('lodash');
+const { get, first } = require('lodash');
 const micromatch = require('micromatch');
 const AC = require('./accessControl');
 const Field = require('./field');
-
+const GrantInterpreter = require('./grantInterpreter');
 const {
   filterByColl,
   filterByOp,
@@ -21,7 +21,10 @@ module.exports = class Grant {
   }
 
   first() {
-    return this.$records[0];
+    return GrantInterpreter(
+      first(this.$records),
+      this.$user,
+    );
   }
 
   can(op) {

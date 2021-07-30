@@ -4,7 +4,6 @@ const {
   get,
   isFunction,
   isObject,
-  isString,
   size,
   mergeWith,
 } = require('lodash');
@@ -43,7 +42,8 @@ exports.hasFields = ({ fields }) =>
 
 exports.extractUser = (ctx) => {
   try {
-    return ctx.__$q3.USER;
+    const copy = { ...invokeJSON(ctx.__$q3.USER) };
+    return copy;
   } catch (e) {
     return null;
   }
@@ -110,17 +110,8 @@ const clean = (xs) => {
 const hasLength = (xs) =>
   isObject(xs) && size(Object.keys(xs));
 
-const mapAsync = (xs, fn) =>
-  Promise.all(Array.isArray(xs) ? compact(xs).map(fn) : []);
-
-const moveWithinPropertyName = (prefix, xs) =>
-  isString(prefix)
-    ? {
-        [prefix]: xs,
-      }
-    : xs;
-
 const toJSON = (xs) =>
+  // eslint-disable-next-line
   isObject(xs)
     ? isFunction(get(xs, 'toJSON'))
       ? xs.toJSON()
@@ -140,7 +131,5 @@ const merge = (...objs) =>
 
 exports.clean = clean;
 exports.hasLength = hasLength;
-exports.mapAsync = mapAsync;
-exports.moveWithinPropertyName = moveWithinPropertyName;
 exports.toJSON = toJSON;
 exports.merge = merge;

@@ -8,6 +8,7 @@ const {
   size,
   omit,
   map,
+  isEqual,
 } = require('lodash');
 const micromatch = require('micromatch');
 const { exception } = require('q3-core-responder');
@@ -46,6 +47,11 @@ const cleanAndPick = (a, b) =>
       : clean(a),
   );
 
+const depopulateCreatedByReference = (xs) =>
+  isObject(xs.createdBy) && 'firstName' in xs.createdBy
+    ? xs.createdBy._id
+    : xs.createdBy;
+
 const getAccessFieldError = () =>
   exception('Authorization')
     .msg('cannotAccessField')
@@ -78,9 +84,9 @@ class AccessControlSessionBridge {
       .on(this.__$getCollectionName())
       .test(fullDocument, options);
 
-    if (!isObject(grant))
+    if (!isObject(grant) || !this.checkOwnership(grant))
       exception('Authorization')
-        .msg('missingGrant')
+        .msg('missingOrIncompleteGrant')
         .throw();
 
     const getGrantPatterns = () =>
@@ -211,6 +217,50 @@ class AccessControlSessionBridge {
       throw getAccessFieldError();
 
     return true;
+  }
+
+  isOwner() {
+    const creator = depopulateCreatedByReference(this);
+    const user = this.__$getUserFromSession();
+    const id = get(user, '_id');
+
+    try {
+      return creator.equals(id);
+    } catch (e) {
+      return isEqual(id, creator);
+    }
+  }
+
+  checkOwnership(grant) {
+    if (
+      !grant ||
+      grant.ownership === 'Any' ||
+      !['Delete', 'Update'].includes(grant.op)
+    )
+      return true;
+
+    const { data, operator } = grant.makeOwnershipQuery();
+    const createdBy = depopulateCreatedByReference(this);
+
+    const compareAliasWithCurrentDocument = (xs) =>
+      isEqual(
+        pick(
+          {
+            ...this.toJSON(),
+            createdBy,
+          },
+          Object.keys(xs),
+        ),
+        xs,
+      );
+
+    if (operator === 'OR')
+      return data.some(compareAliasWithCurrentDocument);
+
+    if (operator === 'AND')
+      return data.every(compareAliasWithCurrentDocument);
+
+    return this.isOwner();
   }
 }
 

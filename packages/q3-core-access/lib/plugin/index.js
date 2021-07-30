@@ -2,11 +2,9 @@
 const {
   get,
   invoke,
-  isEqual,
+  lowerCase,
   isFunction,
   compact,
-  size,
-  isObject,
 } = require('lodash');
 const Comparison = require('comparisons');
 const mongoose = require('mongoose');
@@ -15,7 +13,6 @@ const Grant = require('../core/grant');
 const {
   meetsUserRequirements,
   hasOptions,
-  extractUser,
 } = require('../helpers');
 const AccessControlSessionBridge = require('./sessionBridge');
 const QueryDecorators = require('./queryDecorators');
@@ -47,14 +44,6 @@ const enforce = (fn) =>
     return fn.call(this);
   };
 
-const reduceConditionsIntoObject = (xs) =>
-  size(xs)
-    ? get(new Comparison(xs).query(), '$and', []).reduce(
-        (acc, curr) => Object.assign(acc, curr),
-        {},
-      )
-    : {};
-
 module.exports = (schema) => {
   /**
    * @NOTE
@@ -67,31 +56,13 @@ module.exports = (schema) => {
     );
 
     const op = getOp(this, options);
-    const user = extractUser(this);
+    const user = this.__$getUserFromSession();
     const userId = get(user, '_id');
 
     if (this.isNew && user) this.createdBy = userId;
     if (!collectionName) return;
 
     const isEmpty = (xs) => !xs || xs === undefined;
-
-    const isUserTheOwner = () => {
-      const creator =
-        isObject(this.createdBy) &&
-        'firstName' in this.createdBy
-          ? this.createdBy._id
-          : this.createdBy;
-
-      try {
-        return creator.equals(userId);
-      } catch (e) {
-        return isEqual(userId, creator);
-      }
-    };
-
-    const hasStrictOwnership = (xs) =>
-      ['Delete', 'Update'].includes(op) &&
-      get(xs, 'ownership') === 'Own';
 
     const requiresIdInGrant = () =>
       (op === 'Create' && this.isNew) ||
@@ -108,9 +79,7 @@ module.exports = (schema) => {
 
     fn(
       reportAccessLevelFailure(
-        (hasOptions(options) && isEmpty(acResult)) ||
-          (hasStrictOwnership(acResult) &&
-            !isUserTheOwner()),
+        hasOptions(options) && isEmpty(acResult),
       ),
     );
   }
@@ -119,16 +88,11 @@ module.exports = (schema) => {
     if (!hasOptions(this)) return;
 
     const doc = this.getReadGrant();
+
     const user = this.getActiveUser();
     const createdBy = get(user, '_id', null);
 
-    const {
-      ownership,
-      ownershipAliasesOnly,
-      ownershipAliasesWith,
-      ownershipAliases,
-      documentConditions,
-    } = doc;
+    const { ownership, documentConditions } = doc;
 
     const { $and } = new Comparison(
       documentConditions,
@@ -146,64 +110,11 @@ module.exports = (schema) => {
 
     if ($and.length) this.and($and);
 
-    if (ownership !== 'Any') {
-      const aliases = ownershipAliases.map(
-        ({
-          cast,
-          documentConditions:
-            ownershipAliasDocumentConditions,
-          foreign,
-          local,
-        }) => {
-          const q = get(user, foreign);
+    if (ownership !== 'Any' && doc.hasBeenInterpreted) {
+      const { operator, data } = doc.makeOwnershipQuery();
 
-          const oadc = reduceConditionsIntoObject(
-            ownershipAliasDocumentConditions,
-          );
-
-          const withSubOwnershipAliasConditions = (xs) => ({
-            ...oadc,
-            ...xs,
-          });
-
-          // for now, we've only encountered ObjectId references
-          // we may need to support other caster functions/presets later
-          if (cast === 'ObjectId')
-            return {
-              $or: [
-                withSubOwnershipAliasConditions({
-                  [local]: mongoose.Types.ObjectId(q),
-                }),
-                withSubOwnershipAliasConditions({
-                  [local]:
-                    typeof q === 'object'
-                      ? invoke(q, 'toString')
-                      : q,
-                }),
-              ],
-            };
-
-          return withSubOwnershipAliasConditions({
-            [local]: q,
-          });
-        },
-      );
-      if (aliases.length) {
-        if (ownershipAliasesOnly) {
-          this.or(aliases);
-        } else if (ownershipAliasesWith) {
-          this.and(
-            aliases.concat({
-              createdBy,
-            }),
-          );
-        } else {
-          this.or(
-            aliases.concat({
-              createdBy,
-            }),
-          );
-        }
+      if (operator) {
+        invoke(this, lowerCase(operator), data);
       } else {
         this.where({
           createdBy,
