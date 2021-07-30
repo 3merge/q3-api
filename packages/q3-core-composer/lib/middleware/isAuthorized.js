@@ -22,7 +22,13 @@ class IsAuthorizedInLocationRef {
       const grant = req.authorize(m);
       const { fields } = grant;
 
-      if (!this.meetsFieldRequirements(fields, req.body))
+      if (
+        !this.meetsFieldRequirements(
+          fields,
+          req.body,
+          req.user,
+        )
+      )
         throw new Error('Incomplete grant');
 
       if (!Array.isArray(req.redactions))
@@ -61,7 +67,7 @@ class IsAuthorizedInLocationRef {
     return this;
   }
 
-  meetsFieldRequirements(fields, body = {}) {
+  meetsFieldRequirements(fields, body = {}, user = {}) {
     const { required } = this.locations;
     const requiredPaths = compact(flatten([required]));
 
@@ -89,7 +95,8 @@ class IsAuthorizedInLocationRef {
             fields,
           },
           {
-            includeConditionalGlobs: true,
+            user,
+            includeConditionalGlobs: false,
             keepFlat: true,
           },
         ),

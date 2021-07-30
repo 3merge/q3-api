@@ -4,6 +4,7 @@ const {
   first,
   get,
   isFunction,
+  last,
 } = require('lodash');
 const setup = require('../fixtures');
 const { access, teardown } = require('../helpers');
@@ -11,11 +12,14 @@ const { access, teardown } = require('../helpers');
 let agent;
 let Authorization;
 
+const email = 'developer@3merge.ca';
 const role = 'Developer';
 const coll = 'students';
 
+const Students = Q3.model(coll);
+
 const genStudentId = async () =>
-  get(await Q3.model(coll).create({}), 'id');
+  get(await Students.create({}), 'id');
 
 const makeApiPath = (...xs) =>
   `/${compact([coll].concat(xs.flat())).join('/')}`;
@@ -29,14 +33,15 @@ const setDeveloperPermissionOnStudents = (args = {}) =>
   });
 
 describe('Access control via REST endpoints (user ownership)', () => {
-  afterAll(teardown);
-
   beforeAll(async () => {
-    ({ Authorization, agent } = await setup(
-      'developer@3merge.ca',
-      role,
-    ));
+    ({ Authorization, agent } = await setup(email, role));
   });
+
+  afterEach(async () => {
+    await Students.deleteMany({});
+  });
+
+  afterAll(teardown);
 
   test.each([
     {
@@ -421,7 +426,7 @@ describe('Access control via REST endpoints (user ownership)', () => {
         },
       },
       grant: {
-        fields: ['!samples.test'],
+        fields: ['!samples.*.test'],
       },
     },
   ])(
@@ -470,7 +475,7 @@ describe('Access control via REST endpoints (user ownership)', () => {
     },
   );
 
-  test.only.each([
+  test.each([
     {
       expected: {
         status: 200,
@@ -521,6 +526,24 @@ describe('Access control via REST endpoints (user ownership)', () => {
     },
     {
       expected: {
+        status: 200,
+        assertResponse: (sample) => {
+          expect(sample).not.toHaveProperty('name');
+        },
+      },
+      grant: {
+        fields: [
+          '*',
+          {
+            glob: 'name',
+            negate: true,
+            test: [`q3.session.user.email=${email}`],
+          },
+        ],
+      },
+    },
+    {
+      expected: {
         status: 404,
       },
       grant: {
@@ -563,4 +586,137 @@ describe('Access control via REST endpoints (user ownership)', () => {
         await assertResponse(get(response, 'body.student'));
     },
   );
+
+  describe('ownership', () => {
+    it('should return only documents the user creates', async () => {
+      setDeveloperPermissionOnStudents({
+        fields: ['*'],
+        op: 'Create',
+      });
+
+      setDeveloperPermissionOnStudents({
+        fields: ['*'],
+        op: 'Read',
+        ownership: 'Own',
+      });
+
+      await Students.create({
+        name: 'Hidden',
+      });
+
+      await agent
+        .post(makeApiPath())
+        .set({ Authorization })
+        .send({ name: 'Foo' })
+        .expect(201);
+
+      const { body } = await agent
+        .get(makeApiPath())
+        .set({ Authorization })
+        .expect(200);
+
+      expect(body).toHaveProperty('total', 1);
+      expect(first(body.students)).toHaveProperty(
+        'name',
+        'Foo',
+      );
+    });
+
+    it("should block updating another user's document", async () => {
+      setDeveloperPermissionOnStudents({
+        fields: ['*'],
+        op: 'Update',
+        ownership: 'Own',
+      });
+
+      setDeveloperPermissionOnStudents({
+        fields: ['*'],
+        op: 'Read',
+        ownership: 'All',
+      });
+
+      return agent
+        .patch(
+          makeApiPath(
+            get(
+              await Students.create({
+                name: 'Blocked',
+              }),
+              '_id',
+            ),
+          ),
+        )
+        .set({ Authorization })
+        .send({ name: 'Foo' })
+        .expect(403);
+    });
+  });
+
+  describe('bulk', () => {
+    it('should error if bulk contains a non-editable document', async () => {
+      setDeveloperPermissionOnStudents({
+        fields: ['*'],
+        op: 'Create',
+      });
+
+      setDeveloperPermissionOnStudents({
+        fields: [
+          '*',
+          {
+            glob: 'samples.*.test',
+            negate: true,
+            unwind: 'samples',
+            test: ['samples.message=Foo'],
+          },
+        ],
+        op: 'Update',
+        ownership: 'Own',
+      });
+
+      const studentId = get(
+        await agent
+          .post(makeApiPath())
+          .set({ Authorization })
+          .expect(201),
+        'body.student.id',
+      );
+
+      const getSampleId = async (message) =>
+        get(
+          last(
+            get(
+              await agent
+                .post(makeApiPath(studentId, 'samples'))
+                .set({ Authorization })
+                .send({
+                  message,
+                  test: message,
+                })
+                .expect(201),
+              'body.samples',
+            ),
+          ),
+          'id',
+        );
+
+      const {
+        body: { samples },
+      } = await agent
+        .patch(makeApiPath(studentId, 'samples'))
+        .query({
+          ids: [
+            await getSampleId('Foo'),
+            await getSampleId('Bar'),
+          ],
+        })
+        .set({ Authorization })
+        .send({
+          test: 'Quuz',
+        })
+        .expect(200);
+
+      expect(first(samples)).toHaveProperty('test', 'Foo');
+      expect(last(samples)).toHaveProperty('test', 'Quuz');
+    });
+  });
 });

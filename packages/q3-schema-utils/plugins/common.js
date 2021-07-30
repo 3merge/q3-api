@@ -85,10 +85,18 @@ function getSubDocument(field, id) {
 
 async function pushSubDocument(field, args) {
   let preValidationResult;
+
+  const data = get(
+    this.authorizeCreateArguments({
+      [field]: args,
+    }),
+    field,
+  );
+
   if (Array.isArray(this[field])) {
-    this[field].push(args);
+    this[field].push(data);
   } else {
-    this[field] = [args];
+    this[field] = [data];
   }
 
   try {
@@ -128,7 +136,10 @@ async function removeSubDocument(field, id) {
 async function updateSubDocuments(field, ids, args) {
   ids.map((id) => {
     const d = invoke(get(this, field), 'id', id);
-    return d ? d.set(args) : null;
+
+    return d
+      ? d.authorizeUpdateArgumentsOnCurrentSubDocument(args)
+      : null;
   });
 
   return this.save();
@@ -136,7 +147,10 @@ async function updateSubDocuments(field, ids, args) {
 
 async function updateSubDocument(field, id, args) {
   const subdoc = await this.getSubDocument(field, id);
-  subdoc.set(removeEmpty(args));
+  subdoc.authorizeUpdateArgumentsOnCurrentSubDocument(
+    removeEmpty(args),
+  );
+
   const e = subdoc.validateSync();
   if (e) throw e;
 

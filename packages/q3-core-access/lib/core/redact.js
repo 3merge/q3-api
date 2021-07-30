@@ -72,6 +72,7 @@ const Redact = (data, user, collectionName) =>
           // must do this during the callback
           // as not all documents will contain the same alias conditions
           accessControl.test(doc),
+          { user },
         );
 
       const output = executeAsArray(data, runTest);

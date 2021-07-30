@@ -11,6 +11,7 @@ const {
   pick,
   invoke,
   merge,
+  first,
 } = require('lodash');
 const { makeArray } = require('../helpers');
 
@@ -81,6 +82,7 @@ module.exports = function Field(
 
           // eslint-disable-next-line
           item.glob = originalGlob;
+
           return output;
         };
 
@@ -127,7 +129,7 @@ module.exports = function Field(
 
   return cleanFields(
     uniq(fields).map((item) => {
-      if (includeConditionalGlobs && isObject(item)) {
+      if (!includeConditionalGlobs && isObject(item)) {
         return decorateGlob(item);
       }
 

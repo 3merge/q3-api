@@ -104,7 +104,6 @@ function middleware(UserModel) {
         .setOperation()
         .getPermission(collectionName, req.user);
 
-    authorizeBody(req);
     next();
   };
 }

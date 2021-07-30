@@ -2,9 +2,11 @@
 const {
   get,
   invoke,
+  isEqual,
   isFunction,
   compact,
   size,
+  isObject,
 } = require('lodash');
 const Comparison = require('comparisons');
 const mongoose = require('mongoose');
@@ -15,6 +17,7 @@ const {
   hasOptions,
   extractUser,
 } = require('./helpers');
+const AccessControlSessionBridge = require('./pluginTemp/bridge');
 
 const reportAccessLevelFailure = (condition) =>
   condition
@@ -56,14 +59,37 @@ module.exports = (schema) => {
    * Async required to handle thrown error.
    */
   async function checkOp(fn, options = {}) {
-    const user = extractUser(this);
-    const { collection } = this;
+    const collectionName = get(
+      this,
+      'collection.collectionName',
+    );
 
-    if (this.isNew && user) this.createdBy = user._id;
-    if (!collection) return;
-
-    const { collectionName } = this.collection;
     const op = getOp(this, options);
+    const user = extractUser(this);
+    const userId = get(user, '_id');
+
+    if (this.isNew && user) this.createdBy = userId;
+    if (!collectionName) return;
+
+    const isEmpty = (xs) => !xs || xs === undefined;
+
+    const isUserTheOwner = () => {
+      const creator =
+        isObject(this.createdBy) &&
+        'firstName' in this.createdBy
+          ? this.createdBy._id
+          : this.createdBy;
+
+      try {
+        return creator.equals(userId);
+      } catch (e) {
+        return isEqual(userId, creator);
+      }
+    };
+
+    const hasStrictOwnership = (xs) =>
+      ['Delete', 'Update'].includes(op) &&
+      get(xs, 'ownership') === 'Own';
 
     const requiresIdInGrant = () =>
       (op === 'Create' && this.isNew) ||
@@ -80,8 +106,9 @@ module.exports = (schema) => {
 
     fn(
       reportAccessLevelFailure(
-        hasOptions(options) &&
-          (!acResult || acResult === undefined),
+        (hasOptions(options) && isEmpty(acResult)) ||
+          (hasStrictOwnership(acResult) &&
+            !isUserTheOwner()),
       ),
     );
   }
@@ -190,6 +217,8 @@ module.exports = (schema) => {
       }
     }
   }
+
+  schema.loadClass(AccessControlSessionBridge);
 
   if (schema.options.enableOwnership) {
     schema.pre('save', checkOp);

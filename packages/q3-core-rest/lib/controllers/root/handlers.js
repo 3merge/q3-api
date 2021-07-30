@@ -55,7 +55,7 @@ module.exports = {
 
   async Patch(req, res) {
     const {
-      authorizeBody,
+      body: originalBody,
       collectionSingularName,
       datasource,
       marshal,
@@ -72,7 +72,7 @@ module.exports = {
       },
     );
 
-    const body = authorizeBody(doc);
+    const body = doc.authorizeUpdateArguments(originalBody);
 
     await doc.handleReq({
       body,
@@ -91,17 +91,18 @@ module.exports = {
 
   async Post(
     {
-      authorizeBody,
+      body,
       collectionSingularName,
-      datasource,
+      datasource: Datasource,
       marshal,
     },
     res,
   ) {
-    const body = authorizeBody();
-    const doc = await datasource.create([body], {
-      redact: true,
-    });
+    const doc = new Datasource();
+
+    await doc
+      .set(doc.authorizeCreateArguments(body))
+      .save({ redact: true });
 
     res.create({
       message: res.say('resourceCreated'),

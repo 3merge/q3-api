@@ -40,6 +40,10 @@ module.exports = (req) =>
       const output = Redact.flattenAndReduceByFields(
         merge(parent, baseInput),
         req.authorize(collectionName),
+        {
+          includeConditionalGlobs: true,
+          user: req.user,
+        },
       );
 
       return clean(

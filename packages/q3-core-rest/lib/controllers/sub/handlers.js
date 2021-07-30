@@ -21,22 +21,19 @@ module.exports = {
     const { filter } = aqp(query !== null ? query : {});
 
     res.ok({
-      [fieldName]: marshal(subdocs.filter(sift(filter))),
+      [fieldName]: Array.isArray(subdocs)
+        ? marshal(subdocs.filter(sift(filter)))
+        : marshal(subdocs),
     });
   },
 
-  async Patch({
-    params,
-    authorizeBody,
-    parent,
-    fieldName,
-  }) {
+  async Patch({ body, params, parent, fieldName }) {
     suggestPutRequest(parent, fieldName);
 
     await parent.updateSubDocument(
       fieldName,
       params.fieldID,
-      authorizeBody(parent),
+      body,
     );
 
     return {
@@ -46,13 +43,7 @@ module.exports = {
     };
   },
 
-  async PatchMany({
-    authorizeBody,
-    query,
-    body,
-    parent,
-    fieldName,
-  }) {
+  async PatchMany({ query, body, parent, fieldName }) {
     suggestPutRequest(parent, fieldName);
     const ids = sanitizeQueryIds(query.ids);
 
@@ -65,11 +56,8 @@ module.exports = {
         .field('ids')
         .throw();
 
-    await parent.updateSubDocuments(
-      fieldName,
-      ids,
-      authorizeBody(parent),
-    );
+    // no need to redact, as the method does ti for us.
+    await parent.updateSubDocuments(fieldName, ids, body);
 
     return {
       data: parent,
@@ -78,11 +66,9 @@ module.exports = {
     };
   },
 
-  async Post({ authorizeBody, files, parent, fieldName }) {
+  async Post({ body, files, parent, fieldName }) {
     if (isSimpleSubDocument(parent, fieldName))
       exception('Conflict').msg('usePutRequest').throw();
-
-    const body = authorizeBody(parent);
 
     if (!files) {
       await parent.pushSubDocument(fieldName, body);
@@ -99,9 +85,9 @@ module.exports = {
   },
 
   async Put({ authorizeBody, fieldName, parent }) {
-    await parent
-      .set({ [fieldName]: authorizeBody(parent) })
-      .save();
+    // await parent
+    //   .set({ [fieldName]: authorizeBody(parent) })
+    //   .save();
 
     return {
       data: parent,
