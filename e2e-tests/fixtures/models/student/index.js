@@ -24,6 +24,7 @@ const StudentSchema = new mongoose.Schema(
         age: Number,
       },
     ],
+    referenceId: mongoose.Types.ObjectId,
     samples: [SampleSchema],
   },
   {

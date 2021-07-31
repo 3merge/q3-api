@@ -9,7 +9,6 @@ const {
 const Comparison = require('comparisons');
 const mongoose = require('mongoose');
 const { exception } = require('q3-core-responder');
-const Grant = require('../core/grant');
 const {
   meetsUserRequirements,
   hasOptions,
@@ -17,22 +16,6 @@ const {
 const AccessControlSessionBridge = require('./sessionBridge');
 const QueryDecorators = require('./queryDecorators');
 const MethodDecorators = require('./methodDecorators');
-
-const reportAccessLevelFailure = (condition) =>
-  condition
-    ? exception('Authorization')
-        .msg('insufficientAccessLevels')
-        .boomerang()
-    : undefined;
-
-const getOp = (ctx, options) => {
-  if (ctx.isNew) return 'Create';
-  if (ctx.modifiedPaths().includes('active'))
-    return 'Delete';
-
-  if (options.op) return options.op;
-  return 'Update';
-};
 
 const enforce = (fn) =>
   function () {
@@ -45,42 +28,15 @@ const enforce = (fn) =>
   };
 
 module.exports = (schema) => {
-  /**
-   * @NOTE
-   * Async required to handle thrown error.
-   */
   async function checkOp(fn, options = {}) {
-    const collectionName = get(
-      this,
-      'collection.collectionName',
-    );
-
-    const op = getOp(this, options);
-    const user = this.__$getUserFromSession();
-    const userId = get(user, '_id');
-
-    if (this.isNew && user) this.createdBy = userId;
-    if (!collectionName) return;
-
-    const isEmpty = (xs) => !xs || xs === undefined;
-
-    const requiresIdInGrant = () =>
-      (op === 'Create' && this.isNew) ||
-      (op === 'Delete' &&
-        this.isModified('active') &&
-        !this.active);
-
-    const acResult = new Grant(user)
-      .can(op)
-      .on(collectionName)
-      .test(this.toJSON(), {
-        ensureIdIsAvailable: requiresIdInGrant(),
-      });
+    this.assignCreatedBy();
 
     fn(
-      reportAccessLevelFailure(
-        hasOptions(options) && isEmpty(acResult),
-      ),
+      hasOptions(options) && !this.checkGrantExists()
+        ? exception('Authorization')
+            .msg('insufficientAccessLevels')
+            .boomerang()
+        : undefined,
     );
   }
 
@@ -88,12 +44,10 @@ module.exports = (schema) => {
     if (!hasOptions(this)) return;
 
     const doc = this.getReadGrant();
-
     const user = this.getActiveUser();
     const createdBy = get(user, '_id', null);
 
     const { ownership, documentConditions } = doc;
-
     const { $and } = new Comparison(
       documentConditions,
     ).query();
@@ -103,8 +57,6 @@ module.exports = (schema) => {
       !meetsUserRequirements(doc, user)
     )
       this.and({
-        // this is a "made up" property that will force the query
-        // to return null
         __accessControlLock: new Date(),
       });
 

@@ -9,6 +9,7 @@ const {
   omit,
   map,
   isEqual,
+  isNil,
 } = require('lodash');
 const micromatch = require('micromatch');
 const { exception } = require('q3-core-responder');
@@ -70,11 +71,56 @@ class AccessControlSessionBridge {
     );
   }
 
-  __$getInitialGrantAndContext(op) {
+  getCrudOperationName() {
+    if (this.isNew) return 'Create';
+    if (this.modifiedPaths().includes('active'))
+      return 'Delete';
+
+    if (this.op) return this.op;
+    return 'Update';
+  }
+
+  assignCreatedBy() {
+    const user = this.__$getUserFromSession();
+    const userId = get(user, '_id');
+
+    if (this.isNew && user) {
+      this.createdBy = userId;
+    }
+  }
+
+  enforceOwnership() {
+    const op = this.getCrudOperationName();
+
+    return (
+      (op === 'Create' && this.isNew) ||
+      (op === 'Delete' &&
+        this.isModified('active') &&
+        !this.active)
+    );
+  }
+
+  checkGrantExists() {
+    if (!this.__$getCollectionName()) return true;
+    const op = this.getCrudOperationName();
+
+    return !isNil(
+      get(
+        this.__$getInitialGrantAndContext(op, {
+          ensureIdIsAvailable: this.enforceOwnership(op),
+          noThrow: true,
+        }),
+        'grant',
+      ),
+    );
+  }
+
+  __$getInitialGrantAndContext(op, extendedOptions = {}) {
     const user = this.__$getUserFromSession();
     const fullDocument = this.toJSON();
 
     const options = {
+      ...extendedOptions,
       includeConditionalGlobs: true,
       user,
     };
@@ -84,7 +130,10 @@ class AccessControlSessionBridge {
       .on(this.__$getCollectionName())
       .test(fullDocument, options);
 
-    if (!isObject(grant) || !this.checkOwnership(grant))
+    if (
+      (!isObject(grant) || !this.checkOwnership(grant)) &&
+      !get(extendedOptions, 'noThrow', false)
+    )
       exception('Authorization')
         .msg('missingOrIncompleteGrant')
         .throw();
@@ -239,7 +288,10 @@ class AccessControlSessionBridge {
     )
       return true;
 
-    const { data, operator } = grant.makeOwnershipQuery();
+    const { data, operator } = grant.makeOwnershipQuery({
+      mongo: false,
+    });
+
     const createdBy = depopulateCreatedByReference(this);
 
     const compareAliasWithCurrentDocument = (xs) =>

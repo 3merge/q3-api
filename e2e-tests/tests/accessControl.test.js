@@ -11,6 +11,7 @@ const { access, teardown } = require('../helpers');
 
 let agent;
 let Authorization;
+let userSessionId;
 
 const email = 'developer@3merge.ca';
 const role = 'Developer';
@@ -34,7 +35,11 @@ const setDeveloperPermissionOnStudents = (args = {}) =>
 
 describe('Access control via REST endpoints (user ownership)', () => {
   beforeAll(async () => {
-    ({ Authorization, agent } = await setup(email, role));
+    ({
+      Authorization,
+      agent,
+      user: { _id: userSessionId },
+    } = await setup(email, role));
   });
 
   afterEach(async () => {
@@ -837,6 +842,33 @@ describe('Access control via REST endpoints (user ownership)', () => {
 
       const { _id: id } = await Students.create({
         name: email,
+      });
+
+      await agent
+        .patch(`/students/${id}`)
+        .send({ name: 'New' })
+        .set({ Authorization })
+        .expect(200);
+    });
+
+    it('should convert ownership object ids', async () => {
+      setDeveloperPermissionOnStudents({
+        op: 'Update',
+        fields: ['*'],
+        ownership: 'Own',
+        ownershipAliases: [
+          {
+            foreign: '_id',
+            local: 'referenceId',
+            cast: 'ObjectId',
+          },
+        ],
+        ownershipAliasesOnly: true,
+      });
+
+      const { _id: id } = await Students.create({
+        name: email,
+        referenceId: userSessionId,
       });
 
       await agent
