@@ -18,8 +18,15 @@ const sanitizeQueryIds = (ids) =>
   ).flat();
 
 module.exports = {
-  async List({ subdocs, fieldName, marshal, query }, res) {
+  async List(
+    { subdocs, fieldName, marshal, query, parent },
+    res,
+  ) {
     const { filter } = aqp(query !== null ? query : {});
+    parent.checkAuthorizationForTotalSubDocument(
+      fieldName,
+      'Read',
+    );
 
     res.ok({
       [fieldName]: Array.isArray(subdocs)

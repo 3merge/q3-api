@@ -5,6 +5,7 @@ const {
   get,
   isFunction,
   last,
+  isUndefined,
 } = require('lodash');
 const setup = require('../fixtures');
 const { access, teardown } = require('../helpers');
@@ -431,6 +432,7 @@ describe('Access control via REST endpoints (user ownership)', () => {
         assertResponse: (sample) => {
           expect(sample).toHaveProperty('test', 'Foo');
           expect(sample).toHaveProperty('message', 'Quuz');
+          expect(sample.createdAt).toBeUndefined();
         },
       },
       grant: {
@@ -451,7 +453,10 @@ describe('Access control via REST endpoints (user ownership)', () => {
 
       // allows us to ensure the create rules redacted body
       setDeveloperPermissionOnStudents({
-        fields: ['*'],
+        fields: [
+          '!samples.*.createdAt',
+          '!samples.*.updatedAt',
+        ],
         op: 'Read',
         ownership: 'Any',
       });
@@ -480,6 +485,114 @@ describe('Access control via REST endpoints (user ownership)', () => {
         await assertResponse(
           first(get(response, 'body.samples')),
         );
+    },
+  );
+
+  test.each([
+    {
+      expected: {
+        status: 200,
+        assertResponse: (samples) => {
+          expect(samples).toHaveLength(2);
+          samples.every(
+            (item) =>
+              !isUndefined(item.message) &&
+              isUndefined(item.test),
+          );
+        },
+      },
+      grant: {
+        fields: ['!samples.test'],
+      },
+    },
+    {
+      expected: {
+        status: 403,
+      },
+      grant: {
+        fields: ['!samples*'],
+      },
+    },
+    {
+      expected: {
+        status: 200,
+        assertResponse: (samples) => {
+          expect(samples).toHaveLength(1);
+        },
+      },
+      grant: {
+        fields: [
+          '*',
+          {
+            glob: 'samples.*.',
+            test: ['samples.message=Bar'],
+            negate: true,
+            wildcard: true,
+            unwind: 'samples',
+          },
+        ],
+      },
+    },
+    {
+      expected: {
+        status: 200,
+        assertResponse: (samples) => {
+          expect(samples).toHaveLength(2);
+          samples.every(
+            (item) =>
+              !isUndefined(item.message) &&
+              !isUndefined(item.test),
+          );
+        },
+      },
+      grant: {
+        fields: ['*'],
+      },
+    },
+    {
+      expected: {
+        status: 200,
+        assertResponse: (samples) => {
+          expect(samples).toHaveLength(2);
+        },
+      },
+      grant: {
+        fields: ['*'],
+      },
+    },
+  ])(
+    'SUB-DOCUMENT GET operations',
+    async ({
+      expected: { status, assertResponse },
+      grant,
+    }) => {
+      setDeveloperPermissionOnStudents({
+        op: 'Read',
+        ...grant,
+      });
+
+      const { id } = await Q3.model('students').create({
+        name: 'Test',
+        active: true,
+        samples: [
+          {
+            test: 'Foo',
+            message: 'Bar',
+          },
+          {
+            test: 'Quuz',
+            message: 'Thunk',
+          },
+        ],
+      });
+
+      const response = await agent
+        .get(makeApiPath(id, 'samples'))
+        .set({ Authorization })
+        .expect(status);
+
+      if (isFunction(assertResponse))
+        await assertResponse(get(response, 'body.samples'));
     },
   );
 
