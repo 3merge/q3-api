@@ -991,4 +991,58 @@ describe('Access control via REST endpoints (user ownership)', () => {
         .expect(200);
     });
   });
+
+  describe('misc', () => {
+    it('should replace simple sub-document', async () => {
+      setDeveloperPermissionOnStudents({
+        op: 'Update',
+        fields: ['*'],
+        ownership: 'Any',
+      });
+
+      setDeveloperPermissionOnStudents({
+        op: 'Read',
+        fields: ['dimensions.{weight,height,id}'],
+        ownership: 'Any',
+      });
+
+      const { _id: id } = await Students.create({
+        name: email,
+      });
+
+      const args = {
+        weight: 200,
+        height: 11,
+      };
+
+      const { body } = await agent
+        .put(`/students/${id}/dimensions`)
+        .send(args)
+        .set({ Authorization })
+        .expect(201);
+
+      expect(body.dimensions).toEqual({
+        id: expect.any(String),
+        ...args,
+      });
+    });
+
+    it('should recommend PUT', async () => {
+      setDeveloperPermissionOnStudents({
+        op: 'Update',
+        fields: ['*'],
+        ownership: 'Any',
+      });
+
+      const { _id: id } = await Students.create({
+        name: 'Testing',
+      });
+
+      await agent
+        .patch(`/students/${id}/dimensions`)
+        .send({})
+        .set({ Authorization })
+        .expect(409);
+    });
+  });
 });

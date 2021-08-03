@@ -26,6 +26,10 @@ const StudentSchema = new mongoose.Schema(
     ],
     referenceId: mongoose.Types.ObjectId,
     samples: [SampleSchema],
+    dimensions: new mongoose.Schema({
+      weight: Number,
+      height: Number,
+    }),
   },
   {
     restify: '*',

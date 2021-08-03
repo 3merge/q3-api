@@ -1,23 +1,9 @@
-const { exception } = require('q3-core-responder');
 const aqp = require('api-query-params');
 const { get } = require('lodash');
-const { executeOn } = require('q3-schema-utils');
 const sift = require('sift');
-const { isSimpleSubDocument } = require('../../utils');
+const { decorate } = require('q3-utils');
 
-const suggestPutRequest = (parent, fieldName) => {
-  if (isSimpleSubDocument(parent, fieldName))
-    exception('Conflict').msg('usePutRequest').throw();
-};
-
-const sanitizeQueryIds = (ids) =>
-  executeOn(ids, (v) =>
-    typeof v === 'string'
-      ? v.split(',').map((item) => item.trim())
-      : v,
-  ).flat();
-
-module.exports = {
+const SubControllHandlers = {
   async List(
     { subdocs, fieldName, marshal, query, parent },
     res,
@@ -36,8 +22,6 @@ module.exports = {
   },
 
   async Patch({ body, params, parent, fieldName }) {
-    suggestPutRequest(parent, fieldName);
-
     await parent.updateSubDocument(
       fieldName,
       params.fieldID,
@@ -51,20 +35,7 @@ module.exports = {
     };
   },
 
-  async PatchMany({ query, body, parent, fieldName }) {
-    suggestPutRequest(parent, fieldName);
-    const ids = sanitizeQueryIds(query.ids);
-
-    // eslint-disable-next-line
-    if ('ids' in body) delete body.ids;
-
-    if (!ids.length)
-      exception('Validation')
-        .msg('idsRequiredToPerformUpdate')
-        .field('ids')
-        .throw();
-
-    // no need to redact, as the method does ti for us.
+  async PatchMany({ body, parent, fieldName, ids }) {
     await parent.updateSubDocuments(fieldName, ids, body);
 
     return {
@@ -75,9 +46,6 @@ module.exports = {
   },
 
   async Post({ body, files, parent, fieldName }) {
-    if (isSimpleSubDocument(parent, fieldName))
-      exception('Conflict').msg('usePutRequest').throw();
-
     if (!files) {
       await parent.pushSubDocument(fieldName, body);
     } else {
@@ -124,8 +92,9 @@ module.exports = {
     };
   },
 
-  async RemoveMany({ parent, fieldName, query: { ids } }) {
+  async RemoveMany({ parent, fieldName, ids }) {
     await parent.removeSubDocument(fieldName, ids);
+
     return {
       data: parent,
       message: 'subResourceRemoved',
@@ -133,3 +102,23 @@ module.exports = {
     };
   },
 };
+
+const decorateWithMethodValidation = (xs) =>
+  decorate(
+    xs,
+    ['Patch', 'PatchMany', 'Post'],
+    // eslint-disable-next-line
+    require('./methodValidation'),
+  );
+
+const decorateWithQueryValidation = (xs) =>
+  decorate(
+    xs,
+    ['PatchMany', 'RemoveMany'],
+    // eslint-disable-next-line
+    require('./queryValidation'),
+  );
+
+module.exports = decorateWithMethodValidation(
+  decorateWithQueryValidation(SubControllHandlers),
+);

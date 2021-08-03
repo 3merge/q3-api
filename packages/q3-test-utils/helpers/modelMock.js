@@ -25,6 +25,7 @@ const Model = {};
   'snapshotChange',
   'snapshotChangeOnSubdocument',
   'verifyOutput',
+  'checkAuthorizationForTotalSubDocument',
 ].forEach((name) => {
   Model[name] = jest.fn().mockReturnValue(Model);
 });

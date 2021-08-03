@@ -33,6 +33,7 @@ describe('SubController route handlers', () => {
       const subdocs = [{ foo: 'bar' }];
       req.subdocs = subdocs;
       req.fieldName = 'body';
+
       await List(req, res);
       expect(req.marshal).toHaveBeenCalledWith(subdocs);
       expect(res.ok).toHaveBeenCalledWith(
@@ -142,17 +143,6 @@ describe('SubController route handlers', () => {
         'foo',
         {},
       );
-    });
-
-    it('should throw an error', async () => {
-      req.body = {};
-      req.fieldName = 'foo';
-      req.parent.schema.path = jest.fn().mockReturnValue({
-        constructor: { name: 'SingleNestedPath' },
-      });
-
-      await expect(Post(req, res)).rejects.toThrowError();
-      expect(req.parent.schema.path).toHaveBeenCalled();
     });
   });
 });
