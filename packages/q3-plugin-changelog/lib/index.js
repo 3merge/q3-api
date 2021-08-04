@@ -1,8 +1,19 @@
 /* eslint-disable no-param-reassign, func-names */
-const { pick, get, invoke } = require('lodash');
+const { pick, get, invoke, isNumber } = require('lodash');
 const { getFromChangelog } = require('./utils');
 
+const increment = (v) => (isNumber(v) ? v + 1 : 0);
+
 module.exports = (schema) => {
+  schema.statics.getHistory = async function () {
+    return getFromChangelog(
+      get(this, 'collection.collectionName'),
+      {
+        date: { $exists: true },
+      },
+    );
+  };
+
   schema.methods.getHistory = async function () {
     return getFromChangelog(
       get(this, 'constructor.collection.collectionName'),
@@ -24,6 +35,14 @@ module.exports = (schema) => {
         'lastName',
         'email',
       ]),
+      {
+        strict: false,
+      },
+    );
+
+    this.set(
+      'changelog',
+      increment(this.get('changelog')),
       {
         strict: false,
       },

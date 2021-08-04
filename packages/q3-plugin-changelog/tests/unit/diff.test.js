@@ -1,11 +1,11 @@
 const diff = require('../../lib/diff');
 
-const expectArrayToContain = (xs = []) => (
-  expectedOutput = {},
-) =>
-  expect(xs).toEqual(
-    expect.arrayContaining([expectedOutput]),
-  );
+const expectArrayToContain =
+  (xs = []) =>
+  (expectedOutput = {}) =>
+    expect(xs).toEqual(
+      expect.arrayContaining([expectedOutput]),
+    );
 
 describe('diff', () => {
   it('should detect all differences', () => {

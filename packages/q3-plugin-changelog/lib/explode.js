@@ -8,10 +8,15 @@ const {
 } = require('lodash');
 const flat = require('flat');
 
-const omitByKeyName = (keylist = []) => (xs) =>
-  omitBy(flat(xs), (value, key) =>
-    keylist.some((phrase) => key.includes(phrase)),
-  );
+const toPlainObject = (xs) =>
+  isObject(xs) ? JSON.parse(JSON.stringify(xs)) : {};
+
+const omitByKeyName =
+  (keylist = []) =>
+  (xs) =>
+    omitBy(flat(xs), (value, key) =>
+      keylist.some((phrase) => key.includes(phrase)),
+    );
 
 function explode(obj) {
   const acc = [];
@@ -37,12 +42,15 @@ function explode(obj) {
     return out;
   };
 
-  exec(JSON.parse(JSON.stringify(obj)));
+  exec(toPlainObject(obj));
 
   return uniq(acc).map(
     omitByKeyName([
       '__v',
+      'ngrams',
       'createdAt',
+      'createdBy',
+      'changelog',
       'lastModifiedBy',
       'updatedAt',
     ]),

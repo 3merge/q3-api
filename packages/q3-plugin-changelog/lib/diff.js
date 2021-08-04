@@ -23,26 +23,28 @@ const pickWithMongoId = (xs, keys = []) =>
     ['_id'].concat(keys).some(key.includes.bind(key)),
   );
 
-const getDetailedDiff = (direction) => (a = {}, b = {}) =>
-  Object.entries(
-    direction === 'ltr'
-      ? invokeDetailedDiffWithOmission(a, b)
-      : invokeDetailedDiffWithOmission(b, a),
-  ).reduce((acc, curr) => {
-    const [key, value] = curr;
+const getDetailedDiff =
+  (direction) =>
+  (a = {}, b = {}) =>
+    Object.entries(
+      direction === 'ltr'
+        ? invokeDetailedDiffWithOmission(a, b)
+        : invokeDetailedDiffWithOmission(b, a),
+    ).reduce((acc, curr) => {
+      const [key, value] = curr;
 
-    if (sizeOf(value))
-      acc[key] =
-        key === 'deleted'
-          ? a
-          : {
-              ...pickWithMongoId(a),
-              ...pickWithMongoId(b),
-              ...value,
-            };
+      if (sizeOf(value))
+        acc[key] =
+          key === 'deleted'
+            ? a
+            : {
+                ...pickWithMongoId(a),
+                ...pickWithMongoId(b),
+                ...value,
+              };
 
-    return acc;
-  }, {});
+      return acc;
+    }, {});
 
 const getMongoIdKey = (xs) =>
   Object.keys(xs).find((item) =>

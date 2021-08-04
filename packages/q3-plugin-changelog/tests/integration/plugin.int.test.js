@@ -9,7 +9,7 @@ beforeAll(async () => {
 
 afterEach(async () => {
   await mongoose.connection.db
-    .collection('testing-changelog-patch-history')
+    .collection('testing-changelog-changelog-v2')
     .deleteMany({});
 });
 
@@ -69,9 +69,9 @@ describe('changelog', () => {
 
     setTimeout(async () => {
       const logs = await doc.getHistory();
-      expect(logs).toHaveLength(7);
+      expect(logs).toHaveLength(6);
       done();
-    }, 500);
+    }, 1500);
   });
 
   it('should save the last modified user', async () => {
