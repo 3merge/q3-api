@@ -92,9 +92,8 @@ async function pushSubDocument(field, args) {
   }
 
   try {
-    preValidationResult = this[field][
-      this[field].length - 1
-    ].validateSync();
+    preValidationResult =
+      this[field][this[field].length - 1].validateSync();
   } catch (e) {
     // noop
   }
@@ -107,12 +106,18 @@ async function pushSubDocument(field, args) {
 }
 
 async function removeSubDocument(field, id) {
-  const removeChild = (v) => {
+  const removeChild = async (v) => {
     const subdoc = this.getSubDocument(field, v);
-    subdoc.remove();
+
+    return new Promise((res, rej) =>
+      subdoc.remove((err, product) => {
+        if (err) rej(err);
+        else res(product);
+      }),
+    );
   };
 
-  executeOn(id, removeChild);
+  await executeOn(id, removeChild);
 
   return this.save({
     redact: true,

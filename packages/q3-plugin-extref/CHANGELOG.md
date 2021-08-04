@@ -3,6 +3,209 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.18.5](https://github.com/3merge/q3-api/compare/v1.18.4...v1.18.5) (2021-07-27)
+
+**Note:** Version bump only for package q3-plugin-extref
+
+
+
+
+
+## [1.18.4](https://github.com/3merge/q3-api/compare/v1.18.3...v1.18.4) (2021-07-22)
+
+**Note:** Version bump only for package q3-plugin-extref
+
+
+
+
+
+## [1.18.3](https://github.com/3merge/q3-api/compare/v1.18.2...v1.18.3) (2021-07-19)
+
+**Note:** Version bump only for package q3-plugin-extref
+
+
+
+
+
+## [1.18.2](https://github.com/3merge/q3-api/compare/v1.18.1...v1.18.2) (2021-07-19)
+
+**Note:** Version bump only for package q3-plugin-extref
+
+
+
+
+
+## [1.18.1](https://github.com/3merge/q3-api/compare/v1.18.0...v1.18.1) (2021-07-19)
+
+**Note:** Version bump only for package q3-plugin-extref
+
+
+
+
+
+# [1.18.0](https://github.com/3merge/q3-api/compare/v1.17.14...v1.18.0) (2021-07-15)
+
+**Note:** Version bump only for package q3-plugin-extref
+
+
+
+
+
+## [1.17.13](https://github.com/3merge/q3-api/compare/v1.17.12...v1.17.13) (2021-07-12)
+
+**Note:** Version bump only for package q3-plugin-extref
+
+
+
+
+
+## [1.17.12](https://github.com/3merge/q3-api/compare/v1.17.11...v1.17.12) (2021-07-08)
+
+**Note:** Version bump only for package q3-plugin-extref
+
+
+
+
+
+## [1.17.11](https://github.com/3merge/q3-api/compare/v1.17.10...v1.17.11) (2021-07-08)
+
+**Note:** Version bump only for package q3-plugin-extref
+
+
+
+
+
+## [1.17.10](https://github.com/3merge/q3-api/compare/v1.17.9...v1.17.10) (2021-07-07)
+
+**Note:** Version bump only for package q3-plugin-extref
+
+
+
+
+
+## [1.17.9](https://github.com/3merge/q3-api/compare/v1.17.8...v1.17.9) (2021-07-07)
+
+**Note:** Version bump only for package q3-plugin-extref
+
+
+
+
+
+## [1.17.8](https://github.com/3merge/q3-api/compare/v1.17.7...v1.17.8) (2021-06-29)
+
+**Note:** Version bump only for package q3-plugin-extref
+
+
+
+
+
+## [1.17.7](https://github.com/3merge/q3-api/compare/v1.17.6...v1.17.7) (2021-06-25)
+
+**Note:** Version bump only for package q3-plugin-extref
+
+
+
+
+
+## [1.17.6](https://github.com/3merge/q3-api/compare/v1.17.5...v1.17.6) (2021-06-25)
+
+**Note:** Version bump only for package q3-plugin-extref
+
+
+
+
+
+
+## [1.17.5](https://github.com/3merge/q3-api/compare/v1.17.4...v1.17.5) (2021-06-17)
+
+**Note:** Version bump only for package q3-plugin-extref
+
+
+
+
+
+## [1.17.4](https://github.com/3merge/q3-api/compare/v1.17.3...v1.17.4) (2021-06-17)
+
+**Note:** Version bump only for package q3-plugin-extref
+
+
+
+
+
+## [1.17.3](https://github.com/3merge/q3-api/compare/v1.17.2...v1.17.3) (2021-06-11)
+
+**Note:** Version bump only for package q3-plugin-extref
+
+
+
+
+
+## [1.17.2](https://github.com/3merge/q3-api/compare/v1.17.1...v1.17.2) (2021-06-09)
+
+
+### Bug Fixes
+
+* reset glob ([1b775d1](https://github.com/3merge/q3-api/commit/1b775d1b4c6b61ddaab11b1007d281e09ae29ddd))
+
+
+
+
+
+## [1.17.1](https://github.com/3merge/q3-api/compare/v1.17.0...v1.17.1) (2021-06-08)
+
+**Note:** Version bump only for package q3-plugin-extref
+
+
+
+
+
+# [1.17.0](https://github.com/3merge/q3-api/compare/v1.16.11...v1.17.0) (2021-06-08)
+
+**Note:** Version bump only for package q3-plugin-extref
+
+
+
+
+
+
+## [1.16.11](https://github.com/3merge/q3-api/compare/v1.16.10...v1.16.11) (2021-05-28)
+
+**Note:** Version bump only for package q3-plugin-extref
+
+
+
+
+
+## [1.16.10](https://github.com/3merge/q3-api/compare/v1.16.9...v1.16.10) (2021-05-28)
+
+
+### Bug Fixes
+
+* schema set on autopopulate ([068ca4d](https://github.com/3merge/q3-api/commit/068ca4d81f7bab7985fda1e31163695b903c5c56))
+
+
+
+
+
+## [1.16.9](https://github.com/3merge/q3-api/compare/v1.16.8...v1.16.9) (2021-05-28)
+
+
+### Bug Fixes
+
+* autopopulate virtual leaks ([#134](https://github.com/3merge/q3-api/issues/134)) ([8bb15c3](https://github.com/3merge/q3-api/commit/8bb15c38bf2c91ce7b95bedba0e214055e02dfc2))
+
+
+
+
+
+## [1.16.8](https://github.com/3merge/q3-api/compare/v1.16.7...v1.16.8) (2021-05-26)
+
+**Note:** Version bump only for package q3-plugin-extref
+
+
+
+
+
 ## [1.16.7](https://github.com/3merge/q3-api/compare/v1.16.6...v1.16.7) (2021-05-07)
 
 **Note:** Version bump only for package q3-plugin-extref

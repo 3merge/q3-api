@@ -1,5 +1,6 @@
 const { Grant } = require('q3-core-access');
 const { get, invoke } = require('lodash');
+const authorizeBody = require('./authorizeBody');
 
 class Session {
   constructor(req) {
@@ -103,6 +104,7 @@ function middleware(UserModel) {
         .setOperation()
         .getPermission(collectionName, req.user);
 
+    authorizeBody(req);
     next();
   };
 }

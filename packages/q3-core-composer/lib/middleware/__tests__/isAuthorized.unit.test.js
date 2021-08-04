@@ -31,8 +31,6 @@ describe('IsAuthorized', () => {
 
     const fn = IsAuthorized(model)
       .inResponse('foo')
-      .inRequest('query')
-      .inRequest('body')
       .requireField('bar');
 
     const next = jest.fn();
@@ -40,7 +38,7 @@ describe('IsAuthorized', () => {
     await fn.middleware(req, res, next);
     expect(req.authorize).toHaveBeenCalledWith(model);
     expect(next).toHaveBeenCalledWith();
-    expect(fn.locations.request).toEqual(['query', 'body']);
+    //  expect(fn.locations.request).toEqual(['query', 'body']);
     expect(fn.locations.response).toEqual(['foo']);
     expect(fn.locations.required).toBe('bar');
   });
@@ -54,8 +52,6 @@ describe('IsAuthorized', () => {
 
     const fn = IsAuthorized(model)
       .inResponse('foo')
-      .inRequest('query')
-      .inRequest('body')
       .requireField('bar');
 
     const next = jest.fn();
@@ -63,8 +59,42 @@ describe('IsAuthorized', () => {
     await fn.middleware(req, res, next);
     expect(req.authorize).toHaveBeenCalledWith(model);
     expect(next).toHaveBeenCalledWith();
-    expect(fn.locations.request).toEqual(['query', 'body']);
     expect(fn.locations.response).toEqual(['foo']);
     expect(fn.locations.required).toBe('bar');
   });
+
+  test.each([
+    ['*', ['foo', 'bar'], {}, true],
+    [['!quuz'], ['foo', 'bar'], {}, true],
+    [['!foo'], ['foo', 'bar'], {}, false],
+    [
+      [{ glob: 'quuz', negate: true, test: ['foo=1'] }],
+      ['foo', 'bar'],
+      {},
+      true,
+    ],
+    [
+      [{ glob: 'foo', negate: true, test: ['quuz=1'] }],
+      ['foo', 'bar'],
+      { foo: 1, bar: 1, quuz: 1 },
+      false,
+    ],
+  ])(
+    '.meetsFieldRequirements()',
+    (fields, required, body, expected) => {
+      const out = IsAuthorized(
+        'Test',
+      ).meetsFieldRequirements.call(
+        {
+          locations: {
+            required,
+          },
+        },
+        fields,
+        body,
+      );
+
+      expect(out).toBe(expected);
+    },
+  );
 });

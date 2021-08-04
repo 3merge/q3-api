@@ -3,6 +3,9 @@ const { Notifications } = require('../../models');
 
 module.exports = compose(async (req, res) =>
   res.ok({
-    notifications: await Notifications.recent(req.user),
+    notifications: await Notifications.recent(
+      req.user,
+      req.query.numberOfDays,
+    ),
   }),
 );

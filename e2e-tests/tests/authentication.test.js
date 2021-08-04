@@ -158,6 +158,18 @@ describe('User authentication flow', () => {
           })
           .expect(422));
 
+      it('should fail to change the password with a bad token', async () => {
+        await agent
+          .post('/password-change')
+          .send({
+            email: user.email,
+            passwordResetToken: 'badtoken',
+            newPassword: confirmNewPassword,
+            confirmNewPassword,
+          })
+          .expect(409);
+      });
+
       it('should change the password', async () => {
         const confirm = hasEventBeenCalled(
           'onPasswordChange',
@@ -174,28 +186,6 @@ describe('User authentication flow', () => {
           .expect(204);
 
         return confirm();
-      });
-
-      it.skip('should fail to change the password', async () => {
-        const { body } = await agent
-          .post('/authenticate')
-          .send({
-            email: user.email,
-            password: confirmNewPassword,
-          });
-
-        await agent
-          .post('/password-change')
-          .set({
-            Authorization: `Bearer ${body.token}`,
-            'X-Session-Nonce': body.nonce,
-          })
-          .send({
-            previousPassword: confirmNewPassword,
-            newPassword: confirmNewPassword,
-            confirmNewPassword,
-          })
-          .expect(422);
       });
 
       it('should block previous password without logging in', async () => {

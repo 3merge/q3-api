@@ -2,7 +2,7 @@ const AccessControl = require('./accessControl');
 
 describe('AccessControl', () => {
   it('should initialize grants', () => {
-    const grants = AccessControl.init([
+    AccessControl.init([
       {
         coll: 'foo',
         role: 'Admin',
@@ -10,22 +10,16 @@ describe('AccessControl', () => {
       },
     ]);
 
+    const { grants } = AccessControl;
+
     expect(grants).toHaveLength(1);
     expect(grants[0]).toMatchObject({
-      ownership: 'Any',
+      ownership: 'Own',
       fields: '*',
     });
-
-    expect(() =>
-      grants.push({
-        foo: 1,
-      }),
-    ).toThrowError();
   });
 
   it('should get by role type', () => {
-    expect(
-      AccessControl.getByRoleType('Admin'),
-    ).toHaveLength(1);
+    expect(AccessControl.get('Admin')).toHaveLength(1);
   });
 });

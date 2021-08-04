@@ -29,6 +29,12 @@ const CompanySchema = new mongoose.Schema(
     },
     ip: String,
     incorporationDate: Date,
+    employees: [
+      new mongoose.Schema({
+        name: String,
+        role: String,
+      }),
+    ],
   },
   {
     restify: '*',

@@ -36,7 +36,6 @@ module.exports = class DocumentControllerCommander extends (
   getListController(path) {
     List.authorization = [
       redact(this.collectionName)
-        .inRequest('query')
         .inResponse(this.collectionPluralName)
         .done(),
     ];
@@ -62,7 +61,6 @@ module.exports = class DocumentControllerCommander extends (
   getGetController(path) {
     Get.authorization = [
       redact(this.collectionName)
-        .inRequest('query')
         .inResponse(this.collectionSingularName)
         .done(),
     ];
@@ -73,7 +71,6 @@ module.exports = class DocumentControllerCommander extends (
   getPostController(path) {
     Post.authorization = [
       redact(this.collectionName)
-        .inRequest('body')
         .inResponse(this.collectionSingularName)
         .done(),
     ];
@@ -95,7 +92,6 @@ module.exports = class DocumentControllerCommander extends (
   getPatchController(path) {
     Patch.authorization = [
       redact(this.collectionName)
-        .inRequest('body')
         .inResponse(this.collectionSingularName)
         .done(),
     ];

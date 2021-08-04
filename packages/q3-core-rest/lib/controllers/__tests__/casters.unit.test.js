@@ -1,4 +1,7 @@
+const mongoose = require('mongoose');
 const casters = require('../casters');
+
+const id = mongoose.Types.ObjectId();
 
 describe('Casters', () => {
   it('should return truthy', () => {
@@ -18,9 +21,8 @@ describe('Casters', () => {
   });
 
   it('should return not exists query', () => {
-    expect(casters.has('false')).toMatchObject({
-      $exists: false,
-    });
+    // matches on null and undefined
+    expect(casters.has('false')).toBeNull();
   });
 
   test.each([
@@ -35,6 +37,8 @@ describe('Casters', () => {
     ['/foo', '/foo'],
     ['/^foo/', new RegExp('^foo', 'i')],
     ['/^foo/gm', new RegExp('^foo', 'gm')],
+    [id.toString(), id],
+    ['Under Review', 'Under Review'],
   ])('.string(%s)', (a, b) => {
     expect(casters.string(a)).toEqual(b);
   });

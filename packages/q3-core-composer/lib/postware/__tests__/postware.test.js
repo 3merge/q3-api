@@ -1,22 +1,121 @@
-jest.mock('../redact', () => jest.fn().mockResolvedValue());
+jest.mock('q3-core-session', () => ({
+  kill: jest.fn(),
+}));
 
-const { request } = require('..');
+jest.mock('q3-core-access', () => ({
+  Redact: jest.fn().mockResolvedValue({
+    foo: 1,
+  }),
+}));
+
+jest.mock('express-mung', () => ({
+  jsonAsync: jest.fn().mockImplementation((fn) => fn),
+}));
+
+const { Redact } = require('q3-core-access');
+const response = require('..');
+
+const makeBodyPayload = (xs) => ({
+  test: { foo: 1, bar: 1, ...xs },
+});
+
+const makeRequest = (prefix) => ({
+  redactions: [
+    {
+      collectionName: 'test',
+      locations: {
+        response: ['test'],
+        prefix,
+      },
+    },
+  ],
+  user: {},
+});
 
 describe('postware', () => {
-  it('should do nothing', async () => {
-    const next = jest.fn();
-    await request({}, {}, next);
-    expect(next).toHaveBeenCalled();
+  it('should output Redact result', () => {
+    const b = makeBodyPayload();
+    expect(response(b, makeRequest())).resolves.toEqual({
+      test: {
+        foo: 1,
+      },
+    });
+
+    expect(Redact).toHaveBeenCalledWith(
+      b.test,
+      expect.any(Object),
+      expect.any(String),
+    );
   });
 
-  it('should delete system props', () => {
-    const body = {
-      updatedAt: new Date(),
-      foo: 'bar',
-    };
+  it('should output nested Redact result', () => {
+    const b = makeBodyPayload();
 
-    request({ body }, {}, jest.fn());
-    expect(body).toHaveProperty('foo');
-    expect(body).not.toHaveProperty('updatedAt');
+    expect(
+      response(b, makeRequest('thunk')),
+    ).resolves.toEqual({
+      test: {
+        foo: 1,
+      },
+    });
+
+    expect(Redact).toHaveBeenCalledWith(
+      { thunk: b.test },
+      expect.any(Object),
+      expect.any(String),
+    );
+  });
+
+  it('should consider locals in redaction', async () => {
+    await response(makeBodyPayload(), makeRequest(), {
+      locals: {
+        fullParentDocument: {
+          quuz: 1,
+        },
+      },
+    });
+
+    expect(Redact).toHaveBeenCalledWith(
+      {
+        quuz: 1,
+        foo: 1,
+        bar: 1,
+      },
+      expect.any(Object),
+      expect.any(String),
+    );
+  });
+
+  it('should map locals in redaction', async () => {
+    await response(
+      {
+        test: [
+          {
+            foo: 1,
+            bar: 1,
+          },
+        ],
+      },
+      makeRequest(),
+      {
+        locals: {
+          fullParentDocument: {
+            quuz: 1,
+          },
+        },
+      },
+    );
+
+    expect(Redact).toHaveBeenCalledWith(
+      [
+        {
+          quuz: 1,
+          foo: 1,
+          bar: 1,
+        },
+      ],
+      expect.any(Object),
+      expect.any(String),
+    );
   });
 });

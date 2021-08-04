@@ -5,17 +5,16 @@ const conf = require('./config');
 
 const { Users } = Q3;
 
-const genUser = (
-  email = 'mibberson@3merge.ca',
-  role = 'Developer',
-) => () =>
-  Users.create({
-    firstName: 'Mike',
-    lastName: 'Ibberson',
-    lang: 'en-CA',
-    role,
-    email,
-  });
+const genUser =
+  (email = 'mibberson@3merge.ca', role = 'Developer') =>
+  () =>
+    Users.create({
+      firstName: 'Mike',
+      lastName: 'Ibberson',
+      lang: 'en-CA',
+      role,
+      email,
+    });
 
 const setVerificationProps = async (user) => {
   const props = {

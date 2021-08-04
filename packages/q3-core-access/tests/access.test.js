@@ -29,6 +29,7 @@ Schema.plugin((s) => {
       USER: {
         _id: userID,
         firstName: 'John',
+        age: 21,
         role,
       },
     };
@@ -213,5 +214,46 @@ describe('AccessControlPlugin integration', () => {
         redact: true,
       }),
     ).resolves.toBeDefined();
+  });
+
+  it('it should check ownership document conditions', async () => {
+    genPermission([
+      {
+        op: 'Create',
+      },
+      {
+        op: 'Read',
+        ownershipAliasesOnly: true,
+        ownershipAliases: [
+          {
+            local: 'specialCondition',
+            foreign: 'age',
+            documentConditions: ['featured=true'],
+          },
+        ],
+      },
+    ]);
+
+    await Model.create([
+      {
+        featured: true,
+        specialCondition: 21,
+      },
+      {
+        featured: true,
+        specialCondition: 2191,
+      },
+      {
+        featured: false,
+        specialCondition: 21,
+      },
+    ]);
+
+    expect(
+      await Model.find({})
+        .setOptions({ redact: true })
+        .lean()
+        .exec(),
+    ).toHaveLength(1);
   });
 });

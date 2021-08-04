@@ -1,3 +1,4 @@
+const Q3 = require('q3-api');
 const setup = require('../fixtures');
 const { teardown } = require('../helpers');
 
@@ -6,6 +7,10 @@ let agent;
 
 beforeAll(async () => {
   ({ Authorization, agent } = await setup());
+});
+
+afterEach(async () => {
+  await Q3.model('students').deleteMany({});
 });
 
 afterAll(teardown);
@@ -85,5 +90,27 @@ describe('q3-core-rest', () => {
 
     expect(full).toHaveProperty('id');
     expect(full).not.toHaveProperty('socialStatus');
+  });
+
+  it('should find nullish properties', async () => {
+    await Promise.all(
+      [{}, { date: null }, { date: new Date() }].map(
+        (item) =>
+          agent
+            .post('/students')
+            .set({ Authorization })
+            .send(item)
+            .expect(201),
+      ),
+    );
+
+    const {
+      body: { students },
+    } = await agent
+      .get('/students?date=has(false)&fields=date')
+      .set({ Authorization })
+      .expect(200);
+
+    expect(students).toHaveLength(2);
   });
 });

@@ -1,27 +1,51 @@
+// eslint-disable-next-line
+const { map } = require('lodash');
 const setup = require('../fixtures');
 const { teardown } = require('../helpers');
-const Student = require('../fixtures/models/student');
 
 let agent;
 let Authorization;
+let num = 0;
 
-const genStudent = async () =>
-  Student.create({
-    name: 'Mike',
-    age: 24,
-    friends: [
-      {
-        name: 'Hanna',
-        age: 31,
-      },
-    ],
-  });
+const genStudent = async () => {
+  // eslint-disable-next-line
+  num++;
+
+  const email = `developer+${num}@3merge.ca`;
+  const { Authorization: DevAuth } = await setup(
+    email,
+    'Developer',
+  );
+
+  const {
+    body: { student },
+  } = await agent
+    .post('/students')
+    .send({
+      name: 'Mike',
+      age: 24,
+      friends: [
+        {
+          name: 'Hanna',
+          age: 31,
+        },
+      ],
+    })
+    .set({ Authorization: DevAuth })
+    .expect(201);
+
+  expect(student.createdBy).toHaveProperty('email', email);
+  expect(student.createdBy).toHaveProperty('role');
+  expect(student.createdBy).not.toHaveProperty('isBlocked');
+
+  return student;
+};
 
 const deleteStudent = async (statusCode) => {
-  const { _id } = await genStudent();
+  const { id } = await genStudent();
 
   return agent
-    .delete(`/students/${_id}`)
+    .delete(`/students/${id}`)
     .set({ Authorization })
     .expect(statusCode);
 };
@@ -40,9 +64,44 @@ describe('Access control plugin', () => {
     it('should permit DELETE op', async () =>
       deleteStudent(204));
 
+    it('should allow updating of grade when age is within a certain range', async () => {
+      const { id } = await genStudent();
+
+      const {
+        body: {
+          student: { age, grade },
+        },
+      } = await agent
+        .patch(`/students/${id}`)
+        .set({ Authorization })
+        .send({
+          grade: 10,
+          age: 18,
+        });
+
+      expect(age).toBe(18);
+      expect(grade).toBe(10);
+
+      const {
+        body: {
+          student: { age: nextAge, grade: nextGrade },
+        },
+      } = await agent
+        .patch(`/students/${id}`)
+        .set({ Authorization })
+        .send({
+          age: 12,
+          grade: 6,
+        })
+        .expect(200);
+
+      expect(nextGrade).toBe(10);
+      expect(nextAge).toBe(12);
+    });
+
     it('should not permit DELETE op on nested field', async () => {
-      const { _id: id, friends } = await genStudent();
-      const [{ _id: friendId }] = friends;
+      const { id, friends } = await genStudent();
+      const [{ id: friendId }] = friends;
 
       return agent
         .delete(`/students/${id}/friends/${friendId}`)
@@ -51,7 +110,7 @@ describe('Access control plugin', () => {
     });
 
     it('should not update the age property', async () => {
-      const { _id: id, age, name } = await genStudent();
+      const { id, age, name } = await genStudent();
 
       const {
         body: { student },
@@ -61,12 +120,12 @@ describe('Access control plugin', () => {
         .set({ Authorization })
         .expect(200);
 
-      expect(age).toBe(student.age);
-      expect(name).not.toBe(student.name);
+      expect(age).not.toBe(student.age);
+      expect(name).toBe(student.name);
     });
 
     it('should redact GET response', async () => {
-      const { _id: id } = await genStudent();
+      const { id } = await genStudent();
 
       const {
         body: { students },

@@ -2,62 +2,75 @@ const Api = require('q3-test-utils/helpers/apiMock');
 const Model = require('q3-test-utils/helpers/modelMock');
 const SubController = require('..');
 
+const doc = {
+  _id: 1,
+  name: 'Smithers',
+};
+
+const getApiMocks = () => {
+  const { req, res } = new Api();
+
+  Model.exec.mockResolvedValue(doc);
+  req.datasource = Model;
+
+  return {
+    req,
+    res,
+  };
+};
+
+const getSubController = () => {
+  const instance = new SubController(Model, 'name');
+  instance.preRoute = [];
+
+  return {
+    instance,
+
+    init() {
+      instance.addDocumentLookupMiddleware();
+      return this;
+    },
+
+    invokeFirstPreRoute: (req, res) =>
+      instance.preRoute[0](req, res, jest.fn()),
+  };
+};
+
 beforeEach(() => {
-  jest.resetAllMocks();
+  jest.clearAllMocks();
 });
 
 describe('SubController', () => {
   describe('addDocumentLookupMiddleware', () => {
     it('should register new middleware', () => {
-      const inst = new SubController(Model);
-      inst.preRoute = [];
-
-      inst.addDocumentLookupMiddleware();
-      expect(inst.preRoute).toHaveLength(1);
+      expect(
+        getSubController().init().instance.preRoute,
+      ).toHaveLength(1);
     });
 
     it('should attach properties to the req object', async () => {
-      const inst = new SubController(Model, 'name');
-      const { req, res } = new Api();
-      req.datasource = Model;
-      const doc = {
-        _id: 1,
-        name: 'Smithers',
-      };
+      const { invokeFirstPreRoute, init } =
+        getSubController();
+      const { req, res } = getApiMocks();
+      res.locals = {};
 
-      req.datasource.findById = jest.fn().mockReturnValue({
-        select: jest.fn().mockReturnValue({
-          exec: jest.fn().mockResolvedValue(doc),
-        }),
-      });
-
-      Model.verifyOutput = jest.fn();
-
-      inst.addDocumentLookupMiddleware();
-      await inst.preRoute[0](req, res, jest.fn());
+      init();
+      await invokeFirstPreRoute(req, res);
       expect(req.parent).toMatchObject(doc);
       expect(req.fieldName).toMatch('name');
+      expect(res.locals).toHaveProperty(
+        'fullParentDocument',
+      );
     });
 
     it('should not call select if schema option set', async () => {
-      const inst = new SubController(Model, 'name');
-      const { req, res } = new Api();
-      const select = jest.fn().mockReturnValue({
-        exec: jest.fn().mockResolvedValue({}),
-      });
+      const { init, invokeFirstPreRoute } =
+        getSubController();
+      const { req, res } = getApiMocks();
 
-      req.datasource = Model;
-
-      req.datasource.findById = jest.fn().mockReturnValue({
-        select,
-      });
-
-      Model.exec.mockResolvedValue({ _id: 1 });
-      Model.verifyOutput = jest.fn();
-
-      inst.addDocumentLookupMiddleware();
-      await inst.preRoute[0](req, res, jest.fn());
-      expect(select).toHaveBeenCalledWith('+name');
+      init();
+      await invokeFirstPreRoute(req, res);
+      expect(Model.select).toHaveBeenCalledWith('+name');
     });
   });
 });
