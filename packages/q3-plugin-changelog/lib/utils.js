@@ -114,11 +114,15 @@ const getFromChangelog = (collectionName, op = {}) => {
           {
             $project: {
               _id: 0,
+              ...(isObject(op) && 'reference' in op
+                ? {}
+                : {
+                    reference: 1,
+                  }),
               added: 1,
               updated: 1,
               deleted: 1,
-              collectionName: 1,
-              reference: 1,
+              previous: 1,
               date: 1,
               'user._id': {
                 $first: '$users._id',

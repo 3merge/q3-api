@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const changelog = require('q3-plugin-changelog/lib/changestream');
 const setup = require('../fixtures');
 const Students = require('../fixtures/models/student');
-const { teardown } = require('../helpers');
+const { delay, teardown } = require('../helpers');
 
 let Authorization;
 let agent;
@@ -17,19 +17,18 @@ const deleteMany = (collectionName) =>
     .collection(collectionName)
     .deleteMany({});
 
-const getChanges = () =>
-  new Promise((resolve) => {
-    setTimeout(async () => {
-      const {
-        body: { changes },
-      } = await agent
-        .get('/audit?collectionName=students')
-        .set({ Authorization })
-        .expect(200);
+const getChanges = async (id) => {
+  await delay(150);
 
-      resolve(changes);
-    }, 5000);
-  });
+  const {
+    body: { changes },
+  } = await agent
+    .get(`/audit?collectionName=students&id=${id}`)
+    .set({ Authorization })
+    .expect(200);
+
+  return changes;
+};
 
 afterAll(teardown);
 
@@ -65,7 +64,7 @@ describe('Changelog plugin', () => {
       .send({ age: 36 })
       .expect(200);
 
-    const changes = await getChanges();
+    const changes = await getChanges(id);
 
     expect(changes).toHaveLength(2);
     expect(first(changes)).toHaveProperty('updated.age');
@@ -73,7 +72,11 @@ describe('Changelog plugin', () => {
   });
 
   it('should track system changes', async () => {
-    await agent
+    const {
+      body: {
+        student: { id },
+      },
+    } = await agent
       .post('/students')
       .send({ name: 'Tom' })
       .set({ Authorization })
@@ -86,7 +89,7 @@ describe('Changelog plugin', () => {
       },
     );
 
-    const changes = await getChanges();
+    const changes = await getChanges(id);
 
     expect(changes).toHaveLength(2);
     expect(first(changes).user).toEqual({});
@@ -114,14 +117,16 @@ describe('Changelog plugin', () => {
       .set({ Authorization })
       .expect(201);
 
+    await delay(150);
+
     await agent
       .patch(`/students/${id}/samples/${sampleId}`)
       .send({ test: 'Bar' })
       .set({ Authorization })
       .expect(200);
 
-    const changes = await getChanges();
-
+    await delay(150);
+    const changes = await getChanges(id);
     expect(changes).toHaveLength(3);
 
     expect(
@@ -134,5 +139,47 @@ describe('Changelog plugin', () => {
         test: 'Bar',
       }),
     );
+  });
+
+  it('should track multi sub-document changes separately', async () => {
+    const {
+      body: {
+        student: { id },
+      },
+    } = await agent
+      .post('/students')
+      .send({ name: 'Tom' })
+      .set({ Authorization })
+      .expect(201);
+
+    await agent
+      .post(`/students/${id}/samples`)
+      .send({ test: 'foo' })
+      .set({ Authorization })
+      .expect(201);
+
+    const {
+      body: {
+        samples: [{ id: sampleId }, { id: sampleId2 }],
+      },
+    } = await agent
+      .post(`/students/${id}/samples`)
+      .send({ test: 'bar' })
+      .set({ Authorization })
+      .expect(201);
+
+    await delay(150);
+
+    await agent
+      .patch(`/students/${id}/samples`)
+      .query({
+        ids: [sampleId, sampleId2],
+      })
+      .send({ test: 'Quuz' })
+      .set({ Authorization })
+      .expect(200);
+
+    await delay(150);
+    expect(await getChanges(id)).toHaveLength(5);
   });
 });

@@ -43,6 +43,10 @@ const getDetailedDiff =
                 ...value,
               };
 
+      if ('updated' in acc) {
+        acc.previous = direction === 'ltr' ? a : b;
+      }
+
       return acc;
     }, {});
 
@@ -70,6 +74,12 @@ const reduceByComparison = (a = [], b = [], next) =>
     return output ? acc.concat(output) : acc;
   }, []);
 
+const doesNotMatchPrevious = (xs) => {
+  if (!sizeOf(xs)) return false;
+  if (xs.deleted || xs.added) return true;
+  return !isEqual(xs.previous, xs.updated);
+};
+
 module.exports = (a, b) => {
   const explodedA = explode(a);
   const explodedB = explode(b);
@@ -86,7 +96,7 @@ module.exports = (a, b) => {
         explodedA,
         getDetailedDiff('rtl'),
       ),
-    ].filter(sizeOf),
+    ].filter(doesNotMatchPrevious),
     isEqual,
   );
 };

@@ -1,3 +1,5 @@
+jest.setTimeout(30000);
+
 const mongoose = require('mongoose');
 const Model = require('../fixtures/Model');
 
@@ -34,7 +36,7 @@ describe('changelog', () => {
               args,
             ),
           );
-        }, 50);
+        }, 250);
       });
 
     await up({
@@ -69,9 +71,9 @@ describe('changelog', () => {
 
     setTimeout(async () => {
       const logs = await doc.getHistory();
-      expect(logs).toHaveLength(6);
+      expect(logs).toHaveLength(7);
       done();
-    }, 1500);
+    }, 250);
   });
 
   it('should save the last modified user', async () => {

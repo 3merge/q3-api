@@ -1,16 +1,33 @@
-const { compose } = require('q3-core-composer');
+const { compose, check } = require('q3-core-composer');
+const { exception } = require('q3-core-responder');
+const { Grant } = require('q3-core-access');
 const { model } = require('../..');
 
-module.exports = compose(async ({ query }, res) => {
-  let inst = model(query.collectionName);
+const AuditController = compose(
+  async ({ query, user }, res) => {
+    const { id, collectionName } = query;
+    let inst = model(collectionName);
 
-  if (query.id) {
-    inst = await model.findStrictly(query.id);
-  }
+    if (
+      !new Grant(user).can('Read').on('changelog').test({})
+    )
+      exception('Authorization')
+        .msg('cannotAuditChanges')
+        .throw();
 
-  res.ok({
-    changes: await inst.getHistory(),
-  });
-});
+    if (query.id) {
+      inst = await inst.findStrictly(id);
+    }
 
-// Validation....access control.
+    res.ok({
+      changes: await inst.getHistory(),
+    });
+  },
+);
+
+AuditController.validation = [
+  check('collectionName').isString(),
+  check('id').isMongoId().optional(),
+];
+
+module.exports = AuditController;
