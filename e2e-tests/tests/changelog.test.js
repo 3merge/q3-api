@@ -1,7 +1,7 @@
 jest.setTimeout(30000);
 
 // eslint-disable-next-line
-const { map, first, last } = require('lodash');
+const { map, first, last, get } = require('lodash');
 const mongoose = require('mongoose');
 // eslint-disable-next-line
 const changelog = require('q3-plugin-changelog/lib/changestream');
@@ -47,6 +47,14 @@ afterEach(async () => {
 });
 
 describe('Changelog plugin', () => {
+  it('should 404 on unknown document', async () =>
+    agent
+      .get(
+        `/audit?collectionName=students&id=${mongoose.Types.ObjectId().toString()}`,
+      )
+      .set({ Authorization })
+      .expect(404));
+
   it('should track new document changes', async () => {
     const {
       body: {
@@ -182,4 +190,9 @@ describe('Changelog plugin', () => {
     await delay(150);
     expect(await getChanges(id)).toHaveLength(5);
   });
+
+  it('should block public access', async () =>
+    agent
+      .get('/audit?collectionName=students')
+      .expect(401));
 });

@@ -9,6 +9,7 @@ const response = require('./postware');
 const middleware = require('./middleware');
 const isAuthorized = require('./middleware/isAuthorized');
 const isVerified = require('./middleware/isLoggedIn');
+const { formatAsArray } = require('./utils');
 
 const flatten = (a = [], b = []) => {
   const m = connect();
@@ -37,7 +38,7 @@ const compose = (ctr) =>
     flatten(ctr.validation, [validateBody]),
     flatten(ctr.authorization, [response]),
     sessionMiddleware,
-    ...(ctr.postAuthorization ? ctr.postAuthorization : []),
+    flatten(formatAsArray(ctr.postAuthorization)),
     aa(ctr),
   ]);
 
@@ -45,6 +46,7 @@ module.exports = {
   ...dep,
   redact: isAuthorized, // alias
   verify: isVerified, // alias
+  isLoggedIn: isVerified, // alias
   isVerified,
   isAuthorized,
   compose,

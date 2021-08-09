@@ -84,6 +84,31 @@ const insertIntoChangelog = async (
   }
 };
 
+const makeOp = (xs) => {
+  const output = {};
+  if (!isObject(xs)) return output;
+  const { date, user, operations } = xs;
+
+  if (date)
+    output.date = {
+      $lte: new Date(xs.date),
+    };
+
+  if (user)
+    output.user = {
+      $eq: mongoose.Types.ObjectId(xs.user),
+    };
+
+  if (Array.isArray(operations))
+    Object.entries(operations).forEach((key) => {
+      output[key] = {
+        $ne: null,
+      };
+    });
+
+  return output;
+};
+
 const getFromChangelog = (collectionName, op = {}) => {
   try {
     return new Promise((resolve, reject) =>
@@ -92,7 +117,7 @@ const getFromChangelog = (collectionName, op = {}) => {
           {
             $match: {
               collectionName,
-              ...op,
+              ...makeOp(op),
             },
           },
           {
@@ -101,7 +126,10 @@ const getFromChangelog = (collectionName, op = {}) => {
             },
           },
           {
-            $limit: 500,
+            $limit: 250,
+          },
+          {
+            $skip: op.skip || 0,
           },
           {
             $lookup: {
@@ -155,6 +183,7 @@ const omitByKeyName =
 
 module.exports = {
   getFromChangelog,
+  getChangelogCollection,
   insertIntoChangelog,
   printName,
   someMatch,
