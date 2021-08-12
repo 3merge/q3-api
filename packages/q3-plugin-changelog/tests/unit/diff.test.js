@@ -67,7 +67,6 @@ describe('diff', () => {
 
     checkFor({
       deleted: {
-        'items._id': 1,
         'items.foo': 'bar',
       },
     });

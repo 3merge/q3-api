@@ -87,16 +87,21 @@ const insertIntoChangelog = async (
 const makeOp = (xs) => {
   const output = {};
   if (!isObject(xs)) return output;
-  const { date, user, operation } = xs;
+  const { date, user, operation, reference } = xs;
 
   if (date)
     output.date = {
-      $lte: new Date(xs.date),
+      $lte: new Date(date),
+    };
+
+  if (reference)
+    output.reference = {
+      $eq: mongoose.Types.ObjectId(reference),
     };
 
   if (user)
     output.user = {
-      $eq: mongoose.Types.ObjectId(xs.user),
+      $eq: mongoose.Types.ObjectId(user),
     };
 
   if (Array.isArray(get(operation, '$in')))
@@ -178,6 +183,31 @@ const getFromChangelog = (collectionName, op = {}) => {
   }
 };
 
+const seedChangelog = async (collectionName, reference) => {
+  try {
+    if (!reference)
+      throw new Error(
+        'ID required to seed collection changelog',
+      );
+
+    const snapshot = await mongoose.connection.db
+      .collection(collectionName)
+      .findOne({
+        _id: reference,
+      });
+
+    await mongoose.connection.db
+      .collection('changelog-v2-snapshots')
+      .insert({
+        collectionName,
+        reference,
+        snapshot,
+      });
+  } catch (e) {
+    // noop
+  }
+};
+
 const omitByKeyName =
   (keylist = []) =>
   (xs) =>
@@ -193,4 +223,5 @@ module.exports = {
   someMatch,
   hasKeys,
   omitByKeyName,
+  seedChangelog,
 };

@@ -1,6 +1,16 @@
 /* eslint-disable no-param-reassign, func-names */
-const { pick, get, invoke, isNumber } = require('lodash');
-const { getFromChangelog } = require('./utils');
+const {
+  pick,
+  get,
+  invoke,
+  isNumber,
+  isUndefined,
+} = require('lodash');
+const mongoose = require('mongoose');
+const {
+  getFromChangelog,
+  seedChangelog,
+} = require('./utils');
 
 const increment = (v) => (isNumber(v) ? v + 1 : 0);
 
@@ -22,8 +32,15 @@ module.exports = (schema) => {
     );
   };
 
-  schema.pre('save', function copyQ3UserData() {
+  schema.pre('save', async function copyQ3UserData() {
     if (invoke(this, 'parent')) return;
+    const currentChangeLogValue = this.get('changelog');
+
+    if (isUndefined(currentChangeLogValue) && !this.isNew)
+      await seedChangelog(
+        get(this, 'constructor.collection.collectionName'),
+        this._id,
+      );
 
     this.set(
       'lastModifiedBy',
@@ -40,7 +57,7 @@ module.exports = (schema) => {
 
     this.set(
       'changelog',
-      increment(this.get('changelog')),
+      increment(currentChangeLogValue),
       {
         strict: false,
       },

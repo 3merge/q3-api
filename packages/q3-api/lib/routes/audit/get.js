@@ -3,21 +3,26 @@ const {
   check,
   isLoggedIn,
 } = require('q3-core-composer');
+const { get } = require('lodash');
 const qp = require('q3-core-rest/lib/queryParser');
 const { exception } = require('q3-core-responder');
 const { Grant } = require('q3-core-access');
 const { model } = require('../..');
 
-const checkAuthorizationGrant = (
-  { query, user },
-  res,
-  next,
-) => {
+const getCollectionName = (req) =>
+  get(qp(req), 'query.collectionName');
+
+const checkAuthorizationGrant = (req, res, next) => {
+  const { user } = req;
+  const collectionName = getCollectionName(req);
+
   const getGrant = (coll) =>
     new Grant(user).can('Read').on(coll).test({});
 
   return next(
-    !getGrant('audit') || !getGrant(query.collectionName)
+    !getGrant('audit') ||
+      !collectionName ||
+      !getGrant(collectionName)
       ? exception('Authorization')
           .msg('cannotAuditChanges')
           .boomerang()
@@ -26,7 +31,9 @@ const checkAuthorizationGrant = (
 };
 
 const getModelInstance = async (req, res, next) => {
-  const { id, collectionName } = req.query;
+  const { id } = req.query;
+  const collectionName = getCollectionName(req);
+
   req.auditSource = model(collectionName);
 
   try {

@@ -6,6 +6,7 @@ const {
   get,
   uniqWith,
   pickBy,
+  pick,
 } = require('lodash');
 const { detailedDiff } = require('deep-object-diff');
 const explode = require('./explode');
@@ -33,15 +34,20 @@ const getDetailedDiff =
     ).reduce((acc, curr) => {
       const [key, value] = curr;
 
-      if (sizeOf(value))
-        acc[key] =
-          key === 'deleted'
-            ? a
-            : {
-                ...pickWithMongoId(a),
-                ...pickWithMongoId(b),
-                ...value,
-              };
+      if (sizeOf(value)) {
+        if (key === 'deleted') {
+          const newValue = pick(a, Object.keys(value));
+          if (sizeOf(newValue)) {
+            acc[key] = newValue;
+          }
+        } else {
+          acc[key] = {
+            ...pickWithMongoId(a),
+            ...pickWithMongoId(b),
+            ...value,
+          };
+        }
+      }
 
       if ('updated' in acc) {
         acc.previous = direction === 'ltr' ? a : b;

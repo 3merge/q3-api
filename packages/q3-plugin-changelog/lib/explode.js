@@ -5,6 +5,7 @@ const {
   compact,
   join,
   omitBy,
+  isNull,
 } = require('lodash');
 const flat = require('flat');
 
@@ -14,8 +15,11 @@ const toPlainObject = (xs) =>
 const omitByKeyName =
   (keylist = []) =>
   (xs) =>
-    omitBy(flat(xs), (value, key) =>
-      keylist.some((phrase) => key.includes(phrase)),
+    omitBy(
+      flat(xs),
+      (value, key) =>
+        keylist.some((phrase) => key.includes(phrase)) ||
+        isNull(value),
     );
 
 function explode(obj) {
