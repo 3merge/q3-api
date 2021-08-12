@@ -8,28 +8,25 @@ const { statusHelpers } = require('q3-core-responder');
 const { get } = require('lodash');
 const addControllersToRest = require('./controllers');
 
-const customMessageDispatcherMiddleware = (app) => (
-  req,
-  res,
-  next,
-) => {
-  res.say = (key) => {
-    const verb = req.method.toLowerCase();
-    const locale = get(app, 'locals.messages', {});
-    const namespace = get(
-      locale,
-      [req.collectionPluralName, req.fieldName, verb]
-        .filter(Boolean)
-        .join('.'),
-    );
+const customMessageDispatcherMiddleware =
+  (app) => (req, res, next) => {
+    res.say = (key) => {
+      const verb = req.method.toLowerCase();
+      const locale = get(app, 'locals.messages', {});
+      const namespace = get(
+        locale,
+        [req.collectionPluralName, req.fieldName, verb]
+          .filter(Boolean)
+          .join('.'),
+      );
 
-    return namespace
-      ? req.t(`messages:${namespace}`)
-      : req.t(`messages:${key}`);
+      return namespace
+        ? req.t(`messages:${namespace}`)
+        : req.t(`messages:${key}`);
+    };
+
+    next();
   };
-
-  next();
-};
 
 module.exports = (app, mongoose) => ({
   init() {

@@ -6,7 +6,6 @@ const {
   isNumber,
   isUndefined,
 } = require('lodash');
-const mongoose = require('mongoose');
 const {
   getFromChangelog,
   seedChangelog,

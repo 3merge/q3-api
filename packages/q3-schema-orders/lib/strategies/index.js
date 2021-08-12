@@ -22,11 +22,8 @@ const getTraceDetails = (transactionReceipt) => {
   )
     return transactionReceipt;
 
-  const {
-    status,
-    statusText,
-    data,
-  } = transactionReceipt.trace.response;
+  const { status, statusText, data } =
+    transactionReceipt.trace.response;
   return {
     ...data,
     statusText,

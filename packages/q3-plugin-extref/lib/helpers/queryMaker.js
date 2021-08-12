@@ -9,9 +9,8 @@ const ReferenceReader = (k, value, context) => {
     value.reduce(
       (acc, curr) =>
         Object.assign(acc, {
-          [concatenate(prefix, curr)]: context[
-            curr === 'ref' ? '_id' : curr
-          ],
+          [concatenate(prefix, curr)]:
+            context[curr === 'ref' ? '_id' : curr],
         }),
       {},
     );
@@ -78,7 +77,9 @@ const ReferenceReader = (k, value, context) => {
   };
 };
 
-ReferenceReader.setup = (context) => ([key, value]) =>
-  ReferenceReader(key, value, context);
+ReferenceReader.setup =
+  (context) =>
+  ([key, value]) =>
+    ReferenceReader(key, value, context);
 
 module.exports = ReferenceReader;

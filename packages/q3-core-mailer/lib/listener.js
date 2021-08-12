@@ -13,40 +13,40 @@ const {
  * (1) Not all apps need this feature so we don't want to further bloat the UserModel.
  * (2) Some apps will have non-q3 user schemas, at which point only a few fields need to be mapped.
  */
-module.exports = (UserModel, url, subjects) => async (
-  eventName,
-  filterFn,
-  templateName,
-) => {
-  const listeners = await reduceListenersByLang(
-    await appendFilterFnToUserModel(
-      UserModel.find({
-        listens: eventName,
-        verified: true,
-        active: true,
-      }),
-      filterFn,
-    ),
-    url,
-  );
-
-  return (context) => {
-    const sender = (lang, user) =>
-      MailerCore(getTemplate(lang, eventName, templateName))
-        .to([user.to])
-        .subject(subjects[eventName][lang])
-        .props({
-          ...context,
-          ...user,
-        })
-        .send();
-
-    return exectuteOnAsync(
-      Object.entries(listeners),
-      async ([lang, to]) =>
-        exectuteOnAsync(to, async (user) =>
-          sender(lang, user),
-        ),
+module.exports =
+  (UserModel, url, subjects) =>
+  async (eventName, filterFn, templateName) => {
+    const listeners = await reduceListenersByLang(
+      await appendFilterFnToUserModel(
+        UserModel.find({
+          listens: eventName,
+          verified: true,
+          active: true,
+        }),
+        filterFn,
+      ),
+      url,
     );
+
+    return (context) => {
+      const sender = (lang, user) =>
+        MailerCore(
+          getTemplate(lang, eventName, templateName),
+        )
+          .to([user.to])
+          .subject(subjects[eventName][lang])
+          .props({
+            ...context,
+            ...user,
+          })
+          .send();
+
+      return exectuteOnAsync(
+        Object.entries(listeners),
+        async ([lang, to]) =>
+          exectuteOnAsync(to, async (user) =>
+            sender(lang, user),
+          ),
+      );
+    };
   };
-};

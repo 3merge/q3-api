@@ -16,15 +16,13 @@ const findOn = (modelName, str) =>
     Model[modelName].getFuzzyQuery(str),
   );
 
-const makeTableCase = (modelName) => (
-  searchTerm,
-  expectedLength,
-) => {
-  it(`returns ${expectedLength} ${modelName} result(s) on ${searchTerm}`, async () =>
-    expect(
-      await findOn(modelName, searchTerm),
-    ).toHaveLength(expectedLength));
-};
+const makeTableCase =
+  (modelName) => (searchTerm, expectedLength) => {
+    it(`returns ${expectedLength} ${modelName} result(s) on ${searchTerm}`, async () =>
+      expect(
+        await findOn(modelName, searchTerm),
+      ).toHaveLength(expectedLength));
+  };
 
 beforeAll(async () => {
   await mongoose.connect(process.env.CONNECTION);

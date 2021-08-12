@@ -87,9 +87,8 @@ module.exports = (path, includeReferenceField) => {
       getEmbeddedFilterPath(getSinglePath(optional)),
 
     split: (value) => {
-      const [top, bottom] = makePosOp(optional).split(
-        '.$[embed].',
-      );
+      const [top, bottom] =
+        makePosOp(optional).split('.$[embed].');
 
       return {
         [top]: {

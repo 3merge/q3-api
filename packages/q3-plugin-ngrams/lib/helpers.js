@@ -126,10 +126,12 @@ const makeDocumentPaths = compose(
   invokeJson,
 );
 
-const castToDotNotation = (doc = {}) => (field) =>
-  makeDocumentPaths(doc).filter((f) =>
-    makeRegexForEmbeddedDocumentPaths(field).test(f),
-  );
+const castToDotNotation =
+  (doc = {}) =>
+  (field) =>
+    makeDocumentPaths(doc).filter((f) =>
+      makeRegexForEmbeddedDocumentPaths(field).test(f),
+    );
 
 const reduceSearchableFields = (fields = [], doc) => {
   const getIn = (field) => makeGram(get(doc, field));
