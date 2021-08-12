@@ -3,16 +3,25 @@ const cluster = require('cluster');
 const { get } = require('lodash');
 const { insertIntoChangelog } = require('./utils');
 
+const shouldRunChangelog = (Model) => {
+  try {
+    return !(
+      Model.baseModelName ||
+      ['queues', 'q3-api-notifications'].includes(
+        Model.modelName,
+      ) ||
+      // allows you to turn it off for specific collections
+      Model.schema.get('disableChangelog')
+    );
+  } catch (e) {
+    return false;
+  }
+};
+
 module.exports = () => {
   if (cluster.isMaster)
     Object.values(mongoose.models).forEach((Model) => {
-      if (
-        Model.baseModelName ||
-        ['queues', 'q3-api-notifications'].includes(
-          Model.modelName,
-        )
-      )
-        return;
+      if (!shouldRunChangelog(Model)) return;
 
       Model.watch(
         [

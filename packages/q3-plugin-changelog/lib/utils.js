@@ -87,7 +87,7 @@ const insertIntoChangelog = async (
 const makeOp = (xs) => {
   const output = {};
   if (!isObject(xs)) return output;
-  const { date, user, operations } = xs;
+  const { date, user, operation } = xs;
 
   if (date)
     output.date = {
@@ -99,12 +99,16 @@ const makeOp = (xs) => {
       $eq: mongoose.Types.ObjectId(xs.user),
     };
 
-  if (Array.isArray(operations))
-    Object.entries(operations).forEach((key) => {
-      output[key] = {
+  if (Array.isArray(get(operation, '$in')))
+    output.$or = operation.$in.map((item) => ({
+      [item]: {
         $ne: null,
-      };
-    });
+      },
+    }));
+  else if (operation)
+    output[operation] = {
+      $ne: null,
+    };
 
   return output;
 };
@@ -126,7 +130,7 @@ const getFromChangelog = (collectionName, op = {}) => {
             },
           },
           {
-            $limit: 250,
+            $limit: 150,
           },
           {
             $skip: op.skip || 0,

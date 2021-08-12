@@ -104,6 +104,62 @@ describe('Changelog plugin', () => {
     expect(last(changes).user).toHaveProperty('firstName');
   });
 
+  it('should filter changes by double op', async () => {
+    await agent
+      .post('/students')
+      .send({ name: 'Tom' })
+      .set({ Authorization })
+      .expect(201);
+
+    await Students.updateMany(
+      {},
+      {
+        name: 'Jerry',
+      },
+    );
+
+    await delay(150);
+
+    const {
+      body: { changes },
+    } = await agent
+      .get(
+        '/audit?collectionName=students&operation=in(added,deleted)',
+      )
+      .set({ Authorization })
+      .expect(200);
+
+    expect(changes).toHaveLength(1);
+  });
+
+  it('should filter changes by single op', async () => {
+    await agent
+      .post('/students')
+      .send({ name: 'Tom' })
+      .set({ Authorization })
+      .expect(201);
+
+    await Students.updateMany(
+      {},
+      {
+        name: 'Jerry',
+      },
+    );
+
+    await delay(150);
+
+    const {
+      body: { changes },
+    } = await agent
+      .get(
+        '/audit?collectionName=students&operation=string(added)',
+      )
+      .set({ Authorization })
+      .expect(200);
+
+    expect(changes).toHaveLength(1);
+  });
+
   it('should track sub-document changes', async () => {
     const {
       body: {

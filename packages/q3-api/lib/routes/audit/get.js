@@ -3,13 +3,21 @@ const {
   check,
   isLoggedIn,
 } = require('q3-core-composer');
+const qp = require('q3-core-rest/lib/queryParser');
 const { exception } = require('q3-core-responder');
 const { Grant } = require('q3-core-access');
 const { model } = require('../..');
 
-const checkAuthorizationGrant = ({ user }, res, next) => {
-  next(
-    !new Grant(user).can('Read').on('changelog').test({})
+const checkAuthorizationGrant = (
+  { query, user },
+  res,
+  next,
+) => {
+  const getGrant = (coll) =>
+    new Grant(user).can('Read').on(coll).test({});
+
+  return next(
+    !getGrant('audit') || !getGrant(query.collectionName)
       ? exception('Authorization')
           .msg('cannotAuditChanges')
           .boomerang()
@@ -33,12 +41,11 @@ const getModelInstance = async (req, res, next) => {
   }
 };
 
-const AuditController = async (
-  { auditSource, query },
-  res,
-) => {
+const AuditController = async (req, res) => {
   res.ok({
-    changes: await auditSource.getHistory(query),
+    changes: await req.auditSource.getHistory(
+      qp(req).query,
+    ),
   });
 };
 
@@ -48,9 +55,9 @@ AuditController.validation = [
   check('collectionName').isString(),
   check('id').isMongoId().optional(),
   check('date').isISO8601().optional(),
-  check('operations').isArray().optional(),
+  check('operation').isString().optional(),
   check('skip').isNumeric().optional(),
-  check('user').isNumeric().optional(),
+  check('user').isMongoId().optional(),
 ];
 
 AuditController.postAuthorization = [

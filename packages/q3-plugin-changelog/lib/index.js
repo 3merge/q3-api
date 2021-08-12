@@ -1,9 +1,6 @@
 /* eslint-disable no-param-reassign, func-names */
 const { pick, get, invoke, isNumber } = require('lodash');
-const {
-  getFromChangelog,
-  getChangelogCollection,
-} = require('./utils');
+const { getFromChangelog } = require('./utils');
 
 const increment = (v) => (isNumber(v) ? v + 1 : 0);
 

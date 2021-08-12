@@ -27,7 +27,7 @@
   },
   {
     "role": "Developer",
-    "coll": "changelog",
+    "coll": "audit",
     "op": "Read"
   },
   {
