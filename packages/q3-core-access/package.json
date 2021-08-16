@@ -1,6 +1,6 @@
 {
   "name": "q3-core-access",
-  "version": "1.18.5",
+  "version": "1.19.0",
   "main": "lib/index.js",
   "dependencies": {
     "comparisons": "2.2.10",
@@ -8,12 +8,12 @@
     "lodash": "^4.17.20",
     "micromatch": "^4.0.2",
     "mongoose": "^5.11.8",
-    "q3-core-responder": "^1.18.5",
-    "q3-schema-utils": "^1.18.5",
-    "q3-utils": "^1.0.0"
+    "q3-core-responder": "^1.19.0",
+    "q3-schema-utils": "^1.19.0",
+    "q3-utils": "^1.19.0"
   },
   "devDependencies": {
-    "q3-test-utils": "^1.18.5"
+    "q3-test-utils": "^1.19.0"
   },
   "jest": {
     "verbose": true,
