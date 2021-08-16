@@ -45,22 +45,18 @@ describe('diff', () => {
 
     checkFor({
       updated: {
-        _id: 1,
         foo: 'baz',
       },
       previous: {
-        _id: 1,
         foo: 'bar',
       },
     });
 
     checkFor({
       updated: {
-        'items._id': 2,
         'items.foo': 'bar',
       },
       previous: {
-        'items._id': 2,
         'items.foo': 'bar1',
       },
     });
@@ -73,7 +69,6 @@ describe('diff', () => {
 
     checkFor({
       added: {
-        'items._id': 3,
         'items.foo': 'quuz',
       },
     });
@@ -122,11 +117,9 @@ describe('diff', () => {
 
     checkFor({
       updated: {
-        'items._id': 1,
         'items.foo': 'fuz',
       },
       previous: {
-        'items._id': 1,
         'items.foo': 'foo',
         'items.bar': 'bar',
       },
@@ -134,11 +127,9 @@ describe('diff', () => {
 
     checkFor({
       updated: {
-        'items.quuz._id': 1,
         'items.quuz.ignore': 2,
       },
       previous: {
-        'items.quuz._id': 1,
         'items.quuz.ignore': 1,
       },
     });

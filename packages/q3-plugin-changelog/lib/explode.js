@@ -36,6 +36,12 @@ function explode(obj) {
               .map((item) => exec(item, keyPath))
               .flat()
               .forEach((item) => acc.push(item));
+          else if (entry.length)
+            Object.assign(out, {
+              [keyPath]: uniq(compact(entry))
+                .sort()
+                .join(', '),
+            });
         } else
           Object.assign(out, {
             [keyPath]: entry,

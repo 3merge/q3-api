@@ -86,6 +86,28 @@ const doesNotMatchPrevious = (xs) => {
   return !isEqual(xs.previous, xs.updated);
 };
 
+const removeIds = (xs) =>
+  isObject(xs)
+    ? Object.entries(xs).reduce((acc, [key, value]) => {
+        if (
+          key.includes('_id') ||
+          key.includes('.id') ||
+          key === 'id'
+        )
+          return acc;
+
+        if (Array.isArray(value)) {
+          acc[key] = value.map(removeIds);
+        } else if (isObject(value)) {
+          acc[key] = removeIds(value);
+        } else {
+          acc[key] = value;
+        }
+
+        return acc;
+      }, {})
+    : xs;
+
 module.exports = (a, b) => {
   const explodedA = explode(a);
   const explodedB = explode(b);
@@ -102,7 +124,9 @@ module.exports = (a, b) => {
         explodedA,
         getDetailedDiff('rtl'),
       ),
-    ].filter(doesNotMatchPrevious),
+    ]
+      .filter(doesNotMatchPrevious)
+      .map(removeIds),
     isEqual,
   );
 };
