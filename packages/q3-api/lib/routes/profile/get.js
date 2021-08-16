@@ -1,4 +1,8 @@
-const { compose, redact } = require('q3-core-composer');
+const {
+  compose,
+  redact,
+  isLoggedIn,
+} = require('q3-core-composer');
 const { AccessControl } = require('q3-core-access');
 
 const getProfile = async ({ user, marshal }, res) => {
@@ -12,6 +16,7 @@ const getProfile = async ({ user, marshal }, res) => {
 };
 
 getProfile.authorization = [
+  isLoggedIn,
   redact('profile').inResponse('profile').done(),
 ];
 

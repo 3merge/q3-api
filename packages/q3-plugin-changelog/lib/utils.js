@@ -10,6 +10,7 @@ const {
 } = require('lodash');
 const flat = require('flat');
 const mongoose = require('mongoose');
+const BatchQueryLoader = require('q3-plugin-extref/lib/BatchQueryLoader');
 const diff = require('./diff');
 
 const getChangelogCollection = (xs) =>
@@ -26,6 +27,29 @@ const printName = (o) =>
   join(compact([o.firstName, o.lastName]), ' ');
 
 const hasKeys = (v) => isObject(v) && size(Object.keys(v));
+
+// fixes the issue of auto-populated references in the changelog
+const invokeBatchQueryLoader = async (
+  schemaName,
+  data = [],
+) => {
+  try {
+    const batch = new BatchQueryLoader(
+      mongoose.model(schemaName).schema,
+    );
+
+    if (batch.isReady) {
+      const docs = [].concat(data);
+      docs.map(batch.registerIds.bind(batch));
+      await batch.fetch();
+      docs.map(batch.assign.bind(batch));
+    }
+
+    return data;
+  } catch (e) {
+    return data;
+  }
+};
 
 const insertIntoChangelog = async (
   collectionName,
@@ -55,7 +79,12 @@ const insertIntoChangelog = async (
       'value.snapshot',
     );
 
-    const changes = diff(previousSnapshot, snapshot);
+    const changes = diff(
+      ...(await invokeBatchQueryLoader(
+        get(snapshot, '__t', collectionName),
+        [previousSnapshot, snapshot],
+      )),
+    );
 
     const includeUserId = () => {
       const userId = get(snapshot, 'lastModifiedBy.id');

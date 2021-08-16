@@ -11,6 +11,7 @@
     "jsondiffpatch": "^0.4.1",
     "lodash": "^4.17.20",
     "mongoose": "^5.11.8",
+    "q3-plugin-extref": "^1.19.1",
     "q3-schema-utils": "^1.19.1"
   },
   "jest": {
