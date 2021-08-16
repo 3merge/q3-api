@@ -294,17 +294,22 @@ class AccessControlSessionBridge {
 
     const createdBy = depopulateCreatedByReference(this);
 
-    const compareAliasWithCurrentDocument = (xs) =>
-      isEqual(
-        pick(
-          {
-            ...this.toJSON(),
-            createdBy,
-          },
-          Object.keys(xs),
-        ),
-        xs,
-      );
+    const compareAliasWithCurrentDocument = (xs) => {
+      const ref = {
+        ...this.toJSON(),
+        createdBy,
+      };
+
+      return Object.keys(xs).reduce((acc, curr) => {
+        if (!acc) return false;
+        const target = xs[curr];
+        const comparedTo = String(ref[curr]);
+
+        return Array.isArray(target)
+          ? target.map(String).includes(comparedTo)
+          : isEqual(String(target), comparedTo);
+      }, true);
+    };
 
     if (operator === 'OR')
       return data.some(compareAliasWithCurrentDocument);
