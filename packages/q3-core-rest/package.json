@@ -17,6 +17,7 @@
     "q3-core-responder": "^1.18.5",
     "q3-plugin-ngrams": "^1.12.4",
     "q3-schema-utils": "^1.18.5",
+    "q3-utils": "^1.0.0",
     "sift": "^13.4.0"
   },
   "peerDependencies": {

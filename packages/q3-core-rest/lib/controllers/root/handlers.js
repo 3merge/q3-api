@@ -44,6 +44,8 @@ module.exports = {
         hasPrevPage,
       });
     } catch (e) {
+      if (e.statusCode === 403) throw e;
+
       res.ok({
         [collectionPluralName]: [],
         total: 0,
@@ -55,7 +57,7 @@ module.exports = {
 
   async Patch(req, res) {
     const {
-      authorizeBody,
+      body: originalBody,
       collectionSingularName,
       datasource,
       marshal,
@@ -72,7 +74,7 @@ module.exports = {
       },
     );
 
-    const body = authorizeBody(doc);
+    const body = doc.authorizeUpdateArguments(originalBody);
 
     await doc.handleReq({
       body,
@@ -91,15 +93,17 @@ module.exports = {
 
   async Post(
     {
-      authorizeBody,
+      body,
       collectionSingularName,
-      datasource,
+      datasource: Datasource,
       marshal,
     },
     res,
   ) {
-    const body = authorizeBody();
-    const doc = await datasource.create([body], {
+    const doc = new Datasource();
+
+    doc.set(doc.authorizeCreateArguments(body));
+    await doc.save({
       redact: true,
     });
 
@@ -125,10 +129,14 @@ module.exports = {
     const doc = await datasource.findStrictly(
       params.resourceID,
     );
+
     if (
       files &&
       Object.keys(files).length &&
-      doc.handleFeaturedUpload
+      doc.handleFeaturedUpload &&
+      doc.checkAuthorizationForTotalSubDocument(
+        'featuredUpload',
+      )
     ) {
       await doc.handleFeaturedUpload({ files });
     }

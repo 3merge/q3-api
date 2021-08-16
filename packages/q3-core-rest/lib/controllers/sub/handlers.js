@@ -1,42 +1,31 @@
-const { exception } = require('q3-core-responder');
 const aqp = require('api-query-params');
-const { executeOn } = require('q3-schema-utils');
+const { get } = require('lodash');
 const sift = require('sift');
-const { isSimpleSubDocument } = require('../../utils');
+const { decorate } = require('q3-utils');
 
-const suggestPutRequest = (parent, fieldName) => {
-  if (isSimpleSubDocument(parent, fieldName))
-    exception('Conflict').msg('usePutRequest').throw();
-};
-
-const sanitizeQueryIds = (ids) =>
-  executeOn(ids, (v) =>
-    typeof v === 'string'
-      ? v.split(',').map((item) => item.trim())
-      : v,
-  ).flat();
-
-module.exports = {
-  async List({ subdocs, fieldName, marshal, query }, res) {
+const SubControllHandlers = {
+  async List(
+    { subdocs, fieldName, marshal, query, parent },
+    res,
+  ) {
     const { filter } = aqp(query !== null ? query : {});
+    parent.checkAuthorizationForTotalSubDocument(
+      fieldName,
+      'Read',
+    );
 
     res.ok({
-      [fieldName]: marshal(subdocs.filter(sift(filter))),
+      [fieldName]: Array.isArray(subdocs)
+        ? marshal(subdocs.filter(sift(filter)))
+        : marshal(subdocs),
     });
   },
 
-  async Patch({
-    params,
-    authorizeBody,
-    parent,
-    fieldName,
-  }) {
-    suggestPutRequest(parent, fieldName);
-
+  async Patch({ body, params, parent, fieldName }) {
     await parent.updateSubDocument(
       fieldName,
       params.fieldID,
-      authorizeBody(parent),
+      body,
     );
 
     return {
@@ -46,30 +35,8 @@ module.exports = {
     };
   },
 
-  async PatchMany({
-    authorizeBody,
-    query,
-    body,
-    parent,
-    fieldName,
-  }) {
-    suggestPutRequest(parent, fieldName);
-    const ids = sanitizeQueryIds(query.ids);
-
-    // eslint-disable-next-line
-    if ('ids' in body) delete body.ids;
-
-    if (!ids.length)
-      exception('Validation')
-        .msg('idsRequiredToPerformUpdate')
-        .field('ids')
-        .throw();
-
-    await parent.updateSubDocuments(
-      fieldName,
-      ids,
-      authorizeBody(parent),
-    );
+  async PatchMany({ body, parent, fieldName, ids }) {
+    await parent.updateSubDocuments(fieldName, ids, body);
 
     return {
       data: parent,
@@ -78,12 +45,7 @@ module.exports = {
     };
   },
 
-  async Post({ authorizeBody, files, parent, fieldName }) {
-    if (isSimpleSubDocument(parent, fieldName))
-      exception('Conflict').msg('usePutRequest').throw();
-
-    const body = authorizeBody(parent);
-
+  async Post({ body, files, parent, fieldName }) {
     if (!files) {
       await parent.pushSubDocument(fieldName, body);
     } else {
@@ -98,9 +60,16 @@ module.exports = {
     };
   },
 
-  async Put({ authorizeBody, fieldName, parent }) {
+  async Put({ body, fieldName, parent }) {
     await parent
-      .set({ [fieldName]: authorizeBody(parent) })
+      .set({
+        [fieldName]: get(
+          parent.authorizeCreateArguments({
+            [fieldName]: body,
+          }),
+          fieldName,
+        ),
+      })
       .save();
 
     return {
@@ -115,6 +84,7 @@ module.exports = {
       fieldName,
       params.fieldID,
     );
+
     return {
       data: parent,
       message: 'subResourceRemoved',
@@ -122,8 +92,9 @@ module.exports = {
     };
   },
 
-  async RemoveMany({ parent, fieldName, query: { ids } }) {
+  async RemoveMany({ parent, fieldName, ids }) {
     await parent.removeSubDocument(fieldName, ids);
+
     return {
       data: parent,
       message: 'subResourceRemoved',
@@ -131,3 +102,23 @@ module.exports = {
     };
   },
 };
+
+const decorateWithMethodValidation = (xs) =>
+  decorate(
+    xs,
+    ['Patch', 'PatchMany', 'Post'],
+    // eslint-disable-next-line
+    require('./methodValidation'),
+  );
+
+const decorateWithQueryValidation = (xs) =>
+  decorate(
+    xs,
+    ['PatchMany', 'RemoveMany'],
+    // eslint-disable-next-line
+    require('./queryValidation'),
+  );
+
+module.exports = decorateWithMethodValidation(
+  decorateWithQueryValidation(SubControllHandlers),
+);

@@ -4,6 +4,7 @@ const { assignSocialStatus } = require('./middleware');
 
 const SampleSchema = new mongoose.Schema({
   test: String,
+  message: String,
 });
 
 const StudentSchema = new mongoose.Schema(
@@ -23,7 +24,12 @@ const StudentSchema = new mongoose.Schema(
         age: Number,
       },
     ],
+    referenceId: mongoose.Types.ObjectId,
     samples: [SampleSchema],
+    dimensions: new mongoose.Schema({
+      weight: Number,
+      height: Number,
+    }),
   },
   {
     restify: '*',

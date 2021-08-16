@@ -1,12 +1,16 @@
 const Q3 = require('q3-api');
 const setup = require('../fixtures');
-const { teardown } = require('../helpers');
+const { access, teardown } = require('../helpers');
 
 let Authorization;
 let agent;
 
 beforeAll(async () => {
   ({ Authorization, agent } = await setup());
+});
+
+beforeEach(() => {
+  access.refresh();
 });
 
 afterEach(async () => {

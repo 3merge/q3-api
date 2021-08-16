@@ -33,6 +33,7 @@ describe('SubController route handlers', () => {
       const subdocs = [{ foo: 'bar' }];
       req.subdocs = subdocs;
       req.fieldName = 'body';
+
       await List(req, res);
       expect(req.marshal).toHaveBeenCalledWith(subdocs);
       expect(res.ok).toHaveBeenCalledWith(
@@ -69,11 +70,13 @@ describe('SubController route handlers', () => {
 
   describe('Put', () => {
     it('should set the property', async () => {
-      const args = { name: 'Jon' };
-      req.authorizeBody = jest.fn().mockReturnValue(args);
+      req.body = { name: 'Jon' };
       req.fieldName = 'friends';
 
       req.parent = {
+        authorizeCreateArguments: jest
+          .fn()
+          .mockImplementation((v) => v),
         set: jest.fn().mockReturnValue({
           save: jest.fn(),
         }),
@@ -81,15 +84,14 @@ describe('SubController route handlers', () => {
 
       await Put(req, res);
       expect(req.parent.set).toHaveBeenCalledWith({
-        friends: args,
+        friends: req.body,
       });
     });
   });
 
   describe('Patch', () => {
     it('should set the property', async () => {
-      const args = { name: 'Jon' };
-      req.authorizeBody = jest.fn().mockReturnValue(args);
+      req.body = { name: 'Jon' };
       req.fieldName = 'friends';
       req.params.fieldID = '1';
       req.parent = {
@@ -102,16 +104,15 @@ describe('SubController route handlers', () => {
       await Patch(req, res);
       expect(
         req.parent.updateSubDocument,
-      ).toHaveBeenCalledWith('friends', '1', args);
+      ).toHaveBeenCalledWith('friends', '1', req.body);
     });
   });
 
   describe('PatchMany', () => {
     it('should set the property', async () => {
-      const args = { name: 'Jon' };
       req.query = { ids: ['1', '2'] };
-      req.body = args;
-      req.authorizeBody = jest.fn().mockReturnValue(args);
+      req.body = { name: 'Jon' };
+
       req.fieldName = 'friends';
       req.parent = {
         updateSubDocuments: jest.fn(),
@@ -124,31 +125,24 @@ describe('SubController route handlers', () => {
 
       expect(
         req.parent.updateSubDocuments,
-      ).toHaveBeenCalledWith('friends', ['1', '2'], args);
+      ).toHaveBeenCalledWith(
+        'friends',
+        ['1', '2'],
+        req.body,
+      );
     });
   });
 
   describe('Post', () => {
     it('should push into the subdocuments', async () => {
       req.body = {};
-      req.authorizeBody = jest.fn().mockReturnValue({});
       req.fieldName = 'foo';
+
       await Post(req, res);
       expect(Model.pushSubDocument).toHaveBeenCalledWith(
         'foo',
         {},
       );
-    });
-
-    it('should throw an error', async () => {
-      req.body = {};
-      req.fieldName = 'foo';
-      req.parent.schema.path = jest.fn().mockReturnValue({
-        constructor: { name: 'SingleNestedPath' },
-      });
-
-      await expect(Post(req, res)).rejects.toThrowError();
-      expect(req.parent.schema.path).toHaveBeenCalled();
     });
   });
 });

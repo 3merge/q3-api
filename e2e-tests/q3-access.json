@@ -39,7 +39,7 @@
       "age",
       "friends.*",
       "class",
-      "samples.*",
+      "samples*",
       {
         "glob": "grade",
         "test": "age>16"

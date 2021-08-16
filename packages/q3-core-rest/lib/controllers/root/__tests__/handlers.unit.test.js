@@ -18,6 +18,14 @@ Model.handleReq = function fileHandlerMethod() {
   return this;
 };
 
+Model.authorizeUpdateArguments = jest
+  .fn()
+  .mockImplementation((args) => args);
+
+Model.authorizeCreateArguments = jest
+  .fn()
+  .mockImplementation((args) => args);
+
 beforeEach(() => {
   api.inject({
     datasource: Model,
@@ -109,34 +117,51 @@ describe('Handlers', () => {
 
   describe('Post Controller', () => {
     it('should return with create code', async () => {
-      const args = { name: 'Mike', age: 28 };
-      req.authorizeBody = () => args;
+      req.body = {
+        name: 'Mike',
+        age: 28,
+      };
 
-      await Post(req, res);
-      expect(Model.create).toHaveBeenCalledWith([args], {
-        redact: true,
-      });
+      await Post(
+        {
+          ...req,
+          datasource: class {
+            constructor() {
+              return Model;
+            }
+          },
+        },
+        res,
+      );
+
+      expect(
+        Model.authorizeCreateArguments,
+      ).toHaveBeenCalledWith(req.body);
+
       expect(res.create).toHaveBeenCalled();
     });
   });
 
   describe('Patch Controller', () => {
-    it('should return with create code', async () => {
+    it('should return with update code', async () => {
       Model.findStrictly.mockResolvedValue({
         ...Model,
         updatedAt: new Date(),
         set: jest.fn().mockReturnValue(Model),
       });
 
-      const args = { name: 'Mike', age: 28 };
+      req.body = { name: 'Mike', age: 28 };
       req.params.resourceID = 1;
-      req.authorizeBody = () => args;
+
       await Patch(req, res);
       expect(Model.findStrictly).toHaveBeenCalledWith(1, {
         redact: false,
         select: '+uploads',
       });
-      // expect(set).toHaveBeenCalledWith(args);
+
+      expect(
+        Model.authorizeUpdateArguments,
+      ).toHaveBeenCalledWith(req.body);
       expect(res.update).toHaveBeenCalled();
     });
   });
@@ -147,6 +172,9 @@ describe('Handlers', () => {
       Model.findStrictly.mockResolvedValue({
         ...Model,
         handleFeaturedUpload,
+        checkAuthorizationForTotalSubDocument: jest
+          .fn()
+          .mockReturnValue(true),
       });
 
       req.params.resourceID = 1;

@@ -1,8 +1,4 @@
-const {
-  redact,
-  check,
-  query,
-} = require('q3-core-composer');
+const { redact, check } = require('q3-core-composer');
 const { isObject } = require('lodash');
 const RestRegistration = require('../../datasource');
 const {
@@ -16,12 +12,6 @@ const {
 } = require('./handlers');
 const deco = require('./handlerDecorator');
 const { toJSON } = require('../../utils');
-
-const appendValidationForMultiOp = (ctrl) => {
-  // eslint-disable-next-line
-  ctrl.validation = [query('ids').isArray()];
-  return ctrl;
-};
 
 module.exports = class SubDocumentControllerCommander extends (
   RestRegistration
@@ -61,6 +51,7 @@ module.exports = class SubDocumentControllerCommander extends (
           .exec();
 
         datasource.verifyOutput(doc);
+
         req.parent = doc;
         req.fieldName = this.field;
         req.subdocs = doc[this.field];
@@ -78,7 +69,6 @@ module.exports = class SubDocumentControllerCommander extends (
   getAuthorization() {
     return [
       redact(this.collectionName)
-        .requireField(this.field)
         .inResponse(this.field)
         .withPrefix(this.field)
         .done(),
@@ -99,7 +89,6 @@ module.exports = class SubDocumentControllerCommander extends (
   getListController(path) {
     List.authorization = [
       redact(this.collectionName)
-        .requireField(this.field)
         .inResponse(this.field)
         .withPrefix(this.field)
         .done(),
@@ -132,7 +121,6 @@ module.exports = class SubDocumentControllerCommander extends (
 
   getPatchManyController(path) {
     PatchMany.authorization = this.getAuthorization();
-    appendValidationForMultiOp(PatchMany);
     return this.makePatch(path, deco(PatchMany));
   }
 
@@ -143,7 +131,6 @@ module.exports = class SubDocumentControllerCommander extends (
 
   getDeleteManyController(path) {
     RemoveMany.authorization = this.getAuthorization();
-    appendValidationForMultiOp(RemoveMany);
     return this.makeDelete(path, deco(RemoveMany));
   }
 };
