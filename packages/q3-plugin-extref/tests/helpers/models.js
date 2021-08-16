@@ -27,13 +27,12 @@ module.exports = (Schema) => {
     return doc;
   };
 
-  Schema.methods.expectPathNotToHaveProperty = async function (
-    path,
-  ) {
-    const doc = await this.constructor.findById(this._id);
-    expect(doc).not.toHaveProperty(path);
-    return doc;
-  };
+  Schema.methods.expectPathNotToHaveProperty =
+    async function (path) {
+      const doc = await this.constructor.findById(this._id);
+      expect(doc).not.toHaveProperty(path);
+      return doc;
+    };
 
   return Schema;
 };

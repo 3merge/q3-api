@@ -5,15 +5,15 @@ const {
   compareValues,
 } = require('./helpers');
 
-const filterBySimpleDiscountFormula = (kinds) => ({
-  formula,
-}) => {
-  try {
-    return kinds.includes(formula);
-  } catch (e) {
-    return false;
-  }
-};
+const filterBySimpleDiscountFormula =
+  (kinds) =>
+  ({ formula }) => {
+    try {
+      return kinds.includes(formula);
+    } catch (e) {
+      return false;
+    }
+  };
 
 const isWithinTimeFrame = (doc) =>
   doc && !doc.hasExpired() && !doc.hasNotYetBegun();

@@ -2,8 +2,7 @@ const { first, orderBy, last, get } = require('lodash');
 
 const getInt = (v) => (i) => Number(v.split(i)[1]);
 
-const checkOp = (v) => (op) =>
-  v.startsWith(op) ? v : null;
+const checkOp = (v) => (op) => v.startsWith(op) ? v : null;
 
 module.exports = class RatesDecorator {
   static async findAndFilterByThreshold(query = {}, value) {

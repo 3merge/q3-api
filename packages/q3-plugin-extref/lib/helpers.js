@@ -93,17 +93,18 @@ exports.reduceByContext = (ctx, key) => (a, next) =>
 
 exports.cleanPath = cleanPath;
 
-exports.forEachCollectionAsync = (
-  collections,
-  collectionsNameResolver,
-) => async (fn) =>
-  Promise.allSettled(
-    collections.map((collection) =>
-      fn(
-        new ModelProxy(collection, collectionsNameResolver),
+exports.forEachCollectionAsync =
+  (collections, collectionsNameResolver) => async (fn) =>
+    Promise.allSettled(
+      collections.map((collection) =>
+        fn(
+          new ModelProxy(
+            collection,
+            collectionsNameResolver,
+          ),
+        ),
       ),
-    ),
-  );
+    );
 
 // eslint-disable-next-line
 exports.markModifiedLocalVars = function () {
@@ -122,19 +123,17 @@ exports.executeMiddlewareOnUpdate = (next) => {
       };
 };
 
-exports.getFirstTruthySpec = (context) => (
-  conditions,
-  defaultValue,
-) =>
-  Object.entries(conditions).reduce(
-    (acc, [currentKey, currentValue]) => {
-      let match = context[currentKey];
-      if (isFunction(match)) match = match();
-      if (acc || !match) return acc;
-      return currentValue;
-    },
-    undefined,
-  ) || defaultValue;
+exports.getFirstTruthySpec =
+  (context) => (conditions, defaultValue) =>
+    Object.entries(conditions).reduce(
+      (acc, [currentKey, currentValue]) => {
+        let match = context[currentKey];
+        if (isFunction(match)) match = match();
+        if (acc || !match) return acc;
+        return currentValue;
+      },
+      undefined,
+    ) || defaultValue;
 
 exports.createQueueData = (queries) =>
   map(

@@ -5,11 +5,13 @@ const { FAILED, STALLED } = require('./constants');
 
 const add = (...params) => moment().add(...params);
 
-const composeAsync = (...fns) => (initialValues) =>
-  fns.reduceRight(
-    (sum, fn) => Promise.resolve(sum).then(fn),
-    initialValues,
-  );
+const composeAsync =
+  (...fns) =>
+  (initialValues) =>
+    fns.reduceRight(
+      (sum, fn) => Promise.resolve(sum).then(fn),
+      initialValues,
+    );
 
 const getNextDate = (value) => {
   switch (value) {

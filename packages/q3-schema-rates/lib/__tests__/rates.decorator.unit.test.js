@@ -54,8 +54,10 @@ describe('Rates decorator', () => {
     });
 
     it('should return threshold in custom order', async () => {
-      const high = await Decorator.findAndReduceByThresholdAsc();
-      const low = await Decorator.findAndReduceByThresholdDesc();
+      const high =
+        await Decorator.findAndReduceByThresholdAsc();
+      const low =
+        await Decorator.findAndReduceByThresholdDesc();
       expect(high).toBe(50);
       expect(low).toBe(100);
     });

@@ -73,7 +73,8 @@ module.exports = {
     // avoid bulk op without results
     if (!size(cursor)) return null;
 
-    const bulkOp = this.collection.initializeUnorderedBulkOp();
+    const bulkOp =
+      this.collection.initializeUnorderedBulkOp();
 
     cursor.forEach((doc) =>
       bulkOp.find({ _id: doc._id }).updateOne({

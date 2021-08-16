@@ -1,34 +1,27 @@
 const mongoose = require('mongoose');
 const cluster = require('cluster');
-const { get, uniq } = require('lodash');
-const {
-  findFileTraversingUpwards,
-} = require('q3-schema-utils');
-const {
-  addMetaData,
-  insertIntoChangelog,
-  reduceByKeyMatch,
-} = require('./utils');
+const { get } = require('lodash');
+const { insertIntoChangelog } = require('./utils');
 
-module.exports = (src = __dirname) => {
-  const json = findFileTraversingUpwards(
-    src,
-    'q3-changelog.json',
-    {},
-  );
+const shouldRunChangelog = (Model) => {
+  try {
+    return !(
+      Model.baseModelName ||
+      ['queues', 'q3-api-notifications'].includes(
+        Model.modelName,
+      ) ||
+      // allows you to turn it off for specific collections
+      Model.schema.get('disableChangelog')
+    );
+  } catch (e) {
+    return false;
+  }
+};
 
+module.exports = () => {
   if (cluster.isMaster)
     Object.values(mongoose.models).forEach((Model) => {
-      const coll = get(Model, 'collection.collectionName');
-      let changelog = get(json, coll);
-
-      if (!changelog)
-        changelog = Model.getChangelogProperties
-          ? Model.getChangelogProperties()
-          : null;
-
-      // do not track discriminators
-      if (!changelog || Model.baseModelName) return;
+      if (!shouldRunChangelog(Model)) return;
 
       Model.watch(
         [
@@ -55,10 +48,7 @@ module.exports = (src = __dirname) => {
           insertIntoChangelog(
             get(Model, 'collection.collectionName'),
             get(args, 'documentKey._id'),
-            reduceByKeyMatch(
-              get(args, 'fullDocument'),
-              uniq(addMetaData(changelog)),
-            ),
+            get(args, 'fullDocument'),
           ),
         )
         .on('error', () => {

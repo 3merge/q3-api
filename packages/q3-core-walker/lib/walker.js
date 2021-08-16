@@ -16,7 +16,10 @@ module.exports = class DirectoryWalker {
   getController() {
     try {
       // eslint-disable-next-line
-      const controller = require(resolve(this.dir, this.name));
+      const controller = require(resolve(
+        this.dir,
+        this.name,
+      ));
       if (typeof controller !== 'function') {
         throw new Error('Controller must be a function');
       }

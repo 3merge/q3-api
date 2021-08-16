@@ -8,21 +8,20 @@ const runComparisonEvaluation = (test = [], value) =>
     ? value && new Comparison(test).eval(invokeJSON(value))
     : true;
 
-const filterBy = (propertyName, propertyValue) => (
-  grants,
-) =>
-  grants.filter((grant) => {
-    if (!grant[propertyName]) return false;
+const filterBy =
+  (propertyName, propertyValue) => (grants) =>
+    grants.filter((grant) => {
+      if (!grant[propertyName]) return false;
 
-    try {
-      return grant[propertyName].test(propertyValue);
-    } catch (e) {
-      return (
-        String(grant[propertyName]).toLowerCase() ===
-        String(propertyValue).toLowerCase()
-      );
-    }
-  });
+      try {
+        return grant[propertyName].test(propertyValue);
+      } catch (e) {
+        return (
+          String(grant[propertyName]).toLowerCase() ===
+          String(propertyValue).toLowerCase()
+        );
+      }
+    });
 
 exports.hasOptions = (d) =>
   'options' in d ? d.options.redact : d.redact;

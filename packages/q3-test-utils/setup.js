@@ -9,6 +9,9 @@ module.exports = async () => {
     autoStart: true,
     retryWrites: false,
     replSet: { storageEngine: 'wiredTiger' },
+    binary: {
+      version: '4.4.4',
+    },
   });
 
   await mongod.waitUntilRunning();

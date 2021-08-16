@@ -27,6 +27,11 @@
   },
   {
     "role": "Developer",
+    "coll": "audit",
+    "op": "Read"
+  },
+  {
+    "role": "Developer",
     "coll": "students",
     "op": "Update",
     "ownership": "Any",
@@ -34,6 +39,7 @@
       "age",
       "friends.*",
       "class",
+      "samples.*",
       {
         "glob": "grade",
         "test": "age>16"
