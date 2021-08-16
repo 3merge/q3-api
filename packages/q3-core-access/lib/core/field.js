@@ -70,6 +70,7 @@ module.exports = function Field(
           );
 
           if (item.glob.endsWith('.'))
+            // eslint-disable-next-line
             item.glob = item.glob.substring(
               0,
               item.glob.length - 1,
