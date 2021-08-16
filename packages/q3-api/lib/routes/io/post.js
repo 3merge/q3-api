@@ -25,35 +25,36 @@ const checkIoSettingsByRoleType = (
       .throw();
 };
 
-const ControllerIo = setExecutableTemplateVariablesInRequest(
-  async (req, res) => {
-    const settings = find(
-      findFileTraversingUpwards(
-        get(req, 'app.locals.location'),
-        'q3-access-chores.json',
-      ),
-      (item) => item.name === get(req, 'query.template'),
-    );
+const ControllerIo =
+  setExecutableTemplateVariablesInRequest(
+    async (req, res) => {
+      const settings = find(
+        findFileTraversingUpwards(
+          get(req, 'app.locals.location'),
+          'q3-access-chores.json',
+        ),
+        (item) => item.name === get(req, 'query.template'),
+      );
 
-    checkIoSettingsByRoleType(
-      settings,
-      get(req, 'user.role'),
-    );
+      checkIoSettingsByRoleType(
+        settings,
+        get(req, 'user.role'),
+      );
 
-    await Scheduler.queue(
-      get(req, '$executableTemplatePath'),
-      {
-        buckets: await aws().bulk(req.files, 'queuing'),
-        datasource: get(req, '$datasource'),
-        originalUrl: get(req, 'originalUrl'),
-        session: get(req, '$session'),
-      },
-      get(settings, 'priority', 1),
-    );
+      await Scheduler.queue(
+        get(req, '$executableTemplatePath'),
+        {
+          buckets: await aws().bulk(req.files, 'queuing'),
+          datasource: get(req, '$datasource'),
+          originalUrl: get(req, 'originalUrl'),
+          session: get(req, '$session'),
+        },
+        get(settings, 'priority', 1),
+      );
 
-    res.acknowledge();
-  },
-);
+      res.acknowledge();
+    },
+  );
 
 ControllerIo.validation = [
   setExecutableTemplatePathInRequest('chores'),

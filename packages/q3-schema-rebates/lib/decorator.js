@@ -45,9 +45,8 @@ class RebateDecorator {
       )
       .map((rebate) => {
         const redact = rebate.redactItems(items);
-        const sorted = rebate.greatestPotentialValue(
-          redact,
-        );
+        const sorted =
+          rebate.greatestPotentialValue(redact);
         const amounts = rebate.getMaximumAmounts(sorted);
         const values = rebate.getPriceValues(sorted);
 

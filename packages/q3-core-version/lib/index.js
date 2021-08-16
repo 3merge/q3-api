@@ -16,9 +16,9 @@ const getSchemaPaths = (schema) => {
   let paths = [];
 
   if (schema.discriminators)
-    paths = Object.values(
-      schema.discriminators,
-    ).flatMap((s) => Object.keys(s.paths));
+    paths = Object.values(schema.discriminators).flatMap(
+      (s) => Object.keys(s.paths),
+    );
 
   return union(paths, Object.keys(schema.paths));
 };

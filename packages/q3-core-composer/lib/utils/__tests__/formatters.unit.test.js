@@ -1,6 +1,12 @@
-const { clean, toJSON, merge } = require('../formatters');
+const {
+  clean,
+  toJSON,
+  merge,
+  formatAsArray,
+} = require('../formatters');
 
 const d = new Date();
+const fn = jest.fn();
 
 test.each([
   [{ foo: 1, bar: undefined }, { foo: 1 }],
@@ -19,6 +25,15 @@ test.each([
   [{ toJSON: jest.fn().mockReturnValue(1) }, 1],
 ])('.toJSON', (a, expected) => {
   expect(toJSON(a)).toEqual(expected);
+});
+
+test.each([
+  [[fn], [fn]],
+  [fn, [fn]],
+  [undefined, []],
+  [[null], []],
+])('.formatAsArray', (a, expected) => {
+  expect(formatAsArray(a)).toEqual(expected);
 });
 
 test.each([

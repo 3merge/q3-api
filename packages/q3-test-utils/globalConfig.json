@@ -1,1 +1,4 @@
-{"uri":"mongodb://127.0.0.1:62388/1e62d4e3-ab63-4893-a9a5-d45ff0f92c62?replicaSet=testset&retryWrites=false","name":"1e62d4e3-ab63-4893-a9a5-d45ff0f92c62"}
+{
+  "uri": "mongodb://127.0.0.1:49863/17c9dc57-5190-4dc0-8ee4-f3322d8c3825?replicaSet=testset&retryWrites=false",
+  "name": "17c9dc57-5190-4dc0-8ee4-f3322d8c3825"
+}

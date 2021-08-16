@@ -91,6 +91,11 @@
     "fields": "*"
   },
   {
+    "coll": "audit",
+    "op": "Read",
+    "role": "Dev"
+  },
+  {
     "coll": "characters",
     "op": "Update",
     "role": "Dev",

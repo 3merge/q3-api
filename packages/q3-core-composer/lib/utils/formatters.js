@@ -54,6 +54,9 @@ const merge = (...objs) =>
     return undefined;
   });
 
+const formatAsArray = (xs) =>
+  (Array.isArray(xs) ? xs : [xs].flat()).filter(isFunction);
+
 module.exports = {
   clean,
   hasLength,
@@ -61,4 +64,5 @@ module.exports = {
   moveWithinPropertyName,
   toJSON,
   merge,
+  formatAsArray,
 };

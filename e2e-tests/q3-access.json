@@ -27,6 +27,11 @@
   },
   {
     "role": "Developer",
+    "coll": "audit",
+    "op": "Read"
+  },
+  {
+    "role": "Developer",
     "coll": "students",
     "op": "Update",
     "ownership": "Any",

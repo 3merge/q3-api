@@ -1,29 +1,45 @@
 /* eslint-disable no-param-reassign, func-names */
-const { pick, get, size, map, invoke } = require('lodash');
-const { getFromChangelog } = require('./utils');
+const {
+  pick,
+  get,
+  invoke,
+  isNumber,
+  isUndefined,
+} = require('lodash');
+const {
+  getFromChangelog,
+  seedChangelog,
+} = require('./utils');
+
+const increment = (v) => (isNumber(v) ? v + 1 : 0);
 
 module.exports = (schema) => {
-  schema.statics.getChangelogProperties = function () {
-    const props = get(this, 'schema.options.changelog');
-    return size(props) ? props : null;
-  };
-
-  schema.methods.getHistory = async function () {
-    return map(
-      await getFromChangelog(
-        get(this, 'constructor.collection.collectionName'),
-        {
-          reference: this._id,
-          nextgen: true,
-          'snapshot.updatedAt': { $exists: true },
-        },
-      ),
-      'snapshot',
+  schema.statics.getHistory = async function (args) {
+    return getFromChangelog(
+      get(this, 'collection.collectionName'),
+      args,
     );
   };
 
-  schema.pre('save', function copyQ3UserData() {
+  schema.methods.getHistory = async function (args) {
+    return getFromChangelog(
+      get(this, 'constructor.collection.collectionName'),
+      {
+        ...args,
+        reference: this._id,
+      },
+    );
+  };
+
+  schema.pre('save', async function copyQ3UserData() {
     if (invoke(this, 'parent')) return;
+    const currentChangeLogValue = this.get('changelog');
+
+    if (isUndefined(currentChangeLogValue) && !this.isNew)
+      await seedChangelog(
+        get(this, 'constructor.collection.collectionName'),
+        this._id,
+      );
 
     this.set(
       'lastModifiedBy',
@@ -33,6 +49,14 @@ module.exports = (schema) => {
         'lastName',
         'email',
       ]),
+      {
+        strict: false,
+      },
+    );
+
+    this.set(
+      'changelog',
+      increment(currentChangeLogValue),
       {
         strict: false,
       },

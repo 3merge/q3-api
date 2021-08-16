@@ -32,17 +32,19 @@ const LoggerModel = mongoose.model(
   LoggerSchema,
 );
 
-const addToLogger = (status) => ({ event, ...rest }) => {
-  if (process.env.DEBUG)
-    // eslint-disable-next-line
+const addToLogger =
+  (status) =>
+  ({ event, ...rest }) => {
+    if (process.env.DEBUG)
+      // eslint-disable-next-line
     console.log(`SCHEDULER says, "${event} has ${status}"`);
 
-  return LoggerModel.create({
-    ...rest,
-    status,
-    event,
-  });
-};
+    return LoggerModel.create({
+      ...rest,
+      status,
+      event,
+    });
+  };
 
 const accept = addToLogger(ACCEPTED);
 const reject = addToLogger(REJECTED);

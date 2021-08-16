@@ -13,13 +13,8 @@ function printTel(parts, ext) {
       'Value is not a valid North American phone number',
     );
 
-  const [
-    ,
-    countryCode,
-    areaCode,
-    officeCode,
-    stationCode,
-  ] = parts;
+  const [, countryCode, areaCode, officeCode, stationCode] =
+    parts;
 
   let formatted = '';
 
