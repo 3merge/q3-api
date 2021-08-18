@@ -84,9 +84,8 @@ class AccessControlSessionBridge {
     const user = this.__$getUserFromSession();
     const userId = get(user, '_id');
 
-    if (this.isNew && user) {
+    if (this.isNew && userId && !this.createdBy)
       this.createdBy = userId;
-    }
   }
 
   enforceOwnership() {
