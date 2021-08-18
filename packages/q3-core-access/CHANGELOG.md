@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.19.4](https://github.com/3merge/q3-api/compare/v1.19.3...v1.19.4) (2021-08-18)
+
+
+### Bug Fixes
+
+* assigning created by IDs manually ([0dffb6a](https://github.com/3merge/q3-api/commit/0dffb6a50323faec6deca765147a2d20c8e1aea9))
+
+
+
+
+
 ## [1.19.3](https://github.com/3merge/q3-api/compare/v1.19.2...v1.19.3) (2021-08-16)
 
 **Note:** Version bump only for package q3-core-access
