@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.19.5](https://github.com/3merge/q3-api/compare/v1.19.4...v1.19.5) (2021-08-19)
+
+
+### Bug Fixes
+
+* checking nullish value ([a46fe32](https://github.com/3merge/q3-api/commit/a46fe323182670cf0e1ef94741124b834f96d84d))
+
+
+
+
+
 ## [1.19.4](https://github.com/3merge/q3-api/compare/v1.19.3...v1.19.4) (2021-08-18)
 
 **Note:** Version bump only for package q3-core-rest
