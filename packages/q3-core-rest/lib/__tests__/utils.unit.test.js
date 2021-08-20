@@ -85,3 +85,60 @@ describe('Utility functions', () => {
     expect(Controller.toJSON(a)).toEqual(expected);
   });
 });
+
+test('assignIdsOnSubDocuments', () => {
+  const out = Controller.assignIdsOnSubDocuments({
+    id: 1,
+    foo: 'bar',
+    quuz: [1, 2],
+    options: [
+      {
+        id: 1,
+        foo: 'bar',
+        quuz: {
+          id: 1,
+        },
+      },
+      {
+        id: 2,
+        foo: 'bar',
+      },
+    ],
+    options2: [
+      {
+        id: 1,
+        foo: 'bar',
+      },
+    ],
+  });
+
+  expect(out).toEqual({
+    id: 1,
+    foo: 'bar',
+    quuz: [1, 2],
+    options: [
+      {
+        id: 1,
+        foo: 'bar',
+        quuz: {
+          id: 1,
+          _id: 1,
+        },
+        _id: 1,
+      },
+      {
+        id: 2,
+        foo: 'bar',
+        _id: 2,
+      },
+    ],
+    options2: [
+      {
+        id: 1,
+        foo: 'bar',
+        _id: 1,
+      },
+    ],
+    _id: 1,
+  });
+});

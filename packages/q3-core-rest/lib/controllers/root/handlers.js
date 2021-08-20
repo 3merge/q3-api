@@ -1,4 +1,5 @@
 const queryParser = require('../../queryParser');
+const { assignIdsOnSubDocuments } = require('../../utils');
 
 module.exports = {
   async Get(
@@ -75,6 +76,8 @@ module.exports = {
     );
 
     const body = doc.authorizeUpdateArguments(originalBody);
+    // ensures we don't replace sub-docs accidentally
+    assignIdsOnSubDocuments(body);
 
     await doc.handleReq({
       body,

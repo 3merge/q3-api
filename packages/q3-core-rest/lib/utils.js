@@ -68,3 +68,30 @@ exports.toJSON = (xs) => {
     return {};
   }
 };
+
+exports.assignIdsOnSubDocuments = (xs = {}) => {
+  try {
+    const recurse = (data) => {
+      if (isObject(data)) {
+        if (data.id && !data._id) {
+          // eslint-disable-next-line
+          data._id = data.id;
+        }
+
+        Object.entries(data).forEach(([, value]) => {
+          if (Array.isArray(value)) {
+            value.map(recurse);
+          } else if (isObject(value)) {
+            recurse(value);
+          }
+        });
+      }
+    };
+
+    recurse(xs);
+  } catch (e) {
+    // noop
+  }
+
+  return xs;
+};
