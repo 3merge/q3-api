@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.19.7](https://github.com/3merge/q3-api/compare/v1.19.6...v1.19.7) (2021-08-20)
+
+**Note:** Version bump only for package q3-schema-discounts
+
+
+
+
+
 ## [1.19.5](https://github.com/3merge/q3-api/compare/v1.19.4...v1.19.5) (2021-08-19)
 
 **Note:** Version bump only for package q3-schema-discounts
