@@ -182,10 +182,11 @@ module.exports = class Builder {
       sync:
         get(this, '$ref.collection.collectionName') ||
         this.$ref,
-      ...globalOptions,
+
       _id: false,
       timestamps: false,
       skipPlugins: true,
+      ...globalOptions,
     });
 
     output.pre('validate', populateRef);

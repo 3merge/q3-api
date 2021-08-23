@@ -31,7 +31,7 @@
   "noPermission": "Account cannot perform this operation",
   "insufficientPermissions": "Account requires a greater permission level to complete this operation",
   "credentials": "Bad credentials. Please try again.",
-  "prohibited": "This account has been blocked due to suspicious activity",
+  "prohibited": "This account has been blocked due to suspicious activity. Please reset your password to continue.",
   "incorrectPassword": "Bad credentials. Please try again.",
   "validation": "The request failed validation. Please check your data and try again.",
   "expired": "The information used in this request has expired",

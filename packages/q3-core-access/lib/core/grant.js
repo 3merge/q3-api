@@ -14,7 +14,7 @@ const {
 module.exports = class Grant {
   constructor(user) {
     this.$user = user;
-    this.$records = AC.get(user ? user.role : 'Public');
+    this.$records = AC.get(get(user, 'role', 'Public'));
 
     this.hasCheckedColl = true;
     this.hasCheckedOp = false;
