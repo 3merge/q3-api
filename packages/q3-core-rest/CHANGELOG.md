@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.19.10](https://github.com/3merge/q3-api/compare/v1.19.9...v1.19.10) (2021-09-01)
+
+
+### Bug Fixes
+
+* rest discriminator ([eec7b20](https://github.com/3merge/q3-api/commit/eec7b20c4fd663cf164fe14f6f16f88ac54cacc5))
+
+
+
+
+
 ## [1.19.9](https://github.com/3merge/q3-api/compare/v1.19.8...v1.19.9) (2021-09-01)
 
 **Note:** Version bump only for package q3-core-rest
