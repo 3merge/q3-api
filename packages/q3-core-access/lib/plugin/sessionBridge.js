@@ -301,8 +301,8 @@ class AccessControlSessionBridge {
 
       return Object.keys(xs).reduce((acc, curr) => {
         if (!acc) return false;
-        const target = xs[curr];
-        const comparedTo = String(ref[curr]);
+        const target = get(xs, curr);
+        const comparedTo = String(get(ref, curr));
 
         return Array.isArray(target)
           ? target.map(String).includes(comparedTo)
