@@ -1,3 +1,4 @@
+const { get } = require('lodash');
 const queryParser = require('../../queryParser');
 const { assignIdsOnSubDocuments } = require('../../utils');
 
@@ -103,7 +104,15 @@ module.exports = {
     },
     res,
   ) {
-    const doc = new Datasource();
+    // otherwise some fields get dropped
+    // cannot include partial object either without validation error
+    // it's all or nothing
+    const disc = get(body, '__t');
+    const doc = disc
+      ? new Datasource({
+          __t: disc,
+        })
+      : new Datasource();
 
     doc.set(doc.authorizeCreateArguments(body));
     await doc.save({
