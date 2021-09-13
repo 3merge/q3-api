@@ -134,4 +134,48 @@ describe('diff', () => {
       },
     });
   });
+
+  it('should merge updated and additions to sub-docs', () => {
+    const effectiveFrom = new Date();
+    const differences = diff(
+      {
+        _id: 1,
+        items: [
+          {
+            _id: 1,
+            claim: {
+              program: '',
+            },
+          },
+        ],
+      },
+      {
+        _id: 1,
+        items: [
+          {
+            _id: 1,
+            claim: {
+              program: 'ABC',
+              currency: 'CAD',
+            },
+            effectiveFrom,
+          },
+        ],
+      },
+    );
+
+    const checkFor = expectArrayToContain(differences);
+    expect(differences).toHaveLength(1);
+
+    checkFor({
+      previous: {
+        'items.claim.program': '',
+      },
+      updated: {
+        'items.claim.program': 'ABC',
+        'items.claim.currency': 'CAD',
+        'items.effectiveFrom': effectiveFrom.toISOString(),
+      },
+    });
+  });
 });

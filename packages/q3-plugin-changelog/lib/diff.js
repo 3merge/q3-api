@@ -7,12 +7,26 @@ const {
   uniqWith,
   pickBy,
   pick,
+  first,
+  merge,
 } = require('lodash');
 const { detailedDiff } = require('deep-object-diff');
 const explode = require('./explode');
 
-const sizeOf = (xs) =>
-  (isObject(xs) ? size(Object.keys(xs)) : 0) > 0;
+const sizeOf = (xs, opts = {}) => {
+  if (!isObject(xs)) return false;
+  const keys = Object.keys(xs).filter((item) =>
+    opts && opts.excludeIdKeys
+      ? !item.includes('_id')
+      : true,
+  );
+
+  const len = size(keys);
+
+  if (len > 1) return true;
+  if (len === 1) return !isEqual(xs[first(keys)], {});
+  return false;
+};
 
 const invokeDetailedDiffWithOmission = (...params) =>
   detailedDiff(
@@ -37,6 +51,7 @@ const getDetailedDiff =
       if (sizeOf(value)) {
         if (key === 'deleted') {
           const newValue = pick(a, Object.keys(value));
+
           if (sizeOf(newValue)) {
             acc[key] = newValue;
           }
@@ -49,9 +64,15 @@ const getDetailedDiff =
         }
       }
 
-      if ('updated' in acc) {
-        acc.previous = direction === 'ltr' ? a : b;
-      }
+      const prev = direction === 'ltr' ? a : b;
+
+      // how could it be new if there's a previous version?
+      if (
+        sizeOf(prev, {
+          excludeIdKeys: true,
+        })
+      )
+        acc.previous = prev;
 
       return acc;
     }, {});
@@ -108,6 +129,35 @@ const removeIds = (xs) =>
       }, {})
     : xs;
 
+const hasOps = (xs) =>
+  isObject(xs)
+    ? xs.added || xs.updated || xs.deleted
+    : false;
+
+const mergeUpdateOps = (xs) => {
+  try {
+    const copy = { ...xs };
+
+    if (copy.previous) {
+      const updated = merge({}, xs.updated, xs.added);
+
+      if (sizeOf(updated)) {
+        copy.updated = updated;
+      }
+
+      delete copy.added;
+    }
+
+    if (sizeOf(copy.deleted)) {
+      delete copy.previous;
+    }
+
+    return copy;
+  } catch (e) {
+    return xs;
+  }
+};
+
 module.exports = (a, b) => {
   const explodedA = explode(a);
   const explodedB = explode(b);
@@ -126,7 +176,11 @@ module.exports = (a, b) => {
       ),
     ]
       .filter(doesNotMatchPrevious)
-      .map(removeIds),
+      .reduce((acc, curr) => {
+        const cleaned = mergeUpdateOps(removeIds(curr));
+        if (hasOps(cleaned)) acc.push(cleaned);
+        return acc;
+      }, []),
     isEqual,
   );
 };

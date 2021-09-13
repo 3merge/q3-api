@@ -191,13 +191,13 @@ const getFromChangelog = (collectionName, op = {}) => {
               previous: 1,
               date: 1,
               'user._id': {
-                $first: '$users._id',
+                $arrayElemAt: ['$users._id', 0],
               },
               'user.firstName': {
-                $first: '$users.firstName',
+                $arrayElemAt: ['$users.firstName', 0],
               },
               'user.lastName': {
-                $first: '$users.lastName',
+                $arrayElemAt: ['$users.lastName', 0],
               },
             },
           },
