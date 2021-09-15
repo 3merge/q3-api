@@ -6,6 +6,7 @@ const {
 const { exception } = require('q3-core-responder');
 const { Grant } = require('q3-core-access');
 const micromatch = require('micromatch');
+const { filter, isString } = require('lodash');
 const mongoose = require('../../config/mongoose');
 
 const includes = (a, b) =>
@@ -27,7 +28,10 @@ const SearchParams = async (
     .can('Read')
     .first();
 
-  if (!g || !micromatch(field, g.fields).length)
+  if (
+    !g ||
+    !micromatch(field, filter(g.fields, isString)).length
+  )
     exception('Authorization')
       .msg('missingReadGrandOnCollection')
       .throw();
