@@ -6,6 +6,8 @@ const {
   join,
   omitBy,
   isNull,
+  get,
+  set,
 } = require('lodash');
 const flat = require('flat');
 
@@ -35,7 +37,13 @@ function explode(obj) {
             entry
               .map((item) => exec(item, keyPath))
               .flat()
-              .forEach((item) => acc.push(item));
+              .forEach((item, i) => {
+                const id = `${keyPath}._id`;
+
+                // ensures that there's always an ID to compare against
+                if (!get(item, id)) set(item, id, i);
+                acc.push(item);
+              });
           else if (entry.length)
             Object.assign(out, {
               [keyPath]: uniq(compact(entry))

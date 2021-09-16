@@ -184,4 +184,11 @@ describe('diff', () => {
     const differences = diff(fixture.before, fixture.after);
     expect(differences).toHaveLength(1);
   });
+
+  it('should detect deeply nested differences', () => {
+    const copy = { ...fixture.after };
+    copy.taxBreakdown[0].chargeable = 10;
+    const differences = diff(fixture.before, copy);
+    expect(differences).toHaveLength(2);
+  });
 });
