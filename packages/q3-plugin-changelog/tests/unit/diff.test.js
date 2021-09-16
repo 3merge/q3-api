@@ -1,4 +1,5 @@
 const diff = require('../../lib/diff');
+const fixture = require('../fixtures/sample-order.json');
 
 const expectArrayToContain =
   (xs = []) =>
@@ -177,5 +178,10 @@ describe('diff', () => {
         'items.effectiveFrom': effectiveFrom.toISOString(),
       },
     });
+  });
+
+  it('should detect single difference', () => {
+    const differences = diff(fixture.before, fixture.after);
+    expect(differences).toHaveLength(1);
   });
 });

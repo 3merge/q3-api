@@ -47,6 +47,7 @@ const getDetailedDiff =
         : invokeDetailedDiffWithOmission(b, a),
     ).reduce((acc, curr) => {
       const [key, value] = curr;
+      const prev = direction === 'ltr' ? a : b;
 
       if (sizeOf(value)) {
         if (key === 'deleted') {
@@ -61,18 +62,16 @@ const getDetailedDiff =
             ...pickWithMongoId(b),
             ...value,
           };
+
+          // how could it be new if there's a previous version?
+          if (
+            sizeOf(prev, {
+              excludeIdKeys: true,
+            })
+          )
+            acc.previous = prev;
         }
       }
-
-      const prev = direction === 'ltr' ? a : b;
-
-      // how could it be new if there's a previous version?
-      if (
-        sizeOf(prev, {
-          excludeIdKeys: true,
-        })
-      )
-        acc.previous = prev;
 
       return acc;
     }, {});
@@ -96,6 +95,8 @@ const findByKeyValue = (xs, key, value) =>
 const reduceByComparison = (a = [], b = [], next) =>
   a.reduce((acc, item) => {
     const key = getMongoIdKey(item);
+    if (!key) return acc;
+
     const match = findByKeyValue(b, key, get(item, key));
     const output = next(item, match);
     return output ? acc.concat(output) : acc;
@@ -146,10 +147,6 @@ const mergeUpdateOps = (xs) => {
       }
 
       delete copy.added;
-    }
-
-    if (sizeOf(copy.deleted)) {
-      delete copy.previous;
     }
 
     return copy;
