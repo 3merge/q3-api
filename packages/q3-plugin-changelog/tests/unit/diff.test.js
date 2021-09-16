@@ -1,4 +1,5 @@
 const diff = require('../../lib/diff');
+const fixture = require('../fixtures/sample-order.json');
 
 const expectArrayToContain =
   (xs = []) =>
@@ -177,5 +178,17 @@ describe('diff', () => {
         'items.effectiveFrom': effectiveFrom.toISOString(),
       },
     });
+  });
+
+  it('should detect single difference', () => {
+    const differences = diff(fixture.before, fixture.after);
+    expect(differences).toHaveLength(1);
+  });
+
+  it('should detect deeply nested differences', () => {
+    const copy = { ...fixture.after };
+    copy.taxBreakdown[0].chargeable = 10;
+    const differences = diff(fixture.before, copy);
+    expect(differences).toHaveLength(2);
   });
 });
