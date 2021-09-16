@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.19.13](https://github.com/3merge/q3-api/compare/v1.19.12...v1.19.13) (2021-09-16)
+
+
+### Bug Fixes
+
+* false matches ([#145](https://github.com/3merge/q3-api/issues/145)) ([41914d4](https://github.com/3merge/q3-api/commit/41914d4472160c7d3fd897ce3b77e667f4bcdbe3))
+
+
+
+
+
 ## [1.19.12](https://github.com/3merge/q3-api/compare/v1.19.11...v1.19.12) (2021-09-15)
 
 
