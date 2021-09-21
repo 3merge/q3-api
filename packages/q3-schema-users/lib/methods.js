@@ -188,6 +188,8 @@ module.exports = class UserAuthDecorator {
 
     this.set({
       password: await createHash(password),
+      passwordResetToken: undefined,
+      passwordResetTokenIssuedOn: undefined,
       loginAttempts: 0,
       verified: true,
     });
