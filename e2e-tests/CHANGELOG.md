@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.20.0](https://github.com/3merge/q3-api/compare/v1.19.13...v1.20.0) (2021-09-21)
+
+
+### Features
+
+* email templates stored in the database ([#147](https://github.com/3merge/q3-api/issues/147)) ([b5edee0](https://github.com/3merge/q3-api/commit/b5edee0eeccfff0785dfda73f727f3baae0cfc75))
+
+
+
+
+
 ## [1.19.13](https://github.com/3merge/q3-api/compare/v1.19.12...v1.19.13) (2021-09-16)
 
 **Note:** Version bump only for package e2e-tests
