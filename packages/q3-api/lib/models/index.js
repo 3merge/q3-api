@@ -1,6 +1,7 @@
 const UserModel = require('q3-schema-users');
 const mongoose = require('../config/mongoose');
 const { MODEL_NAMES } = require('../constants');
+const Emails = require('./emails');
 const NotifiationSchema = require('./notifications');
 
 UserModel.set('restify', '*');
@@ -16,6 +17,7 @@ const Notifications = mongoose.model(
 );
 
 module.exports = {
+  Emails,
   Users,
   Notifications,
 };

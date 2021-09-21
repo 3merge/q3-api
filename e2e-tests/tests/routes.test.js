@@ -106,4 +106,46 @@ describe('q3-api', () => {
       expect(values).toContain('Jon');
     });
   });
+
+  describe('emails-preview', () => {
+    it('should return return 401', async () => {
+      await agent
+        .post('/emails-preview?mjml=<mjml>')
+        .expect(401);
+    });
+
+    it('should return return 403', async () => {
+      await user.update({
+        role: 'Unknown',
+      });
+
+      await agent
+        .post('/emails-preview?mjml=<mjml>')
+        .set({ Authorization })
+        .expect(403);
+    });
+
+    it('should return return 422', async () => {
+      await agent.post('/emails-preview').expect(422);
+    });
+
+    it('should return preview', async () => {
+      await user.update({
+        role: 'Developer',
+      });
+
+      const { body } = await agent
+        .post('/emails-preview')
+        .send({
+          mjml: 'mjml=<mjml><mj-body><mj-text>Sample {{name}}</mj-text></mj-body></mjml>',
+          variables: {
+            name: 'Document',
+          },
+        })
+        .set({ Authorization })
+        .expect(200);
+
+      expect(body.html).toMatch('Sample Document');
+    });
+  });
 });

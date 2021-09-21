@@ -57,5 +57,12 @@
     "coll": "profile",
     "op": "Create",
     "fields": ["!email"]
+  },
+  {
+    "role": "Developer",
+    "coll": "emails",
+    "op": "Read",
+    "ownership": "Any",
+    "fields": ["*"]
   }
 ]

@@ -37,8 +37,8 @@ server.use(
 if (process.env.NODE_ENV !== 'test')
   server.use(
     limit({
-      windowMs: 15 * 60 * 1000,
-      max: 500,
+      windowMs: 300000,
+      max: 1000,
     }),
   );
 
