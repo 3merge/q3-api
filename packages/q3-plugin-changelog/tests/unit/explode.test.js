@@ -22,9 +22,9 @@ describe('explode', () => {
     });
 
     expect(out).toEqual([
-      { 'items.subitems.foo': 1 },
-      { 'items.codes.foo': 1 },
-      { 'items.foo': 1 },
+      { 'items.subitems._id': 0, 'items.subitems.foo': 1 },
+      { 'items.codes._id': 0, 'items.codes.foo': 1 },
+      { 'items._id': 0, 'items.foo': 1 },
       { foo: 1 },
     ]);
   });

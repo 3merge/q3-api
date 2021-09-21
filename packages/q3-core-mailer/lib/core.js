@@ -3,12 +3,19 @@ const mjml = require('mjml');
 const fs = require('fs');
 const Handlebars = require('handlebars');
 const i18next = require('i18next');
-const { first, lowerCase } = require('lodash');
+const { first, get, lowerCase } = require('lodash');
 const utils = require('./utils');
 const mailer = require('./strategies');
+const {
+  EmailCollection,
+  MjmlTextParser,
+} = require('./helpers');
+
+// assumed to be registered already with mongoose
+const DEFAULT_MODEL_NAME = 'emails';
 
 module.exports = class Mailer {
-  constructor(template) {
+  constructor(template, options = {}) {
     if (!template)
       throw new Error('Template name required');
 
@@ -22,6 +29,34 @@ module.exports = class Mailer {
       strategy: MAILER_STRATEGY,
       template,
     };
+
+    this.$model = get(options, 'model', DEFAULT_MODEL_NAME);
+  }
+
+  static async preview(raw, options = {}) {
+    const { model = DEFAULT_MODEL_NAME, variables } =
+      options;
+    const db = EmailCollection(model);
+    const parser = MjmlTextParser(raw);
+
+    parser.replace(await db.getTemplates(parser.find()));
+    return Handlebars.compile(mjml(parser.out()).html)(
+      variables,
+    );
+  }
+
+  async fromDatabase(variables = {}) {
+    this.meta.html = await this.constructor.preview(
+      await EmailCollection(this.$model).getMjml(
+        get(this, 'meta.template'),
+      ),
+      {
+        model: this.$model,
+        variables,
+      },
+    );
+
+    return this;
   }
 
   get lang() {
