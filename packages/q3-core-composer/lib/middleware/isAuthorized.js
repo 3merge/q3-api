@@ -1,11 +1,21 @@
 const { exception } = require('q3-core-responder');
+const { get } = require('lodash');
 
 class IsAuthorizedInLocationRef {
-  constructor(modelName) {
+  constructor(modelName, options = {}) {
     this.source = modelName;
+    this.options = options;
     this.locations = {
       response: [],
     };
+  }
+
+  enforceGrant() {
+    Object.assign(this.options, {
+      enforceGrant: true,
+    });
+
+    return this;
   }
 
   done() {
@@ -19,6 +29,9 @@ class IsAuthorizedInLocationRef {
 
       if (!Array.isArray(req.redactions))
         req.redactions = [];
+
+      if (get(this, 'options.enforceGrant') && !grant)
+        throw new Error('Requires a grant to continue');
 
       req.redactions.push({
         locations: this.locations,
