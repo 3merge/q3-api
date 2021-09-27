@@ -5,6 +5,7 @@
   "dependencies": {
     "dotenv": "^8.2.0",
     "handlebars": "^4.7.7",
+    "html-entities": "^2.3.2",
     "i18next": "^19.8.4",
     "lodash": "^4.17.20",
     "mailgun-js": "^0.22.0",

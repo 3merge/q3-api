@@ -4,6 +4,7 @@ const fs = require('fs');
 const Handlebars = require('handlebars');
 const i18next = require('i18next');
 const { first, get, lowerCase } = require('lodash');
+const { decode } = require('html-entities');
 const utils = require('./utils');
 const mailer = require('./strategies');
 const {
@@ -57,9 +58,11 @@ module.exports = class Mailer {
     );
 
     try {
-      this.meta.subject = this.meta.html
-        .match(/<title[^>]*>([^<]+)<\/title>/)[1]
-        .trim();
+      this.meta.subject = decode(
+        this.meta.html
+          .match(/<title[^>]*>([^<]+)<\/title>/)[1]
+          .trim(),
+      );
     } catch (e) {
       // noop
     }

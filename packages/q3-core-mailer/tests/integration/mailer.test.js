@@ -5,7 +5,7 @@ const Mailer = require('../../lib/core');
 
 const mjml = `
   <mj-head>
-    <mj-title>Tests for {{name}}</mj-title>
+    <mj-title>"Tests for {{name}}&apos;s sanity"</mj-title>
   </mj-head>
   <mj-body>
     <mj-section>
@@ -47,7 +47,7 @@ describe('Mailer', () => {
       );
 
       expect(html).toMatch('Hi Mike');
-      expect(subject).toMatch('Tests for Mike');
+      expect(subject).toMatch('"Tests for Mike\'s sanity"');
     });
   });
 
