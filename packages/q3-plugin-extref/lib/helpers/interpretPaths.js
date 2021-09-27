@@ -9,9 +9,6 @@ const splitByOperator = (s) => String(s).split('$[]');
 const getSinglePath = (key) =>
   last(splitByOperator(mergePaths(key)));
 
-const getEmbeddedFilterPath = (path) =>
-  ['embed', path, 'ref'].filter(Boolean).join('.');
-
 const cleanPath = (v) => {
   if (typeof v !== 'string')
     throw new Error('Key must be a string');
@@ -84,7 +81,11 @@ module.exports = (path, includeReferenceField) => {
         : optional,
 
     makePosOpFilter: () =>
-      getEmbeddedFilterPath(getSinglePath(optional)),
+      attachReference(
+        ['embed', getSinglePath(optional)]
+          .filter(Boolean)
+          .join('.'),
+      ),
 
     split: (value) => {
       const [top, bottom] =

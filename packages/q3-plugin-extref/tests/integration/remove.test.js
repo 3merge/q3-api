@@ -1,4 +1,5 @@
 require('../helpers/lifecycle');
+const mongoose = require('mongoose');
 const {
   Award,
   School,
@@ -107,6 +108,31 @@ describe('remove', () => {
     await Award.archive(awardId);
     await teacher.expectPathNotToHaveProperty(
       'employment.0.awards.0',
+    );
+  });
+
+  it('should remove non-ref', async () => {
+    const studentId = '601eab20fc13ae782c000002';
+    const schoolId = '601eaab4fc13ae1226000001';
+    await School.findByIdAndModify(schoolId, {
+      honourRoll: [
+        {
+          student: mongoose.Types.ObjectId(studentId),
+        },
+      ],
+    });
+
+    expect(await School.findById(schoolId)).toHaveProperty(
+      'honourRoll.0.student.name',
+      'Vin Beeston',
+    );
+
+    await Student.archive(studentId);
+
+    // empty?
+    expect(await School.findById(schoolId)).toHaveProperty(
+      'honourRoll.0',
+      undefined,
     );
   });
 });
