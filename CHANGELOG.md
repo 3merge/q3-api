@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.21.0](https://github.com/3merge/q3-api/compare/v1.20.0...v1.21.0) (2021-09-27)
+
+
+### Features
+
+* dynamic mjml titles ([91c8baa](https://github.com/3merge/q3-api/commit/91c8baa3da4398f3d47c5d93b678b9983fd02f1f))
+
+
+
+
+
 # [1.20.0](https://github.com/3merge/q3-api/compare/v1.19.13...v1.20.0) (2021-09-21)
 
 
