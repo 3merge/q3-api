@@ -3,13 +3,18 @@ const mongoose = require('mongoose');
 const { get } = require('lodash');
 const Mailer = require('../../lib/core');
 
-const mjml = `<mj-body>
-        <mj-section>
-          <mj-column>
-            <mj-text>Hi {{name}}</mj-text>
-          </mj-column>
-        </mj-section>
-      </mj-body>`;
+const mjml = `
+  <mj-head>
+    <mj-title>Tests for {{name}}</mj-title>
+  </mj-head>
+  <mj-body>
+    <mj-section>
+      <mj-column>
+        <mj-text>Hi {{name}}</mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+`;
 
 beforeAll(async () => {
   await mongoose.connect(process.env.CONNECTION);
@@ -34,13 +39,15 @@ describe('Mailer', () => {
   describe('fromDatabase', () => {
     it('should build HTML', async () => {
       const m = new Mailer('foo');
-      const html = get(
+      const { html, subject } = get(
         await m.fromDatabase({
           name: 'Mike',
         }),
-        'meta.html',
+        'meta',
       );
+
       expect(html).toMatch('Hi Mike');
+      expect(subject).toMatch('Tests for Mike');
     });
   });
 

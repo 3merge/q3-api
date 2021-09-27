@@ -56,6 +56,14 @@ module.exports = class Mailer {
       },
     );
 
+    try {
+      this.meta.subject = this.meta.html
+        .match(/<title[^>]*>([^<]+)<\/title>/)[1]
+        .trim();
+    } catch (e) {
+      // noop
+    }
+
     return this;
   }
 
