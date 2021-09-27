@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.21.1](https://github.com/3merge/q3-api/compare/v1.21.0...v1.21.1) (2021-09-27)
+
+
+### Bug Fixes
+
+* html entities in subject line ([0ccfeb3](https://github.com/3merge/q3-api/commit/0ccfeb355db6de065fa31c057585ac79fa2dd23d))
+
+
+
+
+
 # [1.21.0](https://github.com/3merge/q3-api/compare/v1.20.0...v1.21.0) (2021-09-27)
 
 

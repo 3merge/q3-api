@@ -1,6 +1,6 @@
 {
   "name": "q3-utils",
-  "version": "1.21.0",
+  "version": "1.21.1",
   "main": "jest-preset.js",
   "dependencies": {
     "lodash": "^4.17.20"
@@ -14,6 +14,6 @@
     ]
   },
   "devDependencies": {
-    "q3-test-utils": "^1.21.0"
+    "q3-test-utils": "^1.21.1"
   }
 }
