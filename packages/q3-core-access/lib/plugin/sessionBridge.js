@@ -127,7 +127,12 @@ class AccessControlSessionBridge {
     const grant = new Grant(user)
       .can(op)
       .on(this.__$getCollectionName())
-      .test(fullDocument, options);
+      .test(
+        get(extendedOptions, 'marshal')
+          ? extendedOptions.marshal(fullDocument)
+          : fullDocument,
+        options,
+      );
 
     if (
       (!isObject(grant) || !this.checkOwnership(grant)) &&
@@ -171,7 +176,18 @@ class AccessControlSessionBridge {
 
   __$runGrantAgainstDocument(args, op = 'Update') {
     const { fullDocument, grant, options } =
-      this.__$getInitialGrantAndContext(op);
+      this.__$getInitialGrantAndContext(op, {
+        marshal:
+          // This is a weird workaround that only affects Create ops
+          // When documentConditions are present, we need the args
+          // in case the incoming data satisifies what the default document does not have
+          op === 'Create'
+            ? (xs) => ({
+                ...xs,
+                ...args,
+              })
+            : undefined,
+      });
 
     const modifiedDocument = {
       ...fullDocument,

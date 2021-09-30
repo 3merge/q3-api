@@ -235,6 +235,20 @@ describe('Access control via REST endpoints (user ownership)', () => {
         fields: ['friends'],
       },
     },
+    {
+      body: {
+        name: 'Jon',
+        grade: 4,
+        age: 11,
+      },
+      expected: {
+        status: 201,
+      },
+      grant: {
+        fields: ['*'],
+        documentConditions: ['grade=4'],
+      },
+    },
   ])(
     'TOP-LEVEL CREATE operations',
     async ({
