@@ -199,23 +199,23 @@ Docs coming soon.
 
 Docs coming soon.
 
-### Utils
+## Utils
 
 Docs coming soon.
 
-### Routes
+## Routes
 
 Q3 includes a few common API routes. These deal with core
 functionalities like authentication, auditing and logging.
 
-#### GET /audit
+### GET /audit
 
 Get a full changelog for a document. This includes all user-
 and system-caused effects. **The requesting user must have
 access to the `audit` collection as well as the collection
 being audited.**
 
-##### Params
+#### Params
 
 | Parameter         | Description                               | Type                                 |
 | ----------------- | ----------------------------------------- | ------------------------------------ |
@@ -227,7 +227,7 @@ being audited.**
 | `skip`            | How many sets to skip (batches of 150)    | `Number`                             |
 | `user`            | The user ID of who made the change        | `ID`                                 |
 
-##### Response
+#### Response
 
 The API will return an array of changes. Each will include a
 date, the user involved as well as an "added", "deleted"
@@ -252,21 +252,21 @@ will also be a "previous" object to help with comparisons.
 }
 ```
 
-#### GET /audit-users
+### GET /audit-users
 
 Get all users who have made a change to a particular
 document. **The requesting users must have access to the
 `audit` collection, the collection being audited and the
 `q3-api-users` collection.**
 
-##### Params
+#### Params
 
 | Parameter         | Description                               | Type     |
 | ----------------- | ----------------------------------------- | -------- |
 | `id*`             | The document ID to audit                  | `ID`     |
 | `collectionName*` | The collection which the document belongs | `String` |
 
-##### Response
+#### Response
 
 The API will return an array of users. The data is limited
 to just name, email and ID.
