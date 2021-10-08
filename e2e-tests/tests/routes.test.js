@@ -53,20 +53,20 @@ describe('q3-api', () => {
       expect(profile).not.toHaveProperty('lastName');
     });
 
-    it.skip('should prevent profile from updating', async () => {
-      const buffer = Buffer.from('some data');
+    it.only('should prevent profile from updating', async () => {
       const email = 'no@change.com';
       const firstName = 'Mike';
+
       const {
         body: { profile },
       } = await agent
         .post('/profile')
-        .attach('name', buffer, 'file.txt')
         .field('firstName', firstName)
         .field('email', email)
         .set({
           Authorization,
-        });
+        })
+        .expect(200);
 
       expect(profile.email).not.toMatch(email);
       expect(profile.firstName).toMatch(firstName);

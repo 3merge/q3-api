@@ -1,15 +1,20 @@
+const { Grant, Redact } = require('q3-core-access');
 const { compose, redact } = require('q3-core-composer');
-const flat = require('flat');
 
 const getProfile = async (req, res) => {
-  const { body, files, user, marshal } = req;
+  const { files, user, marshal } = req;
+  const grant = new Grant(req.user)
+    .can('Create')
+    .on('profile')
+    .test({});
 
-  await user.handleReq({
-    body,
-    files,
-  });
+  const body = Redact.flattenAndReduceByFields(
+    req.body,
+    grant,
+  );
 
-  await user.set(flat.unflatten(body)).save();
+  await user.handleReq({ body, files });
+  await user.set(body).save();
 
   res.update({
     profile: marshal(user.obfuscatePrivateFields()),
