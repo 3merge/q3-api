@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.22.0](https://github.com/3merge/q3-api/compare/v1.21.3...v1.22.0) (2021-10-08)
+
+
+### Features
+
+* list of users who've made changes ([#148](https://github.com/3merge/q3-api/issues/148)) ([1fd61ec](https://github.com/3merge/q3-api/commit/1fd61ec1da1fe10cf35e9faabc08d7e0694007c6))
+
+
+
+
+
 ## [1.21.3](https://github.com/3merge/q3-api/compare/v1.21.2...v1.21.3) (2021-09-30)
 
 
