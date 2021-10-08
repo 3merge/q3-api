@@ -167,7 +167,7 @@ const getFromChangelog = (collectionName, op = {}) => {
             $limit: 150,
           },
           {
-            $skip: op.skip || 0,
+            $skip: (op.skip || 0) * 150,
           },
           {
             $lookup: {
@@ -198,6 +198,57 @@ const getFromChangelog = (collectionName, op = {}) => {
               },
               'user.lastName': {
                 $arrayElemAt: ['$users.lastName', 0],
+              },
+            },
+          },
+        ])
+        .toArray((err, docs) => {
+          if (err) reject(err);
+          else resolve(docs);
+        }),
+    );
+  } catch (e) {
+    return null;
+  }
+};
+
+const getDistinctUsers = (collectionName, op = {}) => {
+  try {
+    return new Promise((resolve, reject) =>
+      getChangelogCollection(collectionName)
+        .aggregate([
+          {
+            $match: {
+              collectionName,
+              ...makeOp(op),
+            },
+          },
+          {
+            $group: {
+              _id: '$user',
+            },
+          },
+          {
+            $lookup: {
+              from: 'q3-api-users',
+              localField: '_id',
+              foreignField: '_id',
+              as: 'user',
+            },
+          },
+          {
+            $unwind: '$user',
+          },
+          {
+            $project: {
+              _id: 1,
+              email: '$user.email',
+              name: {
+                $concat: [
+                  '$user.firstName',
+                  ' ',
+                  '$user.lastName',
+                ],
               },
             },
           },
@@ -247,6 +298,7 @@ const omitByKeyName =
 module.exports = {
   getFromChangelog,
   getChangelogCollection,
+  getDistinctUsers,
   insertIntoChangelog,
   printName,
   someMatch,

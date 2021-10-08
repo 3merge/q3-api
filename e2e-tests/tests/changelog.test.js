@@ -244,7 +244,20 @@ describe('Changelog plugin', () => {
       .expect(200);
 
     await delay(150);
+
     expect(await getChanges(id)).toHaveLength(5);
+
+    const {
+      body: { users },
+    } = await agent
+      .get(`/audit-users?id=${id}&collectionName=students`)
+      .set({ Authorization })
+      .expect(200);
+
+    expect(first(users)).toMatchObject({
+      id: expect.any(String),
+      name: 'Mike Ibberson',
+    });
   });
 
   it('should block public access', async () =>

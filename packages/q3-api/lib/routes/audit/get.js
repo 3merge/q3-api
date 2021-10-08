@@ -72,4 +72,11 @@ AuditController.postAuthorization = [
   getModelInstance,
 ];
 
-module.exports = compose(AuditController);
+const Controller = compose(AuditController);
+
+module.exports = Controller;
+
+Controller.__$utils = {
+  checkAuthorizationGrant,
+  getModelInstance,
+};
