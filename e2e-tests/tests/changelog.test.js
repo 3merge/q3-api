@@ -205,7 +205,7 @@ describe('Changelog plugin', () => {
     );
   });
 
-  it('should track multi sub-document changes separately', async () => {
+  it.only('should track multi sub-document changes separately', async () => {
     const {
       body: {
         student: { id },
@@ -258,6 +258,17 @@ describe('Changelog plugin', () => {
       id: expect.any(String),
       name: 'Mike Ibberson',
     });
+
+    const {
+      body: { changes },
+    } = await agent
+      .get(
+        `/audit?collectionName=students&id=${id}&search=name`,
+      )
+      .set({ Authorization })
+      .expect(200);
+
+    expect(changes).toHaveLength(1);
   });
 
   it('should block public access', async () =>

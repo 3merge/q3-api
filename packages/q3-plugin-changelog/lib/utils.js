@@ -116,7 +116,7 @@ const insertIntoChangelog = async (
 const makeOp = (xs) => {
   const output = {};
   if (!isObject(xs)) return output;
-  const { date, user, operation, reference } = xs;
+  const { date, user, operation, reference, search } = xs;
 
   if (date)
     output.date = {
@@ -132,6 +132,15 @@ const makeOp = (xs) => {
     output.user = {
       $eq: mongoose.Types.ObjectId(user),
     };
+
+  if (search)
+    output.$or = ['added', 'deleted', 'updated'].map(
+      (op) => ({
+        [[op, search].join('.')]: {
+          $exists: true,
+        },
+      }),
+    );
 
   if (Array.isArray(get(operation, '$in')))
     output.$or = operation.$in.map((item) => ({

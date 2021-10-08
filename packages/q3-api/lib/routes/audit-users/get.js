@@ -41,7 +41,7 @@ AuditEmailsController.authorization = [isLoggedIn];
 
 AuditEmailsController.validation = [
   check('collectionName').isString(),
-  check('id').isMongoId().optional(),
+  check('id').isMongoId(),
 ];
 
 AuditEmailsController.postAuthorization = [

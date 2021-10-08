@@ -49,10 +49,14 @@ const getModelInstance = async (req, res, next) => {
 };
 
 const AuditController = async (req, res) => {
+  // otherwise ignored by qp()
+  const { search } = req.query;
+
   res.ok({
-    changes: await req.auditSource.getHistory(
-      qp(req).query,
-    ),
+    changes: await req.auditSource.getHistory({
+      ...qp(req).query,
+      search,
+    }),
   });
 };
 
@@ -61,6 +65,7 @@ AuditController.authorization = [isLoggedIn];
 AuditController.validation = [
   check('collectionName').isString(),
   check('id').isMongoId().optional(),
+  check('search').isString().optional(),
   check('date').isISO8601().optional(),
   check('operation').isString().optional(),
   check('skip').isNumeric().optional(),
