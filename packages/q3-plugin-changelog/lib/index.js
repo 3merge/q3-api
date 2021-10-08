@@ -7,6 +7,7 @@ const {
   isUndefined,
 } = require('lodash');
 const {
+  getDistinctUsers,
   getFromChangelog,
   seedChangelog,
 } = require('./utils');
@@ -20,6 +21,14 @@ module.exports = (schema) => {
       args,
     );
   };
+
+  schema.methods.getUsersWhoHaveMadeChanges =
+    async function (args) {
+      return getDistinctUsers(
+        get(this, 'collection.collectionName'),
+        args,
+      );
+    };
 
   schema.methods.getHistory = async function (args) {
     return getFromChangelog(

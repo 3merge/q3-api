@@ -54,6 +54,12 @@
   },
   {
     "role": "Developer",
+    "coll": "q3-api-users",
+    "op": "Read",
+    "fields": ["!email"]
+  },
+  {
+    "role": "Developer",
     "coll": "profile",
     "op": "Create",
     "fields": ["!email"]
