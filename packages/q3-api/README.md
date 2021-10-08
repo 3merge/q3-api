@@ -4,7 +4,7 @@ Many packages in this repository serve a single purpose in
 your application. Q3 API brings all of those functionalities
 together to reduce setup time and dependency management.
 Additionally, it also configures the underlying project
-dependencies such as express and mongoose.
+dependencies such as Express and Mongoose.
 
 The goal of this package is to get your app off the ground
 as quickly as possible by automating many of the things that
@@ -202,3 +202,83 @@ Docs coming soon.
 ### Utils
 
 Docs coming soon.
+
+### Routes
+
+Q3 includes a few common API routes. These deal with core
+functionalities like authentication, auditing and logging.
+
+#### GET /audit
+
+Get a full changelog for a document. This includes all user-
+and system-caused effects. **The requesting user must have
+access to the `audit` collection as well as the collection
+being audited.**
+
+##### Params
+
+| Parameter         | Description                               | Type                                 |
+| ----------------- | ----------------------------------------- | ------------------------------------ |
+| `id*`             | The document ID to audit                  | `ID`                                 |
+| `collectionName*` | The collection which the document belongs | `String`                             |
+| `search`          | A data path (i.e. "items.name" )          | `String`                             |
+| `date`            | The last date to check for changes        | `Date`                               |
+| `operation`       | The type of change recorded               | `String (added, deleted or updated)` |
+| `skip`            | How many sets to skip (batches of 150)    | `Number`                             |
+| `user`            | The user ID of who made the change        | `ID`                                 |
+
+##### Response
+
+The API will return an array of changes. Each will include a
+date, the user involved as well as an "added", "deleted"
+and/or "updated" payload. When data has been modified, there
+will also be a "previous" object to help with comparisons.
+
+```json
+{
+  "changes": [
+    {
+      "added": {
+        "name": "Testing"
+      },
+      "date": "2021-10-08T13:35:18.020Z",
+      "user": {
+        "_id": "1234",
+        "firstName": "Jon",
+        "lastName": "Doe"
+      }
+    }
+  ]
+}
+```
+
+#### GET /audit-users
+
+Get all users who have made a change to a particular
+document. **The requesting users must have access to the
+`audit` collection, the collection being audited and the
+`q3-api-users` collection.**
+
+##### Params
+
+| Parameter         | Description                               | Type     |
+| ----------------- | ----------------------------------------- | -------- |
+| `id*`             | The document ID to audit                  | `ID`     |
+| `collectionName*` | The collection which the document belongs | `String` |
+
+##### Response
+
+The API will return an array of users. The data is limited
+to just name, email and ID.
+
+```json
+{
+  "users": [
+    {
+      "_id": "1234",
+      "name": "Jon Doe",
+      "email": "jon.doe@gmail.com"
+    }
+  ]
+}
+```
