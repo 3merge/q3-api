@@ -118,6 +118,22 @@ const makeOp = (xs) => {
   if (!isObject(xs)) return output;
   const { date, user, operation, reference, search } = xs;
 
+  const and = (args) => {
+    if (Array.isArray(output.$and)) {
+      output.$and = output.$and.concat([
+        {
+          $or: args,
+        },
+      ]);
+    } else {
+      output.$and = [
+        {
+          $or: args,
+        },
+      ];
+    }
+  };
+
   if (date)
     output.date = {
       $lte: new Date(date),
@@ -134,20 +150,22 @@ const makeOp = (xs) => {
     };
 
   if (search)
-    output.$or = ['added', 'deleted', 'updated'].map(
-      (op) => ({
+    and(
+      ['added', 'deleted', 'updated'].map((op) => ({
         [[op, search].join('.')]: {
           $exists: true,
         },
-      }),
+      })),
     );
 
   if (Array.isArray(get(operation, '$in')))
-    output.$or = operation.$in.map((item) => ({
-      [item]: {
-        $ne: null,
-      },
-    }));
+    and(
+      operation.$in.map((item) => ({
+        [item]: {
+          $ne: null,
+        },
+      })),
+    );
   else if (operation)
     output[operation] = {
       $ne: null,
