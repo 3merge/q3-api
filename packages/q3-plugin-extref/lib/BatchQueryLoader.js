@@ -4,6 +4,7 @@ const {
   pick,
   uniq,
   isObject,
+  compact,
 } = require('lodash');
 const flat = require('flat');
 const { model } = require('mongoose');
@@ -64,7 +65,11 @@ class BatchQueryLoader {
     const getPaths = (s, p) =>
       s.eachPath(
         (pathname, { options, schema: embedded }) => {
-          if (embedded) getPaths(embedded, pathname);
+          if (embedded)
+            getPaths(
+              embedded,
+              compact([p, pathname]).join('.'),
+            );
 
           if (options.autopopulate) {
             pushUniquely(paths, {
