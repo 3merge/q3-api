@@ -84,9 +84,9 @@ class BatchQueryLoader {
     getPaths(schema);
 
     if (schema.discriminators)
-      Object.values(schema.discriminators).forEach(
-        getPaths,
-      );
+      Object.values(schema.discriminators).forEach((d) => {
+        getPaths(d);
+      });
 
     this.$__datasources = paths
       .flat()

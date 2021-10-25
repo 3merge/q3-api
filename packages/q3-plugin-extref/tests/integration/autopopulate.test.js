@@ -1,8 +1,13 @@
 require('../helpers/lifecycle');
 const mongoose = require('mongoose');
-const { Student, Teacher, School } = require('../fixtures');
+const {
+  College,
+  Student,
+  Teacher,
+  School,
+} = require('../fixtures');
 
-describe('remove', () => {
+describe('autopopulate', () => {
   it('should set', async () => {
     const teacherId = '601eab32fc13ae12a200006c';
     const student = await Student.findByIdAndModify(
@@ -14,6 +19,21 @@ describe('remove', () => {
 
     await student.expectPathToHaveProperty(
       'teacher.name',
+      'Art Anstis',
+    );
+  });
+
+  it('should set on discriminator', async () => {
+    const teacherId = '601eab32fc13ae12a200006c';
+    const f = await College.create({});
+    const college = await College.findByIdAndModify(f._id, {
+      'professors': {
+        professor: mongoose.Types.ObjectId(teacherId),
+      },
+    });
+
+    await college.expectPathToHaveProperty(
+      'professors.0.professor.name',
       'Art Anstis',
     );
   });
