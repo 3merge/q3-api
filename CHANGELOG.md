@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.22.4](https://github.com/3merge/q3-api/compare/v1.22.3...v1.22.4) (2021-10-25)
+
+
+### Bug Fixes
+
+* autopulate discriminators ([e3a51d2](https://github.com/3merge/q3-api/commit/e3a51d2770a6dfe2576c2de8860e526430bdb785))
+
+
+
+
+
 ## [1.22.3](https://github.com/3merge/q3-api/compare/v1.22.2...v1.22.3) (2021-10-21)
 
 

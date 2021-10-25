@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.22.4](https://github.com/3merge/q3-api/compare/v1.22.3...v1.22.4) (2021-10-25)
+
+**Note:** Version bump only for package q3-schema-orders
+
+
+
+
+
 ## [1.22.3](https://github.com/3merge/q3-api/compare/v1.22.2...v1.22.3) (2021-10-21)
 
 **Note:** Version bump only for package q3-schema-orders
