@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.23.0](https://github.com/3merge/q3-api/compare/v1.22.5...v1.23.0) (2021-11-12)
+
+
+### Features
+
+* utility for refreshing aws links ([ac4b7f6](https://github.com/3merge/q3-api/commit/ac4b7f6e30c7024f929179e6de128d812df67e37))
+
+
+
+
+
 ## [1.22.5](https://github.com/3merge/q3-api/compare/v1.22.4...v1.22.5) (2021-10-27)
 
 **Note:** Version bump only for package Q3-Api
