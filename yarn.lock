@@ -7662,10 +7662,10 @@ luxon@^1.25.0:
   resolved "https://registry.yarnpkg.com/luxon/-/luxon-1.27.0.tgz#ae10c69113d85dab8f15f5e8390d0cbeddf4f00f"
   integrity sha512-VKsFsPggTA0DvnxtJdiExAucKdAnwbCCNlMM5ENvHlxubqWd0xhZcdb4XgZ7QFNhaRhilXCFxHuoObP5BNA4PA==
 
-m2e-validator@^1.3.8:
-  version "1.3.8"
-  resolved "https://registry.yarnpkg.com/m2e-validator/-/m2e-validator-1.3.8.tgz#8e59d3fe045679f6c690bd5670cddf4b2a851c52"
-  integrity sha512-NCXoIy6WYbyG2wEeVcodBKg9Yz3GXbNd+X2twvRiX8my3KHh6X2dxht6hu5Vh8u+lC9l/7g5gd0hV38HOhHqmA==
+m2e-validator@^1.3.9:
+  version "1.3.9"
+  resolved "https://registry.yarnpkg.com/m2e-validator/-/m2e-validator-1.3.9.tgz#da9c7b33d7eb41e99f3c720e2819343cfff10bd7"
+  integrity sha512-htpJw0Ug2XYIOY3yVb3y7E6AjU6xDVg4QSxgUPRp1gKJpPCAvoCCAwe63lnWyS+aguNNhTi3+cZgJwUBSEn/Jg==
   dependencies:
     express-validator "^6.3.0"
     lodash "^4.17.15"
