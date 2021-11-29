@@ -1,7 +1,9 @@
 const { get } = require('lodash');
 const CSV = require('./toCsv');
 const Excel = require('./toExcel');
+const Html = require('./toHtml');
 const Pdf = require('./toPdf');
+const Text = require('./toText');
 
 module.exports = class Q3Export {
   constructor(strategyName, options = {}) {
@@ -11,6 +13,8 @@ module.exports = class Q3Export {
         csv: CSV,
         xlsx: Excel,
         pdf: Pdf,
+        txt: Text,
+        html: Html,
       },
       strategyName,
     );
