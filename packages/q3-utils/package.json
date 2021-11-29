@@ -1,6 +1,6 @@
 {
   "name": "q3-utils",
-  "version": "1.23.1",
+  "version": "1.24.0",
   "main": "index.js",
   "dependencies": {
     "lodash": "^4.17.20"
@@ -14,6 +14,6 @@
     ]
   },
   "devDependencies": {
-    "q3-test-utils": "^1.23.1"
+    "q3-test-utils": "^1.24.0"
   }
 }

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.24.0](https://github.com/3merge/q3-api/compare/v1.23.2...v1.24.0) (2021-11-29)
+
+
+### Features
+
+* text and html file exports ([#150](https://github.com/3merge/q3-api/issues/150)) ([e08b4a3](https://github.com/3merge/q3-api/commit/e08b4a38da587db9c7d1c8e6fba8ed79ae384e4f))
+
+
+
+
+
 ## [1.23.1](https://github.com/3merge/q3-api/compare/v1.23.0...v1.23.1) (2021-11-22)
 
 **Note:** Version bump only for package q3-test-utils
