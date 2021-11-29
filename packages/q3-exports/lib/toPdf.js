@@ -3,8 +3,14 @@ const PdfPrinter = require('pdfmake');
 const { flatten, first, forEach } = require('lodash');
 const path = require('path');
 
-// eslint-disable-next-line
-const { executeOnAsync } = require('q3-schema-utils');
+// copied from q3-ui-schema-utils
+// redundant so we can avoid that dep and use in browser too
+const executeOnAsync = async (target, next) => {
+  if (!target) return null;
+  return Array.isArray(target)
+    ? Promise.all(target.map(next))
+    : next(target);
+};
 
 const getFontFromDir = (variant) =>
   path.resolve(__dirname, `./fonts/Roboto-${variant}.ttf`);
