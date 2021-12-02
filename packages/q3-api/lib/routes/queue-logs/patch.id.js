@@ -13,22 +13,35 @@ const QueueLogsPatch = async (
   res,
 ) => {
   const queue = await Scheduler.__$db.findById(queuelogsID);
-  checkOp(queue, user, 'Update');
 
-  if (status === 'Queued')
-    await queue
-      .set({
-        completedOn: null,
-        due: new Date(),
-        error: null,
-        locked: false,
-        status,
-      })
-      .save();
-  else
+  checkOp(queue, user, 'Update');
+  const type = getType(queue);
+
+  if (status !== 'Queued')
     exception('Validation')
       .msg('onlyTheStatusMayBeChangedToQueued')
       .throw();
+
+  if (
+    type === 'Recurring' &&
+    (await Scheduler.__$db.count({
+      name: queue.name,
+      status: 'Queued',
+    }))
+  )
+    exception('Conflict')
+      .msg('cannotRescheduleRecurringTask')
+      .throw();
+
+  await queue
+    .set({
+      completedOn: null,
+      due: new Date(),
+      error: null,
+      locked: false,
+      status,
+    })
+    .save();
 
   const out = queue.toObject();
   const avg = await calculateAverageDuration(queue.name);
@@ -36,7 +49,7 @@ const QueueLogsPatch = async (
   out.expectedCompletionDate = avg(queue);
   out.id = queue._id;
   out.status = getResolvedStatus(queue);
-  out.type = getType(queue);
+  out.type = type;
 
   res.ok({
     queue: out,

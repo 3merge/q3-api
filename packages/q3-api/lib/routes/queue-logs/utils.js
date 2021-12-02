@@ -2,13 +2,7 @@ const Scheduler = require('q3-core-scheduler');
 const { exception } = require('q3-core-responder');
 const { Grant } = require('q3-core-access');
 const moment = require('moment');
-const {
-  map,
-  isNumber,
-  get,
-  find,
-  size,
-} = require('lodash');
+const { map, isNumber, get, find } = require('lodash');
 const aws = require('../../config/aws');
 
 exports.calculateAverageDuration = async (
@@ -31,7 +25,7 @@ exports.calculateAverageDuration = async (
     },
   ]);
 
-  return ({ due, name: singleName }) =>
+  return ({ due = new Date(), name: singleName }) =>
     moment(due)
       .add(
         get(
@@ -45,7 +39,7 @@ exports.calculateAverageDuration = async (
 };
 
 exports.getDuration = ({ duration = 0 }) =>
-  isNumber(duration) ? Math.floor(duration / 1000) : 0;
+  isNumber(duration) ? Math.ceil(duration / 1000) : 0;
 
 exports.getResolvedStatus = ({ locked, status }) => {
   if (status === 'Queued')
@@ -58,6 +52,7 @@ exports.getType = ({ name }) =>
   String(name).includes('@') ? 'Recurring' : 'Once';
 
 exports.getImportedFile = ({ payload }) => {
+  const a = aws();
   let data;
 
   try {
@@ -65,7 +60,7 @@ exports.getImportedFile = ({ payload }) => {
   } catch (e) {
     data = {};
   }
-  const a = aws();
+
   return map(get(data, 'buckets', []), a.getPrivate);
 };
 
@@ -78,7 +73,7 @@ exports.checkOp = (queue, user, op = 'Update') => {
     .on('queues')
     .test(queue);
 
-  if (!grant || !grant.fields || !size(grant.fields))
+  if (!grant)
     exception('Authorization')
       .msg('grantRequiredToModifyQueue')
       .throw();

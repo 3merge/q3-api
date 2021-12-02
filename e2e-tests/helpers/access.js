@@ -13,6 +13,11 @@ exports.findAndReplace = (current) => {
   );
 };
 
+exports.insert = (record) => {
+  AccessControl.grants =
+    AccessControl.grants.concat(record);
+};
+
 exports.refresh = () => {
   // eslint-disable-next-line
   AccessControl.grants = require('../q3-access.json');
