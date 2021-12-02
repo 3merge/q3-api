@@ -37,5 +37,10 @@
   "expired": "The information used in this request has expired",
   "insufficientAccessLevels": "This role type cannot perform the requested operation",
   "unknownBridge": "The template requested does not exist",
-  "cannotQueueThisChore": "Access denied for scheduling the requested chore"
+  "cannotQueueThisChore": "Access denied for scheduling the requested chore",
+  "cannotDeleteDoneTask": "Cannot delete a task once it's finished",
+  "cannotDeleteRecurringTask": "Cannot delete a recurring task",
+  "onlyTheStatusMayBeChangedToQueued": "Status can only change to \"Queued\"",
+  "cannotRescheduleRecurringTask": "Cannot re-run a recurring task",
+  "grantRequiredToModifyQueue": "User cannot modify tasks in the queue"
 }

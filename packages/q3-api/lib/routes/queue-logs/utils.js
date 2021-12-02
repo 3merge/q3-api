@@ -65,9 +65,7 @@ exports.getImportedFile = ({ payload }) => {
 };
 
 exports.checkOp = (queue, user, op = 'Update') => {
-  if (!queue)
-    exception('NotFound').msg('taskNotFound').throw();
-
+  if (!queue) exception('NotFound').throw();
   const grant = new Grant(user)
     .can(op)
     .on('queues')
