@@ -23,7 +23,7 @@ module.exports = (item) => {
         );
 
         // eslint-disable-next-line
-        copy = item.replace(link, `src="${m}"`);
+        copy = copy.replace(link, `src="${m}"`);
       } catch (e) {
         // noop
       }
