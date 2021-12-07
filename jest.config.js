@@ -13,4 +13,6 @@ module.exports = {
   setupFilesAfterEnv: ['q3-test-utils/jest-setup.js'],
   coverageReporters: ['lcov'],
   verbose: false,
+  maxWorkers: 4,
+  forceExit: true,
 };

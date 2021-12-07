@@ -27,6 +27,7 @@ const walk = (dir) => {
 };
 
 i18next.use(middleware.LanguageDetector).init({
+  compatibilityJSON: 'v3',
   lng: 'en',
   fallbackLng: 'en',
   preload: ['en', 'fr'],

@@ -1,3 +1,4 @@
+/* global wait */
 const mongoose = require('mongoose');
 const moment = require('moment');
 const cron = require('node-cron');
@@ -35,12 +36,12 @@ afterAll(() => {
 });
 
 describe('Scheduler', () => {
-  it('should walk fixtures directory', async (done) => {
+  it('should walk fixtures directory', async () => {
     const name = 'onRecurring@minutely';
     await Scheduler.seed(__dirname);
     await Scheduler.start(__dirname);
 
-    setTimeout(async () => {
+    return wait(async () => {
       await expectFromScheduler({
         name,
         status: DONE,
@@ -53,12 +54,10 @@ describe('Scheduler', () => {
           $gt: new Date(),
         },
       });
-
-      done();
-    }, 50);
+    });
   });
 
-  it('should call on chore', async (done) => {
+  it('should call on chore', async () => {
     const payload = { name: 'Mike' };
     single.mockImplementation((d) => {
       expect(d).toHaveProperty('name', payload.name);
@@ -68,20 +67,18 @@ describe('Scheduler', () => {
     await Scheduler.queue('onSingle', payload);
     await Scheduler.start(__dirname);
 
-    return setTimeout(() => {
+    return wait(() =>
       expectFromScheduler({
         name: 'onSingle',
         status: DONE,
         duration: {
           $gt: 0.5,
         },
-      }).then(() => {
-        done();
-      });
-    }, 50);
+      }),
+    );
   });
 
-  it('should stall jobs that error', async (done) => {
+  it('should stall jobs that error', async () => {
     single.mockImplementation(() => {
       throw new Error('Oops!');
     });
@@ -89,17 +86,15 @@ describe('Scheduler', () => {
     await Scheduler.queue('onSingle');
     await Scheduler.start(__dirname);
 
-    return setTimeout(() => {
+    return wait(() => {
       expectFromScheduler({
         status: STALLED,
         error: 'Oops!',
-      }).then(() => {
-        done();
       });
     }, 50);
   });
 
-  it('should re-start jobs', async (done) => {
+  it('should re-start jobs', async () => {
     const { _id } = await Scheduler.__$db.create({
       name: 'staller',
       status: 'Queued',
@@ -108,11 +103,10 @@ describe('Scheduler', () => {
 
     await Scheduler.start(__dirname);
 
-    setTimeout(() => {
+    return wait(() =>
       expect(
         Scheduler.__$db.findById(_id),
-      ).resolves.toHaveProperty('status', 'Stalled');
-      done();
-    }, 150);
+      ).resolves.toHaveProperty('status', 'Stalled'),
+    );
   });
 });

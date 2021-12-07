@@ -41,9 +41,14 @@ exports.pick = (obj, keys) =>
 exports.isSimpleSubDocument = (parent, fieldName) => {
   if (typeof parent.schema.path !== 'function')
     return false;
+
   const meta = parent.schema.path(fieldName);
+
   return (
-    meta && meta.constructor.name === 'SingleNestedPath'
+    meta &&
+    ['SingleNestedPath', 'SubdocumentPath'].includes(
+      meta.constructor.name,
+    )
   );
 };
 

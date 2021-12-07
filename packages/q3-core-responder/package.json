@@ -7,7 +7,7 @@
   },
   "devDependencies": {
     "q3-test-utils": "^1.25.1",
-    "supertest": "^6.0.1"
+    "supertest": "^6.1.6"
   },
   "dependencies": {
     "etag": "^1.8.1",

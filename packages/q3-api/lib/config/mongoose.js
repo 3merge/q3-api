@@ -16,11 +16,6 @@ const Files = require('../models/files');
 require('q3-schema-types');
 
 mongoose.pluralize(null);
-mongoose.set('useCreateIndex', true);
-mongoose.set('useFindAndModify', false);
-mongoose.set('useNewUrlParser', true);
-mongoose.set('useUnifiedTopology', true);
-
 mongoose.plugin(context);
 mongoose.plugin(autopopulate);
 mongoose.plugin(locking);

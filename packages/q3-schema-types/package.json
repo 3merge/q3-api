@@ -4,8 +4,8 @@
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "is-glob": "^4.0.1",
-    "mongoose": "^5.11.8"
+    "is-glob": "^4.0.3",
+    "mongoose": "^6.1.0"
   },
   "devDependencies": {
     "q3-test-utils": "^1.25.1"

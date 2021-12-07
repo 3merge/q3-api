@@ -5,30 +5,29 @@
   "main": "lib/index.js",
   "license": "MIT",
   "dependencies": {
-    "api-query-params": "^5.0.0",
-    "aws-sdk": "^2.810.0",
+    "api-query-params": "^5.3.1",
+    "aws-sdk": "^2.1044.0",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "connect": "^3.7.0",
-    "cookie-parser": "^1.4.4",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "csv-express": "^1.2.2",
     "deep-diff": "^1.0.2",
-    "dotenv": "^8.2.0",
+    "dotenv": "^10.0.0",
     "etag": "^1.8.1",
-    "exceljs": "^4.2.0",
+    "exceljs": "^4.3.0",
     "express-fileupload": "^1.1.7-alpha.3",
-    "express-rate-limit": "^5.2.3",
+    "express-rate-limit": "^5.5.1",
     "express-useragent": "^1.0.13",
     "fast-csv": "^4.3.6",
     "flat": "^5.0.2",
     "helmet": "^4.2.0",
-    "i18next": "^19.8.4",
+    "i18next": "^21.5.6",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
     "micromatch": "^4.0.2",
     "moment": "^2.29.1",
-    "mongodb-cron": "^1.7.0",
     "mongoose-dedupe": "^1.0.13",
     "mongoose-field-lock": "^1.0.0",
     "mongoose-lean-virtuals-v2": "^0.7.0",
@@ -47,17 +46,16 @@
     "q3-schema-notes": "^1.25.1",
     "q3-schema-types": "^1.25.1",
     "q3-schema-users": "^1.25.1",
-    "q3-schema-utils": "^1.25.1",
-    "ssestream": "^1.1.0"
+    "q3-schema-utils": "^1.25.1"
   },
   "peerDependencies": {
     "express": "^4.17.1",
     "mongoose": "^5.7.1"
   },
   "devDependencies": {
-    "aws-sdk-mock": "^5.1.0",
+    "aws-sdk-mock": "^5.5.0",
     "q3-test-utils": "^1.25.1",
-    "supertest": "^6.0.1"
+    "supertest": "^6.1.6"
   },
   "jest": {
     "verbose": true,

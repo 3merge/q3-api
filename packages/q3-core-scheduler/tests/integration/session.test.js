@@ -1,12 +1,14 @@
+/* global wait */
 const session = require('q3-core-session');
 const runner = require('../../lib/runner');
 const onSingle = require('./chores/onSingle');
 
 describe('runner', () => {
-  it('should invoke with session defined', async (done) => {
+  it('should invoke with session defined', async () => {
+    let v;
+
     onSingle.mockImplementation(() => {
-      expect(session.get('TEST')).toBe(1);
-      done();
+      v = session.get('TEST');
     });
 
     await runner(__dirname).execute({
@@ -16,6 +18,10 @@ describe('runner', () => {
           TEST: 1,
         },
       },
+    });
+
+    return wait(() => {
+      expect(v).toBe(1);
     });
   });
 });

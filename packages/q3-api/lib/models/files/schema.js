@@ -37,8 +37,8 @@ FileSchema.pre(
       if (this.isModified('name') && !this.isNew) {
         const sdk = AWSInterface();
         sdk.copyFrom(
-          `${this.parent().id}/${this.$locals.prev}`,
-          `${this.parent().id}/${this.name}`,
+          `${this.parent()._id}/${this.$locals.prev}`,
+          `${this.parent()._id}/${this.name}`,
         );
       }
     } catch (e) {

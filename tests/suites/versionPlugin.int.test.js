@@ -54,7 +54,6 @@ describe('UserModel integrations', () => {
     });
 
     await d.save();
-    console.log(d);
 
     expect(d.lastModifiedBy).toHaveProperty(
       'firstName',

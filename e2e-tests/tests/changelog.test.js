@@ -205,7 +205,7 @@ describe('Changelog plugin', () => {
     );
   });
 
-  it.only('should track multi sub-document changes separately', async () => {
+  it('should track multi sub-document changes separately', async () => {
     const {
       body: {
         student: { id },
