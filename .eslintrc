@@ -1,4 +1,10 @@
 {
   "extends": ["node-3merge"],
-  "ignorePatterns": ["node_modules", "docs"]
+  "ignorePatterns": ["node_modules", "docs"],
+  "rules": {
+    "default-param-last": 0,
+    "prefer-regex-literals": 0,
+    "no-promise-executor-return": 0,
+    "no-constructor-return": 0
+  }
 }
