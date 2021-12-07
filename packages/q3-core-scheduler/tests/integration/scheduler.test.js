@@ -1,3 +1,5 @@
+jest.setTimeout(60000);
+
 /* global wait */
 const mongoose = require('mongoose');
 const moment = require('moment');
