@@ -53,7 +53,7 @@ describe('q3-api', () => {
       expect(profile).not.toHaveProperty('lastName');
     });
 
-    it.only('should prevent profile from updating', async () => {
+    it('should prevent profile from updating', async () => {
       const email = 'no@change.com';
       const firstName = 'Mike';
 

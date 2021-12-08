@@ -1,9 +1,0 @@
-{
-  "singleQuote": true,
-  "trailingComma": "all",
-  "arrowParens": "always",
-  "printWidth": 60,
-  "proseWrap": "always",
-  "quoteProps": "preserve",
-   "endOfLine":"auto"
-}

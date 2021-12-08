@@ -1,3 +1,4 @@
+/* global wait */
 jest.setTimeout(30000);
 
 const mongoose = require('mongoose');
@@ -20,7 +21,7 @@ afterAll(() => {
 });
 
 describe('changelog', () => {
-  it('should capture nested changes', async (done) => {
+  it('should capture nested changes', async () => {
     const doc = await Model.create({
       title: 'New',
     });
@@ -69,11 +70,10 @@ describe('changelog', () => {
       },
     });
 
-    setTimeout(async () => {
+    return wait(async () => {
       const logs = await doc.getHistory();
       expect(logs).toHaveLength(7);
-      done();
-    }, 250);
+    });
   });
 
   it('should save the last modified user', async () => {

@@ -7,6 +7,8 @@ jest.mock('os', () => ({
   ),
 }));
 
+const cluster = require('cluster');
+
 const setEnv = (env = {}) =>
   Object.assign(process, {
     env,
@@ -24,6 +26,9 @@ const setEnvironmentVarEnv = (v) =>
 
 beforeEach(() => {
   jest.resetModules();
+  jest.spyOn(cluster, 'fork').mockReturnValue(() => {
+    // noop
+  });
 });
 
 afterEach(() => {

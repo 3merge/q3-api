@@ -1,31 +1,19 @@
 const {
   MongoMemoryReplSet,
 } = require('mongodb-memory-server');
-const path = require('path');
-const fs = require('fs');
+const mongoose = require('mongoose');
 
 module.exports = async () => {
-  const mongod = new MongoMemoryReplSet({
-    autoStart: true,
-    retryWrites: false,
-    replSet: { storageEngine: 'wiredTiger' },
-    binary: {
-      version: '4.4.4',
-    },
-  });
+  if (!process.env.CONNECTION) {
+    const mongod = await MongoMemoryReplSet.create({
+      instanceOpts: [{ storageEngine: 'wiredTiger' }],
+    });
 
-  await mongod.waitUntilRunning();
+    process.env.CONNECTION = mongod.getUri();
+    global.__MONGOD__ = mongod;
 
-  const instance = {
-    uri: `${await mongod.getConnectionString()}&retryWrites=false`,
-    name: await mongod.getDbName(),
-  };
-
-  global.__MONGOD__ = mongod;
-  process.env.CONNECTION = instance.uri;
-
-  fs.writeFileSync(
-    path.join(__dirname, 'globalConfig.json'),
-    JSON.stringify(instance),
-  );
+    await mongoose.connect(process.env.CONNECTION);
+    await mongoose.connection.db.dropDatabase();
+    await mongoose.disconnect();
+  }
 };

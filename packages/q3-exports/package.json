@@ -5,10 +5,10 @@
   "dependencies": {
     "csv-writer": "^1.6.0",
     "exceljs": "^4.2.0",
-    "json-2-csv": "^3.8.0",
+    "json-2-csv": "^3.14.4",
     "lodash": "^4.17.20",
-    "pdf-lib": "^1.13.0",
-    "pdfmake": "^0.1.68"
+    "pdf-lib": "^1.17.1",
+    "pdfmake": "^0.2.4"
   },
   "devDependencies": {
     "q3-test-utils": "^1.25.1"

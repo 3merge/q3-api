@@ -2,7 +2,6 @@
 const {
   pick,
   get,
-  invoke,
   isNumber,
   isUndefined,
 } = require('lodash');
@@ -13,6 +12,16 @@ const {
 } = require('./utils');
 
 const increment = (v) => (isNumber(v) ? v + 1 : 0);
+
+const isParent = (obj) => {
+  try {
+    return typeof obj.parent === 'function'
+      ? obj.parent()._id.equals(obj._id)
+      : true;
+  } catch (e) {
+    return true;
+  }
+};
 
 module.exports = (schema) => {
   schema.statics.getHistory = async function (args) {
@@ -41,7 +50,7 @@ module.exports = (schema) => {
   };
 
   schema.pre('save', async function copyQ3UserData() {
-    if (invoke(this, 'parent')) return;
+    if (!isParent(this)) return;
     const currentChangeLogValue = this.get('changelog');
 
     if (isUndefined(currentChangeLogValue) && !this.isNew)

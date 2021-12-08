@@ -34,7 +34,7 @@ module.exports = {
 
       const isParent =
         typeof this.parent !== 'function' ||
-        this.parent() === undefined;
+        this.parent()._id.equals(this._id);
 
       if (
         isParent &&

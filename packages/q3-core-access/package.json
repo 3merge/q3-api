@@ -7,7 +7,7 @@
     "flat": "^5.0.2",
     "lodash": "^4.17.20",
     "micromatch": "^4.0.2",
-    "mongoose": "^5.11.8",
+    "mongoose": "^6.1.0",
     "q3-core-responder": "^1.25.1",
     "q3-schema-utils": "^1.25.1",
     "q3-utils": "^1.25.1"
