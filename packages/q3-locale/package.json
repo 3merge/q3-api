@@ -1,6 +1,6 @@
 {
   "name": "q3-locale",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "peerDependencies": {
     "i18next": "^19.0.1"
   },
