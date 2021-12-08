@@ -19,3 +19,9 @@
 | <a  href="/packages/q3-plugin-changelog">Changelog</a>        | Saves changes made to a document in a separate collection  |
 | <a  href="/packages/q3-plugin-extref">Extended References</a> | Handles extended collection references and auto-population |
 | <a  href="/packages/q3-plugin-ngrams">N-grams</a>             | Handles mongoose fuzzy searching and text indexing         |
+
+<h2>🛤️ Versions</h2>
+
+| Name                                                         | Key changes                                    |
+| ------------------------------------------------------------ | ---------------------------------------------- |
+| <a  href="https://github.com/3merge/q3-api/tree/v1.x">V1</a> | Upgrade to critical dependencies like Mongoose |
