@@ -73,7 +73,7 @@ const UploadSchema = new Schema({
 UploadSchema.virtual('photo').get((value, v, doc) => {
   const sdk = AWSInterface();
   return doc.featuredUpload
-    ? sdk.getPublic(`${doc.id}/${doc.featuredUpload}`)
+    ? sdk.getPublic(`${doc._id}/${doc.featuredUpload}`)
     : null;
 });
 
