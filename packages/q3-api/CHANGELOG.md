@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.2](https://github.com/3merge/q3-api/compare/v2.0.1...v2.0.2) (2021-12-09)
+
+
+### Bug Fixes
+
+* id in featured photo ([cdd469c](https://github.com/3merge/q3-api/commit/cdd469c226371a341243bf455ecd94f0b0ed9cd8))
+
+
+
+
+
 ## [2.0.1](https://github.com/3merge/q3-api/compare/v2.0.0...v2.0.1) (2021-12-08)
 
 **Note:** Version bump only for package q3-api
