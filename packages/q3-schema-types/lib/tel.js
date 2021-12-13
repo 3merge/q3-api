@@ -1,11 +1,8 @@
+/* eslint-disable class-methods-use-this */
 const mongoose = require('mongoose');
 
 const removeNonDigits = (v) =>
   String(v).replace(/\W|\D|\s/g, '');
-
-function Tel(key, options) {
-  mongoose.SchemaTypes.String.call(this, key, options);
-}
 
 function printTel(parts, ext) {
   if (!parts)
@@ -32,18 +29,20 @@ function validateTel(num) {
   );
 }
 
-Tel.prototype = Object.create(
-  mongoose.SchemaType.prototype,
-);
+class Tel extends mongoose.SchemaType {
+  constructor(key, options) {
+    super(key, options, 'Tel');
+  }
 
-Tel.prototype.cast = function sanitize(val = '') {
-  if (!val.length) return val;
-  const [num, , ext] = val.split(/([a-zA-Z]+)/);
-  return printTel(validateTel(num), ext);
-};
+  cast(val = '') {
+    if (!val.length) return val;
+    const [num, , ext] = val.split(/([a-zA-Z]+)/);
+    return printTel(validateTel(num), ext);
+  }
 
-Tel.prototype.castForQuery = function forward(val = '') {
-  return val;
-};
+  castForQuery(val = '') {
+    return val;
+  }
+}
 
 mongoose.Schema.Types.Tel = Tel;
