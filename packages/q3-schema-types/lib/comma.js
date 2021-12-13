@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 const mongoose = require('mongoose');
 const isGlob = require('is-glob');
 
@@ -18,30 +19,25 @@ const throwOnDuplicate = (a = []) => {
     );
 };
 
-function CommaDelimited(key, options) {
-  mongoose.SchemaTypes.String.call(this, key, options);
-}
-
-CommaDelimited.prototype = Object.create(
-  mongoose.SchemaType.prototype,
-);
-
-CommaDelimited.prototype.cast = function castToString(
-  val,
-  e,
-) {
-  let output = [];
-
-  if (e.constructor.name === 'Query') return val;
-
-  if (Array.isArray(val)) {
-    output = clean(val);
-  } else if (typeof val === 'string') {
-    output = clean(val.split(','));
+class CommaDelimited extends mongoose.SchemaType {
+  constructor(key, options) {
+    super(key, options, 'CommaDelimited');
   }
 
-  throwOnDuplicate(output);
-  return output;
-};
+  cast(val, e) {
+    let output = [];
+
+    if (e.constructor.name === 'Query') return val;
+
+    if (Array.isArray(val)) {
+      output = clean(val);
+    } else if (typeof val === 'string') {
+      output = clean(val.split(','));
+    }
+
+    throwOnDuplicate(output);
+    return output;
+  }
+}
 
 mongoose.Schema.Types.CommaDelimited = CommaDelimited;

@@ -11,9 +11,7 @@ const core = require('./config/core');
 const mongooseInstance = require('./config/mongoose');
 
 const connectToMongooseInstanceWithDefaultPoolSize = () =>
-  mongooseInstance.connect(process.env.CONNECTION, {
-    poolSize: 5,
-  });
+  mongooseInstance.connect(process.env.CONNECTION);
 
 const forkForEachScheduledPriorityLevel = () =>
   Array.from({ length: 3 }).forEach(cluster.fork);
