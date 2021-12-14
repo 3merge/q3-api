@@ -28,7 +28,7 @@ module.exports = {
     try {
       const { docs, totalDocs, hasNextPage, hasPrevPage } =
         await datasource.paginate(query, {
-          options: { redact: true },
+          options: { redact: true, strictQuery: false },
           page: page >= 0 ? page + 1 : 1,
           limit: limit > 500 ? 500 : limit,
           collation: { locale: 'en' },
