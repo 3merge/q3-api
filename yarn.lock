@@ -2399,9 +2399,9 @@ balanced-match@^1.0.0:
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
 bambora-node@^1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/bambora-node/-/bambora-node-1.1.3.tgz#41e35fb3d1596eba6677bc7ea01e220df30cb7c1"
-  integrity sha512-1ZDT6awBRnwfdi468xDseobIS6HtyaFrftAGrg1pOa6E2J0TOZPnVWI3zIBYuAsiqm5F9JK1kjWoOjErO0sJYQ==
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/bambora-node/-/bambora-node-1.2.0.tgz#e67948c6990c0a86b1b9c079b7650585f8bbdf74"
+  integrity sha512-K7aYfo1cYcqgSRxS0/fCKxodW2wTmF0AeRES/10Do8p561Zw0BHhGw5qvERRyAblnbQF1RD0BtB1HQ7HrOEpwA==
   dependencies:
     axios "^0.19.1"
     lodash.get "^4.4.2"
@@ -4776,9 +4776,9 @@ flush-write-stream@^1.0.2:
     readable-stream "^2.3.6"
 
 follow-redirects@^1.14.0:
-  version "1.14.5"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.5.tgz#f09a5848981d3c772b5392309778523f8d85c381"
-  integrity sha512-wtphSXy7d4/OR+MvIFbCVBDzZ5520qV8XfPklSN5QtxuMUJZ+b0Wnst1e1lCDocfzuCkHqj8k0FpZqO+UIaKNA==
+  version "1.14.6"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.6.tgz#8cfb281bbc035b3c067d6cd975b0f6ade6e855cd"
+  integrity sha512-fhUl5EwSJbbl8AR+uYL2KQDxLkdSjZGR36xy46AO7cOMTrCMON6Sa28FmAnC2tRTDbd/Uuzz3aJBv7EBN7JH8A==
 
 forever-agent@~0.6.1:
   version "0.6.1"
