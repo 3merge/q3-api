@@ -15,6 +15,9 @@ const Files = require('../models/files');
 
 require('q3-schema-types');
 
+// for backwards compatibility
+mongoose.set('strictQuery', false);
+
 mongoose.pluralize(null);
 mongoose.plugin(context);
 mongoose.plugin(autopopulate);
