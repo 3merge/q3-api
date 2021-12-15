@@ -2,16 +2,6 @@ const BatchQueryLoader = require('../../lib/BatchQueryLoader');
 
 describe('BatchQueryLoader', () => {
   describe('"invokeJson"', () => {
-    it('should invoke toJSON method', () => {
-      const toJSON = jest.fn();
-      const out = BatchQueryLoader.invokeJson({
-        toJSON,
-      });
-
-      expect(toJSON).toHaveBeenCalled();
-      expect(out).toBeUndefined();
-    });
-
     it('should not invoke the toJSON method', () => {
       const out = BatchQueryLoader.invokeJson({ foo: 1 });
       expect(out).toHaveProperty('foo');

@@ -44,7 +44,12 @@ class BatchQueryLoader {
   static invokeJson(doc) {
     // we need to remove mongoose properties and methods before we flatten it (see load method)
     // otherwise we'll run into callstack errors
-    return 'toJSON' in doc ? doc.toJSON() : doc;
+    // the native methods no longer work for these purposes
+    try {
+      return JSON.parse(JSON.stringify(doc));
+    } catch (e) {
+      return doc;
+    }
   }
 
   static isEmbeddedPath(pathname, objectKeyName) {
