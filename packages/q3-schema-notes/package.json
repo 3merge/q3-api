@@ -1,11 +1,11 @@
 {
   "name": "q3-schema-notes",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "main": "lib/index.js",
   "devDependencies": {
     "lodash": "^4.17.20",
     "q3-core-session": "^2.0.1",
-    "q3-test-utils": "^2.0.5"
+    "q3-test-utils": "^2.0.6"
   },
   "peerDependencies": {
     "mongoose": "^5.7.1"
