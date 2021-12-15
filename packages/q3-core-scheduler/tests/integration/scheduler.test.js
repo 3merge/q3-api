@@ -1,3 +1,6 @@
+// eslint-disable-next-line
+require('dotenv').config();
+
 jest.setTimeout(60000);
 
 /* global wait */
@@ -11,6 +14,19 @@ const {
   STALLED,
   QUEUED,
 } = require('../../lib/constants');
+
+const streamToString = (stream) => {
+  const chunks = [];
+  return new Promise((resolve, reject) => {
+    stream.on('data', (chunk) =>
+      chunks.push(Buffer.from(chunk)),
+    );
+    stream.on('error', (err) => reject(err));
+    stream.on('end', () =>
+      resolve(Buffer.concat(chunks).toString('utf8')),
+    );
+  });
+};
 
 const expectFromScheduler = async (props) =>
   expect(
@@ -32,9 +48,7 @@ beforeEach(async () => {
 });
 
 afterAll(() => {
-  setTimeout(() => {
-    mongoose.disconnect();
-  }, 1000);
+  mongoose.disconnect();
 });
 
 describe('Scheduler', () => {
@@ -80,6 +94,31 @@ describe('Scheduler', () => {
     );
   });
 
+  it('should get file', async () => {
+    let params;
+
+    single.mockImplementation((...d) => {
+      params = d;
+    });
+
+    await Scheduler.queue('onSingle', {
+      // more of an e2e test because it's relying on this file
+      // existing in our AWS test bucket
+      buckets: ['queuing/1639542379408/import'],
+    });
+
+    await Scheduler.start(__dirname);
+
+    await wait(async () => {
+      expect(params).toHaveLength(2);
+
+      const str = await streamToString(params[1].import);
+      expect(str.replace(/(\r\n|\n|\r)/gm, ',')).toMatch(
+        '8880923480324,989898080923840000,21432432443543500,2132432980432800000,2398903890249800000,90238329804803200,23432432543,23434329848348900,808903284902398000',
+      );
+    }, 3500);
+  });
+
   it('should stall jobs that error', async () => {
     single.mockImplementation(() => {
       throw new Error('Oops!');
@@ -93,7 +132,7 @@ describe('Scheduler', () => {
         status: STALLED,
         error: 'Oops!',
       });
-    }, 50);
+    });
   });
 
   it('should re-start jobs', async () => {

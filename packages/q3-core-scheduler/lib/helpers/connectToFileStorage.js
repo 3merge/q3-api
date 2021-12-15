@@ -4,7 +4,7 @@ const { executeOnAsync } = require('q3-schema-utils');
 const { Readable } = require('stream');
 
 const bufferToStream = (buffer) =>
-  Readable.from(Buffer.from(buffer).toString());
+  Readable.from(Buffer.from(buffer, 'utf-8'));
 
 const getFileStreamsFromAws = async (buckets = []) => {
   const buffers = await executeOnAsync(
