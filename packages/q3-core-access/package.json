@@ -10,7 +10,8 @@
     "mongoose": "^6.1.0",
     "q3-core-responder": "^2.0.6",
     "q3-schema-utils": "^2.0.6",
-    "q3-utils": "^2.0.6"
+    "q3-utils": "^2.0.6",
+    "sift": "^15.1.0"
   },
   "devDependencies": {
     "q3-test-utils": "^2.0.6"

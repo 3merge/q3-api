@@ -12,6 +12,8 @@ const {
   isNil,
 } = require('lodash');
 const micromatch = require('micromatch');
+const mongoose = require('mongoose');
+const sift = require('sift');
 const { exception } = require('q3-core-responder');
 const Redact = require('../core/redact');
 const Grant = require('../core/grant');
@@ -320,9 +322,18 @@ class AccessControlSessionBridge {
         const target = get(xs, curr);
         const comparedTo = String(get(ref, curr));
 
-        return Array.isArray(target)
-          ? target.map(String).includes(comparedTo)
-          : isEqual(String(target), comparedTo);
+        if (Array.isArray(target))
+          return target.map(String).includes(comparedTo);
+
+        if (
+          isObject(target) &&
+          !(target instanceof mongoose.Types.ObjectId)
+        )
+          return sift({
+            [curr]: target,
+          })(comparedTo);
+
+        return isEqual(String(target), comparedTo);
       }, true);
     };
 
