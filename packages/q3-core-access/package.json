@@ -1,6 +1,6 @@
 {
   "name": "q3-core-access",
-  "version": "2.0.6",
+  "version": "2.0.9",
   "main": "lib/index.js",
   "dependencies": {
     "comparisons": "2.2.10",

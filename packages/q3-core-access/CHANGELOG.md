@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.9](https://github.com/3merge/q3-api/compare/v2.0.8...v2.0.9) (2021-12-16)
+
+
+### Bug Fixes
+
+* document conditions inside alias ([#158](https://github.com/3merge/q3-api/issues/158)) ([086199f](https://github.com/3merge/q3-api/commit/086199f50eda9ff36a568335aad463369789bd27))
+
+
+
+
+
 ## [2.0.6](https://github.com/3merge/q3-api/compare/v2.0.5...v2.0.6) (2021-12-15)
 
 **Note:** Version bump only for package q3-core-access
