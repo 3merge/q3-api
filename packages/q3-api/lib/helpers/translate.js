@@ -1,4 +1,4 @@
-const { first } = require('lodash');
+const { first, isString, size } = require('lodash');
 const i18next = require('i18next');
 const session = require('q3-core-session');
 
@@ -11,8 +11,13 @@ const translate = (msg) =>
     ),
   )(msg);
 
-const joinMsg = (namespace) => (msg) =>
-  translate([namespace, msg].join(':'));
+const joinMsg = (namespace) => (msg) => {
+  const output = translate([namespace, msg].join(':'));
+
+  return isString(output) && size(output)
+    ? output.replace(`${namespace}:`, '')
+    : '';
+};
 
 exports.from = translate;
 

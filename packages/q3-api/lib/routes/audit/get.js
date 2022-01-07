@@ -17,7 +17,7 @@ const checkAuthorizationGrant = (req, res, next) => {
   const collectionName = getCollectionName(req);
 
   const getGrant = (coll) =>
-    new Grant(user).can('Read').on(coll).test({});
+    new Grant(user).can('Read').on(coll).first();
 
   return next(
     !getGrant('audit') ||
