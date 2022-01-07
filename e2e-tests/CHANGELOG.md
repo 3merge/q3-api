@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.10](https://github.com/3merge/q3-api/compare/v2.0.9...v2.0.10) (2022-01-07)
+
+**Note:** Version bump only for package e2e-tests
+
+
+
+
+
 ## [2.0.9](https://github.com/3merge/q3-api/compare/v2.0.8...v2.0.9) (2021-12-16)
 
 **Note:** Version bump only for package e2e-tests
