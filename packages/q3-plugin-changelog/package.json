@@ -11,6 +11,8 @@
     "jsondiffpatch": "^0.4.1",
     "lodash": "^4.17.20",
     "mongoose": "^6.1.0",
+    "q3-core-access": "^2.0.9",
+    "q3-core-session": "^2.0.9",
     "q3-plugin-extref": "^2.0.9",
     "q3-schema-utils": "^2.0.6"
   },
