@@ -57,6 +57,7 @@ const insertIntoChangelog = async (
   snapshot,
 ) => {
   try {
+    const date = new Date();
     const benchmark = await mongoose.connection.db
       .collection('changelog-v2-snapshots')
       .findOneAndReplace(
@@ -103,7 +104,7 @@ const insertIntoChangelog = async (
       map(changes, (change) => ({
         ...flat.unflatten(change),
         ...includeUserId(),
-        date: new Date(),
+        date,
         collectionName,
         reference,
       })),

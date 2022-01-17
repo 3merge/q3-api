@@ -1,43 +1,18 @@
-const {
-  compose,
-  check,
-  isLoggedIn,
-} = require('q3-core-composer');
-const qp = require('q3-core-rest/lib/queryParser');
-const { map, pick } = require('lodash');
-const { Grant, Redact } = require('q3-core-access');
+const { compose, check } = require('q3-core-composer');
+const Report = require('q3-plugin-changelog/lib/report');
 const Controller = require('../audit/get');
 
-const { checkAuthorizationGrant, getModelInstance } =
+const { checkAuthorizationGrant, getCollectionName } =
   Controller.__$utils;
 
 const AuditEmailsController = async (req, res) => {
-  const users =
-    await req.auditSource.getUsersWhoHaveMadeChanges(
-      qp(req).query,
-    );
-
-  const grant = new Grant(req.user)
-    .can('Read')
-    .on('q3-api-users')
-    .test({});
-
   res.ok({
-    users: map(users, (user) => {
-      const output = pick(
-        Redact.flattenAndReduceByFields(user, grant),
-        ['email', 'name'],
-      );
-
-      return {
-        id: user._id.toString(),
-        ...output,
-      };
-    }),
+    users: await new Report(
+      getCollectionName(req),
+      req.query.id,
+    ).getDistinctUsers(),
   });
 };
-
-AuditEmailsController.authorization = [isLoggedIn];
 
 AuditEmailsController.validation = [
   check('collectionName').isString(),
@@ -46,7 +21,6 @@ AuditEmailsController.validation = [
 
 AuditEmailsController.postAuthorization = [
   checkAuthorizationGrant,
-  getModelInstance,
 ];
 
 module.exports = compose(AuditEmailsController);
