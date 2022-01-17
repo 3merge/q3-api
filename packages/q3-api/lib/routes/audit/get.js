@@ -1,13 +1,12 @@
-const {
-  compose,
-  check,
-  isLoggedIn,
-} = require('q3-core-composer');
-const { get } = require('lodash');
+const { compose, check } = require('q3-core-composer');
+const { get, pick } = require('lodash');
 const qp = require('q3-core-rest/lib/queryParser');
 const { exception } = require('q3-core-responder');
 const { Grant } = require('q3-core-access');
-const { model } = require('../..');
+// alternative to mongoose plugin methods
+const Report = require('q3-plugin-changelog/lib/report');
+const aqp = require('api-query-params');
+const { translate } = require('../../helpers');
 
 const getCollectionName = (req) =>
   get(qp(req), 'query.collectionName');
@@ -30,51 +29,32 @@ const checkAuthorizationGrant = (req, res, next) => {
   );
 };
 
-const getModelInstance = async (req, res, next) => {
-  const { id } = req.query;
-  const collectionName = getCollectionName(req);
-
-  req.auditSource = model(collectionName);
-
-  try {
-    if (id)
-      req.auditSource = await req.auditSource.findStrictly(
-        id,
-      );
-
-    next();
-  } catch (e) {
-    next(e);
-  }
-};
-
 const AuditController = async (req, res) => {
-  // otherwise ignored by qp()
-  const { search } = req.query;
+  const { id, targets, ...rest } = req.query;
 
   res.ok({
-    changes: await req.auditSource.getHistory({
-      ...qp(req).query,
-      search,
-    }),
+    changes: await new Report(
+      getCollectionName(req),
+      id,
+    ).getData(
+      aqp(pick(rest, ['date', 'user'])).filter,
+      targets,
+      translate.messages,
+    ),
   });
 };
 
-AuditController.authorization = [isLoggedIn];
-
 AuditController.validation = [
   check('collectionName').isString(),
-  check('id').isMongoId().optional(),
-  check('search').isString().optional(),
-  check('date').isISO8601().optional(),
-  check('operation').isString().optional(),
-  check('skip').isNumeric().optional(),
+  check('targets').isString(),
+  check('id').isMongoId(),
+  check('date>').isISO8601().optional(),
+  check('date<').isISO8601().optional(),
   check('user').isMongoId().optional(),
 ];
 
 AuditController.postAuthorization = [
   checkAuthorizationGrant,
-  getModelInstance,
 ];
 
 const Controller = compose(AuditController);
@@ -83,5 +63,5 @@ module.exports = Controller;
 
 Controller.__$utils = {
   checkAuthorizationGrant,
-  getModelInstance,
+  getCollectionName,
 };

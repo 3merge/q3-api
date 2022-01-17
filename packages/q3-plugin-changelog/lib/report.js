@@ -148,7 +148,7 @@ class ChangelogReport {
               $project: {
                 _id: 0,
                 value: '$_id',
-                label: {
+                name: {
                   $concat: [
                     '$user.firstName',
                     ' ',
@@ -233,7 +233,7 @@ class ChangelogReport {
                 [DELETIONS]: 1,
                 [UPDATES]: 1,
                 date: '$_id.d',
-                user: isObject(getUserGrant())
+                user: canSessionUserSeeUserNames()
                   ? {
                       $concat: [
                         '$user.firstName',

@@ -15,6 +15,7 @@ const StudentSchema = new mongoose.Schema(
     },
     grade: Number,
     age: Number,
+    class: String,
     socialStatus: String,
     trigger: Boolean,
     date: Date,
