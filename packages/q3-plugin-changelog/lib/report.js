@@ -11,10 +11,12 @@ const {
   isNil,
   pick,
   size,
+  uniq,
   uniqWith,
   isObject,
 } = require('lodash');
 const alpha = require('alphabetize-object-keys');
+const flat = require('flat');
 
 const USER_COLLECTION_NAME = 'q3-api-users';
 
@@ -65,6 +67,7 @@ const getIndexKey = (xs, t) => {
   const cleaned = str.replace(/\.(\d+)/g, '');
   const parts = str.match(/((\.(\d+)\.?$)|(\.(\d+)\.))/g);
   const l = isFunction(t) ? t(cleaned) : cleaned;
+  if (!l) return null;
 
   if (size(parts))
     return `${l} #${parts
@@ -91,8 +94,7 @@ const reduceFlattenedObject = (xs, t) =>
   alpha(
     Object.entries(xs).reduce((acc, [k, v]) => {
       const l = getIndexKey(k, t);
-
-      acc[l] = v;
+      if (l) acc[l] = v;
       return acc;
     }, {}),
   );

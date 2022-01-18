@@ -1,0 +1,24 @@
+[
+  {
+    "coll": "students",
+    "template": "test1",
+    "fields": {
+      "age": "Age",
+      "class": "Class"
+    }
+  },
+  {
+    "coll": "students",
+    "template": "test2",
+    "fields": {
+      "samples.test": "Sample"
+    }
+  },
+  {
+    "coll": "students",
+    "template": "test3",
+    "fields": {
+      "samples.test": "Test"
+    }
+  }
+]

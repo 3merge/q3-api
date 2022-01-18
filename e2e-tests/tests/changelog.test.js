@@ -30,7 +30,7 @@ const getChanges = async (id, targets) => {
     body: { changes },
   } = await agent
     .get(
-      `/audit?collectionName=students&id=${id}&targets=${targets}`,
+      `/audit?collectionName=students&id=${id}&template=${targets}`,
     )
     .set({ Authorization })
     .expect(200);
@@ -81,15 +81,15 @@ describe('Changelog plugin', () => {
       .send({ class: 'Economics', age: 36 })
       .expect(200);
 
-    const changes = await getChanges(id, 'class,age');
+    const changes = await getChanges(id, 'test1');
     expect(changes).toHaveLength(3);
 
     expect(changes).toEqual([
       {
         updates: [
           {
-            class: 'Economics',
-            age: 36,
+            Class: 'Economics',
+            Age: 36,
           },
         ],
         date: expect.any(String),
@@ -98,8 +98,8 @@ describe('Changelog plugin', () => {
       {
         updates: [
           {
-            class: 'Bio',
-            age: 31,
+            Class: 'Bio',
+            Age: 31,
           },
         ],
         date: expect.any(String),
@@ -108,8 +108,8 @@ describe('Changelog plugin', () => {
       {
         additions: [
           {
-            class: 'Bio',
-            age: 21,
+            Class: 'Bio',
+            Age: 21,
           },
         ],
         date: expect.any(String),
@@ -150,15 +150,10 @@ describe('Changelog plugin', () => {
       .expect(200);
 
     // should ignore first post request
-    const changes = await getChanges(id, 'samples.test');
+    const changes = await getChanges(id, 'test2');
     expect(changes).toHaveLength(2);
-    expect(changes[0].updates[0]['samples.test']).toMatch(
-      'Bar',
-    );
-
-    expect(changes[1].additions[0]['samples.test']).toMatch(
-      'foo',
-    );
+    expect(changes[0].updates[0].Sample).toMatch('Bar');
+    expect(changes[1].additions[0].Sample).toMatch('foo');
   });
 
   it('should track multi sub-document changes separately', async () => {
@@ -200,26 +195,17 @@ describe('Changelog plugin', () => {
       .set({ Authorization })
       .expect(200);
 
-    const changes = await getChanges(id, 'samples.test');
+    const changes = await getChanges(id, 'test3');
     expect(changes).toHaveLength(3);
 
     expect(changes).toEqual([
       {
         updates: [
           {
-            'samples.test': 'Quuz',
+            'Test': 'Quuz',
           },
           {
-            'samples.test': 'Quuz',
-          },
-        ],
-        date: expect.any(String),
-        user: 'Mike Ibberson',
-      },
-      {
-        additions: [
-          {
-            'samples.test': 'Bar',
+            'Test': 'Quuz',
           },
         ],
         date: expect.any(String),
@@ -228,7 +214,16 @@ describe('Changelog plugin', () => {
       {
         additions: [
           {
-            'samples.test': 'Foo',
+            'Test': 'Bar',
+          },
+        ],
+        date: expect.any(String),
+        user: 'Mike Ibberson',
+      },
+      {
+        additions: [
+          {
+            'Test': 'Foo',
           },
         ],
         date: expect.any(String),
@@ -265,7 +260,7 @@ describe('Changelog plugin', () => {
   it('should block access', async () =>
     agent
       .get(
-        `/audit?collectionName=students&id=${mongoose.Types.ObjectId()}&targets=foo,bar`,
+        `/audit?collectionName=students&id=${mongoose.Types.ObjectId()}&template=foo`,
       )
       .expect(403));
 
@@ -283,6 +278,14 @@ describe('Changelog plugin', () => {
 
   it('should fail validation', async () =>
     agent
-      .get('/audit?collectionName=students&targets=foo,bar')
+      .get(
+        `/audit?collectionName=students&id=${mongoose.Types.ObjectId()}&template=foo`,
+      )
+      .set({ Authorization })
+      .expect(422));
+
+  it('should fail validation', async () =>
+    agent
+      .get('/audit?collectionName=students&template=foo')
       .expect(422));
 });

@@ -1,8 +1,11 @@
 const { compose, check } = require('q3-core-composer');
-const { get, pick } = require('lodash');
+const { get, find, pick, isObject } = require('lodash');
 const qp = require('q3-core-rest/lib/queryParser');
 const { exception } = require('q3-core-responder');
 const { Grant } = require('q3-core-access');
+const {
+  findFileTraversingUpwards,
+} = require('q3-schema-utils');
 // alternative to mongoose plugin methods
 const Report = require('q3-plugin-changelog/lib/report');
 const { translate } = require('../../helpers');
@@ -30,23 +33,37 @@ const checkAuthorizationGrant = (req, res, next) => {
 
 const AuditController = async (req, res) => {
   const { query } = qp(req);
-  const { id, targets } = query;
+  const coll = getCollectionName(req);
+  const { id, template } = query;
+
+  const settings = find(
+    findFileTraversingUpwards(
+      get(req, 'app.locals.location'),
+      'q3-audit.json',
+    ),
+    (item) =>
+      item.coll === coll && item.template === template,
+  );
+
+  if (!settings || !isObject(settings.fields))
+    exception('Validation')
+      .msg('unknownAuditTemplate')
+      .throw();
+
+  const { fields } = settings;
 
   res.ok({
-    changes: await new Report(
-      getCollectionName(req),
-      id,
-    ).getData(
+    changes: await new Report(coll, id).getData(
       pick(query, ['date', 'user']),
-      get(targets, '$in', targets),
-      translate.labels,
+      Object.keys(fields),
+      (key) => fields[key],
     ),
   });
 };
 
 AuditController.validation = [
   check('collectionName').isString(),
-  check('targets').isString(),
+  check('template').isString(),
   check('id').isMongoId(),
   check('date>').isISO8601().optional(),
   check('date<').isISO8601().optional(),
