@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.1](https://github.com/3merge/q3-api/compare/v2.1.0...v2.1.1) (2022-01-18)
+
+
+### Bug Fixes
+
+* audit querying ([be3f253](https://github.com/3merge/q3-api/commit/be3f253bbc87523866a5b7e6649c4104f54d8740))
+
+
+
+
+
 # [2.1.0](https://github.com/3merge/q3-api/compare/v2.0.10...v2.1.0) (2022-01-17)
 
 
