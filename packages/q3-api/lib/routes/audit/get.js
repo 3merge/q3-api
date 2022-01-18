@@ -5,7 +5,6 @@ const { exception } = require('q3-core-responder');
 const { Grant } = require('q3-core-access');
 // alternative to mongoose plugin methods
 const Report = require('q3-plugin-changelog/lib/report');
-const aqp = require('api-query-params');
 const { translate } = require('../../helpers');
 
 const getCollectionName = (req) =>
@@ -30,16 +29,17 @@ const checkAuthorizationGrant = (req, res, next) => {
 };
 
 const AuditController = async (req, res) => {
-  const { id, targets, ...rest } = req.query;
+  const { query } = qp(req);
+  const { id, targets } = query;
 
   res.ok({
     changes: await new Report(
       getCollectionName(req),
       id,
     ).getData(
-      aqp(pick(rest, ['date', 'user'])).filter,
-      targets,
-      translate.messages,
+      pick(query, ['date', 'user']),
+      get(targets, '$in', targets),
+      translate.labels,
     ),
   });
 };
