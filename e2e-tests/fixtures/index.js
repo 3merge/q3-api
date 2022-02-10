@@ -11,7 +11,7 @@ const genUser =
     Users.create({
       firstName: 'Mike',
       lastName: 'Ibberson',
-      lang: 'en-CA',
+      lang: 'en',
       role,
       email,
     });
