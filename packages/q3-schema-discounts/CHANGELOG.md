@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.1.0](https://github.com/3merge/q3-api/compare/v2.1.2...v3.1.0) (2022-02-10)
+
+
+### Features
+
+* multi-tenancy plugin ([#161](https://github.com/3merge/q3-api/issues/161)) ([deb671d](https://github.com/3merge/q3-api/commit/deb671d87982337309373745dfe968dffdade954))
+
+
+
+
+
+
 # [3.0.0](https://github.com/3merge/q3-api/compare/v2.1.2...v3.0.0) (2022-02-10)
 
 **Note:** Version bump only for package q3-schema-discounts

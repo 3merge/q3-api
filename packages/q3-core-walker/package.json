@@ -1,6 +1,6 @@
 {
   "name": "q3-core-walker",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "main": "lib/index.js",
   "peerDependencies": {
     "express": "^4.17.1"
