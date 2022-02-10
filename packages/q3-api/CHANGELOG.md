@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.1](https://github.com/3merge/q3-api/compare/v3.1.0...v3.1.1) (2022-02-10)
+
+
+### Bug Fixes
+
+* spaces in photo urls ([5971042](https://github.com/3merge/q3-api/commit/5971042a4cb9828a40ae1504cea587ee6d9895e9))
+
+
+
+
+
 # [3.1.0](https://github.com/3merge/q3-api/compare/v2.1.2...v3.1.0) (2022-02-10)
 
 
