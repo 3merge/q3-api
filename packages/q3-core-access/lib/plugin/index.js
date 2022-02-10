@@ -27,7 +27,7 @@ const enforce = (fn) =>
     return fn.call(this);
   };
 
-module.exports = (schema) => {
+module.exports = (schema, pluginSettings = {}) => {
   async function checkOp(fn, options = {}) {
     this.assignCreatedBy();
 
@@ -99,6 +99,8 @@ module.exports = (schema) => {
       'featuredUpload',
     ];
 
+    const { userCollectionName = 'users' } = pluginSettings;
+
     schema.add({
       createdBy: {
         type: mongoose.Schema.Types.ObjectId,
@@ -108,7 +110,7 @@ module.exports = (schema) => {
             schema.options.createdByAutocompleteProjection,
           ),
         ).join(' '),
-        ref: 'q3-api-users',
+        ref: userCollectionName,
         systemOnly: true,
         private: true,
       },

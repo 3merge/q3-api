@@ -52,7 +52,7 @@ describe('ChangelogReport', () => {
       AccessControl.init([
         {
           role: 'DEVELOPER',
-          coll: 'q3-api-users',
+          coll: 'users',
           fields: ['name'],
           op: 'Read',
         },

@@ -17,7 +17,6 @@
     "q3-core-responder": "^2.0.6",
     "q3-core-rest": "^2.1.0",
     "q3-core-session": "^2.0.1",
-    "q3-core-version": "^2.0.1",
     "q3-core-walker": "^2.0.1",
     "q3-locale": "^2.0.1",
     "q3-schema-addresses": "^2.0.6",

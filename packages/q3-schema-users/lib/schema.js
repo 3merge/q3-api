@@ -40,8 +40,7 @@ const BaseUserModel = new Schema(
     },
     lang: {
       type: String,
-      default: 'en-CA',
-      enum: ['en-CA', 'fr-CA'],
+      default: 'en',
     },
     active: {
       type: Boolean,
@@ -80,6 +79,12 @@ const BaseUserModel = new Schema(
     filters: Schema.Types.Mixed,
     sorting: Schema.Types.Mixed,
     tours: [String],
+    tel: Schema.Types.Tel,
+    birthday: Date,
+    occupation: String,
+    theme: String,
+    timezone: String,
+    countryOfResidence: String,
   },
   {
     withUploads: true,

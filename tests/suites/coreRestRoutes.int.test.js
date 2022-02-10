@@ -47,7 +47,7 @@ beforeAll(async () => {
   ({ _id: id } = sup);
 
   await Permissions.create({
-    coll: 'q3-api-users',
+    coll: 'users',
     op: 'Read',
   });
 });
@@ -188,9 +188,7 @@ describe('history /GET', () => {
     const {
       body: { versions },
     } = await agent
-      .get(
-        `/history?collectionName=q3-api-users&documentId=${id}`,
-      )
+      .get(`/history?collectionName=users&documentId=${id}`)
       .set({ Authorization: AuthorizationSuper })
       .expect(200);
 
@@ -202,17 +200,17 @@ describe('Search', () => {
   it('should yield distinct values', async () => {
     await Permissions.create([
       {
-        coll: 'q3-api-users',
+        coll: 'users',
         op: 'Read',
         role: 'Super',
       },
       {
-        coll: 'q3-api-users',
+        coll: 'users',
         op: 'Update',
         role: 'Dev',
       },
       {
-        coll: 'q3-api-users',
+        coll: 'users',
         op: 'Create',
         role: 'Builder',
       },
@@ -275,7 +273,7 @@ describe('charts /GET', () => {
 describe('statistics /GET', () => {
   it('should return 200', async () => {
     const { body } = await agent
-      .get('/statistics?collectionName=q3-api-users')
+      .get('/statistics?collectionName=users')
       .set({ Authorization: AuthorizationSuper })
       .expect(200);
 

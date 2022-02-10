@@ -7,9 +7,11 @@ const shouldRunChangelog = (Model) => {
   try {
     return !(
       Model.baseModelName ||
-      ['queues', 'q3-api-notifications'].includes(
-        Model.modelName,
-      ) ||
+      [
+        'queues',
+        'q3-api-notifications',
+        'notifications',
+      ].includes(Model.modelName) ||
       // allows you to turn it off for specific collections
       Model.schema.get('disableChangelog')
     );

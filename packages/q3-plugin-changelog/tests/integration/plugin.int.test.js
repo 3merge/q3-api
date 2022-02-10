@@ -81,9 +81,6 @@ describe('changelog', () => {
     });
 
     await wait(async () => {
-      const logs = await doc.getHistory();
-      expect(logs).toHaveLength(7);
-
       const r = new Report('testing-changelogs', doc._id);
       const titleRecords = await r.getData({}, 'title');
       const topicRecords = await r.getData(

@@ -8,7 +8,7 @@ const getSuperAgent = async (Q3) => {
     lastName: 'Kent',
     email: 'clark.kent@marvel.com',
     role: 'Super',
-    lang: 'en-CA',
+    lang: 'en',
     secret: 'Shh!',
   });
 

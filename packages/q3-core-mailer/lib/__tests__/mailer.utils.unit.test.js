@@ -55,11 +55,11 @@ describe('Mailer utils', () => {
   describe('"getTemplate"', () => {
     it('should use template name', () =>
       expect(
-        getTemplate('en-CA', 'event', 'subscribe'),
+        getTemplate('en', 'event', 'subscribe'),
       ).toMatch('en-subscribe'));
 
     it('should use event name', () =>
-      expect(getTemplate('en-CA', 'event')).toMatch(
+      expect(getTemplate('en', 'event')).toMatch(
         'en-event',
       ));
   });
@@ -67,11 +67,11 @@ describe('Mailer utils', () => {
   describe('"getTemplate"', () => {
     it('should use template name', () =>
       expect(
-        getTemplate('en-CA', 'event', 'subscribe'),
+        getTemplate('en', 'event', 'subscribe'),
       ).toMatch('en-subscribe'));
 
     it('should use event name', () =>
-      expect(getTemplate('en-CA', 'event')).toMatch(
+      expect(getTemplate('en', 'event')).toMatch(
         'en-event',
       ));
   });
@@ -79,12 +79,12 @@ describe('Mailer utils', () => {
   describe('"reduceListenersByLang"', () => {
     const users = [
       {
-        lang: 'en-CA',
+        lang: 'en',
         role: 'Admin',
         email: 'mibberson@3merge.ca',
       },
       {
-        lang: 'fr-CA',
+        lang: 'fr',
         role: 'Dev',
         email: 'mibberson@3merge.ca',
       },

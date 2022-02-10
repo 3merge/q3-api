@@ -8,7 +8,7 @@ const {
 } = require('q3-schema-utils');
 // alternative to mongoose plugin methods
 const Report = require('q3-plugin-changelog/lib/report');
-const { translate } = require('../../helpers');
+const { MODEL_NAMES } = require('../../constants');
 
 const getCollectionName = (req) =>
   get(qp(req), 'query.collectionName');
@@ -53,7 +53,11 @@ const AuditController = async (req, res) => {
   const { fields } = settings;
 
   res.ok({
-    changes: await new Report(coll, id).getData(
+    changes: await new Report(
+      coll,
+      id,
+      MODEL_NAMES.USERS,
+    ).getData(
       pick(query, ['date', 'user']),
       Object.keys(fields),
       (key) => fields[key],

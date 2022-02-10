@@ -11,14 +11,10 @@ const {
   isNil,
   pick,
   size,
-  uniq,
   uniqWith,
   isObject,
 } = require('lodash');
 const alpha = require('alphabetize-object-keys');
-const flat = require('flat');
-
-const USER_COLLECTION_NAME = 'q3-api-users';
 
 const getUserGrant = (collection) =>
   new Grant(session.get('USER'))
@@ -26,12 +22,12 @@ const getUserGrant = (collection) =>
     .on(collection)
     .first();
 
-const canSessionUserSeeUserNames = () => {
+const canSessionUserSeeUserNames = (userCollectionName) => {
   try {
     return (
       Redact.flattenAndReduceByFields(
         { name: 1 },
-        getUserGrant(USER_COLLECTION_NAME),
+        getUserGrant(userCollectionName),
         { includeConditionalGlobs: false },
       ).name === 1
     );
@@ -100,13 +96,16 @@ const reduceFlattenedObject = (xs, t) =>
   );
 
 class ChangelogReport {
-  constructor(coll, id) {
+  constructor(coll, id, userCollectionName = 'users') {
     if (!coll)
       throw new Error('Report requires collection');
     if (!id) throw new Error('Report requires ObjectId');
 
     this.$collection = coll;
     this.$id = id;
+
+    // previously q3-api-users
+    this.$userCollectionName = userCollectionName;
   }
 
   get connection() {
@@ -120,7 +119,9 @@ class ChangelogReport {
   }
 
   async getDistinctUsers() {
-    return canSessionUserSeeUserNames()
+    return canSessionUserSeeUserNames(
+      this.$userCollectionName,
+    )
       ? this.connection
           .aggregate([
             {
@@ -135,7 +136,7 @@ class ChangelogReport {
             },
             {
               $lookup: {
-                from: USER_COLLECTION_NAME,
+                from: this.$userCollectionName,
                 localField: '_id',
                 foreignField: '_id',
                 as: 'user',
@@ -216,7 +217,7 @@ class ChangelogReport {
             },
             {
               $lookup: {
-                from: USER_COLLECTION_NAME,
+                from: this.$userCollectionName,
                 localField: '_id.u',
                 foreignField: '_id',
                 as: 'user',
@@ -235,7 +236,9 @@ class ChangelogReport {
                 [DELETIONS]: 1,
                 [UPDATES]: 1,
                 date: '$_id.d',
-                user: canSessionUserSeeUserNames()
+                user: canSessionUserSeeUserNames(
+                  this.$userCollectionName,
+                )
                   ? {
                       $concat: [
                         '$user.firstName',

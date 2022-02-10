@@ -12,6 +12,7 @@ const {
 } = require('q3-plugin-extref');
 const versionControl = require('q3-plugin-changelog');
 const Files = require('../models/files');
+const { MODEL_NAMES } = require('../constants');
 
 require('q3-schema-types');
 
@@ -54,7 +55,9 @@ mongoose.plugin((schema) => {
   }
 });
 
-mongoose.plugin(accessControl);
-mongoose.plugin(versionControl);
+mongoose.plugin(accessControl, {
+  userCollectionName: MODEL_NAMES.USERS,
+});
 
+mongoose.plugin(versionControl);
 module.exports = mongoose;
