@@ -1,4 +1,4 @@
-const { merge } = require('lodash');
+const { merge, size, isString } = require('lodash');
 const mongoose = require('mongoose');
 const session = require('q3-core-session');
 
@@ -21,11 +21,15 @@ const multitenantPlugin = (Schema) => {
   });
 
   function assignTenantToQuery() {
-    this.setQuery(
-      merge(this.getQuery(), {
-        tenant: getTenant(),
-      }),
-    );
+    const s = session.get('ORIGIN');
+
+    // prevents pre-queries from running
+    if (isString(s) && size(s))
+      this.setQuery(
+        merge(this.getQuery(), {
+          tenant: getTenant(),
+        }),
+      );
   }
 
   Schema.pre('find', assignTenantToQuery);

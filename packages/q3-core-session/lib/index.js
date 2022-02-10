@@ -1,6 +1,7 @@
 const { createNamespace } = require('cls-hooked');
 
 const {
+  ORIGIN,
   SESSION_NAMESPACE,
   SESSION_KEY,
   TENANT_KEY,
@@ -58,6 +59,7 @@ module.exports = {
 
       ns.set(SESSION_KEY, user);
       ns.set(TENANT_KEY, tenant);
+      ns.set(ORIGIN, getFromReq('originalUrl'));
 
       if (req && !req.session)
         req.session = {
@@ -89,7 +91,7 @@ module.exports = {
 
   getAll: () =>
     Object.keys(ev)
-      .concat(SESSION_KEY)
+      .concat([ORIGIN, SESSION_KEY, TENANT_KEY])
       .reduce(
         (curr, key) =>
           Object.assign(curr, {
@@ -100,7 +102,9 @@ module.exports = {
 
   kill: () => {
     clearMap();
+    clearNs(ORIGIN);
     clearNs(SESSION_KEY);
+    clearNs(TENANT_KEY);
   },
 
   intercept: (keyName, fn) => {
