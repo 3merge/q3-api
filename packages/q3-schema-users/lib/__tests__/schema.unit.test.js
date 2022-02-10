@@ -34,7 +34,7 @@ describe('UserModel validation', () => {
         frozen: false,
         active: true,
         loginAttempts: 0,
-        lang: 'en-CA',
+        lang: 'en',
       }),
     );
   });

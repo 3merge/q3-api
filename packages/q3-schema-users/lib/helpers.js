@@ -50,7 +50,7 @@ const generateIDToken = async (id, code, audience) => {
   };
 };
 
-async function verifyToken(token, nonce, host) {
+async function verifyToken(token, nonce, host, tenant) {
   try {
     const {
       id,
@@ -72,6 +72,7 @@ async function verifyToken(token, nonce, host) {
         'Invalid token context or user state',
       );
 
+    user.checkTenant(tenant);
     return user;
   } catch (err) {
     // log it?

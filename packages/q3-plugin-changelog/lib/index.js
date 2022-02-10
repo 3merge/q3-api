@@ -5,11 +5,7 @@ const {
   isNumber,
   isUndefined,
 } = require('lodash');
-const {
-  getDistinctUsers,
-  getFromChangelog,
-  seedChangelog,
-} = require('./utils');
+const { seedChangelog } = require('./utils');
 
 const increment = (v) => (isNumber(v) ? v + 1 : 0);
 
@@ -24,31 +20,6 @@ const isParent = (obj) => {
 };
 
 module.exports = (schema) => {
-  schema.statics.getHistory = async function (args) {
-    return getFromChangelog(
-      get(this, 'collection.collectionName'),
-      args,
-    );
-  };
-
-  schema.methods.getUsersWhoHaveMadeChanges =
-    async function (args) {
-      return getDistinctUsers(
-        get(this, 'collection.collectionName'),
-        args,
-      );
-    };
-
-  schema.methods.getHistory = async function (args) {
-    return getFromChangelog(
-      get(this, 'constructor.collection.collectionName'),
-      {
-        ...args,
-        reference: this._id,
-      },
-    );
-  };
-
   schema.pre('save', async function copyQ3UserData() {
     if (!isParent(this)) return;
     const currentChangeLogValue = this.get('changelog');

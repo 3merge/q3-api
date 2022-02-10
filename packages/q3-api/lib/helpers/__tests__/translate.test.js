@@ -1,5 +1,5 @@
 jest.mock('q3-core-session', () => ({
-  get: jest.fn().mockReturnValue('en-CA'),
+  get: jest.fn().mockReturnValue('en'),
 }));
 
 jest.mock('i18next', () => ({

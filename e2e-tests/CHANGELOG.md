@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0](https://github.com/3merge/q3-api/compare/v2.1.2...v3.0.0) (2022-02-10)
+
+
+### Features
+
+* virtual file path plugin ([cb61414](https://github.com/3merge/q3-api/commit/cb6141446c9914c269b2e3fe17e915ca8177e2f6))
+
+
+
+
+
 ## [2.1.2](https://github.com/3merge/q3-api/compare/v2.1.1...v2.1.2) (2022-01-18)
 
 

@@ -87,6 +87,7 @@ describe('static find abstractions', () => {
   it('should query by key', async () => {
     await Decorator.findByApiKey.call(MockModel, '123');
     expect(MockModel.findOne).toHaveBeenCalledWith({
+      enableServerToServer: true,
       apiKeys: '123',
       active: true,
     });

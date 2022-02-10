@@ -16,6 +16,13 @@ const isVerifiedQuery = {
 
 const SECRET_EXPIRATION_IN_HRS = 120;
 
+const normalize = (xs) => {
+  const output = String(xs).trim();
+  return ['false', 'null', 'undefined', ''].includes(output)
+    ? null
+    : output;
+};
+
 const isWithinSecretExpirationHrsWindow = (
   lastUpdatedOnDateStamp,
 ) => {
@@ -87,15 +94,23 @@ module.exports = class UserAuthDecorator {
     }
   }
 
-  static async findByApiKey(str = '') {
+  static async findByApiKey(str, tenant) {
     if (!str) return null;
-    return this.findOne({
-      apiKeys: str.trim(),
+    const u = await this.findOne({
+      enableServerToServer: true,
+      apiKeys: String(str).trim(),
       active: true,
     })
       .setOptions({ bypassAuthorization: true })
       .select('+apiKeys +uploads')
       .exec();
+
+    try {
+      u.checkTenant(tenant);
+      return u;
+    } catch (e) {
+      return null;
+    }
   }
 
   static async findbyBearerToken(...args) {
@@ -265,5 +280,14 @@ module.exports = class UserAuthDecorator {
 
     await this.save();
     return stringify;
+  }
+
+  checkTenant(tenant) {
+    if (normalize(tenant) !== normalize(this.tenant))
+      throw new Error(
+        'Cannot authenticate using this tenant',
+      );
+
+    return true;
   }
 };

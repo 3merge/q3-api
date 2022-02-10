@@ -21,7 +21,9 @@
 | <a  href="/packages/q3-plugin-ngrams">N-grams</a>             | Handles mongoose fuzzy searching and text indexing         |
 
 <h2>🛤️ Versions</h2>
+<p>Note that starting in v2, the collection `q3-api-users` has been renamed to `users`. See `q3-api` docs for more details.</p>
 
-| Name                                                         | Key changes                                    |
-| ------------------------------------------------------------ | ---------------------------------------------- |
-| <a  href="https://github.com/3merge/q3-api/tree/v1.x">V1</a> | Upgrade to critical dependencies like Mongoose |
+| Name                                                         | Key changes                   |
+| ------------------------------------------------------------ | ----------------------------- |
+| <a  href="https://github.com/3merge/q3-api/tree/v2.x">V2</a> | Support multi-tenancy         |
+| <a  href="https://github.com/3merge/q3-api/tree/v1.x">V1</a> | Upgrade critical dependencies |

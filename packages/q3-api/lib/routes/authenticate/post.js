@@ -35,7 +35,7 @@ const getDeviceInfo = async (useragent, user) => {
 const LoginIntoAccount = async (
   {
     body: { email, password },
-    headers: { host },
+    headers: { origin },
     useragent,
   },
   res,
@@ -47,7 +47,7 @@ const LoginIntoAccount = async (
   await userResult.verifyPassword(password, true);
 
   const { _id: id, secret } = userResult;
-  const tokens = await generateIDToken(id, secret, host);
+  const tokens = await generateIDToken(id, secret, origin);
 
   await userResult.update({
     lastLoggedIn: new Date(),

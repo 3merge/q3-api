@@ -9,12 +9,18 @@ const genUser =
   (email = 'mibberson@3merge.ca', role = 'Developer') =>
   () =>
     Users.create({
+      enableServerToServer: true,
       firstName: 'Mike',
       lastName: 'Ibberson',
-      lang: 'en-CA',
+      lang: 'en',
       role,
       email,
     });
+
+const genDomain = () =>
+  Q3.model('domains').create({
+    lng: 'en',
+  });
 
 const setVerificationProps = async (user) => {
   const props = {
@@ -29,6 +35,7 @@ const setVerificationProps = async (user) => {
 module.exports = (email, role) =>
   conf
     .connect()
+    .then(genDomain())
     .then(genUser(email, role))
     .then(setVerificationProps)
     .then(async (user) => ({

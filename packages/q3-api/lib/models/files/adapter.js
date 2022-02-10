@@ -1,10 +1,13 @@
+const { get } = require('lodash');
 const AWSInterface = require('../../config/aws');
 
 module.exports = class FileUploadAdapter {
-  async handleUpload({ files }) {
-    const sdk = AWSInterface();
+  async handleUpload({ files, sensitive = true }) {
+    const bool =
+      String(sensitive) === 'true' || sensitive === true;
 
-    const method = sdk.addToBucket(true);
+    const sdk = AWSInterface();
+    const method = sdk.addToBucket(bool);
     const pathMap = Object.entries(files).reduce(
       (acc, [next, file]) => {
         acc[file.name] = next;
@@ -23,7 +26,7 @@ module.exports = class FileUploadAdapter {
         keys.map((name) =>
           this.uploads.push({
             relativePath: pathMap[name],
-            sensitive: true,
+            sensitive: bool,
             name,
           }),
         ),
@@ -80,6 +83,7 @@ module.exports = class FileUploadAdapter {
         );
       else
         await this.handleUpload({
+          sensitive: get(body, 'sensitive'),
           files,
         });
     }

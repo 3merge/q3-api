@@ -54,7 +54,7 @@
   },
   {
     "role": "Developer",
-    "coll": "q3-api-users",
+    "coll": "users",
     "op": "Read",
     "fields": ["!email"]
   },
@@ -68,6 +68,13 @@
     "role": "Developer",
     "coll": "emails",
     "op": "Read",
+    "ownership": "Any",
+    "fields": ["*"]
+  },
+  {
+    "role": "Developer",
+    "coll": "domain",
+    "op": "Create",
     "ownership": "Any",
     "fields": ["*"]
   }

@@ -2,6 +2,13 @@ const { Schema } = require('mongoose');
 
 const BaseUserModel = new Schema(
   {
+    // otherwise only bearer strategy works
+    // and that requires more legwork
+    enableServerToServer: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
     email: {
       type: Schema.Types.Email,
       required: true,
@@ -40,8 +47,7 @@ const BaseUserModel = new Schema(
     },
     lang: {
       type: String,
-      default: 'en-CA',
-      enum: ['en-CA', 'fr-CA'],
+      default: 'en',
     },
     active: {
       type: Boolean,
@@ -80,6 +86,13 @@ const BaseUserModel = new Schema(
     filters: Schema.Types.Mixed,
     sorting: Schema.Types.Mixed,
     tours: [String],
+    tel: Schema.Types.Tel,
+    birthday: Date,
+    occupation: String,
+    theme: String,
+    timezone: String,
+    tenant: String,
+    countryOfResidence: String,
   },
   {
     withUploads: true,

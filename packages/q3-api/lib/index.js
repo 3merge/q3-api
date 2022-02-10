@@ -57,6 +57,10 @@ const Q3 = {
   routes() {
     const { location } = app.locals;
     app.use(middleware(models.Users));
+    // can't require earlier without runtime errors
+    // leave as is!
+    // eslint-disable-next-line
+    app.use(require('./config/express-tenant'));
     runner();
 
     app.use(walker(__dirname));
