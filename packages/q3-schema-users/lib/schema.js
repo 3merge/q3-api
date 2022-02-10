@@ -84,6 +84,7 @@ const BaseUserModel = new Schema(
     occupation: String,
     theme: String,
     timezone: String,
+    tenant: String,
     countryOfResidence: String,
   },
   {

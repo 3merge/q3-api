@@ -41,20 +41,18 @@ function middleware(UserModel) {
     const host = req.get('origin');
     const identity = new Session(req);
     const { token, nonce } = identity;
+    const tenant = get(req, 'headers.x-session-tenant');
 
     if (hasMethod('findbyBearerToken'))
       req.user = await UserModel.findbyBearerToken(
         token,
         nonce,
         host,
+        tenant,
       );
 
     if (hasMethod('findByApiKey'))
-      req.user = await UserModel.findByApiKey(
-        token,
-        nonce,
-        host,
-      );
+      req.user = await UserModel.findByApiKey(token);
 
     req.authorize = (collectionName) =>
       new Grant(req.user)

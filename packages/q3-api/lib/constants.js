@@ -2,6 +2,7 @@ const CONSTANTS = {
   MODEL_NAMES: {
     USERS: 'users',
     NOTIFICATIONS: 'notifications',
+    DOMAINS: 'domains',
   },
   CONTEXT: {
     LOCALE: 'q3-session:locale',

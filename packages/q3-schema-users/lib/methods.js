@@ -16,6 +16,13 @@ const isVerifiedQuery = {
 
 const SECRET_EXPIRATION_IN_HRS = 120;
 
+const normalize = (xs) => {
+  const output = String(xs).trim();
+  return ['false', 'null', 'undefined', ''].includes(output)
+    ? null
+    : output;
+};
+
 const isWithinSecretExpirationHrsWindow = (
   lastUpdatedOnDateStamp,
 ) => {
@@ -265,5 +272,14 @@ module.exports = class UserAuthDecorator {
 
     await this.save();
     return stringify;
+  }
+
+  checkTenant(tenant) {
+    if (normalize(tenant) !== normalize(this.tenant))
+      throw new Error(
+        'Cannot authenticate using this tenant',
+      );
+
+    return true;
   }
 };
