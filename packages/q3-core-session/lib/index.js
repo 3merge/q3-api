@@ -3,6 +3,7 @@ const { createNamespace } = require('cls-hooked');
 const {
   SESSION_NAMESPACE,
   SESSION_KEY,
+  TENANT_KEY,
 } = require('./constants');
 
 const ev = {};
@@ -53,7 +54,16 @@ module.exports = {
         isObject(req) ? req[path] : undefined;
 
       const user = getFromReq('user');
+      const headers = getFromReq('headers');
+      const defaultTenant = isObject(headers)
+        ? headers['x-session-tenant']
+        : undefined;
+
       ns.set(SESSION_KEY, user);
+      ns.set(
+        TENANT_KEY,
+        isObject(user) ? user.tenant : defaultTenant,
+      );
 
       if (req && !req.session)
         req.session = {
