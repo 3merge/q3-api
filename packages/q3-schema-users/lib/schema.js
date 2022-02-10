@@ -2,6 +2,13 @@ const { Schema } = require('mongoose');
 
 const BaseUserModel = new Schema(
   {
+    // otherwise only bearer strategy works
+    // and that requires more legwork
+    enableServerToServer: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
     email: {
       type: Schema.Types.Email,
       required: true,

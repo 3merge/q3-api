@@ -52,7 +52,10 @@ function middleware(UserModel) {
       );
 
     if (hasMethod('findByApiKey'))
-      req.user = await UserModel.findByApiKey(token);
+      req.user = await UserModel.findByApiKey(
+        token,
+        tenant,
+      );
 
     req.authorize = (collectionName) =>
       new Grant(req.user)

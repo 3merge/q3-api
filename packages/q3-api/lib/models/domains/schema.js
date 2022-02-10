@@ -6,7 +6,12 @@ const {
 const DomainSchema = new mongoose.Schema(
   {
     resources: mongoose.Schema.Types.Mixed,
-    lng: String,
+    tenant: mongoose.Schema.Types.Mixed,
+    lng: {
+      type: String,
+      required: true,
+      default: 'en',
+    },
     title: String,
     brand: String,
     supportedLngs: [String],

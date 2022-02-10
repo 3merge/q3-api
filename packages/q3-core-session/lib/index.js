@@ -54,20 +54,15 @@ module.exports = {
         isObject(req) ? req[path] : undefined;
 
       const user = getFromReq('user');
-      const headers = getFromReq('headers');
-      const defaultTenant = isObject(headers)
-        ? headers['x-session-tenant']
-        : undefined;
+      const tenant = getFromReq('tenant');
 
       ns.set(SESSION_KEY, user);
-      ns.set(
-        TENANT_KEY,
-        isObject(user) ? user.tenant : defaultTenant,
-      );
+      ns.set(TENANT_KEY, tenant);
 
       if (req && !req.session)
         req.session = {
           [SESSION_KEY]: user,
+          [TENANT_KEY]: tenant,
         };
 
       Promise.all(execMap(req)).then(() => {

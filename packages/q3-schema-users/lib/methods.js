@@ -94,15 +94,23 @@ module.exports = class UserAuthDecorator {
     }
   }
 
-  static async findByApiKey(str = '') {
+  static async findByApiKey(str, tenant) {
     if (!str) return null;
-    return this.findOne({
-      apiKeys: str.trim(),
+    const u = await this.findOne({
+      enableServerToServer: true,
+      apiKeys: String(str).trim(),
       active: true,
     })
       .setOptions({ bypassAuthorization: true })
       .select('+apiKeys +uploads')
       .exec();
+
+    try {
+      u.checkTenant(tenant);
+      return u;
+    } catch (e) {
+      return null;
+    }
   }
 
   static async findbyBearerToken(...args) {

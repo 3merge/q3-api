@@ -1,21 +1,22 @@
 const { compose, redact } = require('q3-core-composer');
 const { Domains } = require('../../models');
+const { removeUnwantedProps } = require('./post');
 
 const getDomain = async (req, res) => {
-  const domain = await Domains.findOne({
-    lng: req.headers['content-language'] || 'en',
-    tenant: req.headers['x-session-tenant'],
-  });
+  const { tenant, tenantLng } = req;
 
-  res.json(
-    domain
-      ? {
-          domain: domain.toJSON(),
-        }
-      : {
-          domain: {},
-        },
-  );
+  res.json({
+    domain: removeUnwantedProps(
+      req.marshal(
+        await Domains.findOne({
+          lng: tenantLng,
+          tenant,
+        })
+          .lean()
+          .exec(),
+      ),
+    ),
+  });
 };
 
 getDomain.authorization = [

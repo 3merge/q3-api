@@ -70,5 +70,12 @@
     "op": "Read",
     "ownership": "Any",
     "fields": ["*"]
+  },
+  {
+    "role": "Developer",
+    "coll": "domain",
+    "op": "Create",
+    "ownership": "Any",
+    "fields": ["*"]
   }
 ]

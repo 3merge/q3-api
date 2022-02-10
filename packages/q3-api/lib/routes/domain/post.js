@@ -3,8 +3,24 @@ const { compose, redact } = require('q3-core-composer');
 const { omit, invoke } = require('lodash');
 const { Domains } = require('../../models');
 
+const removeUnwantedProps = (xs) =>
+  omit(xs, [
+    'uploads',
+    'thread',
+    'changelog',
+    'lastModifiedBy',
+    'active',
+    'id',
+    'createdAt',
+    'updatedAt',
+    'createdBy',
+  ]);
+
 const postDomain = async (req, res) => {
   const { files, marshal } = req;
+
+  // domain NOT domains
+  // that's a very important distinction here
   const grant = new Grant(req.user)
     .can('Create')
     .on('domain')
@@ -15,13 +31,18 @@ const postDomain = async (req, res) => {
     grant,
   );
 
-  const tenant = req.headers['x-session-tenant'];
+  const { tenant, tenantLng } = req;
   const domain = await Domains.findOne({
-    lng: req.headers['content-language'] || 'en',
+    lng: tenantLng,
     tenant,
   }).select('+uploads');
 
   invoke(req.user, 'checkTenant', tenant);
+
+  // cannot modify by anyone
+  delete body.tenant;
+  delete body.lng;
+
   await domain.handleReq({ body, files });
   await domain.set(body).save();
 
@@ -35,7 +56,7 @@ const postDomain = async (req, res) => {
       photo: null,
 
       // defaults in case they've been stripped out.
-      ...omit(marshal(domain), ['uploads', 'thread']),
+      ...removeUnwantedProps(marshal(domain)),
     },
   });
 };
@@ -44,4 +65,7 @@ postDomain.authorization = [
   redact('domain').inResponse('domain').done(),
 ];
 
-module.exports = compose(postDomain);
+const Ctrl = compose(postDomain);
+
+Ctrl.removeUnwantedProps = removeUnwantedProps;
+module.exports = Ctrl;

@@ -24,6 +24,7 @@ const stripMongoDBProps = (i) => {
     delete cleaned.__v;
     delete cleaned.password;
     delete cleaned.secret;
+    delete cleaned.tenant;
 
     return Object.entries(cleaned).reduce(
       (a, [k, v]) =>

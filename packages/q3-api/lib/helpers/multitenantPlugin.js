@@ -1,20 +1,31 @@
 const { merge } = require('lodash');
+const mongoose = require('mongoose');
 const session = require('q3-core-session');
 
+const clean = (xs) => {
+  const output = String(xs).trim();
+  return ['false', 'null', 'undefined', ''].includes(output)
+    ? null
+    : output;
+};
+
+const getTenant = () => clean(session.get('TENANT'));
+
+/**
+ * This is required to sync all models with the Domains model.
+ * It's implementation is similar to our access control.
+ */
 const multitenantPlugin = (Schema) => {
   Schema.add({
-    tenant: String,
+    tenant: mongoose.Schema.Types.Mixed,
   });
 
   function assignTenantToQuery() {
-    const tenant = session.get('TENANT');
-
-    if (tenant)
-      this.setQuery(
-        merge(this.getQuery(), {
-          tenant,
-        }),
-      );
+    this.setQuery(
+      merge(this.getQuery(), {
+        tenant: getTenant(),
+      }),
+    );
   }
 
   Schema.pre('find', assignTenantToQuery);
@@ -26,8 +37,10 @@ const multitenantPlugin = (Schema) => {
   Schema.pre('distinct', assignTenantToQuery);
 
   Schema.pre('save', function injectTenantId() {
-    this.tenant = session.get('TENANT');
+    this.tenant = getTenant();
   });
 };
+
+multitenantPlugin.clean = clean;
 
 module.exports = multitenantPlugin;
