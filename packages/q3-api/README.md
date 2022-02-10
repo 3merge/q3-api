@@ -120,7 +120,23 @@ important for developers who intend to run integration
 testing tools like `supertest`. Otherwise, you can delete
 `config.js` and include its code here instead.
 
+Note that you can insert global functionality at the top of
+the file, before requiring/importing your config. Below,
+you'll see examples of two cases this might be useful.
+
 ```javascript
+// only include this if you desire multi-tenancy
+require('mongoose').plugin(
+  require('q3-api').utils.multitenantPlugin,
+);
+
+// if you're coming from v2, you might need to revert the collection name
+require('q3-api/lib/constants').change(
+  'MODEL_NAMES',
+  'USERS',
+  'q3-api-users',
+);
+
 const Q3 = require('q3-api');
 const config = require('./config');
 
@@ -139,6 +155,9 @@ a chore executes, it will look for a file with a
 corresponding name. So, if `/chores/example.js` exists and a
 chore named "example" runs, then Q3 can dynamically run that
 file.
+
+Like `index.js`, you may need to insert some global plugins
+in this file since it runs independent of the web server.
 
 ```javascript
 require('q3-api/lib/startQueue')(__dirname);
@@ -207,6 +226,17 @@ Docs coming soon.
 
 Q3 includes a few common API routes. These deal with core
 functionalities like authentication, auditing and logging.
+
+**Note that all routes, both automated and client-made,
+accept custom headers for controlling content and
+authorization. See the table below for more information.**
+
+| Header             | Description                                                     |
+| ------------------ | --------------------------------------------------------------- |
+| `Authorization`    | Takes either a Bearer or Apikey token.                          |
+| `Content-Language` | Changes the locale of the API and domain.                       |
+| `X-Session-Nonce`  | Used to decrypt bearer tokens.                                  |
+| `X-Session-Tenant` | Used to target a tenant. Necessary if there's multiple domains. |
 
 ### GET /audit
 
