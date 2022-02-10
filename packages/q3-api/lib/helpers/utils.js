@@ -99,6 +99,9 @@ const handleExtRefData = async ({ data }) => {
   );
 };
 
+const replaceSpaces = (str) =>
+  String(str).replace(/\s/gi, '%20');
+
 module.exports = {
   toQuery,
   toUndefined,
@@ -107,4 +110,5 @@ module.exports = {
   joinJsFileWithAppRoot,
   setExecutableTemplateVariablesInRequest,
   setExecutableTemplatePathInRequest,
+  replaceSpaces,
 };

@@ -3,8 +3,15 @@ const { compose, redact } = require('q3-core-composer');
 const { omit, invoke } = require('lodash');
 const { Domains } = require('../../models');
 
-const removeUnwantedProps = (xs) =>
-  omit(xs, [
+const removeUnwantedProps = (xs) => ({
+  logo: null,
+  favicon: null,
+  terms: null,
+  cancellation: null,
+  privacy: null,
+  photo: null,
+
+  ...omit(xs, [
     'uploads',
     'thread',
     'changelog',
@@ -14,7 +21,8 @@ const removeUnwantedProps = (xs) =>
     'createdAt',
     'updatedAt',
     'createdBy',
-  ]);
+  ]),
+});
 
 const postDomain = async (req, res) => {
   const { files, marshal } = req;
@@ -47,17 +55,7 @@ const postDomain = async (req, res) => {
   await domain.set(body).save();
 
   res.update({
-    domain: {
-      logo: null,
-      favicon: null,
-      terms: null,
-      cancellation: null,
-      privacy: null,
-      photo: null,
-
-      // defaults in case they've been stripped out.
-      ...removeUnwantedProps(marshal(domain)),
-    },
+    domain: removeUnwantedProps(marshal(domain)),
   });
 };
 

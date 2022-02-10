@@ -29,10 +29,10 @@ test('makeVirtualFilePathPlugin should make virtual paths', () => {
   const fn = get.mock.calls[0][0];
   expect(
     fn(undefined, undefined, {
-      testFilePath: 'foo.png',
+      testFilePath: 'foo (1).png',
       _id: 1,
     }),
-  ).toMatch('1/foo.png');
+  ).toMatch('1/foo%20(1).png');
 
   expect(
     fn(undefined, undefined, {

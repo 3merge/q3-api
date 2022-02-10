@@ -1,5 +1,6 @@
 const { get } = require('lodash');
 const AWSInterface = require('../config/aws');
+const { replaceSpaces } = require('./utils');
 
 module.exports = (Schema, path) => {
   const referencePath = `${path}FilePath`;
@@ -14,7 +15,9 @@ module.exports = (Schema, path) => {
 
     return bucketKey &&
       !['null', 'undefined'].includes(String(bucketKey))
-      ? sdk.getPublic(`${doc._id}/${bucketKey}`)
+      ? replaceSpaces(
+          sdk.getPublic(`${doc._id}/${bucketKey}`),
+        )
       : null;
   });
 };

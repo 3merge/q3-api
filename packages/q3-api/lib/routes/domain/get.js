@@ -11,9 +11,7 @@ const getDomain = async (req, res) => {
         await Domains.findOne({
           lng: tenantLng,
           tenant,
-        })
-          .lean()
-          .exec(),
+        }).exec(),
       ),
     ),
   });

@@ -1,5 +1,6 @@
 const { Schema } = require('mongoose');
 const AWSInterface = require('../../config/aws');
+const { replaceSpaces } = require('../../helpers/utils');
 
 const FileSchema = new Schema(
   {
@@ -73,7 +74,9 @@ const UploadSchema = new Schema({
 UploadSchema.virtual('photo').get((value, v, doc) => {
   const sdk = AWSInterface();
   return doc.featuredUpload
-    ? sdk.getPublic(`${doc._id}/${doc.featuredUpload}`)
+    ? replaceSpaces(
+        sdk.getPublic(`${doc._id}/${doc.featuredUpload}`),
+      )
     : null;
 });
 
