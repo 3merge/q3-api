@@ -1,7 +1,4 @@
-// multi-tenancy enabled!
-require('mongoose').plugin(
-  require('q3-api').utils.multitenantPlugin,
-);
+process.env.ARCHITECTURE = 'MULTITENANT';
 
 const Q3 = require('q3-api');
 const setup = require('../fixtures');

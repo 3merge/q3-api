@@ -21,12 +21,13 @@ const multitenantPlugin = (Schema) => {
   });
 
   function assignTenantToQuery() {
+    const q = this.getQuery() || {};
     const s = session.get('ORIGIN');
 
     // prevents pre-queries from running
-    if (isString(s) && size(s))
+    if (isString(s) && size(s) && !('tenant' in q))
       this.setQuery(
-        merge(this.getQuery(), {
+        merge(q, {
           tenant: getTenant(),
         }),
       );
@@ -41,7 +42,8 @@ const multitenantPlugin = (Schema) => {
   Schema.pre('distinct', assignTenantToQuery);
 
   Schema.pre('save', function injectTenantId() {
-    this.tenant = getTenant();
+    if (this.isNew && !this.tenant)
+      this.tenant = getTenant();
   });
 };
 

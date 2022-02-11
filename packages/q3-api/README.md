@@ -26,6 +26,7 @@ CONNECTION=
 PORT=
 SECRET=
 WEB_CONCURRENCY=
+ARCHITECTURE=multitenant
 
 # AWS configurations for file sharing
 S3_ACCESS_KEY_ID=
@@ -125,11 +126,6 @@ the file, before requiring/importing your config. Below,
 you'll see examples of two cases this might be useful.
 
 ```javascript
-// only include this if you desire multi-tenancy
-require('mongoose').plugin(
-  require('q3-api').utils.multitenantPlugin,
-);
-
 // if you're coming from v2, you might need to revert the collection name
 require('q3-api/lib/constants').change(
   'MODEL_NAMES',

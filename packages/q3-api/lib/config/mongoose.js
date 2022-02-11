@@ -13,6 +13,7 @@ const {
 const versionControl = require('q3-plugin-changelog');
 const Files = require('../models/files');
 const { MODEL_NAMES } = require('../constants');
+const multitenantPlugin = require('../helpers/multitenantPlugin');
 
 require('q3-schema-types');
 
@@ -60,4 +61,11 @@ mongoose.plugin(accessControl, {
 });
 
 mongoose.plugin(versionControl);
+
+if (
+  String(process.env.ARCHITECTURE).toUpperCase() ===
+  'MULTITENANT'
+)
+  mongoose.plugin(multitenantPlugin);
+
 module.exports = mongoose;
