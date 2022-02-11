@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.2](https://github.com/3merge/q3-api/compare/v3.1.1...v3.1.2) (2022-02-11)
+
+
+### Bug Fixes
+
+* prevent tenancy query from running before session init ([5613cf7](https://github.com/3merge/q3-api/commit/5613cf788ca264cad5ae32a5e64cbe6246f7ddaa))
+
+
+
+
+
 # [3.1.0](https://github.com/3merge/q3-api/compare/v2.1.2...v3.1.0) (2022-02-10)
 
 
