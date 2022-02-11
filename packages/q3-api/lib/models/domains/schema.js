@@ -6,14 +6,24 @@ const {
 const DomainSchema = new mongoose.Schema(
   {
     resources: mongoose.Schema.Types.Mixed,
-    tenant: mongoose.Schema.Types.Mixed,
+    tenant: {
+      type: mongoose.Schema.Types.Mixed,
+      gram: true,
+      dedupe: true,
+    },
     lng: {
       type: String,
       required: true,
       default: 'en',
     },
-    title: String,
-    brand: String,
+    title: {
+      type: String,
+      gram: true,
+    },
+    brand: {
+      type: String,
+      gram: true,
+    },
     supportedLngs: [String],
     description: String,
     color: String,
@@ -25,6 +35,7 @@ const DomainSchema = new mongoose.Schema(
     collectionSingularName: 'domain',
     collectionPluralName: 'domains',
     enableOwnership: true,
+    bypassMultitenancy: true,
   },
 );
 

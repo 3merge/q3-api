@@ -1,3 +1,4 @@
+const session = require('q3-core-session');
 const context = require('q3-core-session/lib/plugin');
 const accessControl = require('q3-core-access/lib/plugin');
 const mongooseLeanVirtuals = require('mongoose-lean-virtuals-v2');
@@ -17,6 +18,10 @@ const multitenantPlugin = require('../helpers/multitenantPlugin');
 
 require('q3-schema-types');
 
+const isMultiTenancy =
+  String(process.env.ARCHITECTURE).toUpperCase() ===
+  'MULTITENANT';
+
 // for backwards compatibility
 mongoose.set('strictQuery', false);
 
@@ -28,6 +33,13 @@ mongoose.plugin(locking);
 mongoose.plugin(dedupe, {
   options: {
     active: true,
+  },
+  resolver() {
+    return isMultiTenancy
+      ? {
+          tenant: session.get('TENANT'),
+        }
+      : {};
   },
 });
 
@@ -62,10 +74,6 @@ mongoose.plugin(accessControl, {
 
 mongoose.plugin(versionControl);
 
-if (
-  String(process.env.ARCHITECTURE).toUpperCase() ===
-  'MULTITENANT'
-)
-  mongoose.plugin(multitenantPlugin);
+if (isMultiTenancy) mongoose.plugin(multitenantPlugin);
 
 module.exports = mongoose;

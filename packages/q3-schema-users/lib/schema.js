@@ -7,7 +7,6 @@ const BaseUserModel = new Schema(
     enableServerToServer: {
       type: Boolean,
       default: false,
-      required: true,
     },
     email: {
       type: Schema.Types.Email,

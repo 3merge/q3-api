@@ -1,4 +1,4 @@
-const { merge, size, isString } = require('lodash');
+const { merge, size, isString, get } = require('lodash');
 const mongoose = require('mongoose');
 const session = require('q3-core-session');
 
@@ -16,6 +16,9 @@ const getTenant = () => clean(session.get('TENANT'));
  * It's implementation is similar to our access control.
  */
 const multitenantPlugin = (Schema) => {
+  // mainly just for the domains collection
+  if (get(Schema.options, 'bypassMultitenancy')) return;
+
   Schema.add({
     tenant: mongoose.Schema.Types.Mixed,
   });

@@ -4776,9 +4776,9 @@ flush-write-stream@^1.0.2:
     readable-stream "^2.3.6"
 
 follow-redirects@^1.14.0:
-  version "1.14.6"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.6.tgz#8cfb281bbc035b3c067d6cd975b0f6ade6e855cd"
-  integrity sha512-fhUl5EwSJbbl8AR+uYL2KQDxLkdSjZGR36xy46AO7cOMTrCMON6Sa28FmAnC2tRTDbd/Uuzz3aJBv7EBN7JH8A==
+  version "1.14.8"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.8.tgz#016996fb9a11a100566398b1c6839337d7bfa8fc"
+  integrity sha512-1x0S9UVJHsQprFcEC/qnNzBLcIxsjAV905f/UkQxbclCsoTWlacCNOpQa/anodLl2uaEKFhfWOvM2Qg77+15zA==
 
 forever-agent@~0.6.1:
   version "0.6.1"
@@ -7792,10 +7792,10 @@ mongodb@4.2.1, mongodb@^4.1.3:
   optionalDependencies:
     saslprep "^1.0.3"
 
-mongoose-dedupe@^1.0.13:
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/mongoose-dedupe/-/mongoose-dedupe-1.0.13.tgz#d04d96fb67b0fa71aaa43c6344ef9caeb9dad342"
-  integrity sha512-Vent6a/TqOl+JqSRdAu9Wdq+jYandB0M+oGnNtMF2dhyhHg8hV9jrOr4lvNqCUhLehYlIcwQF3BaYIr0bs1XgA==
+mongoose-dedupe@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/mongoose-dedupe/-/mongoose-dedupe-1.1.0.tgz#3a2d6d83d37fd76f0de09f81236f2bb31f419cf9"
+  integrity sha512-Ozm4vBglhcvbDZ79RYrP5im7AOTtPWsByNo9XjdXG3gqIOyYuQDDBaotjKqBn7g+yJWj2spFjf+T7vO6SnDEZg==
   dependencies:
     mongoose "^5.8.5"
 
