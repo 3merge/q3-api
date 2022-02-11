@@ -71,4 +71,12 @@ describe('cors', () => {
     }).origin('http://foo.com', fn);
     expect(fn).toHaveBeenCalledWith(expect.any(Error));
   });
+
+  it('should convert asterisk to regex', async () => {
+    const fn = jest.fn();
+    process.env.WHITELIST_CORS = 'https://*.test.ca';
+
+    await cors({}).origin('https://sandbox.test.ca', fn);
+    expect(fn).toHaveBeenCalledWith(null, true);
+  });
 });
