@@ -98,10 +98,21 @@ const clean = (xs) => {
   if (!isObject(xs) || xs instanceof Date) return xs;
 
   return Object.entries(xs).reduce((acc, [key, v]) => {
-    if (v !== undefined)
+    if (v !== undefined) {
+      const out = clean(v);
+
+      if (
+        out !== null &&
+        !(out instanceof Date) &&
+        typeof out === 'object' &&
+        !Object.keys(out).length
+      )
+        return acc;
+
       Object.assign(acc, {
-        [key]: clean(v),
+        [key]: out,
       });
+    }
 
     return acc;
   }, {});
