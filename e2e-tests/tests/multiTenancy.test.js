@@ -157,6 +157,11 @@ describe('multi-tenancy', () => {
       .send({
         lng: 'es',
         brand: '3merge',
+        resources: {
+          titles: {
+            password: 'Password',
+          },
+        },
       })
       .expect(200);
 
@@ -171,6 +176,11 @@ describe('multi-tenancy', () => {
     expect(domain).toMatchObject({
       lng: 'fr',
       brand: '3merge',
+      resources: {
+        titles: {
+          password: 'Password',
+        },
+      },
     });
   });
 });

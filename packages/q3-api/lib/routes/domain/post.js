@@ -65,9 +65,13 @@ const postDomain = async (req, res) => {
 
   await domain.handleReq({ body, files });
   await domain.set(body).save();
+  const output = removeUnwantedProps(marshal(domain));
+
+  // see get.js for explanation
+  set(output, 'resources', get(domain, 'resources', {}));
 
   res.update({
-    domain: removeUnwantedProps(marshal(domain)),
+    domain: output,
   });
 };
 

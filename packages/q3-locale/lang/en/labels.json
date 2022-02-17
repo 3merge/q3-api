@@ -1,8 +1,6 @@
 {
   "temporaryPassword": "Temporary password",
   "accountID": "Account ID",
-  "subbies.$.active": "Active subby",
-  "subbies.$.name": "Active name",
   "add": "Add",
   "delete": "Delete",
   "nevermind": "Nevermind",
