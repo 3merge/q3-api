@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.2.0](https://github.com/3merge/q3-api/compare/v3.1.5...v3.2.0) (2022-02-17)
+
+
+### Features
+
+* default lang helper ([#163](https://github.com/3merge/q3-api/issues/163)) ([db4ede3](https://github.com/3merge/q3-api/commit/db4ede38db648481ac8ebe3bd4c5671dee790ac5))
+
+
+
+
+
 ## [3.1.5](https://github.com/3merge/q3-api/compare/v3.1.4...v3.1.5) (2022-02-14)
 
 
