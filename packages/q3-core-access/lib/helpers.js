@@ -104,6 +104,7 @@ const clean = (xs) => {
       if (
         out !== null &&
         !(out instanceof Date) &&
+        !Array.isArray(out) &&
         typeof out === 'object' &&
         !Object.keys(out).length
       )
