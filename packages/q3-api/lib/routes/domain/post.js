@@ -1,6 +1,6 @@
 const { Grant, Redact } = require('q3-core-access');
 const { compose, redact } = require('q3-core-composer');
-const { get, set, omit, invoke } = require('lodash');
+const { get, set, omit, invoke, merge } = require('lodash');
 const { Domains } = require('../../models');
 
 const removeUnwantedProps = (xs) => ({
@@ -39,10 +39,6 @@ const postDomain = async (req, res) => {
     grant,
   );
 
-  // this is a free-for-all object
-  // it might contain otherwise restricted key names
-  set(body, 'resources', get(req, 'body.resources'));
-
   const { tenant, tenantLng } = req;
   const domain = await Domains.findOne({
     lng: tenantLng,
@@ -50,6 +46,18 @@ const postDomain = async (req, res) => {
   }).select('+uploads');
 
   invoke(req.user, 'checkTenant', tenant);
+
+  // this is a free-for-all object
+  // it might contain otherwise restricted key names
+  set(
+    body,
+    'resources',
+    merge(
+      {},
+      get(domain, 'resources', {}),
+      get(req, 'body.resources'),
+    ),
+  );
 
   // cannot modify by anyone
   delete body.tenant;

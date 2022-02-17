@@ -105,5 +105,7 @@
   "domainPolicies": "Policies",
   "domainI18n": "Locale",
   "domainEmails": "Email templates",
-  "domainQueues": "Queues"
+  "domainQueues": "Queues",
+  "password": "Password",
+  "notifications": "Notifications"
 }

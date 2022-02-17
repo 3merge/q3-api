@@ -97,5 +97,7 @@
   "accountNotificationSettings": "Modify which system notifications you receive",
   "accountLocale": "Change your preferred language and timezone",
   "accountPassword": "Change your password",
-  "logout": "End your session and return to login"
+  "logout": "End your session and return to login",
+  "localeEditorChangeEffect": "After saving, refresh the page for your changes to take effect.",
+  "domainUpdated": "Domain settings have been updated"
 }

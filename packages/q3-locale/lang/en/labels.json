@@ -411,5 +411,6 @@
   "Type": "Type",
   "Canada": "Canada",
   "United States": "United States",
-  "addNew": "Add new"
+  "addNew": "Add new",
+  "supportedLngs": "Languages"
 }
