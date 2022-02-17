@@ -49,6 +49,11 @@ const SubControllHandlers = {
     if (!files) {
       await parent.pushSubDocument(fieldName, body);
     } else {
+      parent.checkAuthorizationForTotalSubDocument(
+        fieldName,
+        'Create',
+      );
+
       await parent.handleUpload({ files, ...body });
       await parent.save();
     }
