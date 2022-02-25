@@ -3,6 +3,7 @@
   "version": "2.1.3",
   "main": "lib/index.js",
   "dependencies": {
+    "clean-object-helper": "^1.0.0",
     "comparisons": "2.2.10",
     "flat": "^5.0.2",
     "lodash": "^4.17.20",
