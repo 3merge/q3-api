@@ -28,6 +28,7 @@
   "q3-api-users": "UserModel",
   "q3-api-permissions": "PermissionModel",
   "users": "Users",
+  "usersSearchPlaceholder": "Search by name or email",
   "searchPlaceholderUsers": "Search by name or email",
   "forgotPassword": "Forgot your password?",
   "ok": "OK, thanks",
