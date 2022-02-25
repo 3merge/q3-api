@@ -1,0 +1,25 @@
+{
+  "name": "q3-plugin-sequence",
+  "version": "3.0.0",
+  "description": "Incrementer mongoose plugin",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.20",
+    "q3-core-responder": "^3.1.0"
+  },
+  "peerDependencies": {
+    "mongoose": "^5.7.1"
+  },
+  "devDependencies": {
+    "q3-test-utils": "^3.1.0"
+  },
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node",
+    "preset": "q3-test-utils",
+    "setupFilesAfterEnv": [
+      "q3-test-utils/jest-setup.js"
+    ]
+  }
+}
