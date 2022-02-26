@@ -7,6 +7,7 @@ const {
   size,
   mergeWith,
 } = require('lodash');
+const clean = require('clean-object-helper');
 
 const invokeJSON = (v) =>
   v && 'toJSON' in v ? v.toJSON() : v;
@@ -90,34 +91,6 @@ exports.makeArray = (xs) =>
   compact(Array.isArray(xs) ? xs : [xs]);
 
 exports.concat = (xs) => xs.join('.');
-
-/// ////////////////// WILL CHECK AFTER
-
-const clean = (xs) => {
-  if (Array.isArray(xs)) return xs.map(clean);
-  if (!isObject(xs) || xs instanceof Date) return xs;
-
-  return Object.entries(xs).reduce((acc, [key, v]) => {
-    if (v !== undefined) {
-      const out = clean(v);
-
-      if (
-        out !== null &&
-        !(out instanceof Date) &&
-        !Array.isArray(out) &&
-        typeof out === 'object' &&
-        !Object.keys(out).length
-      )
-        return acc;
-
-      Object.assign(acc, {
-        [key]: out,
-      });
-    }
-
-    return acc;
-  }, {});
-};
 
 const hasLength = (xs) =>
   isObject(xs) && size(Object.keys(xs));

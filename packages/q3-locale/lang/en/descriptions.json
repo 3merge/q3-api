@@ -99,5 +99,12 @@
   "accountPassword": "Change your password",
   "logout": "End your session and return to login",
   "localeEditorChangeEffect": "After saving, refresh the page for your changes to take effect.",
-  "domainUpdated": "Domain settings have been updated"
+  "domainUpdated": "Domain settings have been updated",
+  "importFailed": "Import process failed to start",
+  "importStarted": "Import process queued",
+  "exportFailed": "Export process failed to start",
+  "exportStarted": "Export process queued",
+  "reportStarted": "Report process queued",
+  "reportFailed": "Report process failed to start",
+  "accountThemeSettings": "Control your login display preferences, such as light/dark mode."
 }

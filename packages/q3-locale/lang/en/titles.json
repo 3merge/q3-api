@@ -107,5 +107,6 @@
   "domainEmails": "Email templates",
   "domainQueues": "Queues",
   "password": "Password",
-  "notifications": "Notifications"
+  "notifications": "Notifications",
+  "accountThemeSettings": "Theme settings"
 }

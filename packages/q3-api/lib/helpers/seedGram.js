@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 const cluster = require('cluster');
 
-module.exports = (collection) => async () => {
+module.exports = async (collection) => {
   if (!cluster.isMaster) return;
 
   const mod = mongoose.models[collection];
