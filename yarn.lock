@@ -2907,9 +2907,9 @@ clean-css@^4.2.1:
     source-map "~0.6.0"
 
 clean-object-helper@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/clean-object-helper/-/clean-object-helper-1.0.0.tgz#366246a2e230ce6adab2134596081a9fb127da95"
-  integrity sha512-0/q+r0L1QYGUZnPlRqxBsVx7YhEumWab3o1N627sp9qJRpUANwyFlJTlI2pNBfyO8hPmcGVTwqPoDZy5PVvGVA==
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/clean-object-helper/-/clean-object-helper-1.0.1.tgz#2fb0a2ac2285f96d02eb2121ae3727e0cdf3fa9c"
+  integrity sha512-u9wQ9Ifws770QOltz3HYJzFC1NKMn4K4OEMdei2c6XI4cJ48mPL1TF8UsQEurSVDYiVeCWP3/UYOWYo+A0lj6A==
 
 clean-stack@^2.0.0:
   version "2.2.0"
@@ -7017,9 +7017,9 @@ luxon@^1.25.0:
   integrity sha512-VKsFsPggTA0DvnxtJdiExAucKdAnwbCCNlMM5ENvHlxubqWd0xhZcdb4XgZ7QFNhaRhilXCFxHuoObP5BNA4PA==
 
 m2e-validator@^1.3.9:
-  version "1.3.10"
-  resolved "https://registry.yarnpkg.com/m2e-validator/-/m2e-validator-1.3.10.tgz#49a1662c77fa060e01a6cc54b587ac9e73296708"
-  integrity sha512-eyhHZ4jvnbX2XIcziHFQxsHkoqH6LSUc4hOxW2GQ0P4NrGuc1HZOUIBmswNSXKQEvjEFQwD41MyEFdCl7F20Wg==
+  version "1.3.11"
+  resolved "https://registry.yarnpkg.com/m2e-validator/-/m2e-validator-1.3.11.tgz#7d66ebe3fc076363f9233f6f0d8d592cd0d770d8"
+  integrity sha512-ZypwaFvNAY/D7n0XPPCoAdhi+thyANRIzsSwpTBeYMuRIxXuA0Damm+M2jkuDDWM0CtJ5GV6EwPsYhtikhGV6A==
   dependencies:
     clean-object-helper "^1.0.0"
     express-validator "^6.3.0"
