@@ -8,6 +8,7 @@ const {
   mergeWith,
 } = require('lodash');
 const clean = require('clean-object-helper');
+const { getAll } = require('q3-core-session');
 
 const invokeJSON = (v) =>
   v && 'toJSON' in v ? v.toJSON() : v;
@@ -103,6 +104,21 @@ const toJSON = (xs) =>
       : xs
     : {};
 
+const makeSessionPayload = () => {
+  const s = getAll();
+
+  return {
+    q3: {
+      session: isObject(s)
+        ? Object.entries(s).reduce((acc, [k, d]) => {
+            acc[String(k).toLowerCase()] = d;
+            return acc;
+          }, {})
+        : {},
+    },
+  };
+};
+
 const merge = (...objs) =>
   mergeWith({}, ...objs, (obj, src) => {
     if (
@@ -114,6 +130,7 @@ const merge = (...objs) =>
     return undefined;
   });
 
+exports.makeSessionPayload = makeSessionPayload;
 exports.clean = clean;
 exports.hasLength = hasLength;
 exports.toJSON = toJSON;

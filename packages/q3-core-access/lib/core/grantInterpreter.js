@@ -10,6 +10,10 @@ const {
   size,
 } = require('lodash');
 
+/**
+ * DOES NOT YET SUPPORT $OR THAT WAS INTRODUCED IN COMPARISONS
+ * IN VERSION 2.4.0+
+ */
 const reduceConditionsIntoObject = (xs) =>
   size(xs)
     ? get(new Comparison(xs).query(), '$and', []).reduce(
