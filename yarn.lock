@@ -2077,10 +2077,10 @@ anymatch@^3.0.3, anymatch@~3.1.2:
     normalize-path "^3.0.0"
     picomatch "^2.0.4"
 
-api-query-params@^5.3.1:
-  version "5.3.1"
-  resolved "https://registry.yarnpkg.com/api-query-params/-/api-query-params-5.3.1.tgz#3530590e979dee245596875ce678baad9a378042"
-  integrity sha512-1Y+iFakZhZ025kOQ7bAXNT1MdsqQl0a0c/maod/81Q9M3cVxUtxjN3L3oMwQwsKxyQi1kpBMkfcyB4mVdIcvtw==
+api-query-params@5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/api-query-params/-/api-query-params-5.0.0.tgz#b4144e0b5ce361c8b2f2ae5bd6df6da44c265231"
+  integrity sha512-xdzUeRmq+v/jtE8L5VfGaXjT5LqyHvvVvWdSlai1BoKseocgzRv2eV63gFBGFR0XurZJ8EOlb8WhW24BXdKMmA==
 
 append-buffer@^1.0.2:
   version "1.0.2"
@@ -3101,10 +3101,10 @@ compare-func@^2.0.0:
     array-ify "^1.0.0"
     dot-prop "^5.1.0"
 
-comparisons@2.2.10:
-  version "2.2.10"
-  resolved "https://registry.yarnpkg.com/comparisons/-/comparisons-2.2.10.tgz#bf6d9fad9936ef2313695323f17b9e4b6fe86cbf"
-  integrity sha512-TUboAOc6G2Th+drBO6MRoH9nSRg9mSg/aGbpSz1PlWQIeO2KE/T4aO6UCtXXDkmxarsDEdzTiGqr8ibsjLpI7Q==
+comparisons@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/comparisons/-/comparisons-2.4.0.tgz#da9b0f9312ea313779a3bacc86545b26f3e7da86"
+  integrity sha512-+PHD7Pnp7jnNiqMzHrNCv/QQ6PHZJMEY2o0ALgNWviMbJCGNUQ+HTJR0iTDOuGPY7seEIjItk4A0KfJr4XEj+w==
   dependencies:
     flat "^5.0.0"
     lodash.get "^4.4.2"
