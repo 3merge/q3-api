@@ -1,4 +1,10 @@
-const { merge, size, isString, get } = require('lodash');
+const {
+  merge,
+  size,
+  isString,
+  get,
+  invoke,
+} = require('lodash');
 const mongoose = require('mongoose');
 const session = require('q3-core-session');
 
@@ -45,7 +51,12 @@ const multitenantPlugin = (Schema) => {
   Schema.pre('distinct', assignTenantToQuery);
 
   Schema.pre('save', function injectTenantId() {
-    if (this.isNew && !this.tenant)
+    if (
+      this.isNew &&
+      !this.tenant &&
+      // not a child
+      this._id.equals(get(invoke(this, 'parent'), '_id'))
+    )
       this.tenant = getTenant();
   });
 };

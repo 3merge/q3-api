@@ -2,10 +2,15 @@ const Q3 = require('q3-api');
 const mongoose = require('mongoose');
 const { assignSocialStatus } = require('./middleware');
 
-const SampleSchema = new mongoose.Schema({
-  test: String,
-  message: String,
-});
+const SampleSchema = new mongoose.Schema(
+  {
+    test: String,
+    message: String,
+  },
+  {
+    testing: 1,
+  },
+);
 
 const StudentSchema = new mongoose.Schema(
   {

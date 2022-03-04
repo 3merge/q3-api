@@ -14,6 +14,7 @@ beforeAll(async () => {
 beforeEach(async () => {
   access.refresh();
   await Q3.model('domains').deleteMany({});
+  await Q3.model('domainresources').deleteMany({});
   await Q3.model('users').updateOne({
     tenant: undefined,
   });
@@ -141,12 +142,11 @@ describe('multi-tenancy', () => {
   it('should modify domain', async () => {
     await Q3.model('users').updateOne({
       tenant: null,
-      lang: 'fr',
+      lang: 'es',
     });
 
     await Q3.model('domains').create({
       active: true,
-      lng: 'fr',
     });
 
     const {
@@ -174,13 +174,19 @@ describe('multi-tenancy', () => {
 
     expect(domain).toMatchObject(domain2);
     expect(domain).toMatchObject({
-      lng: 'fr',
       brand: '3merge',
+      lng: 'es',
       resources: {
         titles: {
           password: 'Password',
         },
       },
     });
+
+    // one for default en
+    // one for new es
+    expect(
+      Q3.model('domainresources').find(),
+    ).resolves.toHaveLength(2);
   });
 });

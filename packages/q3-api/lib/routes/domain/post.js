@@ -1,7 +1,11 @@
 const { Grant, Redact } = require('q3-core-access');
 const { compose, redact } = require('q3-core-composer');
-const { get, set, omit, invoke, merge } = require('lodash');
-const { Domains } = require('../../models');
+const { exception } = require('q3-core-responder');
+const { get, omit, invoke, merge } = require('lodash');
+const {
+  Domains,
+  DomainResources,
+} = require('../../models');
 
 const removeUnwantedProps = (xs) => ({
   logo: null,
@@ -25,10 +29,11 @@ const removeUnwantedProps = (xs) => ({
 });
 
 const postDomain = async (req, res) => {
-  const { files, marshal } = req;
+  let { tenantLng } = req;
+  const { files, marshal, tenant } = req;
 
-  // domain NOT domains
-  // that's a very important distinction here
+  invoke(req.user, 'checkTenant', tenant);
+
   const grant = new Grant(req.user)
     .can('Create')
     .on('domain')
@@ -39,39 +44,61 @@ const postDomain = async (req, res) => {
     grant,
   );
 
-  const { tenant, tenantLng } = req;
   const domain = await Domains.findOne({
+    tenant,
+  })
+    .select('+uploads')
+    .exec();
+
+  if (!domain)
+    exception('NotFound')
+      .field('tenant')
+      .msg('domainNotFound')
+      .toThrow();
+
+  if (body.lng) tenantLng = body.lng;
+  const domainresource = await DomainResources.findOne({
     lng: tenantLng,
     tenant,
-  }).select('+uploads');
+  }).exec();
 
-  invoke(req.user, 'checkTenant', tenant);
-
-  // this is a free-for-all object
-  // it might contain otherwise restricted key names
-  set(
-    body,
-    'resources',
-    merge(
-      {},
-      get(domain, 'resources', {}),
-      get(req, 'body.resources'),
-    ),
+  const resources = merge(
+    {},
+    get(domainresource, 'resources', {}),
+    get(req, 'body.resources'),
   );
 
-  // cannot modify by anyone
+  if (domainresource) {
+    domainresource.set('resources', resources, {
+      strict: false,
+    });
+
+    await domainresource.save();
+  } else {
+    await DomainResources.create({
+      lng: tenantLng,
+      resources,
+      tenant,
+    });
+  }
+
   delete body.tenant;
-  delete body.lng;
+  await domain.handleReq({
+    body,
+    files,
+  });
 
-  await domain.handleReq({ body, files });
   await domain.set(body).save();
-  const output = removeUnwantedProps(marshal(domain));
-
-  // see get.js for explanation
-  set(output, 'resources', get(domain, 'resources', {}));
 
   res.update({
-    domain: output,
+    domain: merge(
+      {},
+      removeUnwantedProps(marshal(domain)),
+      {
+        lng: tenantLng,
+        resources,
+      },
+    ),
   });
 };
 

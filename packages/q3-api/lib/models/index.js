@@ -2,6 +2,7 @@ const UserModel = require('q3-schema-users');
 const mongoose = require('../config/mongoose');
 const { MODEL_NAMES } = require('../constants');
 const Domains = require('./domains');
+const DomainResources = require('./domainsResources');
 const Emails = require('./emails');
 const NotifiationSchema = require('./notifications');
 
@@ -19,6 +20,7 @@ const Notifications = mongoose.model(
 
 module.exports = {
   Domains,
+  DomainResources,
   Emails,
   Users,
   Notifications,

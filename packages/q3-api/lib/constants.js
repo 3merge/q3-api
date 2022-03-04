@@ -3,6 +3,7 @@ const CONSTANTS = {
     USERS: 'users',
     NOTIFICATIONS: 'notifications',
     DOMAINS: 'domains',
+    DOMAINS_RESOURCES: 'domainresources',
   },
   CONTEXT: {
     LOCALE: 'q3-session:locale',

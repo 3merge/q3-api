@@ -20,9 +20,9 @@ module.exports = (req, res, next) => {
     ).split('-'),
   );
 
+  // language no longer served here
   return Domains.findOne({
     active: true,
-    lng: req.tenantLng,
     tenant,
   })
     .lean()
