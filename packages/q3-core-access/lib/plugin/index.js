@@ -5,11 +5,13 @@ const {
   lowerCase,
   isFunction,
   compact,
+  size,
 } = require('lodash');
 const Comparison = require('comparisons');
 const mongoose = require('mongoose');
 const { exception } = require('q3-core-responder');
 const {
+  makeSessionPayload,
   meetsUserRequirements,
   hasOptions,
 } = require('../helpers');
@@ -48,9 +50,10 @@ module.exports = (schema, pluginSettings = {}) => {
     const createdBy = get(user, '_id', null);
 
     const { ownership, documentConditions } = doc;
-    const { $and } = new Comparison(
+
+    const { $and, $or } = new Comparison(
       documentConditions,
-    ).query();
+    ).query(makeSessionPayload());
 
     if (
       doc.ownershipConditions &&
@@ -60,7 +63,8 @@ module.exports = (schema, pluginSettings = {}) => {
         __accessControlLock: new Date(),
       });
 
-    if ($and.length) this.and($and);
+    if (size($and)) this.and($and);
+    if (size($or)) this.or($or);
 
     if (ownership !== 'Any' && doc.hasBeenInterpreted) {
       const { operator, data } = doc.makeOwnershipQuery();

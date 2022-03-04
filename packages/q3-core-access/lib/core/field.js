@@ -1,7 +1,6 @@
 const Comparison = require('comparisons');
 const {
   isObject,
-  isFunction,
   get,
   compact,
   size,
@@ -9,10 +8,12 @@ const {
   uniq,
   set,
   pick,
-  invoke,
   merge,
 } = require('lodash');
-const { makeArray } = require('../helpers');
+const {
+  makeArray,
+  makeSessionPayload,
+} = require('../helpers');
 
 module.exports = function Field(
   fields = [],
@@ -27,29 +28,6 @@ module.exports = function Field(
     if (xs.wildcard) output = `*${output}*`;
     if (xs.negate) output = `!${output}`;
     return output;
-  };
-
-  const makeQ3Payload = () => {
-    const pathToDynamicPaths = [
-      user,
-      'constructor.getFieldSessionPaths',
-    ];
-
-    return {
-      q3: {
-        session: {
-          user: isFunction(get(...pathToDynamicPaths))
-            ? invoke(...pathToDynamicPaths)
-            : pick(user, [
-                '_id',
-                'role',
-                'email',
-                'name',
-                'active',
-              ]),
-        },
-      },
-    };
   };
 
   const cleanFields = (xs) =>
@@ -81,14 +59,32 @@ module.exports = function Field(
           const output =
             !size(test) ||
             new Comparison(test).eval(
-              merge(makeQ3Payload(), evaluationTarget),
+              merge(
+                {},
+                makeSessionPayload(),
+                {
+                  q3: {
+                    session: {
+                      // allows us to plug-in different users
+                      // to the same underlying session
+                      user: pick(user, [
+                        '_id',
+                        'role',
+                        'email',
+                        'name',
+                        'active',
+                      ]),
+                    },
+                  },
+                },
+                evaluationTarget,
+              ),
             )
               ? decorateGlob(item)
               : null;
 
           // eslint-disable-next-line
           item.glob = originalGlob;
-
           return output;
         };
 

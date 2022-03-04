@@ -5,16 +5,10 @@ const {
 
 const DomainSchema = new mongoose.Schema(
   {
-    resources: mongoose.Schema.Types.Mixed,
     tenant: {
       type: mongoose.Schema.Types.Mixed,
       gram: true,
       dedupe: true,
-    },
-    lng: {
-      type: String,
-      required: true,
-      default: 'en',
     },
     title: {
       type: String,
@@ -24,7 +18,11 @@ const DomainSchema = new mongoose.Schema(
       type: String,
       gram: true,
     },
-    supportedLngs: [String],
+    supportedLngs: {
+      default: ['en'],
+      type: [String],
+      required: true,
+    },
     description: String,
     color: String,
     theme: String,
