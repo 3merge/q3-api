@@ -3101,10 +3101,10 @@ compare-func@^2.0.0:
     array-ify "^1.0.0"
     dot-prop "^5.1.0"
 
-comparisons@2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/comparisons/-/comparisons-2.4.0.tgz#da9b0f9312ea313779a3bacc86545b26f3e7da86"
-  integrity sha512-+PHD7Pnp7jnNiqMzHrNCv/QQ6PHZJMEY2o0ALgNWviMbJCGNUQ+HTJR0iTDOuGPY7seEIjItk4A0KfJr4XEj+w==
+comparisons@3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/comparisons/-/comparisons-3.0.1.tgz#e4f4aaa2c8ade38087aa5edb71f620d98ae56256"
+  integrity sha512-p/9BTzPibQjYVcO8g+lj2a7IQDA1YEDKzZEk5OD8vaWvC8Phs0qDJmeR0nk2XLwAuDXWpsH4ZF7pOf+W1pqhHg==
   dependencies:
     flat "^5.0.0"
     lodash.get "^4.4.2"
@@ -9684,15 +9684,10 @@ side-channel@^1.0.4:
     get-intrinsic "^1.0.2"
     object-inspect "^1.9.0"
 
-sift@13.5.2:
+sift@13.5.2, sift@^15.1.0:
   version "13.5.2"
   resolved "https://registry.yarnpkg.com/sift/-/sift-13.5.2.tgz#24a715e13c617b086166cd04917d204a591c9da6"
   integrity sha512-+gxdEOMA2J+AI+fVsCqeNn7Tgx3M9ZN9jdi95939l1IJ8cZsqS8sqpJyOkic2SJk+1+98Uwryt/gL6XDaV+UZA==
-
-sift@^15.1.0:
-  version "15.1.0"
-  resolved "https://registry.yarnpkg.com/sift/-/sift-15.1.0.tgz#aab23d0372da52cc857d41d342fb0c5e3cc64971"
-  integrity sha512-AYm2xyUOglfMUyBiwtwIqlsjx33C4BS2QaVwe1PwAxoSa8RI5LKCSnBgTEhPvR8WNGjzVNUFUCNKCPJwaRpCDQ==
 
 sigmund@^1.0.1:
   version "1.0.1"

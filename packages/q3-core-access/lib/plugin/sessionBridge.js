@@ -12,7 +12,6 @@ const {
   isNil,
 } = require('lodash');
 const micromatch = require('micromatch');
-const mongoose = require('mongoose');
 const sift = require('sift');
 const { exception } = require('q3-core-responder');
 const Redact = require('../core/redact');
@@ -22,7 +21,10 @@ const {
   clean,
   hasKeys,
   concat,
+  invokeJSON,
 } = require('../helpers');
+
+const forward = (xs) => (fn) => fn(xs);
 
 const removeSpecialProps = (xs) =>
   omit(xs, [
@@ -305,43 +307,21 @@ class AccessControlSessionBridge {
     )
       return true;
 
-    const { data, operator } = grant.makeOwnershipQuery({
-      mongo: false,
+    const { data, operator } = grant.makeOwnershipQuery();
+
+    const siftPipeline = map(data, sift);
+    const siftCallback = forward({
+      ...invokeJSON(this),
+      createdBy: depopulateCreatedByReference(this),
     });
 
-    const createdBy = depopulateCreatedByReference(this);
+    if (operator === 'OR') {
+      return siftPipeline.some(siftCallback);
+    }
 
-    const compareAliasWithCurrentDocument = (xs) => {
-      const ref = {
-        ...this.toJSON(),
-        createdBy,
-      };
-
-      return Object.keys(xs).reduce((acc, curr) => {
-        if (!acc) return false;
-        const target = get(xs, curr);
-        const comparedTo = String(get(ref, curr));
-
-        if (Array.isArray(target))
-          return target.map(String).includes(comparedTo);
-
-        if (
-          isObject(target) &&
-          !(target instanceof mongoose.Types.ObjectId)
-        )
-          return sift({
-            [curr]: target,
-          })(comparedTo);
-
-        return isEqual(String(target), comparedTo);
-      }, true);
-    };
-
-    if (operator === 'OR')
-      return data.some(compareAliasWithCurrentDocument);
-
-    if (operator === 'AND')
-      return data.every(compareAliasWithCurrentDocument);
+    if (operator === 'AND') {
+      return siftPipeline.every(siftCallback);
+    }
 
     return this.isOwner();
   }

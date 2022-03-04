@@ -7,20 +7,9 @@ const {
   get,
   map,
   invoke,
-  size,
+  isObject,
 } = require('lodash');
-
-/**
- * DOES NOT YET SUPPORT $OR THAT WAS INTRODUCED IN COMPARISONS
- * IN VERSION 2.4.0+
- */
-const reduceConditionsIntoObject = (xs) =>
-  size(xs)
-    ? get(new Comparison(xs).query(), '$and', []).reduce(
-        (acc, curr) => Object.assign(acc, curr),
-        {},
-      )
-    : {};
+const { makeSessionPayload } = require('../helpers');
 
 module.exports = function GrantInterpreter(
   xs,
@@ -53,49 +42,35 @@ module.exports = function GrantInterpreter(
     };
   };
 
-  Grant.makeOwnershipQuery = function (options = {}) {
+  Grant.makeOwnershipQuery = function () {
     const pipeline = compose(defineAliasData, compact, map);
-    const mongo = get(options, 'mongo', true);
 
     return pipeline(
       this.ownershipAliases,
       ({ cast, documentConditions, foreign, local }) => {
         const q = get(currentUser, foreign);
-        const oadc = reduceConditionsIntoObject(
-          documentConditions,
-        );
 
         const withSubOwnershipAliasConditions = (data) => ({
-          ...oadc,
+          ...(Comparison.isAcceptableParam(
+            documentConditions,
+          )
+            ? new Comparison(documentConditions).query(
+                makeSessionPayload(),
+              )
+            : {}),
           [local]: data,
         });
-
-        const getAsObjectId = () =>
-          withSubOwnershipAliasConditions(
-            mongoose.Types.ObjectId(q),
-          );
-
-        const getAsObjectIdString = () =>
-          withSubOwnershipAliasConditions(
-            typeof q === 'object'
-              ? invoke(q, 'toString')
-              : q,
-          );
-
-        const castToObjectId = () =>
-          mongo
-            ? {
-                $or: [
-                  getAsObjectId(),
-                  getAsObjectIdString(),
-                ],
-              }
-            : getAsObjectId();
 
         try {
           return get(
             {
-              ObjectId: castToObjectId,
+              ObjectId: () =>
+                withSubOwnershipAliasConditions({
+                  $in: [
+                    mongoose.Types.ObjectId(q),
+                    isObject(q) ? invoke(q, 'toString') : q,
+                  ],
+                }),
             },
             cast,
           )();

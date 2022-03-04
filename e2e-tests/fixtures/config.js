@@ -1,4 +1,5 @@
 require('./models');
+require('./session');
 const Q3 = require('q3-api');
 
 module.exports = Q3.config({

@@ -50,6 +50,7 @@ module.exports = (schema, pluginSettings = {}) => {
     const createdBy = get(user, '_id', null);
 
     const { ownership, documentConditions } = doc;
+
     const { $and, $or } = new Comparison(
       documentConditions,
     ).query(makeSessionPayload());
@@ -63,7 +64,7 @@ module.exports = (schema, pluginSettings = {}) => {
       });
 
     if (size($and)) this.and($and);
-    if (size($or)) this.and($or);
+    if (size($or)) this.or($or);
 
     if (ownership !== 'Any' && doc.hasBeenInterpreted) {
       const { operator, data } = doc.makeOwnershipQuery();

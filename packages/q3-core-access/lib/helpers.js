@@ -135,3 +135,4 @@ exports.clean = clean;
 exports.hasLength = hasLength;
 exports.toJSON = toJSON;
 exports.merge = merge;
+exports.invokeJSON = invokeJSON;

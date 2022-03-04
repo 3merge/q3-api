@@ -353,6 +353,49 @@ describe('Access control via REST endpoints (user ownership)', () => {
         ownership: 'Any',
       },
     },
+    {
+      body: {
+        // see fixtures file
+        test: 'Foo',
+        message: 'Ignore',
+      },
+      expected: {
+        status: 403,
+      },
+      grant: {
+        fields: [
+          '*',
+          {
+            glob: 'samples',
+            wildcard: true,
+            negate: true,
+            test: ['test!={{q3.session.user.firstName}}'],
+          },
+        ],
+        ownership: 'Any',
+      },
+    },
+    {
+      body: {
+        test: 'Mike',
+        message: 'Ignore',
+      },
+      expected: {
+        status: 201,
+      },
+      grant: {
+        fields: [
+          '*',
+          {
+            glob: 'samples',
+            wildcard: true,
+            negate: true,
+            test: ['test={{q3.session.user.firstName}}'],
+          },
+        ],
+        ownership: 'Any',
+      },
+    },
   ])(
     'SUB-DOCUMENT CREATE operations',
     async ({
@@ -755,6 +798,147 @@ describe('Access control via REST endpoints (user ownership)', () => {
         'name',
         'Foo',
       );
+    });
+
+    it('should return from $or condition', async () => {
+      setDeveloperPermissionOnStudents({
+        fields: ['*'],
+        op: 'Create',
+      });
+
+      setDeveloperPermissionOnStudents({
+        fields: ['*'],
+        op: 'Read',
+        ownership: 'Any',
+        documentConditions: [
+          'socialStatus=Freshman',
+          {
+            operand: '$or',
+            expressions: [
+              'friends.name=Angelic',
+              'friends.name=Angela',
+            ],
+          },
+        ],
+      });
+
+      await Students.create({
+        name: 'Hidden',
+        friends: [
+          {
+            name: 'Angelic',
+          },
+          {
+            name: 'Henry',
+          },
+        ],
+      });
+
+      await agent
+        .post(makeApiPath())
+        .set({ Authorization })
+        .send({ name: 'Foo' })
+        .expect(201);
+
+      const { body } = await agent
+        .get(makeApiPath())
+        .set({ Authorization })
+        .expect(200);
+
+      expect(body.students).toHaveLength(1);
+      expect(body.students[0].name).toMatch('Hidden');
+    });
+
+    it('should apply session to ownership queries', async () => {
+      setDeveloperPermissionOnStudents({
+        fields: ['*'],
+        op: 'Create',
+      });
+
+      setDeveloperPermissionOnStudents({
+        fields: ['*'],
+        op: 'Read',
+        ownership: 'Own',
+        ownershipAliases: [
+          {
+            local: 'active',
+            foreign: 'active',
+            documentConditions: [
+              'name={{q3.session.testing}}',
+            ],
+          },
+        ],
+      });
+
+      await Students.create({
+        name: 'Hidden',
+        friends: [
+          {
+            name: 'Angelic',
+          },
+          {
+            name: 'Henry',
+          },
+        ],
+      });
+
+      await agent
+        .post(makeApiPath())
+        .set({ Authorization })
+        .send({ name: 'Foo' })
+        .expect(201);
+
+      const { body } = await agent
+        .get(makeApiPath())
+        .set({ Authorization })
+        .expect(200);
+
+      expect(body.students).toHaveLength(2);
+    });
+
+    it('should convert nested ownershipship query', async () => {
+      setDeveloperPermissionOnStudents({
+        fields: ['*'],
+        op: 'Update',
+        ownership: 'Own',
+        ownershipAliasesOnly: true,
+        ownershipAliases: [
+          {
+            local: 'active',
+            foreign: 'active',
+            documentConditions: [
+              'name={{q3.session.testing}}',
+            ],
+          },
+          {
+            local: 'createdBy',
+            foreign: '_id',
+            cast: 'ObjectId',
+          },
+        ],
+      });
+
+      setDeveloperPermissionOnStudents({
+        fields: ['*'],
+        op: 'Read',
+        ownership: 'All',
+      });
+
+      return agent
+        .patch(
+          makeApiPath(
+            get(
+              await Students.create({
+                name: 'Hidden',
+                createdBy: userSessionId,
+              }),
+              '_id',
+            ),
+          ),
+        )
+        .set({ Authorization })
+        .send({ age: 34 })
+        .expect(200);
     });
 
     it("should block updating another user's document", async () => {
