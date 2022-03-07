@@ -55,7 +55,8 @@ const multitenantPlugin = (Schema) => {
       this.isNew &&
       !this.tenant &&
       // not a child
-      this._id.equals(get(invoke(this, 'parent'), '_id'))
+      (!this._id ||
+        this._id.equals(get(invoke(this, 'parent'), '_id')))
     )
       this.tenant = getTenant();
   });
