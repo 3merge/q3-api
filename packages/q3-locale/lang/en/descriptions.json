@@ -106,5 +106,7 @@
   "exportStarted": "Export process queued",
   "reportStarted": "Report process queued",
   "reportFailed": "Report process failed to start",
-  "accountThemeSettings": "Control your login display preferences, such as light/dark mode."
+  "accountThemeSettings": "Control your login display preferences, such as light/dark mode.",
+  "showUnseenOnly": "Hide anything you've already seen/downloaded to keep this space clean.",
+  "notificationSettings": "There are no notifications to display from the last week. You can change your notification settings by updating your profile."
 }

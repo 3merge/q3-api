@@ -108,5 +108,8 @@
   "domainQueues": "Queues",
   "password": "Password",
   "notifications": "Notifications",
-  "accountThemeSettings": "Theme settings"
+  "accountThemeSettings": "Theme settings",
+  "showUnseenOnly": "Show only unseen notifications",
+  "usersNew": "New user",
+  "users": "Users"
 }

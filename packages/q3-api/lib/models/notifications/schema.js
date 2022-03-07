@@ -11,6 +11,7 @@ module.exports = new Schema(
     dismissedOn: Date,
     label: String,
     path: String,
+    excerpt: String,
   },
   {
     timestamps: true,

@@ -411,5 +411,7 @@
   "Canada": "Canada",
   "United States": "United States",
   "addNew": "Add new",
-  "supportedLngs": "Languages"
+  "supportedLngs": "Languages",
+  "newDownloadAvailable": "New download available",
+  "showUnseenOnly": "Toggle"
 }

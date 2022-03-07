@@ -45,7 +45,14 @@ class NotificationDecorator {
   }
 
   static async upload(
-    { name, data, user, buffer, options = {} },
+    {
+      name,
+      data,
+      user,
+      buffer,
+      options = {},
+      excerpt = '',
+    },
     columnMapDef,
   ) {
     const [, ext] = name.split('.');
@@ -64,6 +71,7 @@ class NotificationDecorator {
 
     await aws().add(fileName, buffer);
     const doc = await this.create({
+      excerpt,
       path: fileName,
       userId,
     });
@@ -92,11 +100,12 @@ class NotificationDecorator {
     );
   }
 
-  static async saveToSessionNotifications(label) {
+  static async saveToSessionNotifications(label, excerpt) {
     return this.create({
       hasSeen: false,
       userId: session.get('USER', '_id'),
       label,
+      excerpt,
     });
   }
 
