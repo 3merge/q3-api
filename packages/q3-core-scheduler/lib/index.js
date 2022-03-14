@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const EventEmitter = require('events');
+const session = require('q3-core-session');
 const cron = require('node-cron');
 const { performance } = require('perf_hooks');
 const { executeOnAsync } = require('q3-schema-utils');
@@ -21,6 +22,7 @@ module.exports = {
 
   queue: async (name, data, priority = 1) => {
     const job = await Scheduler.add({
+      tenant: session.get('TENANT'),
       payload: makePayload(data),
       priority,
       name,

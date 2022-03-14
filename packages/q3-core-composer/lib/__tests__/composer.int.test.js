@@ -26,18 +26,19 @@ beforeAll(() => {
 describe('compose', () => {
   it('should stack middleware', () => {
     const obj = () => null;
-    expect(compose(obj).stack).toHaveLength(4);
+    expect(compose(obj).stack).toHaveLength(5);
     expect(compose(obj).root).toEqual(expect.any(Function));
   });
 
-  it('should skip middleware without validation or authorizaion', async (done) => {
+  it('should skip middleware without validation or authorizaion', async () => {
     app.get(
       '/',
       compose((req, res) => {
         res.send();
       }),
     );
-    agent.get('/').expect(200).end(done);
+
+    return agent.get('/').expect(200);
   });
 
   it('should run validation', async () => {
@@ -78,8 +79,7 @@ describe('compose', () => {
         req.authorize = () =>
           Promise.resolve({
             coll: 'Foo',
-            fields: 'bar, quux',
-            readOnly: 'bar, quux',
+            fields: ['!foo'],
             role: 'Developer',
           });
 
@@ -92,6 +92,7 @@ describe('compose', () => {
     return agent
       .get('/authorization')
       .expect(({ body }) => {
+        console.log(body);
         expect(body.mono).not.toHaveProperty('foo');
         expect(body.mono).toMatchObject({
           bar: 1,

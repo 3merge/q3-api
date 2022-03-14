@@ -14,11 +14,14 @@ module.exports =
     let outside;
 
     return session
-      .hydrate(makeSessionObject(data), () =>
-        composeAsync(...fns)(data).catch((e) => {
+      .hydrate(makeSessionObject(data), () => {
+        session.set('ORIGIN', 'QUEUE');
+        session.set('TENANT', data.tenant);
+
+        return composeAsync(...fns)(data).catch((e) => {
           outside = e;
           return Promise.reject(e);
-        }),
-      )
+        });
+      })
       .catch(() => Promise.reject(outside));
   };
