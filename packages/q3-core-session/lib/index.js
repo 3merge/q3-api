@@ -41,6 +41,7 @@ const getIn = (obj, v) =>
     : obj;
 
 module.exports = {
+  runPromise: ns.runPromise.bind(ns),
   set: ns.set.bind(ns),
 
   get: (keyName, propertyPath, defaultValue) => {
@@ -50,7 +51,7 @@ module.exports = {
   },
 
   middleware: (req, res, next) =>
-    ns.run(() => {
+    ns.runPromise(async () => {
       const getFromReq = (path) =>
         isObject(req) ? req[path] : undefined;
 
@@ -67,7 +68,7 @@ module.exports = {
           [TENANT_KEY]: tenant,
         };
 
-      Promise.all(execMap(req)).then(() => {
+      await Promise.all(execMap(req)).then(() => {
         if (typeof getFromReq('onSession') === 'function') {
           req.onSession(req, res, next);
         } else {

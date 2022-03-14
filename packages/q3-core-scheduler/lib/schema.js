@@ -45,6 +45,7 @@ const Schema = new mongoose.Schema(
     },
     error: String,
     payload: String,
+    tenant: String,
   },
   {
     capped: {

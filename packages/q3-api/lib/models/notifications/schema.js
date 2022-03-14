@@ -12,6 +12,7 @@ module.exports = new Schema(
     label: String,
     path: String,
     excerpt: String,
+    localUrl: String,
   },
   {
     timestamps: true,
