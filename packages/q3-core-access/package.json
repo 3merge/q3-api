@@ -1,6 +1,6 @@
 {
   "name": "q3-core-access",
-  "version": "3.3.1",
+  "version": "3.3.5",
   "main": "lib/index.js",
   "dependencies": {
     "clean-object-helper": "^1.0.0",
@@ -10,7 +10,7 @@
     "micromatch": "^4.0.2",
     "mongoose": "^6.1.0",
     "q3-core-responder": "^3.1.0",
-    "q3-core-session": "^3.1.0",
+    "q3-core-session": "^3.3.5",
     "q3-schema-utils": "^3.1.0",
     "q3-utils": "^3.1.0",
     "sift": "^15.1.0"
