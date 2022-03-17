@@ -1,3 +1,4 @@
+require('./middleware');
 const UserModel = require('q3-schema-users');
 const mongoose = require('../../config/mongoose');
 const { MODEL_NAMES } = require('../../constants');
