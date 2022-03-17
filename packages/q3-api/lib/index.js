@@ -8,6 +8,7 @@ const {
 } = require('q3-core-responder');
 const i18next = require('i18next');
 const { middleware } = require('q3-core-composer');
+const SchedulerDispatch = require('q3-plugin-schedulerdispatch');
 const path = require('path');
 const runner = require('./config');
 const core = require('./config/core');
@@ -116,8 +117,15 @@ Q3.$app = app;
 Q3.$mongoose = mongoose;
 Q3.$i18 = i18next;
 
-utils.exception = exception;
+Q3.notifier = {
+  // exposes underlying class
+  commander: SchedulerDispatch.notify(models),
+  dispatcher: SchedulerDispatch.plugin,
+};
+
 Q3.utils = utils;
 
+Object.assign(Q3.utils, SchedulerDispatch.utils);
+Object.assign(Q3.utils, { exception });
 Object.assign(Q3, models);
 module.exports = Q3;
