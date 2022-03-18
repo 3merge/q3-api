@@ -27,6 +27,7 @@ const DomainSchema = new mongoose.Schema(
     color: String,
     theme: String,
     font: String,
+    listens: mongoose.Schema.Types.Mixed,
   },
   {
     restify: '*',

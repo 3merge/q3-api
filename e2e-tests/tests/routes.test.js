@@ -1,4 +1,11 @@
+jest.mock('q3-core-scheduler', () => ({
+  queue: jest.fn(),
+}));
+
+const Q3 = require('q3-api');
 const jwt = require('jsonwebtoken');
+const { queue } = require('q3-core-scheduler');
+const { first, last } = require('lodash');
 const setup = require('../fixtures');
 const { teardown } = require('../helpers');
 
@@ -14,6 +21,10 @@ beforeAll(async () => {
     .set({ Authorization })
     .send({ name: 'Jon' })
     .expect(201);
+});
+
+beforeEach(() => {
+  queue.mockClear();
 });
 
 afterAll(teardown);
@@ -70,6 +81,31 @@ describe('q3-api', () => {
 
       expect(profile.email).not.toMatch(email);
       expect(profile.firstName).toMatch(firstName);
+    });
+
+    it('should delete self', async () => {
+      await agent
+        .delete('/profile')
+        .set({ Authorization })
+        .expect(204);
+
+      // other tests need this
+      await Q3.model('users').updateOne(
+        {
+          _id: user._id,
+        },
+        {
+          $set: {
+            active: true,
+          },
+        },
+      );
+
+      await global.wait(() => {
+        expect(first(last(queue.mock.calls))).toMatch(
+          'onArchivedUser',
+        );
+      }, 250);
     });
   });
 
