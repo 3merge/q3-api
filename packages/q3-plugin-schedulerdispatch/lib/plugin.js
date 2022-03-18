@@ -35,43 +35,31 @@ const MongooseSchedulerDispatchPlugin = (
   args = {},
 ) => {
   const notifications = compact([args].flat());
-  let batchCache = [];
-  let timer;
 
-  const batch = async (queueArsg) => {
-    batchCache.push(queueArsg);
+  const batch = async (d) =>
+    Promise.all(
+      Object.entries(groupBy(d, 'name')).map(
+        ([name, b]) => {
+          const len = size(b);
+          const obj = first(b);
+          const delay = get(obj, 'delay', 0);
 
-    // restart the timer to debounce this;
-    if (timer) clearInterval(timer);
+          const clean = (xs) => omit(xs, ['delay', 'name']);
 
-    timer = setTimeout(async () => {
-      const collect = [...batchCache];
-      batchCache = [];
-
-      await Promise.all(
-        Object.entries(groupBy(collect, 'name')).map(
-          ([name, b]) => {
-            const len = size(b);
-            const obj = first(b);
-            const delay = get(obj, 'delay', 0);
-
-            const clean = (xs) =>
-              omit(xs, ['delay', 'name']);
-
-            if (len === 0) return null;
-            return len === 1
-              ? queue(name, clean(obj), 1, delay)
-              : queue(
-                  name,
-                  { batch: map(b, clean) },
-                  1,
-                  delay,
-                );
-          },
-        ),
-      );
-    }, 115);
-  };
+          if (len === 0) return null;
+          return len === 1
+            ? queue(name, clean(obj), 1, delay)
+            : queue(
+                name,
+                {
+                  batch: map(b, clean),
+                },
+                1,
+                delay,
+              );
+        },
+      ),
+    );
 
   async function execRule(
     {
@@ -236,9 +224,7 @@ const MongooseSchedulerDispatchPlugin = (
   });
 
   Schema.post('save', async (doc) => {
-    await Promise.all(
-      map(get(doc, '$locals.dispatchers', []), batch),
-    );
+    await batch(get(doc, '$locals.dispatchers', []));
 
     if (isObject(doc.$locals)) {
       Object.assign(doc.$locals, {

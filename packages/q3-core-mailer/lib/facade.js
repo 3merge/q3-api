@@ -15,8 +15,21 @@ const {
  * actually corresponds to the email template.
  */
 const interpretTemplateNameFromInitialCallerFunction = (
-  s = caller(),
-) => cleanCallerResponse(s);
+  str,
+) => {
+  const primary = caller();
+  const secondary = caller(2);
+
+  // eslint-disable-next-line
+  const s = str
+    ? str
+    : primary === secondary ||
+      String(secondary).includes('node_modules')
+    ? primary
+    : secondary;
+
+  return cleanCallerResponse(s);
+};
 
 async function MailerCoreFacade(
   user,
