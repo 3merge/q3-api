@@ -1,12 +1,5 @@
-const {
-  map,
-  includes,
-  isObject,
-  isString,
-  get,
-} = require('lodash');
+const { map, includes, isObject, get } = require('lodash');
 const mongoose = require('mongoose');
-const path = require('path');
 
 const decorateQueuedFunction =
   (fn) =>

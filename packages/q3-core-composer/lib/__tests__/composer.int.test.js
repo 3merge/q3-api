@@ -92,7 +92,6 @@ describe('compose', () => {
     return agent
       .get('/authorization')
       .expect(({ body }) => {
-        console.log(body);
         expect(body.mono).not.toHaveProperty('foo');
         expect(body.mono).toMatchObject({
           bar: 1,
