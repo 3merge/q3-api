@@ -14,8 +14,9 @@ const {
  * from the /chores directory, where the initial file name
  * actually corresponds to the email template.
  */
-const interpretTemplateNameFromInitialCallerFunction = () =>
-  cleanCallerResponse(caller());
+const interpretTemplateNameFromInitialCallerFunction = (
+  s = caller(),
+) => cleanCallerResponse(s);
 
 async function MailerCoreFacade(
   user,

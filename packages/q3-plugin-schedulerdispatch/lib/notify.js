@@ -33,10 +33,8 @@ module.exports = function NotifyDependencyLayer(
       );
 
       this.$exemptUserId = false;
-      this.$listener = get(
-        options,
-        'filename',
-        Mailer.Facade.interpretTemplateName(),
+      this.$listener = Mailer.Facade.interpretTemplateName(
+        get(options, 'filename'),
       );
 
       this.$users = [];
