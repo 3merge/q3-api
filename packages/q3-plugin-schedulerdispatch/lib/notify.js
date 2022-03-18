@@ -2,12 +2,7 @@ const Mailer = require('q3-core-mailer');
 const { get, map, pick, isObject } = require('lodash');
 const i18next = require('i18next');
 const Pipeline = require('./pipeline');
-const {
-  castId,
-  getWebAppUrlAsTenantUser,
-  stripFileName,
-  getTargetListener,
-} = require('./utils');
+const { castId, getId } = require('./utils');
 
 module.exports = function NotifyDependencyLayer(
   Models = {},
@@ -36,9 +31,12 @@ module.exports = function NotifyDependencyLayer(
         'context',
         {},
       );
+
       this.$exemptUserId = false;
-      this.$listener = stripFileName(
-        get(options, 'filename', getTargetListener()),
+      this.$listener = get(
+        options,
+        'filename',
+        Mailer.Facade.interpretTemplateName(),
       );
 
       this.$users = [];
@@ -49,13 +47,8 @@ module.exports = function NotifyDependencyLayer(
       );
     }
 
-    static castId(v) {
-      return castId(v);
-    }
-
     exemptUserId() {
       this.$exemptUserId = Boolean(this.$meta.userId);
-
       return this;
     }
 
@@ -75,16 +68,10 @@ module.exports = function NotifyDependencyLayer(
       return null;
     }
 
-    makeEmailTemplateNameFromUser(user = {}) {
-      return `${user.lang || 'en'}-${String(this.$listener)
-        .match(/[A-Z][a-z]+/g)
-        .join('-')}`.toLowerCase();
-    }
-
     negateId(query) {
       if (this.$exemptUserId) {
         const ne = {
-          $ne: this.constructor.castId(this.$meta.userId),
+          $ne: getId(this.$meta.userId),
         };
 
         if (isObject(query)) {
@@ -109,15 +96,11 @@ module.exports = function NotifyDependencyLayer(
       return query;
     }
 
-    concatOwnershipText(
-      initialWord,
-      user = {},
-      character = '',
-    ) {
-      let l = initialWord;
+    concatOwnershipTextForUser(user = {}) {
+      let l = this.$listener;
 
       const joinWithL = (str) => {
-        l = [l].concat(str).join(character);
+        l = [l].concat(str).join('');
       };
 
       if (this.$withOwnership) {
@@ -128,15 +111,40 @@ module.exports = function NotifyDependencyLayer(
       return l;
     }
 
-    async loadUsers(query) {
-      const formattedQuery = this.negateId(
-        this.constructor.castId(query),
-      );
+    isUserEqualTo(user = {}) {
+      return (key) => {
+        const id = get(this.$meta, key);
+        const userId = user._id;
 
+        try {
+          return userId.equals(id);
+        } catch (e) {
+          return userId === id;
+        }
+      };
+    }
+
+    translateForUser(user = {}) {
+      return (ns) => {
+        const t = i18next.getFixedT(user.lang || 'en');
+        const k = this.concatOwnershipTextForUser(user);
+        const out = t(`${ns}:${k}`, this.$context);
+
+        if (out === k && k !== this.$listener)
+          return t(
+            `${ns}:${this.$listener}`,
+            this.$context,
+          );
+
+        return out;
+      };
+    }
+
+    async loadUsers(query) {
       this.$users = await Pipeline(
         Models.Domains,
         this.$listener,
-        formattedQuery,
+        this.negateId(castId(query)),
       );
 
       return this;
@@ -145,22 +153,13 @@ module.exports = function NotifyDependencyLayer(
     async forEachUserAsync(cb) {
       return Promise.all(
         map(this.$users, (user) => {
-          const isEqualTo = (key) => {
-            const id = get(this.$meta, key);
-            try {
-              return user._id.equals(id);
-            } catch (e) {
-              return user._id === id;
-            }
-          };
-
           if (this.$withOwnership) {
+            const fn = this.isUserEqualTo(user);
+
             // eslint-disable-next-line
-            user.isDocumentMine = isEqualTo(
-              'documentAuthor',
-            );
+            user.isDocumentMine = fn('documentAuthor');
             // eslint-disable-next-line
-            user.isSubDocumentMine = isEqualTo(
+            user.isSubDocumentMine = fn(
               'subDocumentAuthor',
             );
           }
@@ -172,55 +171,26 @@ module.exports = function NotifyDependencyLayer(
 
     async notify() {
       return this.forEachUserAsync(async (user) => {
-        const callT = (ns) => {
-          const t = i18next.getFixedT(user.lang);
-          const k = this.concatOwnershipText(
-            this.$listener,
-            user,
-          );
+        const t = this.translateForUser(user);
 
-          const out = t(`${ns}:${k}`, this.$context);
-
-          if (out === k && k !== this.$listener)
-            return t(
-              `${ns}:${this.$listener}`,
-              this.$context,
-            );
-
-          return out;
-        };
-
-        const notificationOptions = {
+        return Models.Notifications.create({
           ...this.$meta,
           hasSeen: false,
-          label: callT('messages'),
-          excerpt: callT('descriptions'),
+          label: t('messages'),
+          excerpt: t('descriptions'),
           localUrl: this.getInAppLink(),
           userId: user._id,
-        };
-
-        return Models.Notifications.create(
-          notificationOptions,
-        );
+        });
       });
     }
 
     async send() {
-      return this.forEachUserAsync(async (user) => {
-        const templateName =
-          this.makeEmailTemplateNameFromUser(user);
-
-        const url = getWebAppUrlAsTenantUser(user);
-        const mail = Mailer(templateName).to([user.email]);
-
-        await mail.fromDatabase({
-          context: this.$context,
-          user,
-          url,
-        });
-
-        return mail.send();
-      });
+      return this.forEachUserAsync(async (user) =>
+        // look at the constructor and this.$listener
+        // just implements what Facade would normally automatically
+        // but it extends the name to other external methods in this class
+        Mailer.Facade(user, this.$context, this.$listener),
+      );
     }
   }
 

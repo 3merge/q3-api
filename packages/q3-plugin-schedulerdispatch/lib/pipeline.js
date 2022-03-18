@@ -1,6 +1,6 @@
 const session = require('q3-core-session');
 
-module.exports = (
+module.exports = async (
   collectionSource,
   notificationName,
   additionalUserQuery = {},

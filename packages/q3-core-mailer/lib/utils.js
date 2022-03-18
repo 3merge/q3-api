@@ -1,3 +1,6 @@
+const { isString, size } = require('lodash');
+const path = require('path');
+
 const isValidEmailAddress = (v) =>
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
     String(v).toLowerCase(),
@@ -49,3 +52,29 @@ exports.reduceListenersByLang = (users = [], getUrl) =>
 
     return acc;
   }, {});
+
+exports.langCode = langCode;
+
+exports.convertFromCamelCase = (initialStr) => {
+  const str = String(initialStr);
+  const parts = str.match(/[A-Z][a-z]+/g);
+
+  return (
+    size(parts) ? parts.join('-') : str
+  ).toLowerCase();
+};
+
+exports.getWebAppUrlAsTenantUser = (user = {}) => {
+  const url = process.env.WEB_APP;
+  const { tenant } = user;
+
+  if (tenant && isString(url)) {
+    const [protocol, host] = url.split('//');
+    return `${protocol}//${tenant}.${host}`;
+  }
+
+  return url;
+};
+
+exports.cleanCallerResponse = (str) =>
+  isString(str) ? path.basename(str).split('.')[0] : str;

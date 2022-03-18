@@ -8,7 +8,7 @@ jest.mock('fs', () => ({
 
 jest.mock('path', () => ({
   join: jest.fn(),
-  basename: jest.fn(),
+  basename: jest.fn().mockReturnValue('name.js'),
   extname: jest.fn(),
 }));
 
@@ -21,6 +21,9 @@ const {
   prefix,
   getTemplate,
   reduceListenersByLang,
+  getWebAppUrlAsTenantUser,
+  cleanCallerResponse,
+  convertFromCamelCase,
 } = require('../utils');
 
 describe('Mailer utils', () => {
@@ -108,6 +111,48 @@ describe('Mailer utils', () => {
 
       expect(grouped.en[0]).toHaveProperty('url', '/admin');
       expect(grouped.fr[0]).toHaveProperty('url', '/dev');
+    });
+  });
+
+  describe('getWebAppUrlAsTenantUser', () => {
+    it('should insert tenant into URL as subdomain', () => {
+      process.env.WEB_APP = 'https://google.ca';
+      const out = getWebAppUrlAsTenantUser({
+        tenant: '3merge',
+      });
+
+      expect(out).toMatch('https://3merge.google.ca');
+    });
+
+    it('should return virgin URL', () => {
+      process.env.WEB_APP = 'https://google.ca';
+      const out = getWebAppUrlAsTenantUser({
+        tenant: null,
+      });
+
+      expect(out).toMatch('https://google.ca');
+    });
+  });
+
+  describe('cleanCallerREsponse', () => {
+    it('should just get filename', () => {
+      expect(
+        cleanCallerResponse('/myfiles/name.js'),
+      ).toEqual('name');
+    });
+  });
+
+  describe('convertFromCamelCase', () => {
+    it('should combine with lang', () => {
+      expect(convertFromCamelCase('foobar')).toEqual(
+        'foobar',
+      );
+    });
+
+    it('should format and combine with lang', () => {
+      expect(convertFromCamelCase('onFooBar')).toEqual(
+        'foo-bar',
+      );
     });
   });
 });
