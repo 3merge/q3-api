@@ -1,6 +1,6 @@
 {
   "name": "q3-core-composer",
-  "version": "3.3.5",
+  "version": "3.4.0",
   "main": "lib/index.js",
   "dependencies": {
     "connect": "^3.7.0",
