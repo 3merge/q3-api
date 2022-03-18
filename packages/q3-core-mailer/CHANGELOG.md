@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.1](https://github.com/3merge/q3-api/compare/v3.4.0...v3.4.1) (2022-03-18)
+
+
+### Bug Fixes
+
+* callee ([5af1fdb](https://github.com/3merge/q3-api/commit/5af1fdb9e639a69a3a830b5fc73860d4db5eb8bc))
+
+
+
+
+
 # [3.4.0](https://github.com/3merge/q3-api/compare/v3.3.5...v3.4.0) (2022-03-18)
 
 
