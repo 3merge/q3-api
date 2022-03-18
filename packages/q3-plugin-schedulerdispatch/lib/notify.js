@@ -183,11 +183,16 @@ module.exports = function NotifyDependencyLayer(
     }
 
     async send() {
+      const body = {
+        ...this.$meta,
+        context: this.$context,
+      };
+
       return this.forEachUserAsync(async (user) =>
         // look at the constructor and this.$listener
         // just implements what Facade would normally automatically
         // but it extends the name to other external methods in this class
-        Mailer.Facade(user, this.$context, this.$listener),
+        Mailer.Facade(user, body, this.$listener),
       );
     }
   }

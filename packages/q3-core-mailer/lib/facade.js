@@ -1,5 +1,5 @@
 const caller = require('caller');
-const { compact, get } = require('lodash');
+const { compact, get, isObject } = require('lodash');
 const Core = require('./core');
 const {
   cleanCallerResponse,
@@ -33,7 +33,7 @@ const interpretTemplateNameFromInitialCallerFunction = (
 
 async function MailerCoreFacade(
   user,
-  context,
+  options,
   overrideTemplateName,
 ) {
   try {
@@ -53,8 +53,12 @@ async function MailerCoreFacade(
       get(user, 'email'),
     ]);
 
+    if (!isObject(options) || !('context' in options))
+      // eslint-disable-next-line
+      console.warn('Missing context in mailer options');
+
     await inst.fromDatabase({
-      context,
+      ...options,
       user,
       url,
     });

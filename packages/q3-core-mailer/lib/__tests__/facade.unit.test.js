@@ -13,7 +13,9 @@ describe('Facade', () => {
   it('should invoke Core with template variables', async () => {
     process.env.WEB_APP = 'https://google.ca';
     const context = {
-      foo: 1,
+      context: {
+        foo: 1,
+      },
     };
 
     const user = {
@@ -24,7 +26,7 @@ describe('Facade', () => {
 
     await Facade(user, context, 'onCustomerListener');
     expect(fromFn).toHaveBeenCalledWith({
-      context,
+      context: context.context,
       url: 'https://hooli.google.ca',
       user,
     });
