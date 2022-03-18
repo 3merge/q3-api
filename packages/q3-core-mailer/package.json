@@ -1,7 +1,7 @@
 {
   "name": "q3-core-mailer",
   "main": "lib/index.js",
-  "version": "3.4.2",
+  "version": "3.4.3",
   "dependencies": {
     "caller": "^1.1.0",
     "dotenv": "^10.0.0",
@@ -14,7 +14,7 @@
     "moment": "^2.29.1",
     "mongoose": "^6.1.0",
     "node-cron": "^3.0.0",
-    "q3-core-scheduler": "^3.4.2",
+    "q3-core-scheduler": "^3.4.3",
     "q3-schema-utils": "^3.1.0",
     "q3-test-utils": "^3.1.0"
   },
