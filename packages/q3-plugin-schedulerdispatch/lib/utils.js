@@ -1,4 +1,10 @@
-const { map, includes, isObject, get } = require('lodash');
+const {
+  map,
+  includes,
+  isObject,
+  get,
+  isString,
+} = require('lodash');
 const mongoose = require('mongoose');
 
 const decorateQueuedFunction =
@@ -23,17 +29,20 @@ const notInclusive =
   (curr) =>
     !includes(a, curr);
 
+const toObjectId = (v) =>
+  mongoose.Types.ObjectId.isValid(v)
+    ? mongoose.Types.ObjectId(v)
+    : undefined;
+
 // eslint-disable-next-line
 const extractId = (xs, options = {}) => {
+  if (isString(xs)) return toObjectId(xs);
   if (isObject(xs) && xs._id) {
     const v =
       // due to autopopulation
       isObject(xs._id) && xs._id._id ? xs._id._id : xs._id;
 
-    const output = mongoose.Types.ObjectId.isValid(v)
-      ? mongoose.Types.ObjectId(v)
-      : undefined;
-
+    const output = toObjectId(v);
     if (get(options, 'reassign'))
       Object.assign(xs, {
         _id: output,
@@ -44,6 +53,7 @@ const extractId = (xs, options = {}) => {
 };
 
 const getId = (xs) => extractId(xs) || null;
+
 const castId = (xs) => {
   extractId(xs, {
     reassign: true,
@@ -61,4 +71,5 @@ module.exports = {
   getId,
   mapIdToString,
   notInclusive,
+  toObjectId,
 };

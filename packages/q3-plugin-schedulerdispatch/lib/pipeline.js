@@ -4,11 +4,13 @@ module.exports = async (
   collectionSource,
   notificationName,
   additionalUserQuery = {},
-) =>
-  collectionSource.aggregate([
+) => {
+  const tnt = session.get('TENANT');
+
+  return collectionSource.aggregate([
     {
       '$match': {
-        'tenant': session.get('TENANT'),
+        'tenant': tnt,
       },
     },
     {
@@ -54,6 +56,7 @@ module.exports = async (
             '$match': {
               ...additionalUserQuery,
               'active': true,
+              'tenant': tnt,
               '$expr': {
                 '$in': ['$role', '$$role'],
               },
@@ -76,8 +79,10 @@ module.exports = async (
         'lastName': '$users.lastName',
         'lang': '$users.lang',
         'locale': '$users.timezone',
+        'timezone': '$users.timezone',
         'role': '$users.role',
         'tenant': '$users.tenant',
       },
     },
   ]);
+};

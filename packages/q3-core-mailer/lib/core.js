@@ -13,7 +13,8 @@ const {
 } = require('./helpers');
 
 // assumed to be registered already with mongoose
-const DEFAULT_MODEL_NAME = 'emails';
+const DEFAULT_MODEL_NAME =
+  process.env.EMAIL_COLLECTION || 'emails';
 
 module.exports = class Mailer {
   constructor(template, options = {}) {

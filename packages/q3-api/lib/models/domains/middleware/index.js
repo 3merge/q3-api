@@ -1,1 +1,2 @@
 require('./createDomainResources');
+require('./configureNotifications');
