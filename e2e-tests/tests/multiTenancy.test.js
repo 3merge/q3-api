@@ -14,6 +14,7 @@ beforeAll(async () => {
 beforeEach(async () => {
   access.refresh();
   await Q3.model('domains').deleteMany({});
+  await Q3.model('emails').deleteMany({});
   await Q3.model('domainresources').deleteMany({});
   await Q3.model('users').updateOne({
     tenant: undefined,
@@ -149,6 +150,29 @@ describe('multi-tenancy', () => {
       active: true,
     });
 
+    await Q3.model('emails').create([
+      {
+        name: '__en-header',
+        mjml: 'testing',
+        variables: {
+          foo: 1,
+        },
+      },
+      {
+        name: '__es-header',
+        mjml: 'keepsafe',
+        variables: {
+          foo: 1,
+          bar: 1,
+        },
+      },
+      {
+        name: 'en-testing-template',
+        mjml: 'testing2',
+        variables: {},
+      },
+    ]);
+
     const {
       body: { domain },
     } = await agent
@@ -157,6 +181,7 @@ describe('multi-tenancy', () => {
       .send({
         lng: 'es',
         brand: '3merge',
+        supportedLngs: ['en', 'es'],
         resources: {
           titles: {
             password: 'Password',
@@ -188,5 +213,27 @@ describe('multi-tenancy', () => {
     expect(
       Q3.model('domainresources').find(),
     ).resolves.toHaveLength(2);
+
+    const allEmails = await Q3.model('emails').find();
+
+    const expectEmailTemplateToMatch = (name, obj = {}) =>
+      expect(
+        allEmails.find((item) => item.name === name),
+      ).toMatchObject(obj);
+
+    expectEmailTemplateToMatch('__es-header', {
+      name: '__es-header',
+      mjml: 'keepsafe',
+      variables: {
+        foo: 1,
+        bar: 1,
+      },
+    });
+
+    expectEmailTemplateToMatch('es-testing-template', {
+      name: 'es-testing-template',
+      mjml: 'testing2',
+      variables: {},
+    });
   });
 });
