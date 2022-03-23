@@ -1,5 +1,6 @@
 const aqp = require('api-query-params');
 const read = require('url');
+const { get } = require('lodash');
 const { castObjectIds } = require('./utils');
 const casters = require('./controllers/casters');
 
@@ -30,7 +31,12 @@ module.exports = (req, Model) => {
 
   return {
     query: Object.assign(
-      execSearchBuildMethod(Model, datasource, search),
+      execSearchBuildMethod(
+        Model,
+        datasource,
+        // rely on uncasted search when available
+        get(q, 'search', search),
+      ),
       castObjectIds(where),
       {
         active: true,
