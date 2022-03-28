@@ -25,7 +25,8 @@ module.exports = async (
   const defaultTitles = require(`q3-locale/lang/${lng}/titles.json`);
 
   try {
-    const { applyToAll = false } = options;
+    const { applyToAll = false, overwrite = false } =
+      options;
     const doms = await mongoose.models.domainresources.find(
       {
         lng: applyToAll
@@ -40,28 +41,30 @@ module.exports = async (
       map(doms, async (dom) => {
         const { resources } = dom;
 
+        const facilitateMerge = (a, b, c) =>
+          overwrite
+            ? // takes our custom ones last
+              merge({}, a, c, b)
+            : merge({}, a, b, c);
+
         await dom.updateOne({
           resources: {
-            labels: merge(
-              {},
+            labels: facilitateMerge(
               defaultLabels,
               labels,
               get(resources, 'labels'),
             ),
-            descriptions: merge(
-              {},
+            descriptions: facilitateMerge(
               defaultDescriptions,
               descriptions,
               get(resources, 'descriptions'),
             ),
-            titles: merge(
-              {},
+            titles: facilitateMerge(
               defaultTitles,
               titles,
               get(resources, 'titles'),
             ),
-            helpers: merge(
-              {},
+            helpers: facilitateMerge(
               defaultHelpers,
               helpers,
               get(resources, 'helpers'),
