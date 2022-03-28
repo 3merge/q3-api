@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+const { isFunction, isObject } = require('lodash');
 const {
   filterByResourceName,
   filterByTaxonomy,
@@ -31,15 +32,26 @@ const isBase = filterBySimpleDiscountFormula([
 ]);
 
 module.exports = class DiscountFilter {
-  constructor(docs = []) {
+  constructor(docs = [], fn) {
     Object.assign(
       this,
       docs.reduce(
-        (acc, curr) => {
-          if (isWithinTimeFrame(curr)) {
-            if (isBase(curr)) acc.__$base.push(curr);
-            else if (isAugmented(curr))
-              acc.__$augmented.push(curr);
+        (acc, nextCurr) => {
+          if (
+            isObject(nextCurr) &&
+            typeof nextCurr.hasActiveTimeframe === 'boolean'
+              ? nextCurr.hasActiveTimeframe === true
+              : isWithinTimeFrame(nextCurr)
+          ) {
+            const curr = isFunction(fn)
+              ? fn(nextCurr)
+              : nextCurr;
+
+            if (curr) {
+              if (isBase(curr)) acc.__$base.push(curr);
+              else if (isAugmented(curr))
+                acc.__$augmented.push(curr);
+            }
           }
 
           return acc;

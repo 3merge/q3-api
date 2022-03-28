@@ -111,5 +111,7 @@
   "accountThemeSettings": "Theme settings",
   "showUnseenOnly": "Show only unseen notifications",
   "usersNew": "New user",
-  "users": "Users"
+  "users": "Users",
+  "contactInformation": "Contact information",
+  "appLocale": "Locale"
 }

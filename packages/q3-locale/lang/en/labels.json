@@ -413,5 +413,8 @@
   "addNew": "Add new",
   "supportedLngs": "Languages",
   "newDownloadAvailable": "New download available",
-  "showUnseenOnly": "Toggle"
+  "showUnseenOnly": "Toggle",
+  "uis": "UIs",
+  "calendar": "Calendar",
+  "table": "Table"
 }
