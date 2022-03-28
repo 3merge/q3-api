@@ -55,6 +55,7 @@ module.exports = async (
           {
             '$match': {
               ...additionalUserQuery,
+              'listens': notificationName,
               'active': true,
               'tenant': tnt,
               '$expr': {

@@ -42,7 +42,9 @@ const filterByTaxonomy = (id) => (v) => {
 };
 
 const filterByResourceName = (name) => (v) => {
-  const test = (re) => glob(re, { flags: 'i' }).test(name);
+  const test = (re) =>
+    re === name || glob(re, { flags: 'i' }).test(name);
+
   let pattern = compact(v.resource);
 
   if (!pattern) pattern = ['!*'];

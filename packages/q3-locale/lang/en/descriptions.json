@@ -108,5 +108,6 @@
   "reportFailed": "Report process failed to start",
   "accountThemeSettings": "Control your login display preferences, such as light/dark mode.",
   "showUnseenOnly": "Hide anything you've already seen/downloaded to keep this space clean.",
-  "notificationSettings": "There are no notifications to display from the last week. You can change your notification settings by updating your profile."
+  "notificationSettings": "There are no notifications to display from the last week. You can change your notification settings by updating your profile.",
+  "calendarSegments": "When saving a segment under a calendar, the system will not save the current date range. If you'd like to save the date range, please use the table view and use the appropriate filter."
 }

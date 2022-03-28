@@ -80,4 +80,15 @@ PricingSchema.pre('save', async function checkScope() {
 });
 
 PricingSchema.plugin(withDateRange);
+
+PricingSchema.virtual('hasActiveTimeframe').get(
+  function runDateRangeMethods() {
+    try {
+      return !this.hasExpired() && !this.hasNotYetBegun();
+    } catch (e) {
+      return undefined;
+    }
+  },
+);
+
 module.exports = PricingSchema;

@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
-const { compareValues } = require('../helpers');
+const {
+  compareValues,
+  filterByResourceName,
+} = require('../helpers');
 const DiscountSchema = require('..');
 
 DiscountSchema.set('target', 'normal');
@@ -32,6 +35,32 @@ describe('helpers', () => {
       );
 
       expect(winner).toHaveProperty('factor', 0.9);
+    });
+  });
+
+  describe('filterByResourceName', () => {
+    it('should match two strings', () => {
+      expect(
+        filterByResourceName('foo')({
+          resource: ['foo'],
+        }),
+      ).toBeTruthy();
+    });
+
+    it('should match by regex', () => {
+      expect(
+        filterByResourceName('fo0')({
+          resource: ['f*'],
+        }),
+      ).toBeTruthy();
+    });
+
+    it('should match by regex', () => {
+      expect(
+        filterByResourceName('bar')({
+          resource: ['foo'],
+        }),
+      ).toBeFalsy();
     });
   });
 });
