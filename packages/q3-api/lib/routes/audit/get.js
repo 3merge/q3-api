@@ -8,7 +8,6 @@ const {
 } = require('q3-schema-utils');
 // alternative to mongoose plugin methods
 const Report = require('q3-plugin-changelog/lib/report');
-const { translate } = require('../../helpers');
 
 const getCollectionName = (req) =>
   get(qp(req), 'query.collectionName');

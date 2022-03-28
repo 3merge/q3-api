@@ -11,12 +11,10 @@ const {
   isNil,
   pick,
   size,
-  uniq,
   uniqWith,
   isObject,
 } = require('lodash');
 const alpha = require('alphabetize-object-keys');
-const flat = require('flat');
 
 const USER_COLLECTION_NAME = 'q3-api-users';
 
