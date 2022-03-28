@@ -1,6 +1,6 @@
 {
   "name": "q3-plugin-sequence",
-  "version": "3.3.0",
+  "version": "3.4.5",
   "description": "Incrementer mongoose plugin",
   "main": "lib/index.js",
   "license": "MIT",
