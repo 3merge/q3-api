@@ -111,7 +111,7 @@ class AccessControlSessionBridge {
       get(
         this.__$getInitialGrantAndContext(op, {
           ensureIdIsAvailable: this.enforceOwnership(op),
-          noThrow: true,
+          noThrow: op !== 'Delete',
         }),
         'grant',
       ),
