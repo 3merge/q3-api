@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.6](https://github.com/3merge/q3-api/compare/v3.4.5...v3.4.6) (2022-04-04)
+
+
+### Bug Fixes
+
+* delete op check grant ([6637a2f](https://github.com/3merge/q3-api/commit/6637a2fc42a9337fb189953aa20d558bbb6ac754))
+
+
+
+
+
+
 ## [3.3.5](https://github.com/3merge/q3-api/compare/v3.3.4...v3.3.5) (2022-03-14)
 
 **Note:** Version bump only for package q3-core-access
