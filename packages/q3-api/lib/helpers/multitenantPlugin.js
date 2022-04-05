@@ -30,11 +30,17 @@ const multitenantPlugin = (Schema) => {
   });
 
   function assignTenantToQuery() {
+    const opts = this.getOptions() || {};
     const q = this.getQuery() || {};
     const s = session.get('ORIGIN');
 
     // prevents pre-queries from running
-    if (isString(s) && size(s) && !('tenant' in q))
+    if (
+      isString(s) &&
+      size(s) &&
+      !('tenant' in q) &&
+      !get(opts, 'bypassMultitenancy', false)
+    )
       this.setQuery(
         merge(q, {
           tenant: getTenant(),
