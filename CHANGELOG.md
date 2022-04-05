@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.7](https://github.com/3merge/q3-api/compare/v3.4.6...v3.4.7) (2022-04-05)
+
+
+### Bug Fixes
+
+* bypass tenant in extended ref ([ad7916e](https://github.com/3merge/q3-api/commit/ad7916ec90548fd657e84cf6691f73bce4644bcb))
+
+
+
+
+
 ## [3.4.6](https://github.com/3merge/q3-api/compare/v3.4.5...v3.4.6) (2022-04-04)
 
 
