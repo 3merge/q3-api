@@ -1,6 +1,6 @@
 {
   "name": "q3-core-rest",
-  "version": "3.4.6",
+  "version": "3.4.8",
   "description": "Mongoose schema REST exports",
   "main": "lib/index.js",
   "license": "MIT",
