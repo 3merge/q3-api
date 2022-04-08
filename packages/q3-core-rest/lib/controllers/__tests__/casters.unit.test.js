@@ -50,4 +50,21 @@ describe('Casters', () => {
   ])('.in(%s)', (a, b) => {
     expect(casters.in(a)).toEqual(b);
   });
+
+  test.each([
+    [
+      '623e080e8b6ba3b991818b7f',
+      {
+        $in: [
+          mongoose.Types.ObjectId(
+            '623e080e8b6ba3b991818b7f',
+          ),
+          '623e080e8b6ba3b991818b7f',
+        ],
+      },
+    ],
+    ['6 e8b6ba3b991818b7f', '6 e8b6ba3b991818b7f'],
+  ])('.id(%s)', (a, b) => {
+    expect(casters.id(a)).toEqual(b);
+  });
 });

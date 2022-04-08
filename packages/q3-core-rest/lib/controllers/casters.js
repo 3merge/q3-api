@@ -45,4 +45,10 @@ module.exports = {
       .match(/(".*?"|[^",]+)/g)
       .map(toString),
   string: toString,
+  id: (xs) =>
+    mongoose.isValidObjectId(xs)
+      ? {
+          $in: [mongoose.Types.ObjectId(xs), xs],
+        }
+      : xs,
 };
