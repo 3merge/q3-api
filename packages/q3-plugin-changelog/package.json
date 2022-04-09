@@ -1,6 +1,6 @@
 {
   "name": "q3-plugin-changelog",
-  "version": "3.4.8",
+  "version": "3.4.9",
   "main": "lib/index.js",
   "dependencies": {
     "alphabetize-object-keys": "^3.0.0",
@@ -13,7 +13,7 @@
     "mongoose": "^6.1.0",
     "q3-core-access": "^3.4.6",
     "q3-core-session": "^3.3.5",
-    "q3-plugin-extref": "^3.4.8",
+    "q3-plugin-extref": "^3.4.9",
     "q3-schema-utils": "^3.1.0"
   },
   "jest": {
