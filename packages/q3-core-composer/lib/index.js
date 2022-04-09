@@ -3,7 +3,6 @@ const {
   middleware: sessionMiddleware,
   runPromise,
 } = require('q3-core-session');
-const aa = require('express-async-handler');
 const dep = require('express-validator');
 const validateBody = require('m2e-validator/lib/middlewareHelper');
 const response = require('./postware');
@@ -12,9 +11,12 @@ const isAuthorized = require('./middleware/isAuthorized');
 const isVerified = require('./middleware/isLoggedIn');
 const { formatAsArray } = require('./utils');
 
-const bindToActiveSession =
-  (fn) => async (req, res, next) =>
-    runPromise(async () => fn(req, res, next));
+const bindToActiveSession = (fn) => (req, res, next) =>
+  runPromise(() =>
+    Promise.resolve(fn(req, res, next)).catch((e) => {
+      next(e);
+    }),
+  );
 
 const flatten = (a = [], b = []) => {
   const m = connect();
@@ -44,7 +46,7 @@ const compose = (ctr) =>
     flatten(ctr.authorization, [response]),
     sessionMiddleware,
     flatten(formatAsArray(ctr.postAuthorization)),
-    aa(bindToActiveSession(ctr)),
+    bindToActiveSession(ctr),
   ]);
 
 module.exports = {
