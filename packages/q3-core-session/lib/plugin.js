@@ -1,12 +1,12 @@
-const { getAll } = require('.');
+const { getActiveContext } = require('.');
 
 module.exports = (s) => {
   const copyToContext = function markPrivateContext() {
-    this.__$q3 = getAll();
+    this.__$q3 = getActiveContext();
   };
 
   const copyToInstance = () => ({
-    __$q3: getAll(),
+    __$q3: getActiveContext(),
   });
 
   // eslint-disable-next-line

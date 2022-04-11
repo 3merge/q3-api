@@ -223,15 +223,18 @@ const MongooseSchedulerDispatchPlugin = (
     );
   });
 
-  Schema.post('save', async (doc) => {
-    await batch(get(doc, '$locals.dispatchers', []));
+  Schema.post(
+    'save',
+    session.connect(async (doc) => {
+      await batch(get(doc, '$locals.dispatchers', []));
 
-    if (isObject(doc.$locals)) {
-      Object.assign(doc.$locals, {
-        dispatchers: [],
-      });
-    }
-  });
+      if (isObject(doc.$locals)) {
+        Object.assign(doc.$locals, {
+          dispatchers: [],
+        });
+      }
+    }),
+  );
 
   return Schema;
 };

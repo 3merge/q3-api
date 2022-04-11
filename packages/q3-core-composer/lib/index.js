@@ -1,22 +1,26 @@
 const connect = require('connect');
 const {
   middleware: sessionMiddleware,
-  runPromise,
 } = require('q3-core-session');
 const dep = require('express-validator');
 const validateBody = require('m2e-validator/lib/middlewareHelper');
+const { isFunction } = require('lodash');
 const response = require('./postware');
 const middleware = require('./middleware');
 const isAuthorized = require('./middleware/isAuthorized');
 const isVerified = require('./middleware/isLoggedIn');
 const { formatAsArray } = require('./utils');
 
-const bindToActiveSession = (fn) => (req, res, next) =>
-  runPromise(() =>
+const bindToActiveSession = (fn) => (req, res, next) => {
+  const callback = () =>
     Promise.resolve(fn(req, res, next)).catch((e) => {
       next(e);
-    }),
-  );
+    });
+
+  return isFunction(req.bindPromise)
+    ? req.bindPromise(callback)
+    : callback();
+};
 
 const flatten = (a = [], b = []) => {
   const m = connect();

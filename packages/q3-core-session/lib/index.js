@@ -44,6 +44,8 @@ module.exports = {
   runPromise: ns.runPromise.bind(ns),
   set: ns.set.bind(ns),
 
+  getActiveContext: () => ns.active,
+
   get: (keyName, propertyPath, defaultValue) => {
     const v = ns.get(keyName);
     if (!v) return defaultValue;
@@ -57,16 +59,23 @@ module.exports = {
 
       const user = getFromReq('user');
       const tenant = getFromReq('tenant');
+      const { active } = ns;
 
       ns.set(SESSION_KEY, user);
       ns.set(TENANT_KEY, tenant);
       ns.set(ORIGIN, getFromReq('originalUrl'));
 
-      if (req && !req.session)
-        req.session = {
-          [SESSION_KEY]: user,
-          [TENANT_KEY]: tenant,
-        };
+      if (req) {
+        if (!req.session)
+          req.session = {
+            [SESSION_KEY]: user,
+            [TENANT_KEY]: tenant,
+          };
+
+        // ensures that the active context doesn't
+        // get duplicated and pollute the underlying .Map
+        req.bindPromise = (fn) => ns.bind(fn, active)();
+      }
 
       await Promise.all(execMap(req)).then(() => {
         if (typeof getFromReq('onSession') === 'function') {
@@ -112,8 +121,13 @@ module.exports = {
     ev[keyName] = fn;
   },
 
-  hydrate: (ctx = {}, done) =>
-    new Promise((resolve, reject) => {
+  hydrate: (ctx = {}, done) => {
+    // eslint-disable-next-line
+    console.warn(
+      'This method has been deprecated. Please use `connect` instead.',
+    );
+
+    return new Promise((resolve, reject) => {
       ns.run(async () => {
         try {
           if ('__$q3' in ctx && isObject(ctx.__$q3))
@@ -129,5 +143,12 @@ module.exports = {
           reject();
         }
       });
-    }),
+    });
+  },
+
+  connect(fn) {
+    return function connectToActiveContext(...params) {
+      return ns.bind(fn, this.__$q3)(...params);
+    };
+  },
 };
