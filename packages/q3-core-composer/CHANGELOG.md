@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.10](https://github.com/3merge/q3-api/compare/v3.4.9...v3.4.10) (2022-04-11)
+
+
+### Bug Fixes
+
+* active session in post middleware ([a8890a8](https://github.com/3merge/q3-api/commit/a8890a8033f3183edd604b34908dc1d6214ab664))
+
+
+
+
+
 ## [3.4.9](https://github.com/3merge/q3-api/compare/v3.4.8...v3.4.9) (2022-04-09)
 
 **Note:** Version bump only for package q3-core-composer

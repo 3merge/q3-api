@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.10](https://github.com/3merge/q3-api/compare/v3.4.9...v3.4.10) (2022-04-11)
+
+
+### Bug Fixes
+
+* active session in post middleware ([a8890a8](https://github.com/3merge/q3-api/commit/a8890a8033f3183edd604b34908dc1d6214ab664))
+
+
+
+
+
+
 ## [3.3.5](https://github.com/3merge/q3-api/compare/v3.3.4...v3.3.5) (2022-03-14)
 
 
