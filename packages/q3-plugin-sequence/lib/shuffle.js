@@ -11,7 +11,6 @@ const {
   forEach,
   invoke,
 } = require('lodash');
-const moment = require('moment');
 const { exception } = require('q3-core-responder');
 
 module.exports = function shuffle(data = []) {
@@ -22,9 +21,7 @@ module.exports = function shuffle(data = []) {
     if (invoke(item, 'isModified', 'seq') && item.updatedAt)
       Object.assign(item, {
         // this gives us an edge over equally modified seqs
-        updatedAt: moment(item.updatedAt)
-          .add(1, 'milliseconds')
-          .toISOString(),
+        updatedAt: new Date().toISOString(),
       });
   };
 
