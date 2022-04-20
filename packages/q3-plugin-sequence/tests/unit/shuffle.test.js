@@ -237,7 +237,7 @@ describe('shuffle', () => {
         id: 1,
         seq: 3,
         type: 'Note',
-        updatedAt: '2021-11-11T19:29:02.074Z',
+        updatedAt: expect.any(String),
       },
       {
         id: 2,
