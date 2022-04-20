@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.12](https://github.com/3merge/q3-api/compare/v3.4.11...v3.4.12) (2022-04-20)
+
+**Note:** Version bump only for package q3-plugin-extref
+
+
+
+
+
 ## [3.4.10](https://github.com/3merge/q3-api/compare/v3.4.9...v3.4.10) (2022-04-11)
 
 **Note:** Version bump only for package q3-plugin-extref
