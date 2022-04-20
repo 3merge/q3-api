@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "etag": "^1.8.1",
-    "moment": "^2.29.1"
+    "moment": "^2.29.3"
   },
   "jest": {
     "verbose": true,
