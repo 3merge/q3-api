@@ -9,18 +9,33 @@ const {
   isObject,
   size,
   forEach,
+  invoke,
 } = require('lodash');
+const moment = require('moment');
 const { exception } = require('q3-core-responder');
 
 module.exports = function shuffle(data = []) {
   const orderBySeqAndUpdatedAt = (xs) =>
     orderBy(xs, ['seq', 'updatedAt'], ['asc', 'asc']);
 
-  forEach(data, ({ seq }) => {
+  const adjustUpdatedTimestamp = (item) => {
+    if (invoke(item, 'isModified', 'seq') && item.updatedAt)
+      Object.assign(item, {
+        // this gives us an edge over equally modified seqs
+        updatedAt: moment(item.updatedAt)
+          .add(1, 'milliseconds')
+          .toISOString(),
+      });
+  };
+
+  forEach(data, (item) => {
+    const { seq } = item;
+
     if (seq < 1 || seq > size(data))
       exception('Validation')
         .msg('cannotSetOutOfBoundSequence')
         .throw();
+    else adjustUpdatedTimestamp(item);
   });
 
   orderBySeqAndUpdatedAt(data).forEach(
@@ -52,7 +67,9 @@ module.exports = function shuffle(data = []) {
         if (shouldSkip(currItem)) return acc;
 
         if (isEqualTo(currItem.seq)) {
-          if (wasUpdatedEarlier(currItem)) return item.seq;
+          if (wasUpdatedEarlier(currItem)) {
+            return item.seq;
+          }
 
           return minus;
         }

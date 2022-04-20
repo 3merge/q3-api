@@ -9,7 +9,7 @@ module.exports = {
   },
 
   SubDocumentSequenceParentMiddleware(Schema, subdoc) {
-    Schema.pre('validate', function runShuffleFunction() {
+    Schema.post('validate', function runShuffleFunction() {
       shuffle(get(this, subdoc, []));
     });
   },

@@ -6,6 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "lodash": "^4.17.20",
+    "moment": "^2.29.1",
     "q3-core-responder": "^3.1.0"
   },
   "peerDependencies": {
