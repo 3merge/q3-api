@@ -19,8 +19,7 @@
     "test": "yarn test:packages && yarn test:packages-scheduler && yarn test:packages-schedulerdispatch && yarn test:packages-ngrams && yarn test:packages-extref && yarn test:packages-sequence && yarn test:packages-changestream && yarn test:e2e",
     "upload": "lerna publish",
     "demo-web": "nodemon demo",
-    "demo-worker": "nodemon demo/worker",
-    "docs": "jsdoc -c jsdoc.json"
+    "demo-worker": "nodemon demo/worker"
   },
   "workspaces": [
     "demo",
@@ -28,7 +27,6 @@
     "packages/*"
   ],
   "devDependencies": {
-    "codecov": "^3.8.3",
     "eslint": "^7.15.0",
     "eslint-config-node-3merge": "^1.2.1",
     "jest": "^27.4.3",
