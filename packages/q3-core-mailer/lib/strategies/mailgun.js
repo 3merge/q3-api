@@ -1,19 +1,25 @@
-const mailgun = require('mailgun-js');
+const formData = require('form-data');
+const Mailgun = require('mailgun.js');
 
 module.exports = () => {
-  const mg = mailgun({
-    apiKey: process.env.MAILGUN_ACCESS_TOKEN,
-    domain: process.env.MAILGUN_DOMAIN,
-    testMode: process.env.MAILGUN_DEBUG,
+  const mailgun = new Mailgun(formData);
+  const mg = mailgun.client({
+    key: process.env.MAILGUN_ACCESS_TOKEN,
+    username: 'api',
   });
 
   return {
-    send: (data) =>
-      new Promise((resolve, reject) => {
-        mg.messages().send(data, (error, body) => {
-          if (error) reject(error);
-          resolve(body);
+    send: (data = {}) => {
+      if (String(process.env.MAILGUN_DEBUG) === 'true')
+        Object.assign(data, {
+          'o:testmode': 'yes',
         });
-      }),
+
+      // now asyncronous
+      return mg.messages.create(
+        process.env.MAILGUN_DOMAIN,
+        data,
+      );
+    },
   };
 };

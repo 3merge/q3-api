@@ -3,7 +3,13 @@ const mjml = require('mjml');
 const fs = require('fs');
 const Handlebars = require('handlebars');
 const i18next = require('i18next');
-const { first, get, lowerCase } = require('lodash');
+const {
+  first,
+  get,
+  lowerCase,
+  isObject,
+  compact,
+} = require('lodash');
 const { decode } = require('html-entities');
 const utils = require('./utils');
 const mailer = require('./strategies');
@@ -92,6 +98,26 @@ module.exports = class Mailer {
 
   subject(subject) {
     this.meta.subject = subject;
+    return this;
+  }
+
+  attach(attachment) {
+    if (
+      !isObject(attachment) ||
+      !attachment.filename ||
+      !attachment.data
+    )
+      throw new Error();
+
+    if (!this.meta.attachment)
+      this.meta.attachment = attachment;
+    else if (Array.isArray(this.meta.attachment))
+      this.meta.attachment.push(attachment);
+    else
+      this.meta.attachment = compact(
+        [this.meta.attachment, attachment].flat(),
+      );
+
     return this;
   }
 

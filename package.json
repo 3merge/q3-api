@@ -17,11 +17,9 @@
     "test:integrations": "jest \"^(.*?)\\.int.test.js\" --runInBand --detectOpenHandles --forceExit --collectCoverage --coverageDirectory coverage/coverage_integrations",
     "test:e2e": "yarn workspace e2e-tests test",
     "test": "yarn test:packages && yarn test:packages-scheduler && yarn test:packages-schedulerdispatch && yarn test:packages-ngrams && yarn test:packages-extref && yarn test:packages-sequence && yarn test:packages-changestream && yarn test:e2e",
-    "coverage": "lcov-result-merger coverage/coverage_*/lcov.info | codecov --pipe",
     "upload": "lerna publish",
     "demo-web": "nodemon demo",
-    "demo-worker": "nodemon demo/worker",
-    "docs": "jsdoc -c jsdoc.json"
+    "demo-worker": "nodemon demo/worker"
   },
   "workspaces": [
     "demo",
@@ -29,13 +27,11 @@
     "packages/*"
   ],
   "devDependencies": {
-    "codecov": "^3.8.3",
     "eslint": "^7.15.0",
     "eslint-config-node-3merge": "^1.2.1",
     "jest": "^27.4.3",
     "jest-watch-typeahead": "^1.0.0",
     "jest-watch-yarn-workspaces": "^1.1.0",
-    "lcov-result-merger": "^3.1.0",
     "lerna": "^4.0.0",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
@@ -69,6 +65,7 @@
     "sift": "^15.1.0"
   },
   "resolutions": {
+    "async": "2.6.4",
     "axios": "^0.21.1",
     "mpath": "^0.8.4",
     "moment": "^2.29.3",
