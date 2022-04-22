@@ -80,4 +80,47 @@ describe('Mailer core', () => {
       });
     });
   });
+
+  describe('"attach"', () => {
+    it('should attach', () => {
+      const obj = {
+        filename: 'foo',
+        data: 'buf',
+      };
+
+      inst.attach(obj);
+      expect(inst.meta).toHaveProperty('attachment', obj);
+    });
+
+    it('should error without buffer', () => {
+      expect(() =>
+        inst.attach({
+          filename: 'foo',
+          data: null,
+        }),
+      ).toThrowError();
+    });
+
+    it('should error without filename', () => {
+      expect(() =>
+        inst.attach({
+          data: 'buf',
+        }),
+      ).toThrowError();
+    });
+
+    it('should attach multiple', () => {
+      const obj = {
+        filename: 'foo',
+        data: 'buf',
+      };
+
+      inst.attach(obj);
+      inst.attach(obj);
+      expect(inst.meta).toHaveProperty('attachment', [
+        obj,
+        obj,
+      ]);
+    });
+  });
 });
