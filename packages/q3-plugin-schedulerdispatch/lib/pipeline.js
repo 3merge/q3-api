@@ -57,6 +57,7 @@ module.exports = async (
               ...additionalUserQuery,
               'listens': notificationName,
               'active': true,
+              'verified': true,
               'tenant': tnt,
               '$expr': {
                 '$in': ['$role', '$$role'],

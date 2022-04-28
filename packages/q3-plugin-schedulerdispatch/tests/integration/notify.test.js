@@ -47,6 +47,7 @@ const Users = mongoose.model(
     email: String,
     listens: [String],
     role: String,
+    verified: Boolean,
   }),
 );
 
@@ -64,6 +65,7 @@ beforeAll(async () => {
   [{ _id: userId }, { _id: userId2 }] = await Users.create([
     {
       active: true,
+      verified: true,
       firstName: 'J',
       lastName: 'S',
       email: 'js@test.ca',
@@ -72,6 +74,7 @@ beforeAll(async () => {
     },
     {
       active: true,
+      verified: true,
       firstName: 'J2',
       lastName: 'S2',
       email: 'js2@test.ca',
