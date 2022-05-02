@@ -54,15 +54,23 @@ module.exports = class Mailer {
   }
 
   async fromDatabase(variables = {}) {
+    const { attachment, ...rest } = isObject(variables)
+      ? variables
+      : {};
+
     this.meta.html = await this.constructor.preview(
       await EmailCollection(this.$model).getMjml(
         get(this, 'meta.template'),
       ),
       {
         model: this.$model,
-        variables,
+        variables: rest,
       },
     );
+
+    if (attachment) {
+      this.attach(attachment);
+    }
 
     try {
       this.meta.subject = decode(
