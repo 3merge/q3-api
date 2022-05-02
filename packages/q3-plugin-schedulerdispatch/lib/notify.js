@@ -24,6 +24,7 @@ module.exports = function NotifyDependencyLayer(
         'subDocumentAuthor',
         'messageType',
         'userId',
+        'attachment',
       ]);
 
       this.$context = get(

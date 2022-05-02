@@ -17,6 +17,7 @@ const {
   EmailCollection,
   MjmlTextParser,
 } = require('./helpers');
+require('./helpers/handlebarsFunctions');
 
 // assumed to be registered already with mongoose
 const DEFAULT_MODEL_NAME =
