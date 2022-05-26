@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.7](https://github.com/3merge/q3-api/compare/v2.1.6...v2.1.7) (2022-05-26)
+
+
+### Bug Fixes
+
+* encode plus sign ([#178](https://github.com/3merge/q3-api/issues/178)) ([4b933d1](https://github.com/3merge/q3-api/commit/4b933d1a95a068297be2d525b229e6183b2f241a))
+
+
+
+
+
+
 ## [2.1.6](https://github.com/3merge/q3-api/compare/v2.1.5...v2.1.6) (2022-03-28)
 
 **Note:** Version bump only for package Q3-Api
