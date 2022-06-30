@@ -21,6 +21,9 @@ module.exports = () => {
     region: s3Region || 'us-east-2',
   });
 
+  const encodePlusSign = (str) =>
+    String(str).replace(/\+/g, '%2B');
+
   return {
     getBuffer(Key) {
       return new Promise((resolve, reject) =>
@@ -36,7 +39,7 @@ module.exports = () => {
     },
 
     getPublic(Key) {
-      return `${process.env.CDN}/${Key}`;
+      return `${process.env.CDN}/${encodePlusSign(Key)}`;
     },
 
     getPrivate(Key) {

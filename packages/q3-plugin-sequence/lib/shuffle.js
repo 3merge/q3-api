@@ -7,11 +7,9 @@ const {
   last,
   isNumber,
   isObject,
-  size,
   forEach,
   invoke,
 } = require('lodash');
-const { exception } = require('q3-core-responder');
 
 module.exports = function shuffle(data = []) {
   const orderBySeqAndUpdatedAt = (xs) =>
@@ -25,15 +23,12 @@ module.exports = function shuffle(data = []) {
       });
   };
 
-  forEach(data, (item) => {
-    const { seq } = item;
-
-    if (seq < 1 || seq > size(data))
-      exception('Validation')
-        .msg('cannotSetOutOfBoundSequence')
-        .throw();
-    else adjustUpdatedTimestamp(item);
-  });
+  /**
+   * @note
+   * Removed exception when seq is out of bounds.
+   * It errored wrongly on delete operations
+   *  */
+  forEach(data, adjustUpdatedTimestamp);
 
   orderBySeqAndUpdatedAt(data).forEach(
     (item, idx, items = []) => {
