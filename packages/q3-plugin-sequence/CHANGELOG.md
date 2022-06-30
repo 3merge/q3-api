@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.17](https://github.com/3merge/q3-api/compare/v3.4.16...v3.4.17) (2022-06-30)
+
+
+### Bug Fixes
+
+* shuffle boundary error and aws plus sign encoding ([#179](https://github.com/3merge/q3-api/issues/179)) ([629f3d8](https://github.com/3merge/q3-api/commit/629f3d8020dce3060584bd823711a3a4748aa4b2))
+
+
+
+
+
+
 ## [3.4.12](https://github.com/3merge/q3-api/compare/v3.4.11...v3.4.12) (2022-04-20)
 
 **Note:** Version bump only for package q3-plugin-sequence
