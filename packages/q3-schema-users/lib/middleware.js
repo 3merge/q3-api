@@ -2,6 +2,16 @@
 const { queue } = require('q3-core-scheduler');
 const Schema = require('./schema');
 
+Schema.pre('find', function changeSortOp() {
+  const s = this.getOptions();
+
+  if (s && s.sort && s.sort.name)
+    this.sort({
+      firstName: s.sort.name,
+      lastName: s.sort.name,
+    });
+});
+
 Schema.pre('save', function primeNewUserDispatcher() {
   if (this.isNew) {
     this.$dispatch = true;
