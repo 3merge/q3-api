@@ -6,9 +6,12 @@ const Thread = new Schema(
   {
     author: String,
     editor: String,
-    message: {
-      type: String,
-      required: true,
+    message: String,
+    tags: [String],
+    title: String,
+    pin: {
+      type: Boolean,
+      default: false,
     },
   },
   {
