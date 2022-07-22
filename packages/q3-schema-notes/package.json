@@ -1,6 +1,6 @@
 {
   "name": "q3-schema-notes",
-  "version": "3.4.10",
+  "version": "3.4.19",
   "main": "lib/index.js",
   "devDependencies": {
     "lodash": "^4.17.20",
