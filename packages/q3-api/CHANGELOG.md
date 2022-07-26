@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.21](https://github.com/3merge/q3-api/compare/v3.4.20...v3.4.21) (2022-07-26)
+
+
+### Bug Fixes
+
+* removed unnecessary middleware ([#182](https://github.com/3merge/q3-api/issues/182)) ([1bf3c90](https://github.com/3merge/q3-api/commit/1bf3c9062c278fbafabb7d6a2821a96be9fd7cce))
+
+
+
+
+
 ## [3.4.20](https://github.com/3merge/q3-api/compare/v3.4.19...v3.4.20) (2022-07-26)
 
 **Note:** Version bump only for package q3-api
