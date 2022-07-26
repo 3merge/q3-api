@@ -23,9 +23,10 @@ const getMaxDate = (a, b) => {
 function ensureFolderStructure() {
   if (!Array.isArray(this.uploads)) this.uploads = [];
 
-  const findById = (id) => find(this.uploads, checkId(id));
+  const findById = (id) =>
+    find(compact(this.uploads), checkId(id));
 
-  forEach(this.uploads, (upload) => {
+  forEach(compact(this.uploads), (upload) => {
     if (upload.folderId && !findById(upload.folderId))
       upload.remove();
 
