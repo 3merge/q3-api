@@ -13,8 +13,17 @@ const FileSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    tags: [String],
-    relativePath: String,
+    size: Number,
+    folder: {
+      type: Boolean,
+      default: false,
+    },
+    folderId: Schema.Types.ObjectId,
+    bucketId: {
+      type: String,
+      required: true,
+      lock: true,
+    },
   },
   {
     timestamps: true,
@@ -22,32 +31,7 @@ const FileSchema = new Schema(
   },
 );
 
-FileSchema.path('name').set(function savePreviousFileName(
-  newVal,
-) {
-  if (this.$locals && this.name)
-    this.$locals.prev = this.name;
-
-  return newVal;
-});
-
-FileSchema.pre(
-  'save',
-  async function modifyS3OnNameChange() {
-    try {
-      if (this.isModified('name') && !this.isNew) {
-        const sdk = AWSInterface();
-        sdk.copyFrom(
-          `${this.parent()._id}/${this.$locals.prev}`,
-          `${this.parent()._id}/${this.name}`,
-        );
-      }
-    } catch (e) {
-      // noop
-    }
-  },
-);
-
+FileSchema.virtual('relativePath');
 FileSchema.virtual('url').get((value, v, doc) => {
   try {
     const sdk = AWSInterface();
