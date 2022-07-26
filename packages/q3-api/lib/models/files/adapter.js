@@ -1,6 +1,36 @@
 const { get } = require('lodash');
 const AWSInterface = require('../../config/aws');
 
+const normalize = (xs) =>
+  ['', 'null', 'undefined'].includes(String(xs))
+    ? null
+    : xs;
+
+const explodeName = (name) => {
+  const r = String(name).match(/\[([a-zA-Z0-9])*\]/);
+
+  if (!r)
+    return {
+      folderId: null,
+      name,
+    };
+
+  const [folderInParenthesis] = r;
+  const folderId = normalize(
+    folderInParenthesis.slice(1, -1),
+  );
+
+  const isolatedName = name.replace(
+    folderInParenthesis,
+    '',
+  );
+
+  return {
+    folderId,
+    name: isolatedName,
+  };
+};
+
 module.exports = class FileUploadAdapter {
   async handleUpload({ files, sensitive = true }) {
     const bool =
@@ -27,7 +57,8 @@ module.exports = class FileUploadAdapter {
           this.uploads.push({
             relativePath: pathMap[name],
             sensitive: bool,
-            name,
+            size: get(files, `${pathMap[name]}.size`, 0),
+            ...explodeName(name),
           }),
         ),
       ),
