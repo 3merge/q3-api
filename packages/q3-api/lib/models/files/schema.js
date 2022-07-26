@@ -1,4 +1,5 @@
 const { Schema } = require('mongoose');
+const { get } = require('lodash');
 const AWSInterface = require('../../config/aws');
 const { replaceSpaces } = require('../../helpers/utils');
 
@@ -6,8 +7,6 @@ const FileSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
-      systemOnly: true,
     },
     sensitive: {
       type: Boolean,
@@ -21,8 +20,6 @@ const FileSchema = new Schema(
     folderId: Schema.Types.ObjectId,
     bucketId: {
       type: String,
-      required: true,
-      lock: true,
     },
   },
   {
@@ -39,7 +36,13 @@ FileSchema.virtual('url').get((value, v, doc) => {
       ? sdk.getPrivate
       : sdk.getPublic;
 
-    return method(`${doc.parent().id}/${doc.name}`);
+    return method(
+      `${doc.parent().id}/${get(
+        doc,
+        'bucketId',
+        doc.name,
+      )}`,
+    );
   } catch (e) {
     return null;
   }

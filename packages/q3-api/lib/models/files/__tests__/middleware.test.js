@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const { map } = require('lodash');
 const {
-  convertLegacyRelativePathsToFolderObjects,
   ensureFolderStructure,
   generateFolderStats,
   generateRelativePaths,
@@ -20,76 +19,13 @@ const toObjectContaining = (obj) =>
   expect.objectContaining(obj);
 
 describe('middleware', () => {
-  describe('convertLegacyRelativePathsToFolderObjects', () => {
-    it('should', () => {
-      const output =
-        convertLegacyRelativePathsToFolderObjects([
-          {
-            relativePath: 'relics/docs/text.txt',
-          },
-          {
-            relativePath: 'relics/docs/notes.docs',
-          },
-          {
-            relativePath: 'relics/media/song.mp3',
-          },
-          {
-            relativePath: 'favourites/media/vacation.jpg',
-          },
-          {
-            relativePath: null,
-          },
-          {
-            relativePath: 'readme.md',
-          },
-          {
-            relativePath: 'tmp/backup.zip',
-          },
-        ]);
-
-      expect(output).toEqual(
-        [
-          {
-            folder: true,
-            folderId: null,
-            name: 'relics',
-          },
-          {
-            folder: true,
-            folderId: output[0]._id,
-            name: 'docs',
-          },
-          {
-            folder: true,
-            folderId: output[0]._id,
-            name: 'media',
-          },
-          {
-            folder: true,
-            folderId: null,
-            name: 'favourites',
-          },
-          {
-            folder: true,
-            folderId: output[3]._id,
-            name: 'media',
-          },
-          {
-            folder: true,
-            folderId: null,
-            name: 'tmp',
-          },
-        ].map(toObjectContaining),
-      );
-    });
-  });
-
   describe('ensureFolderStructure', () => {
     it('should nullify missing folders and extract undefined ones', () => {
       const folderThatDoesntExist =
         mongoose.Types.ObjectId();
 
       const folderThatExists = mongoose.Types.ObjectId();
+      const remove = jest.fn();
 
       const context = {
         uploads: [
@@ -100,10 +36,10 @@ describe('middleware', () => {
           {
             folderId: folderThatDoesntExist,
             name: 'lost',
+            remove,
           },
           {
             folderId: null,
-            relativePath: 'relics/test.txt',
             name: 'test.txt',
           },
           {
@@ -115,6 +51,8 @@ describe('middleware', () => {
       };
 
       ensureFolderStructure.call(context);
+      expect(remove).toHaveBeenCalled();
+
       expect(context.uploads).toEqual(
         [
           {
@@ -123,12 +61,12 @@ describe('middleware', () => {
             bucketId: 'favourites',
           },
           {
-            folderId: null,
+            // will have actually deleted it
+            folderId: folderThatDoesntExist,
             name: 'lost',
             bucketId: 'lost',
           },
           {
-            folderId: context.uploads[4]._id,
             name: 'test.txt',
             bucketId: 'test.txt',
           },
@@ -136,12 +74,6 @@ describe('middleware', () => {
             name: 'archives',
             folder: true,
             bucketId: 'archives',
-          },
-          {
-            folder: true,
-            folderId: null,
-            name: 'relics',
-            bucketId: 'relics',
           },
         ].map(toObjectContaining),
       );
