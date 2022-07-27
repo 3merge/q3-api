@@ -5,7 +5,9 @@ const {
   get,
   invoke,
   isEqual,
+  last,
   isNumber,
+  isString,
 } = require('lodash');
 const Schema = require('./schema');
 
@@ -20,6 +22,11 @@ const getMaxDate = (a, b) => {
   return new Date(a) > new Date(b) ? a : b;
 };
 
+const makeNameWithFileExtension = ({ bucketId, name }) =>
+  isString(bucketId)
+    ? `${name}.${last(bucketId.split('.'))}`
+    : name;
+
 function ensureFolderStructure() {
   if (!Array.isArray(this.uploads)) this.uploads = [];
 
@@ -33,6 +40,14 @@ function ensureFolderStructure() {
     if (!upload.bucketId && upload.name)
       Object.assign(upload, {
         bucketId: upload.name,
+      });
+
+    if (
+      upload.isDirectModified('name') &&
+      upload.name !== upload.bucketId
+    )
+      Object.assign(upload, {
+        name: makeNameWithFileExtension(upload),
       });
   });
 }
@@ -115,6 +130,7 @@ Schema.post('find', (docs) => {
 });
 
 module.exports = {
+  makeNameWithFileExtension,
   ensureFolderStructure,
   generateFolderStats,
   generateRelativePaths,

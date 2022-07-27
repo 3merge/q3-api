@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const { map } = require('lodash');
 const {
   ensureFolderStructure,
+  makeNameWithFileExtension,
   generateFolderStats,
   generateRelativePaths,
 } = require('../middleware');
@@ -12,6 +13,8 @@ const ensureObjectId = (obj) => {
       _id: mongoose.Types.ObjectId(),
     });
 
+  // eslint-disable-next-line
+  obj.isDirectModified = jest.fn().mockReturnValue(true);
   return obj;
 };
 
@@ -175,6 +178,23 @@ describe('middleware', () => {
         'public/media',
         'public/media/test.jpg',
       ]);
+    });
+  });
+
+  describe('makeNameWithFileExtension', () => {
+    it('should return name', () => {
+      expect(
+        makeNameWithFileExtension({ name: 'foobar' }),
+      ).toEqual('foobar');
+    });
+
+    it('should return name with extension', () => {
+      expect(
+        makeNameWithFileExtension({
+          bucketId: 'previous.png',
+          name: 'foobar',
+        }),
+      ).toEqual('foobar.png');
     });
   });
 });
