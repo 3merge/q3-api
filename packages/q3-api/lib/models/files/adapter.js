@@ -57,7 +57,7 @@ module.exports = class FileUploadAdapter {
           this.uploads.push({
             relativePath: pathMap[name],
             sensitive: bool,
-            size: get(files, `${pathMap[name]}.size`, 0),
+            size: files[name] ? files[name].size : 0,
             ...explodeName(name),
           }),
         ),
