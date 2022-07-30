@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.25](https://github.com/3merge/q3-api/compare/v3.4.24...v3.4.25) (2022-07-30)
+
+
+### Bug Fixes
+
+* renaming file folders ([712e27b](https://github.com/3merge/q3-api/commit/712e27b3affbb5d64a59a7dfe8888c2b5323994b))
+
+
+
+
+
 ## [3.4.24](https://github.com/3merge/q3-api/compare/v3.4.23...v3.4.24) (2022-07-28)
 
 
