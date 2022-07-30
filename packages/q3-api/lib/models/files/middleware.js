@@ -8,6 +8,7 @@ const {
   last,
   isNumber,
   isString,
+  size,
 } = require('lodash');
 const Schema = require('./schema');
 
@@ -22,10 +23,13 @@ const getMaxDate = (a, b) => {
   return new Date(a) > new Date(b) ? a : b;
 };
 
-const makeNameWithFileExtension = ({ bucketId, name }) =>
-  isString(bucketId)
-    ? `${name}.${last(bucketId.split('.'))}`
-    : name;
+const makeNameWithFileExtension = ({ bucketId, name }) => {
+  const parts = isString(bucketId)
+    ? bucketId.split('.')
+    : [];
+
+  return size(parts) > 1 ? `${name}.${last(parts)}` : name;
+};
 
 function ensureFolderStructure() {
   if (!Array.isArray(this.uploads)) this.uploads = [];

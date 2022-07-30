@@ -188,6 +188,15 @@ describe('middleware', () => {
       ).toEqual('foobar');
     });
 
+    it('should preserve folder', () => {
+      expect(
+        makeNameWithFileExtension({
+          bucketId: 'foobar',
+          name: 'quuz',
+        }),
+      ).toEqual('quuz');
+    });
+
     it('should return name with extension', () => {
       expect(
         makeNameWithFileExtension({
