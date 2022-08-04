@@ -1,6 +1,10 @@
 const moment = require('moment');
 const handlebarsFunctions = require('../handlebarsFunctions');
 
+const context = {
+  foo: 'bar',
+};
+
 test.each([
   [[1, 2], ' + ', '1 + 2'],
   [[1, 2], null, '1, 2'],
@@ -47,4 +51,34 @@ test.each([
   expect(handlebarsFunctions.renderUrl(a).string).toBe(
     expected,
   );
+});
+
+test('renderUrl should call options fn', () => {
+  process.env.URL = 'http://localhost:8000/';
+  const { string } = handlebarsFunctions.renderUrl.call(
+    context,
+    {
+      fn() {
+        expect(this).toMatchObject(context);
+        return 'test';
+      },
+    },
+  );
+
+  expect(string).toMatch('http://localhost:8000/test');
+});
+
+test('renderUrl should call fn', () => {
+  const { string } = handlebarsFunctions.renderUrl.call(
+    context,
+    'https://google.ca',
+    {
+      fn() {
+        expect(this).toMatchObject(context);
+        return 'test';
+      },
+    },
+  );
+
+  expect(string).toMatch('https://google.ca/test');
 });

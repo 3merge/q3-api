@@ -1,6 +1,13 @@
 // eslint-disable-next-line
 const moment = require('moment-timezone');
-const { isString, join } = require('lodash');
+const {
+  compact,
+  isFunction,
+  isObject,
+  isString,
+  join,
+  size,
+} = require('lodash');
 const Handlebars = require('handlebars');
 
 const isDate = (str) => str instanceof Date;
@@ -28,12 +35,25 @@ const renderDateString = (dateString, tz, format) =>
       .format(toString(format, 'LL (z)')),
   );
 
-const renderUrl = (urlString = '') =>
-  new Handlebars.SafeString(
-    toString(urlString)
+function renderUrl(urlString = '', options) {
+  const invokeFnWithCurrentContext = (obj) =>
+    isObject(obj) && isFunction(obj.fn)
+      ? obj.fn.call(this)
+      : undefined;
+
+  return new Handlebars.SafeString(
+    toString(
+      compact([
+        !isString(urlString) || !size(urlString)
+          ? process.env.URL
+          : urlString,
+        invokeFnWithCurrentContext(options || urlString),
+      ]).join('/'),
+    )
       .replace(/([^:]\/)\/+/g, '$1')
       .replace(/\/+$/, ''),
   );
+}
 
 Handlebars.registerHelper('renderArray', renderArray);
 
