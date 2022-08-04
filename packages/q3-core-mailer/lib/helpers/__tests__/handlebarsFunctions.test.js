@@ -1,9 +1,14 @@
 const moment = require('moment');
 const handlebarsFunctions = require('../handlebarsFunctions');
 
+const fn = jest.fn().mockReturnValue('test');
 const context = {
   foo: 'bar',
 };
+
+beforeEach(() => {
+  fn.mockClear();
+});
 
 test.each([
   [[1, 2], ' + ', '1 + 2'],
@@ -57,14 +62,9 @@ test('renderUrl should call options fn', () => {
   process.env.URL = 'http://localhost:8000/';
   const { string } = handlebarsFunctions.renderUrl.call(
     context,
-    {
-      fn() {
-        expect(this).toMatchObject(context);
-        return 'test';
-      },
-    },
+    { fn },
   );
-
+  expect(fn).toHaveBeenCalledWith(context);
   expect(string).toMatch('http://localhost:8000/test');
 });
 
@@ -72,13 +72,9 @@ test('renderUrl should call fn', () => {
   const { string } = handlebarsFunctions.renderUrl.call(
     context,
     'https://google.ca',
-    {
-      fn() {
-        expect(this).toMatchObject(context);
-        return 'test';
-      },
-    },
+    { fn },
   );
 
+  expect(fn).toHaveBeenCalledWith(context);
   expect(string).toMatch('https://google.ca/test');
 });

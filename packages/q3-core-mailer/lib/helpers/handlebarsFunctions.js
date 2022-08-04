@@ -38,7 +38,7 @@ const renderDateString = (dateString, tz, format) =>
 function renderUrl(urlString = '', options) {
   const invokeFnWithCurrentContext = (obj) =>
     isObject(obj) && isFunction(obj.fn)
-      ? obj.fn.call(this)
+      ? obj.fn(this)
       : undefined;
 
   return new Handlebars.SafeString(
