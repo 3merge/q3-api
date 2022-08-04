@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.28](https://github.com/3merge/q3-api/compare/v3.4.27...v3.4.28) (2022-08-04)
+
+
+### Bug Fixes
+
+* handlebars arg ([ba909fe](https://github.com/3merge/q3-api/commit/ba909fe358a98c96c761ebefd5dac22b7d1c30ac))
+
+
+
+
+
 ## [3.4.27](https://github.com/3merge/q3-api/compare/v3.4.26...v3.4.27) (2022-08-04)
 
 **Note:** Version bump only for package q3-core-mailer
