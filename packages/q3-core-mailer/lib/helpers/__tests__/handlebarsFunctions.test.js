@@ -38,3 +38,13 @@ test.each([
     handlebarsFunctions.renderDateString(a, b, c).string,
   ).toBe(expected);
 });
+
+test.each([
+  ['https://google.ca/app/', 'https://google.ca/app'],
+  ['https://google.ca//app', 'https://google.ca/app'],
+  ['www.google.ca/app/1', 'www.google.ca/app/1'],
+])('.renderUrl()', (a, expected) => {
+  expect(handlebarsFunctions.renderUrl(a).string).toBe(
+    expected,
+  );
+});

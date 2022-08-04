@@ -28,6 +28,13 @@ const renderDateString = (dateString, tz, format) =>
       .format(toString(format, 'LL (z)')),
   );
 
+const renderUrl = (urlString = '') =>
+  new Handlebars.SafeString(
+    toString(urlString)
+      .replace(/([^:]\/)\/+/g, '$1')
+      .replace(/\/+$/, ''),
+  );
+
 Handlebars.registerHelper('renderArray', renderArray);
 
 Handlebars.registerHelper(
@@ -35,7 +42,10 @@ Handlebars.registerHelper(
   renderDateString,
 );
 
+Handlebars.registerHelper('renderUrl', renderUrl);
+
 module.exports = {
   renderArray,
   renderDateString,
+  renderUrl,
 };
