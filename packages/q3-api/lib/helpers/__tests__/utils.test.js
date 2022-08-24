@@ -8,6 +8,7 @@ const {
   joinJsFileWithAppRoot,
   toUndefined,
   toQuery,
+  getWebAppUrlByUser,
 } = require('../utils');
 
 describe('Setters', () => {
@@ -36,4 +37,22 @@ describe('joinJsFileWithAppRoot', () => {
     expect(joinJsFileWithAppRoot('folder', 'file')).toMatch(
       'root\\folder\\file.js',
     ));
+});
+
+describe('getWebAppUrlByUser', () => {
+  it('should return WEB_APP', () => {
+    const url = 'https://google.ca';
+    process.env.WEB_APP = url;
+    expect(getWebAppUrlByUser()).toMatch(url);
+  });
+
+  it('should return tenanted WEB_APP', () => {
+    const url = 'https://google.ca';
+    process.env.WEB_APP = url;
+    expect(
+      getWebAppUrlByUser({
+        tenant: 'foobar',
+      }),
+    ).toMatch('https://foobar.google.ca');
+  });
 });
