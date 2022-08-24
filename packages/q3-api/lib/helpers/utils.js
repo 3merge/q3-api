@@ -102,6 +102,22 @@ const handleExtRefData = async ({ data }) => {
 const replaceSpaces = (str) =>
   String(str).replace(/\s/gi, '%20');
 
+const getWebAppUrlByUser = (user = {}) => {
+  /**
+   * @NOTE
+   * Assumed to be a valid URL.
+   */
+  const url = process.env.WEB_APP;
+  const { tenant } = user;
+
+  if (tenant) {
+    const [protocol, host] = url.split('//');
+    return `${protocol}//${tenant}.${host}`;
+  }
+
+  return url;
+};
+
 module.exports = {
   toQuery,
   toUndefined,
@@ -111,4 +127,5 @@ module.exports = {
   setExecutableTemplateVariablesInRequest,
   setExecutableTemplatePathInRequest,
   replaceSpaces,
+  getWebAppUrlByUser,
 };

@@ -1,4 +1,5 @@
 const { ExtendedReference } = require('q3-plugin-extref');
+const createNotificationForUser = require('./createNotificationForUser');
 const DatabaseStream = require('./databaseStream');
 const handleImport = require('./handleImport');
 const refreshAwsLinks = require('./refreshAwsLinks');
@@ -10,6 +11,7 @@ const utils = require('./utils');
 module.exports = {
   DatabaseStream,
   ExtendedReference,
+  createNotificationForUser,
   handleImport,
   refreshAwsLinks,
   makeVirtualFilePathPlugin,
