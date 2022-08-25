@@ -426,5 +426,18 @@
   "birthday": "Birthday",
   "occupation": "Occupation",
   "light": "Light",
-  "dark": "Dark"
+  "dark": "Dark",
+  "home": "Home",
+  "create": "Add new",
+  "createAndRedirect": "Create then redirect",
+  "createAndRestart": "Create another after",
+  "createAndClose": "Create and close dialog",
+  "system": "System",
+  "lastLoggedIn": "Last logged in",
+  "verified": "Verified",
+  "yes": "Yes",
+  "no": "No",
+  "usersDetail": "User",
+  "uploadFiles": "Upload files",
+  "expand": "Expand"
 }

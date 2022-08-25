@@ -25,7 +25,6 @@ module.exports = (directory) => {
         ));
       }
     } catch (e) {
-      console.log(e);
       throw new Error(`${name} missing from file system`);
     }
   };
@@ -51,11 +50,18 @@ module.exports = (directory) => {
       ),
     ),
 
-    walk: () =>
-      readdirSync(root).reduce(
-        (acc, dirent) =>
-          isRecurringJob(dirent) ? acc.concat(dirent) : acc,
-        [],
-      ),
+    walk: () => {
+      try {
+        return readdirSync(root).reduce(
+          (acc, dirent) =>
+            isRecurringJob(dirent)
+              ? acc.concat(dirent)
+              : acc,
+          [],
+        );
+      } catch (e) {
+        return [];
+      }
+    },
   };
 };

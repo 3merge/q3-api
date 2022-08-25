@@ -1,5 +1,5 @@
 const onNewUser =
-  require('../helpers/createNotificationForUser')(
+  require('..').utils.createNotificationForUser(
     'verify',
     (user) => ({
       code: user.secret,

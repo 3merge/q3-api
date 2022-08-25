@@ -1,5 +1,5 @@
 const onPasswordReset =
-  require('../helpers/createNotificationForUser')(
+  require('..').utils.createNotificationForUser(
     'password-reset',
     (user) => ({
       passwordResetToken: user.passwordResetToken,

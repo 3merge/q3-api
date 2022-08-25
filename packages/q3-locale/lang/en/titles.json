@@ -115,5 +115,8 @@
   "contactInformation": "Contact information",
   "appLocale": "Locale",
   "queuelogs": "Queues",
-  "appSettings": "Settings"
+  "appSettings": "Settings",
+  "details": "Details",
+  "summary": "Summary",
+  "fileManagerEmptyDirectory": "Empty"
 }

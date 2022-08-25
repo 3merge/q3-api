@@ -1,5 +1,5 @@
 const onPasswordChange =
-  require('../helpers/createNotificationForUser')(
+  require('..').utils.createNotificationForUser(
     'password-change',
   );
 

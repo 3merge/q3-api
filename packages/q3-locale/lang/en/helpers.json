@@ -29,5 +29,6 @@
   "filterByDate": "Will include records up to and on the selected date",
   "filterByOperation": "The operation describes the type of change that occurred",
   "auditTargets": "Select fields to query for changes. Not all fields will have human-friendly translations; however, those in raw form should still be distinguishable. This field will auto-populate if a template has been applied.",
-  "auditUser": "Although this field displays only user who've modified this resource, not all users have modified all fields. Therefore, this might commonly lead to no results."
+  "auditUser": "Although this field displays only user who've modified this resource, not all users have modified all fields. Therefore, this might commonly lead to no results.",
+  "invertLogo": "If the logo doesn't display well in dark mode, turn this setting on to automatically invert its colours and render grayscale."
 }
