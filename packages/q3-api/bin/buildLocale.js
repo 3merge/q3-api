@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /* eslint-disable no-console,global-require */
 require('dotenv').config();
+require('../lib/models/domainsResources');
 
 const path = require('path');
 const seedLocale = require('../lib/helpers/seedLocale');

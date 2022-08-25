@@ -248,6 +248,7 @@ yarn build-locale --overwrite true --applyToAll true
 | Argument     | Expected Value | Description                                                                                                                |
 | ------------ | -------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | `applyToAll` | `Boolean`      | Should this apply to all languages? This is useful when setting up defaults that an end-user will translate in production. |
+| `lang`       | `String`       | The namespace to target                                                                                                    |
 | `overwrite`  | `Boolean`      | Should the file system overwrite what's already in the database?                                                           |
 
 ### `seed-login`
