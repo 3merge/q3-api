@@ -1,0 +1,10 @@
+{
+  "active": true,
+  "tenant": null,
+  "supportedLngs": ["en"],
+  "brand": "Q3",
+  "color": "#0000FF",
+  "description": "",
+  "font": "Roboto",
+  "title": "Back-office portal"
+}

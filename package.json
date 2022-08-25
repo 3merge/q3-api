@@ -20,7 +20,11 @@
     "test": "yarn test:packages && yarn test:packages-scheduler && yarn test:packages-schedulerdispatch && yarn test:packages-ngrams && yarn test:packages-extref && yarn test:packages-sequence && yarn test:packages-changestream && yarn test:e2e",
     "upload": "lerna publish",
     "demo-web": "nodemon demo",
-    "demo-worker": "nodemon demo/worker"
+    "demo-worker": "nodemon demo/worker",
+    "bin:build-access": "yarn build-access",
+    "bin:build-locale": "yarn build-locale",
+    "bin:seed-emails": "yarn seed-emails",
+    "bin:seed-login": "yarn seed-login"
   },
   "workspaces": [
     "demo",

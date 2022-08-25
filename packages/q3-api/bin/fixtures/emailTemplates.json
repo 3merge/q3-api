@@ -1,0 +1,46 @@
+[
+  {
+    "active": true,
+    "name": "__classlist",
+    "mjml": "<mj-attributes>\n  <mj-body />\n  <mj-all font-family=\"Verdana\" />\n  <mj-class name=\"background\" background-color=\"#fff\" full-width padding=\"20px 0\" align=\"center\" />\n  <mj-class name=\"foreground\" background-color=\"#FFF\" />\n  <mj-class name=\"section\" background-color=\"#FFF\" padding=\"20px 20px 0\" />\n  <mj-class name=\"h1\" font-weight=\"800\" font-size=\"18px\" padding-bottom=\"15px\" color=\"#000\" />\n  <mj-class name=\"center\" align=\"center\" />\n  <mj-class name=\"summary-info\" font-weight=\"800\" font-size=\"28px\" padding-bottom=\"8px\" padding-top=\"8px\" align=\"center\" />\n  <mj-class name=\"summary-label\" height=\"23px\" font-size=\"11px\" color=\"#4d6975\" align=\"center\" />\n  <mj-class name=\"h2\" font-size=\"14px\" font-weight=\"bold\" padding-bottom=\"8px\" />\n  <mj-class name=\"main\" width=\"100%\" padding=\"15px 0\" />\n  <mj-class name=\"wrapper\" padding=\"8px\" />\n  <mj-class name=\"full-width\" width=\"100%\" />\n  <mj-class name=\"half-width\" width=\"50%\" margin=\"15px 0\" />\n  <mj-class name=\"muted\" width=\"100%\" background-color=\"#EEE\" padding=\"12px\" border-bottom=\"1px solid #FFF\" />\n  <mj-class name=\"stat\" width=\"50%\" background-color=\"#f3f8fa\" padding=\"12px\" border=\"2px solid #FFF\" align=\"center\" />\n  <mj-class name=\"strong\" font-weight=\"800\" />\n  <mj-class name=\"small\" align=\"center\" font-size=\"12px\" color=\"#676271\" />\n  <mj-class name=\"link\" font-size=\"12px\" background-color=\"transparent\" color=\"#4283b7\" text-decoration=\"underline\" width=\"100%\" padding=\"0 !important\" height=\"auto\" text-align=\"left\" align=\"left\" />\n  <mj-class name=\"inline-link\" text-align=\"left\" font-size=\"14px\" background-color=\"transparent\" color=\"#4283b7\" text-decoration=\"underline\" width=\"auto\" padding=\"0\" margin=\"0\" inner-padding=\"0\" text-align=\"left\" padding=\"0\" height=\"auto\" />\n  <mj-class name=\"sign\" border-width=\"1px\" border-color=\"#000\" padding-bottom=\"6px\" />\n  <mj-class name=\"fineprint\" font-size=\"10px\" font-style=\"italic\" />\n  <mj-class name=\"link-label\" font-weight=\"bold\" font-size=\"10px\" text-transform=\"uppercase\" />\n  <mj-button background-color=\"#4283b7\" color=\"#fff\" align=\"left\" padding=\"0px\" />\n  <mj-divider border-width=\"1px\" padding=\"18px 0\" border-color=\"#eceff1\" />\n  <mj-text padding=\"0\" />\n</mj-attributes>"
+  },
+  {
+    "active": true,
+    "name": "en-verify",
+    "mjml": "<mjml>\n  <mj-head>\n    <mj-include path=\"__classlist\" />\n    <mj-title>Q3 - Verify your email address</mj-title>\n  </mj-head>\n  <mj-body mj-class=\"background\">\n    <mj-include path=\"__en-header\" />\n    <mj-wrapper mj-class=\"wrapper\">\n      <mj-section mj-class=\"section\" padding=\"0\">\n        <mj-column mj-class=\"main\">\n          <mj-text>Hi {{firstName}},</mj-text>\n          <mj-spacer />\n          <mj-text>Before you can log into your new account, you'll need to verify your email. Use the ID and code below to set your first password and begin using the services.</mj-text>\n        </mj-column>\n      </mj-section>\n      <mj-section mj-class=\"section\" padding=\"0\">\n        <mj-column mj-class=\"muted\">\n          <mj-text mj-class=\"strong\">ID:</mj-text>\n          <mj-text>{{id}}</mj-text>\n        </mj-column>\n      </mj-section>\n      <mj-section mj-class=\"section\" padding-top=\"1px\" padding=\"0\">\n        <mj-column mj-class=\"muted\">\n          <mj-text mj-class=\"strong\">Verification code:</mj-text>\n          <mj-text>{{code}}</mj-text>\n        </mj-column>\n      </mj-section>\n      <mj-section mj-class=\"foreground\">\n        <mj-column>\n          <mj-button href=\"{{#renderUrl}}/verify?id={{id}}&verificationCode={{code}}&email={{email}}{{/renderUrl}}\">Verify</mj-button>\n        </mj-column>\n      </mj-section>\n    </mj-wrapper>\n  </mj-body>\n</mjml>",
+    "variables": {
+      "firstName": "Jane",
+      "email": "test@3merge.ca",
+      "code": "123",
+      "id": "0988900234098243"
+    }
+  },
+  {
+    "active": true,
+    "name": "en-password-reset",
+    "mjml": "<mjml>\n  <mj-head>\n    <mj-include path=\"__classlist\" />\n    <mj-title>Q3 - Password reset</mj-title>\n  </mj-head>\n  <mj-body mj-class=\"background\">\n    <mj-include path=\"__en-header\" />\n    <mj-wrapper mj-class=\"wrapper\">\n      <mj-section mj-class=\"foreground\">\n        <mj-column mj-class=\"main\">\n          <mj-text>Hi {{firstName}},</mj-text>\n          <mj-spacer />\n          <mj-text>Click the link below to set a new password.</mj-text>\n          <mj-spacer />\n          <mj-button href=\"{{#renderUrl}}/password-change?email={{email}}&passwordResetToken={{passwordResetToken}}{{/renderUrl}}\">Change password</mj-button>\n        </mj-column>\n      </mj-section>\n    </mj-wrapper>\n  </mj-body>\n</mjml>",
+    "variables": {
+      "firstName": "Jane",
+      "passwordResetToken": "123",
+      "email": "test@3merge.ca"
+    }
+  },
+  {
+    "active": true,
+    "name": "__en-header",
+    "mjml": "<mj-wrapper background-color=\"#fff\" padding=\"0\">\n  <mj-hero background-color=\"#fff\" padding=\"0\">\n    <mj-image alt=\"Q3 Logo\" width=\"95px\" src=\"https://github.com/3merge/q3-client/raw/master/logo.png\" />\n  </mj-hero>\n</mj-wrapper>"
+  },
+  {
+    "active": true,
+    "name": "__en-footer",
+    "mjml": ""
+  },
+  {
+    "active": true,
+    "name": "en-password-change",
+    "mjml": "<mjml>\n  <mj-head>\n    <mj-include path=\"__classlist\" />\n    <mj-title>Q3 - Your password has been changed</mj-title>\n  </mj-head>\n  <mj-body mj-class=\"background\">\n    <mj-include path=\"__en-header\" />\n    <mj-wrapper mj-class=\"wrapper\">\n      <mj-section mj-class=\"foreground\">\n        <mj-column mj-class=\"main\">\n          <mj-text>Hi {{firstName}},</mj-text>\n          <mj-spacer />\n          <mj-text>Your account password has been changed. If you did not prompt the change, get in touch with an administrator as soon as possible.</mj-text>\n        </mj-column>\n      </mj-section>\n    </mj-wrapper>\n  </mj-body>\n</mjml>",
+    "variables": {
+      "firstName": "Jane"
+    }
+  }
+]

@@ -65,5 +65,11 @@
     "setupFilesAfterEnv": [
       "q3-test-utils/jest-setup.js"
     ]
+  },
+  "bin": {
+    "build-access": "./bin/buildAccessControl.js",
+    "build-locale": "./bin/buildLocale.js",
+    "seed-emails": "./bin/seedEmailDatabase.js",
+    "seed-login": "./bin/seedUserAndDomain.js"
   }
 }

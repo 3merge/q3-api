@@ -78,3 +78,6 @@ exports.getWebAppUrlAsTenantUser = (user = {}) => {
 
 exports.cleanCallerResponse = (str) =>
   isString(str) ? path.basename(str).split('.')[0] : str;
+
+exports.getEmailCollectionNameFromEnv = () =>
+  process.env.EMAIL_COLLECTION || 'emails';

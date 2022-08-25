@@ -19,9 +19,8 @@ const {
 } = require('./helpers');
 require('./helpers/handlebarsFunctions');
 
-// assumed to be registered already with mongoose
 const DEFAULT_MODEL_NAME =
-  process.env.EMAIL_COLLECTION || 'emails';
+  utils.getEmailCollectionNameFromEnv();
 
 module.exports = class Mailer {
   constructor(template, options = {}) {
