@@ -100,10 +100,10 @@ const makePayload = (data) => {
   if (isObject(formatted)) {
     checkBlacklist(formatted);
 
-    if (formatted.session) {
+    if (isObject(formatted.session)) {
       checkBlacklist(formatted.session);
 
-      if (formatted.session.USER)
+      if (isObject(formatted.session.USER))
         checkBlacklist(formatted.session.USER);
     }
   }
