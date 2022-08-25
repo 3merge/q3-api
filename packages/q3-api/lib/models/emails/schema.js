@@ -12,5 +12,6 @@ module.exports = new Schema(
     timestamps: false,
     collectionSingularName: 'email',
     collectionPluralName: 'emails',
+    strict: false,
   },
 );

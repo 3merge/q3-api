@@ -218,6 +218,61 @@ Docs coming soon.
 
 Docs coming soon.
 
+## Scripts
+
+### `build-access`
+
+Since Q3 reads its permissions from a single file,
+`q3-access.json`, you'll want to use `yarn build-access` to
+compile a source directory rather than managing this file
+directly. The system expects the folder `accessJson` at the
+root of your project, containing one file per role (i.e.
+"Administrator.json"). Running this script will compile the
+directory or initialize it if missing.
+
+### `build-locale`
+
+Unlike access control, language reads from the database.
+However, developers can manage defaults from the file
+system. Running this script will upload the framework's
+default language keys as well as any custom keys found in
+the file system. The expected path per namespace is
+`lib/lang/:langKey/:namespace.json`.
+
+```shell
+yarn build-locale --overwrite true --applyToAll true
+```
+
+#### Arguments
+
+| Argument     | Expected Value | Description                                                                                                                |
+| ------------ | -------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `applyToAll` | `Boolean`      | Should this apply to all languages? This is useful when setting up defaults that an end-user will translate in production. |
+| `overwrite`  | `Boolean`      | Should the file system overwrite what's already in the database?                                                           |
+
+### `seed-login`
+
+Create a system domain/tenant and Administrator user. This
+will allow you to setup `q3-client` without much effort.
+
+```shell
+yarn seed-login --email foo@bar.net
+```
+
+#### Arguments
+
+| Argument | Expected Value | Description                               |
+| -------- | -------------- | ----------------------------------------- |
+| `email`  | `String`       | The users' email to verify and login with |
+
+### `seed-emails`
+
+To dispatch rather critical workflows, such as password
+reset and account verification, you'll need a few email
+templates. Run this script to populate the database so that
+you have all the required templates and partials to work
+off.
+
 ## Routes
 
 Q3 includes a few common API routes. These deal with core

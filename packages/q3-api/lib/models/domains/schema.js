@@ -28,6 +28,10 @@ const DomainSchema = new mongoose.Schema(
     theme: String,
     font: String,
     listens: mongoose.Schema.Types.Mixed,
+    invertLogo: {
+      default: false,
+      type: Boolean,
+    },
   },
   {
     restify: '*',

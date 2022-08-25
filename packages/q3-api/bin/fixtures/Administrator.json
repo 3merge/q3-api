@@ -1,0 +1,78 @@
+[
+  {
+    "coll": "profile",
+    "fields": ["*"],
+    "op": "Read"
+  },
+  {
+    "coll": "profile",
+    "fields": ["*"],
+    "op": "Create"
+  },
+  {
+    "coll": "profile",
+    "fields": ["*"],
+    "op": "Update"
+  },
+  {
+    "coll": "profile",
+    "fields": ["featuredUpload"],
+    "op": "Delete"
+  },
+  {
+    "coll": "domain",
+    "fields": ["*"],
+    "op": "Read"
+  },
+  {
+    "coll": "domain",
+    "fields": ["*"],
+    "op": "Create"
+  },
+  {
+    "coll": "domain",
+    "fields": ["*"],
+    "op": "Update"
+  },
+  {
+    "coll": "domain",
+    "fields": [
+      "{faviconFilePath,featuredUpload,logoFilePath}"
+    ],
+    "op": "Delete"
+  },
+  {
+    "coll": "audit",
+    "op": "Read",
+    "fields": ["*"]
+  },
+  {
+    "coll": "queues",
+    "op": "Read",
+    "fields": ["*"]
+  },
+  {
+    "coll": "queues",
+    "op": "Update",
+    "fields": ["*"]
+  },
+  {
+    "coll": "queues",
+    "op": "Delete",
+    "fields": ["*"]
+  },
+  {
+    "coll": "emails",
+    "op": "Read",
+    "inClient": true,
+    "fields": ["*"],
+    "ownership": "Any"
+  },
+  {
+    "coll": "emails",
+    "op": "Update",
+    "inClient": true,
+    "fields": ["mjml"],
+    "ownership": "Any"
+  }
+]
