@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.1](https://github.com/3merge/q3-api/compare/v3.5.0...v3.5.1) (2022-08-25)
+
+
+### Bug Fixes
+
+* domain resources ref ([28e70e2](https://github.com/3merge/q3-api/commit/28e70e26b3dc61325be7c572f1bb39e159214332))
+
+
+
+
+
 # [3.5.0](https://github.com/3merge/q3-api/compare/v3.4.29...v3.5.0) (2022-08-25)
 
 
