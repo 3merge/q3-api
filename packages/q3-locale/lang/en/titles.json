@@ -113,5 +113,7 @@
   "usersNew": "New user",
   "users": "Users",
   "contactInformation": "Contact information",
-  "appLocale": "Locale"
+  "appLocale": "Locale",
+  "queuelogs": "Queues",
+  "appSettings": "Settings"
 }

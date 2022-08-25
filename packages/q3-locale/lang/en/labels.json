@@ -416,5 +416,15 @@
   "showUnseenOnly": "Toggle",
   "uis": "UIs",
   "calendar": "Calendar",
-  "table": "Table"
+  "table": "Table",
+  "account": "Account",
+  "invertLogo": "Invert logo",
+  "color": "Colour",
+  "uploadFile": "Upload file",
+  "clearFile": "Clear file",
+  "theme": "Theme",
+  "birthday": "Birthday",
+  "occupation": "Occupation",
+  "light": "Light",
+  "dark": "Dark"
 }
