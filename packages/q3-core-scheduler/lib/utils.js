@@ -75,7 +75,41 @@ const parse = (v) => {
 const toJson = (data) =>
   data && 'toJSON' in data ? data.toJSON() : data;
 
-const makePayload = (data) => stringify(toJson(data));
+const makePayload = (data) => {
+  const formatted = toJson(data);
+  const checkBlacklist = (obj) => {
+    [
+      '__v',
+      'apiKeys',
+      'changelog',
+      'enableServerToServer',
+      'loginAttempts',
+      'secretIssuedOn',
+      'tours',
+      'uploads',
+      'password',
+      'lastLoggedIn',
+    ].forEach((key) => {
+      if (obj[key]) {
+        // eslint-disable-next-line
+        delete obj[key];
+      }
+    });
+  };
+
+  if (isObject(formatted)) {
+    checkBlacklist(formatted);
+
+    if (formatted.session) {
+      checkBlacklist(formatted.session);
+
+      if (formatted.session.USER)
+        checkBlacklist(formatted.session.USER);
+    }
+  }
+
+  return stringify(formatted);
+};
 
 const forwardPayload = (fn) => (choreData) =>
   fn({
