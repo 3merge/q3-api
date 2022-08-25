@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.5.0](https://github.com/3merge/q3-api/compare/v3.4.29...v3.5.0) (2022-08-25)
+
+
+### Features
+
+* cli scripts for bootstring project ([#184](https://github.com/3merge/q3-api/issues/184)) ([4905d4e](https://github.com/3merge/q3-api/commit/4905d4ebf3d61b68767b0913702cc2f4bc734cac))
+
+
+
+
+
 ## [3.4.29](https://github.com/3merge/q3-api/compare/v3.4.28...v3.4.29) (2022-08-24)
 
 **Note:** Version bump only for package Q3-Api
