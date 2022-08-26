@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.3](https://github.com/3merge/q3-api/compare/v3.5.2...v3.5.3) (2022-08-26)
+
+**Note:** Version bump only for package q3-plugin-sequence
+
+
+
+
+
+
 ## [3.4.17](https://github.com/3merge/q3-api/compare/v3.4.16...v3.4.17) (2022-06-30)
 
 
