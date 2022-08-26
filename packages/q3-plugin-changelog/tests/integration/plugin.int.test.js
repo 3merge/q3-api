@@ -1,15 +1,18 @@
 /* global wait */
-jest.setTimeout(30000);
+jest.setTimeout(60000);
 
 const mongoose = require('mongoose');
 const { AccessControl } = require('q3-core-access');
+const changestream = require('../../lib/changestream');
 const Report = require('../../lib/report');
 const Model = require('../fixtures/Model');
 
 beforeAll(async () => {
+  // for some reason we need to disconnect first...
+  await mongoose.disconnect();
   await mongoose.connect(process.env.CONNECTION);
-  // eslint-disable-next-line
-  require('../../lib/changestream')();
+  await changestream();
+
   AccessControl.init([
     {
       coll: 'testing-changelogs',
@@ -36,19 +39,15 @@ describe('changelog', () => {
       title: 'New',
     });
 
-    const up = async (args) =>
-      new Promise((r) => {
-        setTimeout(async () => {
-          r(
-            await Model.updateOne(
-              {
-                _id: doc._id,
-              },
-              args,
-            ),
-          );
-        }, 1000);
-      });
+    const up = (args) =>
+      wait(async () => {
+        await Model.updateOne(
+          {
+            _id: doc._id,
+          },
+          args,
+        );
+      }, 500);
 
     await up({
       title: 'New Tesla announced',
@@ -80,31 +79,31 @@ describe('changelog', () => {
       },
     });
 
+    let titleRecords;
+    let topicRecords;
+
     await wait(async () => {
       const r = new Report('testing-changelogs', doc._id);
-      const titleRecords = await r.getData({}, 'title');
-      const topicRecords = await r.getData(
-        {},
-        'topics.name',
-      );
-
-      expect(titleRecords).toHaveLength(2);
-      expect(titleRecords[0].updates[0].title).toEqual(
-        'New Tesla announced',
-      );
-
-      expect(titleRecords[1].additions[0].title).toEqual(
-        'New',
-      );
-
-      expect(topicRecords).toHaveLength(2);
-
-      expect(
-        topicRecords[0].deletions[0]['topics.name'],
-      ).toEqual('Entertainment');
-
-      expect(topicRecords[1].additions).toHaveLength(3);
+      titleRecords = await r.getData({}, 'title');
+      topicRecords = await r.getData({}, 'topics.name');
     });
+
+    expect(titleRecords).toHaveLength(2);
+    expect(titleRecords[0].updates[0].title).toEqual(
+      'New Tesla announced',
+    );
+
+    expect(titleRecords[1].additions[0].title).toEqual(
+      'New',
+    );
+
+    expect(topicRecords).toHaveLength(2);
+
+    expect(
+      topicRecords[0].deletions[0]['topics.name'],
+    ).toEqual('Entertainment');
+
+    expect(topicRecords[1].additions).toHaveLength(3);
   });
 
   it('should save the last modified user', async () => {

@@ -26,6 +26,10 @@ beforeAll(async () => {
   await mongoose.connect(process.env.CONNECTION);
 });
 
+afterAll(() => {
+  mongoose.disconnect();
+});
+
 describe('SubDocumentSequenceParentMiddleware', () => {
   it('should shuffle the subdocs on save', async () => {
     const { embedded } = await Model.create({

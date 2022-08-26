@@ -19,6 +19,10 @@ beforeEach(async () => {
   await Counter.deleteMany({});
 });
 
+afterAll(() => {
+  mongoose.disconnect();
+});
+
 describe('sequential', () => {
   it('should increment based on previous', async () => {
     const docs = await Model.create([
