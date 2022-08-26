@@ -7,7 +7,6 @@
     "deep-diff": "^1.0.2",
     "deep-object-diff": "^1.1.0",
     "flat": "^5.0.2",
-    "hyperdiff": "^2.0.10",
     "jsondiffpatch": "^0.4.1",
     "lodash": "^4.17.20",
     "mongoose": "^6.2.1",
