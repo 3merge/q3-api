@@ -1,4 +1,3 @@
-// eslint-disable-next-line
 const moment = require('moment-timezone');
 const {
   compact,
