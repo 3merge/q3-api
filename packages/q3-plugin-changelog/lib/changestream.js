@@ -3,6 +3,17 @@ const cluster = require('cluster');
 const { get } = require('lodash');
 const { insertIntoChangelog } = require('./utils');
 
+const isReadyToConnect = () => {
+  try {
+    return (
+      cluster.isMaster &&
+      mongoose.connection.readyState === 1
+    );
+  } catch (e) {
+    return false;
+  }
+};
+
 const shouldRunChangelog = (Model) => {
   try {
     return !(
@@ -21,7 +32,7 @@ const shouldRunChangelog = (Model) => {
 };
 
 module.exports = () => {
-  if (cluster.isMaster)
+  if (isReadyToConnect())
     Object.values(mongoose.models).forEach((Model) => {
       if (!shouldRunChangelog(Model)) return;
 

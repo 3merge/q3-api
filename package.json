@@ -71,6 +71,7 @@
   "resolutions": {
     "async": "2.6.4",
     "axios": "^0.21.1",
+    "mongodb": "4.8.1",
     "mpath": "^0.8.4",
     "moment": "^2.29.3",
     "mongoose": "^6.2.1",

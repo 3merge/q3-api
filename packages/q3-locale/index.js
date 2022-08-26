@@ -15,13 +15,14 @@ const walk = (dir) => {
         'utf8',
       );
 
-      i18next.addResourceBundle(
-        lang,
-        name,
-        JSON.parse(json),
-        true,
-        true,
-      );
+      if (json)
+        i18next.addResourceBundle(
+          lang,
+          name,
+          JSON.parse(json),
+          true,
+          true,
+        );
     });
   });
 };

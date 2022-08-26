@@ -9,6 +9,7 @@ const {
   omit,
   map,
   isEqual,
+  isString,
   isNil,
 } = require('lodash');
 const micromatch = require('micromatch');
@@ -25,6 +26,9 @@ const {
 } = require('../helpers');
 
 const forward = (xs) => (fn) => fn(xs);
+
+const getFirstInPath = (str) =>
+  isString(str) ? first(str.split('.')) : undefined;
 
 const removeSpecialProps = (xs) =>
   omit(xs, [
@@ -218,6 +222,24 @@ class AccessControlSessionBridge {
     );
   }
 
+  __$resolveFullPath() {
+    const path = get(this, '$__.fullPath');
+
+    if (this.$isSubdocument) {
+      // calling this populates $__.fullPath
+      invoke(this, '$__fullPath');
+
+      return (
+        path ||
+        getFirstInPath(
+          invoke(this, '$__pathRelativeToParent'),
+        )
+      );
+    }
+
+    return path;
+  }
+
   authorizeCreateArguments(args = {}) {
     return this.__$runGrantAgainstDocument(args, 'Create');
   }
@@ -232,7 +254,7 @@ class AccessControlSessionBridge {
 
   authorizeUpdateArgumentsOnCurrentSubDocument(args) {
     let index = 0;
-    const field = this.$__.fullPath;
+    const field = this.__$resolveFullPath();
     const parent = this.parent();
 
     const newSubDoc = {
@@ -262,7 +284,7 @@ class AccessControlSessionBridge {
   }
 
   authorizeRemovalOnCurrentSubDocument(callback) {
-    const field = this.$__.fullPath;
+    const field = this.__$resolveFullPath();
     const { checkFieldAgainst, getIndexOfSubField } =
       this.parent().__$getInitialGrantAndContext('Delete');
 
