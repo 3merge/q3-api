@@ -9,6 +9,7 @@ const Scheduler = require('q3-core-scheduler');
 const cluster = require('cluster');
 const core = require('./config/core');
 const mongooseInstance = require('./config/mongoose');
+const registerGlobals = require('./registerGlobals');
 
 const connectToMongooseInstanceWithDefaultPoolSize = () =>
   mongooseInstance.connect(process.env.CONNECTION);
@@ -22,6 +23,7 @@ module.exports = async (location) => {
   // eslint-disable-next-line
   if (fs.existsSync(models)) require(models);
 
+  registerGlobals(location);
   await connectToMongooseInstanceWithDefaultPoolSize();
   core(location);
 
