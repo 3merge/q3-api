@@ -38,6 +38,13 @@ describe('Mailer core', () => {
     });
   });
 
+  describe('"from"', () => {
+    it('should assign reply-to', () => {
+      inst.from('test@google.ca');
+      expect(inst.meta).toHaveProperty('from');
+    });
+  });
+
   describe('"props"', () => {
     it('should assign template variables', () => {
       inst.props({ foo: 1 });
@@ -75,7 +82,6 @@ describe('Mailer core', () => {
       await m.send();
 
       expect(strategies).toHaveBeenCalledWith('Test', {
-        from: expect.any(String),
         html: '<br />',
       });
     });
