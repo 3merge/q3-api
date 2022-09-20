@@ -17,6 +17,7 @@ const mongoose = require('./config/mongoose');
 const models = require('./models');
 const { DatabaseStream, ...utils } = require('./helpers');
 const cluster = require('./config/cluster');
+const registerGlobals = require('./registerGlobals');
 
 const connectToDB = (res, rej) => (err) => {
   if (err) return rej(err);
@@ -49,6 +50,7 @@ const Q3 = {
       throw new Error('App requires a location');
 
     Object.assign(app.locals, { location }, args);
+    registerGlobals(app.locals.location);
     core(app.locals.location);
 
     this.routes();

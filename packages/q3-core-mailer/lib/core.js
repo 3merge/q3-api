@@ -27,13 +27,9 @@ module.exports = class Mailer {
     if (!template)
       throw new Error('Template name required');
 
-    const {
-      MAILER_FROM = '3merge <donotreply@3merge.ca>',
-      MAILER_STRATEGY = 'Mailgun',
-    } = process.env;
+    const { MAILER_STRATEGY = 'Mailgun' } = process.env;
 
     this.meta = {
-      from: MAILER_FROM,
       strategy: MAILER_STRATEGY,
       template,
     };
@@ -101,6 +97,11 @@ module.exports = class Mailer {
       throw new Error('Must provide an array');
 
     this.meta[key] = utils.filterByEmailValidity(addresses);
+    return this;
+  }
+
+  from(from) {
+    this.meta.from = utils.filterByEmailValidity([from]);
     return this;
   }
 

@@ -1,12 +1,18 @@
+const { get, invoke, isFunction } = require('lodash');
 const mailgun = require('./mailgun');
 
 module.exports = async (strategy, data = {}) => {
-  const services = {
-    Mailgun: mailgun(),
-  };
+  const service = get(
+    {
+      Mailgun: mailgun,
+    },
+    strategy,
+  );
 
-  if (!(strategy in services))
+  if (!service || !isFunction(service))
     throw new Error('Unknown strategy');
 
-  return services[strategy].send(data);
+  return service(
+    await invoke(global, 'getMailerVars'),
+  ).send(data);
 };

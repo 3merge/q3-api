@@ -36,6 +36,8 @@ PUBLIC_BUCKET=
 CDN=
 
 # Mailing configurations
+MAILER_STRATEGY=
+MAILER_FROM=
 MAILGUN_ACCESS_TOKEN=
 MAILGUN_DOMAIN=
 MAILGUN_DEV_RECIPIENT=
@@ -77,6 +79,7 @@ access control JSON file</a>.
  ┃ ┣ 📂 models
  ┃ ┣ 📂 routes
  ┃ ┣ 📜 config.js
+ ┃ ┣ 📜 globals.js
  ┃ ┣ 📜 index.js
  ┃ ┗ 📜 worker.js
  ┣ 📜 q3-access.json
@@ -112,6 +115,14 @@ module.exports = Q3.config({
 | `location`             | If your working directory is not in the same location as your `package.json` file, you'll need to provide Q3 with the directory root.                                                                                                                                                                                                                                                                                                               | `String`         |
 | `messages`             | Any route that Q3 automates will send a standard message back to the client. For example, on PATCH 200, the app will include some sort of acknowledgement message the request was successful. To tailor these messages, you can provide an object that specifies the collection name, the sub-document (if required) and the operation to overwrite. For example, part of the Object might look like: `{ collectionNamePlural: { post: 'Woot!' } }` | `Object`         |
 | `onCors`               | If the environment variable `WHITELIST_CORS` is undefined, then CORS will allow all requests through. If your app requires a dynamic policy, then you can combine the whitelist along with a resolving function. This function receives the origin's value so that you can programmatically accept or deny based on the value.                                                                                                                      | `async Function` |
+
+### globals.js
+
+If your project contains a `global.js` file, then Q3 will parse its exported functions and load them into the global namespace. However, to limit namespace pollution, unrecognized functions will be discarded. Here are some that you can use safely:
+
+ - `getMailerVars`
+
+Each function corresponds to a configuration option outlined elsewhere in the documentation. Typically, global functions handle runtime changes to environment variables or overwrite default arguments in private/internal modules.
 
 ### index.js
 
