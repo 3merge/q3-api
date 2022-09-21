@@ -408,8 +408,6 @@ information.
 			"folder": false,
 			"folderId" null,
 			"id": 1,
-      // only developers can see this
-      // this field controls which roles see which segments
       "visibility": ["Administrator", "Sales"]
 		}
 	]
@@ -424,17 +422,11 @@ developers can perform this operation.
 
 #### Params
 
-| Parameter | Description | Type |
-
-| ----------------- |
-| ----------------- |
-
-| `action*` | What to do with the payload|
-`String (create,remove,rename,replace,reorder,replaceVisibility)`
-|
-
-| `collectionName*` | The collection to target | `String` |
-| `payload` | | `Object`|
+| Parameter         | Description                 | Type                                                              |
+| ----------------- | --------------------------- | ----------------------------------------------------------------- |
+| `action*`         | What to do with the payload | `String (create,remove,rename,replace,reorder,replaceVisibility)` |
+| `collectionName*` | The collection to target    | `String`                                                          |
+| `payload`         |                             | `Object`                                                          |
 
 Typically, the payload just contains a single segment. That
 means the `id` field is expected along with whatever
