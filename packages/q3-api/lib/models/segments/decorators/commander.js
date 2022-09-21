@@ -94,8 +94,6 @@ class Commander {
     return this;
   }
 
-  // control visibility?
-
   async execCmd(cmd, args) {
     const f = {
       create: this.addToEntries,
@@ -111,7 +109,7 @@ class Commander {
         .msg('unknownSegmentCommand')
         .throw();
 
-    f(args);
+    f.call(this, args);
     await this.save();
   }
 }
