@@ -118,11 +118,18 @@ module.exports = Q3.config({
 
 ### globals.js
 
-If your project contains a `global.js` file, then Q3 will parse its exported functions and load them into the global namespace. However, to limit namespace pollution, unrecognized functions will be discarded. Here are some that you can use safely:
+If your project contains a `global.js` file, then Q3 will
+parse its exported functions and load them into the global
+namespace. However, to limit namespace pollution,
+unrecognized functions will be discarded. Here are some that
+you can use safely:
 
- - `getMailerVars`
+- `getMailerVars`
 
-Each function corresponds to a configuration option outlined elsewhere in the documentation. Typically, global functions handle runtime changes to environment variables or overwrite default arguments in private/internal modules.
+Each function corresponds to a configuration option outlined
+elsewhere in the documentation. Typically, global functions
+handle runtime changes to environment variables or overwrite
+default arguments in private/internal modules.
 
 ### index.js
 
@@ -375,3 +382,96 @@ to just name, email and ID.
   ]
 }
 ```
+
+### GET /system-segments
+
+Pull a list of _segments_, which contains saved filters for
+each collection. Developers will see all possible segments,
+whereas other roles types will only see those applicable
+(see `visibility` field). Currently, there are no queries or
+parameters for this route.
+
+Note that the segments' order will descend by creation date
+or mimic the last saved re-sort. See `PUT` for more
+information.
+
+#### Response
+
+```json
+
+{
+	"segments": [
+		{
+			"collectName": "test",
+			"label": "Segment #1",
+			"value": "?queryparam=string(foo)",
+			"folder": false,
+			"folderId" null,
+			"id": 1,
+      // only developers can see this
+      // this field controls which roles see which segments
+      "visibility": ["Administrator", "Sales"]
+		}
+	]
+}
+
+```
+
+### PUT /system-segments
+
+Modify one or many segments inside a collection. Only
+developers can perform this operation.
+
+#### Params
+
+| Parameter | Description | Type |
+
+| ----------------- |
+| ----------------- |
+
+| `action*` | What to do with the payload|
+`String (create,remove,rename,replace,reorder,replaceVisibility)`
+|
+
+| `collectionName*` | The collection to target | `String` |
+| `payload` | | `Object`|
+
+Typically, the payload just contains a single segment. That
+means the `id` field is expected along with whatever
+property being editted. For instance:
+
+```json
+{
+	"action" "rename",
+	"collectionName": "foo",
+	"payload": {
+		"id": 1,
+    // the label is the name, so we provide a new one
+		"label": "New value",
+	}
+}
+```
+
+Possible properties to edit include `label`, `value` and
+`visibility`. For re-ordering, simply provide a list of just
+`id` and `folderId` values in the anticipated order:
+
+```json
+{
+	"action" "rename",
+	"collectionName": "foo",
+	"payload": {
+		"entries": [
+			{
+				"id": 1,
+				"folderId": null,
+			}
+		],
+	}
+}
+```
+
+Note that reordering expects all segments within a
+collection; omitting any deletes them. The `PUT` response
+looks like the `GET` for this route, but the data contains
+only segments for the modified collection.
