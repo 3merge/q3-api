@@ -438,8 +438,7 @@ property being editted. For instance:
 	"collectionName": "foo",
 	"payload": {
 		"id": 1,
-    // the label is the name, so we provide a new one
-		"label": "New value",
+    "label": "New value",
 	}
 }
 ```
