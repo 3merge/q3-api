@@ -4,15 +4,33 @@ const {
   reduce,
   omit,
   includes,
-  map,
+  forEach,
+  find,
 } = require('lodash');
 const { exception } = require('q3-core-responder');
 const Schema = require('../schema');
+const {
+  objectIdEquals,
+} = require('../../../helpers/utils');
 
 class Commander {
   addToEntries(args) {
-    this.entries.push(args);
+    if (Array.isArray(this.entries))
+      this.entries.push(args);
+    else this.entries = [args];
     return this;
+  }
+
+  getEntry(id) {
+    try {
+      const item = this.entries.id(id);
+      if (!item) throw new Error();
+      return item;
+    } catch (e) {
+      return exception('Validation')
+        .msg('unknownSegmentEntryId')
+        .throw();
+    }
   }
 
   mapEntries(visibilityOptions = {}) {
@@ -42,56 +60,62 @@ class Commander {
   }
 
   removeEntry({ id }) {
-    this.entries.forEach((item) => {
-      try {
-        if (item.folderId.equals(id)) {
-          item.remove();
-        }
-      } catch (e) {
-        // noop
+    this.getEntry(id).remove();
+    forEach(this.entries, (item) => {
+      if (objectIdEquals(item.folderId, id)) {
+        item.remove();
       }
     });
 
-    this.entries.id(id).remove();
+    return this;
+  }
+
+  getEntryAndSet(id, args) {
+    this.getEntry(id).set(args);
     return this;
   }
 
   renameEntry({ id, label }) {
-    this.entries.id(id).set({
+    return this.getEntryAndSet(id, {
       label,
     });
-
-    return this;
   }
 
-  reorderEntries({ segments: sorted }) {
-    this.entries = map(sorted, ({ folderId, id }) => ({
-      ...this.entries.find((prevItem) =>
-        prevItem._id.equals(id),
-      ),
-      folderId: folderId
-        ? mongoose.Types.ObjectId(folderId)
-        : null,
-      id,
-    }));
+  reorderEntries({ entries }) {
+    this.entries = reduce(
+      entries,
+      (acc, curr) => {
+        const { folderId, id } = curr;
+        const match = find(this.entries, (prevItem) =>
+          objectIdEquals(prevItem._id, id),
+        );
+
+        if (match)
+          acc.push({
+            ...match,
+            folderId: folderId
+              ? mongoose.Types.ObjectId(folderId)
+              : null,
+          });
+
+        return acc;
+      },
+      [],
+    );
 
     return this;
   }
 
   replaceEntry({ id, value }) {
-    this.entries.id(id).set({
+    return this.getEntryAndSet(id, {
       value,
     });
-
-    return this;
   }
 
   replaceEntryVisibility({ id, visibility = [] }) {
-    this.entries.id(id).set({
+    return this.getEntryAndSet(id, {
       visibility,
     });
-
-    return this;
   }
 
   async execCmd(cmd, args) {

@@ -118,6 +118,15 @@ const getWebAppUrlByUser = (user = {}) => {
   return url;
 };
 
+const objectIdEquals = (a, b) => {
+  try {
+    const { ObjectId } = mongoose.Types;
+    return ObjectId(a).equals(ObjectId(b));
+  } catch (e) {
+    return false;
+  }
+};
+
 module.exports = {
   toQuery,
   toUndefined,
@@ -128,4 +137,5 @@ module.exports = {
   setExecutableTemplatePathInRequest,
   replaceSpaces,
   getWebAppUrlByUser,
+  objectIdEquals,
 };
