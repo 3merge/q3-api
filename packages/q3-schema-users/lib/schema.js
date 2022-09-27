@@ -92,6 +92,10 @@ const BaseUserModel = new Schema(
     timezone: String,
     tenant: String,
     countryOfResidence: String,
+    developer: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     withUploads: true,

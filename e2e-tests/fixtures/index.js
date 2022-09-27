@@ -9,6 +9,7 @@ const genUser =
   (email = 'mibberson@3merge.ca', role = 'Developer') =>
   () =>
     Users.create({
+      developer: true,
       enableServerToServer: true,
       firstName: 'Mike',
       lastName: 'Ibberson',

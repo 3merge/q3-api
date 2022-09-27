@@ -4,6 +4,7 @@ const Domains = require('./domains');
 const DomainResources = require('./domainsResources');
 const Emails = require('./emails');
 const NotifiationSchema = require('./notifications');
+const Segments = require('./segments');
 const Users = require('./users');
 
 const Notifications = mongoose.model(
@@ -17,4 +18,5 @@ module.exports = {
   Emails,
   Users,
   Notifications,
+  Segments,
 };
