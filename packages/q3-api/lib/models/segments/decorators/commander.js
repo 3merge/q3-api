@@ -6,12 +6,17 @@ const {
   includes,
   forEach,
   find,
+  some,
 } = require('lodash');
 const { exception } = require('q3-core-responder');
 const Schema = require('../schema');
 const {
   objectIdEquals,
 } = require('../../../helpers/utils');
+
+const toJSON = (xs) =>
+  // only available during non-lean queries
+  isFunction(xs.toJSON) ? xs.toJSON() : xs;
 
 class Commander {
   addToEntries(args) {
@@ -41,13 +46,26 @@ class Commander {
       omissions.push(['visibility']);
     }
 
+    const inheritVisibility = (xs) =>
+      some(this.entries, (entry) => {
+        const { _id: id, folder, folderId } = toJSON(entry);
+
+        return objectIdEquals(id, xs)
+          ? false
+          : objectIdEquals(folderId, xs) &&
+              (!folder ||
+                (folder && inheritVisibility(id)));
+      });
+
     return reduce(
       this.entries,
       (acc, curr) => {
-        const entry = curr.toJSON();
-        const { _id: id, visibility } = entry;
+        const entry = toJSON(curr);
+        const { _id: id, folder, visibility } = entry;
 
-        return developer || includes(visibility, role)
+        return developer ||
+          includes(visibility, role) ||
+          (folder && inheritVisibility(id))
           ? acc.concat({
               ...omit(entry, omissions),
               collectionName: this.collectionName,
@@ -92,7 +110,7 @@ class Commander {
 
         if (match)
           acc.push({
-            ...match,
+            ...toJSON(match),
             folderId: folderId
               ? mongoose.Types.ObjectId(folderId)
               : null,

@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 const Commander = require('../commander');
 
+jest.mock('../../../../helpers/utils', () => ({
+  objectIdEquals: jest
+    .fn()
+    .mockImplementation((a, b) => String(a) === String(b)),
+}));
+
 const makeToJson = (args) =>
   jest.fn().mockReturnValue({
     _id: 1,
@@ -37,6 +43,56 @@ describe('Segments>Commander', () => {
           label: 1,
           value: 1,
           visibility: ['Customer'],
+        },
+      ]);
+    });
+
+    it.only('should include parent folders', () => {
+      const c = new Commander().mapEntries.call(
+        {
+          collectionName: 'test',
+          entries: [
+            {
+              toJSON: makeToJson({
+                label: 'Include',
+                folder: true,
+                _id: 2,
+              }),
+            },
+            {
+              toJSON: makeToJson({
+                label: 'Exclude',
+                folder: true,
+                _id: 3,
+              }),
+            },
+            {
+              toJSON: makeToJson({
+                folderId: 2,
+                visibility: ['Administrator'],
+              }),
+            },
+          ],
+        },
+        {
+          role: 'Administrator',
+        },
+      );
+
+      expect(c).toEqual([
+        {
+          collectionName: 'test',
+          id: 2,
+          label: 'Include',
+          value: 1,
+          folder: true,
+        },
+        {
+          collectionName: 'test',
+          id: 1,
+          label: 1,
+          value: 1,
+          folderId: 2,
         },
       ]);
     });
