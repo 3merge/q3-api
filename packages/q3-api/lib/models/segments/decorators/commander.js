@@ -48,12 +48,17 @@ class Commander {
 
     const inheritVisibility = (xs) =>
       some(this.entries, (entry) => {
-        const { _id: id, folder, folderId } = toJSON(entry);
+        const {
+          _id: id,
+          folder,
+          folderId,
+          visibility,
+        } = toJSON(entry);
 
         return objectIdEquals(id, xs)
           ? false
           : objectIdEquals(folderId, xs) &&
-              (!folder ||
+              ((!folder && includes(visibility, role)) ||
                 (folder && inheritVisibility(id)));
       });
 
