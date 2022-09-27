@@ -11,9 +11,13 @@ const SystemSegmentsPutController = async (req, res) => {
       .msg('requiresDeveloper')
       .throw();
 
-  const s = await Segments.findOne({
-    collectionName,
-  });
+  const s =
+    (await Segments.findOne({
+      collectionName,
+    })) ||
+    new Segments({
+      collectionName,
+    });
 
   await s.execCmd(action, payload);
 
