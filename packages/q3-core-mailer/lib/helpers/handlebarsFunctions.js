@@ -6,6 +6,7 @@ const {
   isString,
   join,
   size,
+  invoke,
 } = require('lodash');
 const Handlebars = require('handlebars');
 
@@ -44,7 +45,7 @@ function renderUrl(urlString = '', options) {
     toString(
       compact([
         !isString(urlString) || !size(urlString)
-          ? process.env.URL
+          ? invoke(global, 'getUrl') || process.env.URL
           : urlString,
         invokeFnWithCurrentContext(options || urlString),
       ]).join('/'),

@@ -124,7 +124,9 @@ namespace. However, to limit namespace pollution,
 unrecognized functions will be discarded. Here are some that
 you can use safely:
 
-- `getMailerVars`
+- `async getMailerVars`
+- `getWebApp`
+- `getUrl`
 
 Each function corresponds to a configuration option outlined
 elsewhere in the documentation. Typically, global functions

@@ -6,6 +6,7 @@ const {
   size,
   isFunction,
   set,
+  invoke,
 } = require('lodash');
 const mongoose = require('mongoose');
 const parse = require('q3-core-rest/lib/queryParser');
@@ -107,7 +108,8 @@ const getWebAppUrlByUser = (user = {}) => {
    * @NOTE
    * Assumed to be a valid URL.
    */
-  const url = process.env.WEB_APP;
+  const url =
+    invoke(global, 'getWebApp') || process.env.WEB_APP;
   const { tenant } = user;
 
   if (tenant) {
