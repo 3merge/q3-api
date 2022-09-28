@@ -47,7 +47,7 @@ describe('changelog', () => {
           },
           args,
         );
-      }, 500);
+      }, 1050);
 
     await up({
       title: 'New Tesla announced',
@@ -86,7 +86,7 @@ describe('changelog', () => {
       const r = new Report('testing-changelogs', doc._id);
       titleRecords = await r.getData({}, 'title');
       topicRecords = await r.getData({}, 'topics.name');
-    });
+    }, 5000);
 
     expect(titleRecords).toHaveLength(2);
     expect(titleRecords[0].updates[0].title).toEqual(

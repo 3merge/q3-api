@@ -66,9 +66,10 @@ exports.convertFromCamelCase = (initialStr) => {
 
 exports.getWebAppUrlAsTenantUser = (user = {}) => {
   const { tenant } = user;
-  const url =
-    invoke(global, 'getWebApp', tenant) ||
-    process.env.WEB_APP;
+  const customUrl = invoke(global, 'getWebApp', tenant);
+  const url = process.env.WEB_APP;
+
+  if (customUrl) return customUrl;
 
   if (tenant && isString(url)) {
     const [protocol, host] = url.split('//');

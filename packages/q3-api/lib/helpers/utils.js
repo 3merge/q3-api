@@ -6,9 +6,11 @@ const {
   size,
   isFunction,
   set,
-  invoke,
 } = require('lodash');
 const mongoose = require('mongoose');
+const {
+  getWebAppUrlAsTenantUser,
+} = require('q3-core-mailer/lib/utils');
 const parse = require('q3-core-rest/lib/queryParser');
 const { check } = require('q3-core-composer');
 const app = require('../config/express');
@@ -103,23 +105,7 @@ const handleExtRefData = async ({ data }) => {
 const replaceSpaces = (str) =>
   String(str).replace(/\s/gi, '%20');
 
-const getWebAppUrlByUser = (user = {}) => {
-  /**
-   * @NOTE
-   * Assumed to be a valid URL.
-   */
-  const { tenant } = user;
-  const url =
-    invoke(global, 'getWebApp', tenant) ||
-    process.env.WEB_APP;
-
-  if (tenant) {
-    const [protocol, host] = url.split('//');
-    return `${protocol}//${tenant}.${host}`;
-  }
-
-  return url;
-};
+const getWebAppUrlByUser = getWebAppUrlAsTenantUser;
 
 const objectIdEquals = (a, b) => {
   try {
