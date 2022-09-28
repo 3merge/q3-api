@@ -1,4 +1,4 @@
-const { isString, size } = require('lodash');
+const { isString, size, invoke } = require('lodash');
 const path = require('path');
 
 const isValidEmailAddress = (v) =>
@@ -65,8 +65,10 @@ exports.convertFromCamelCase = (initialStr) => {
 };
 
 exports.getWebAppUrlAsTenantUser = (user = {}) => {
-  const url = process.env.WEB_APP;
   const { tenant } = user;
+  const url =
+    invoke(global, 'getWebApp', tenant) ||
+    process.env.WEB_APP;
 
   if (tenant && isString(url)) {
     const [protocol, host] = url.split('//');
