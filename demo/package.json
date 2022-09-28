@@ -1,6 +1,6 @@
 {
   "name": "demo",
-  "version": "3.6.5",
+  "version": "3.6.6",
   "main": "index.js",
   "license": "MIT",
   "private": true,
@@ -10,10 +10,10 @@
     "i18next": "^21.5.6",
     "moment": "^2.29.3",
     "mongoose": "^6.2.1",
-    "q3-api": "^3.6.5",
+    "q3-api": "^3.6.6",
     "q3-core-access": "^3.5.3",
     "q3-core-composer": "^3.5.3",
-    "q3-core-mailer": "^3.6.5",
+    "q3-core-mailer": "^3.6.6",
     "q3-core-responder": "^3.4.12",
     "q3-core-rest": "^3.5.3",
     "q3-core-session": "^3.4.10",
@@ -27,7 +27,7 @@
     "q3-schema-rates": "^3.4.12",
     "q3-schema-rebates": "^3.4.12",
     "q3-schema-types": "^3.4.12",
-    "q3-schema-users": "^3.6.5",
+    "q3-schema-users": "^3.6.6",
     "q3-schema-utils": "^3.4.12",
     "q3-test-utils": "^3.4.12"
   }

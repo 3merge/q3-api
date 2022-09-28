@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.6.6](https://github.com/3merge/q3-api/compare/v3.6.5...v3.6.6) (2022-09-28)
+
+
+### Bug Fixes
+
+* changelog test assert and refactor duplicate mailer func ([70ca22b](https://github.com/3merge/q3-api/commit/70ca22b7dada49c080ea5623642ab2a19c28ae21))
+
+
+
+
+
 ## [3.6.5](https://github.com/3merge/q3-api/compare/v3.6.4...v3.6.5) (2022-09-28)
 
 **Note:** Version bump only for package q3-api
