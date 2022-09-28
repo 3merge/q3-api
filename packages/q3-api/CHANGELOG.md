@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.6.4](https://github.com/3merge/q3-api/compare/v3.6.3...v3.6.4) (2022-09-28)
+
+
+### Bug Fixes
+
+* add globals to whitelist ([0f2e6b4](https://github.com/3merge/q3-api/commit/0f2e6b4b21b846bfcea879f5b1ce17db6cdee9e9))
+
+
+
+
+
 ## [3.6.3](https://github.com/3merge/q3-api/compare/v3.6.2...v3.6.3) (2022-09-28)
 
 **Note:** Version bump only for package q3-api
