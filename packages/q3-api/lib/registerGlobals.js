@@ -3,7 +3,11 @@ const path = require('path');
 
 const registerGlobals = (location) => {
   const globals = path.join(location, './globals.js');
-  const expectedGlobalFunctions = ['getMailerVars'];
+  const expectedGlobalFunctions = [
+    'getMailerVars',
+    'getWebApp',
+    'getUrl',
+  ];
 
   if (!fs.existsSync(globals)) return;
 

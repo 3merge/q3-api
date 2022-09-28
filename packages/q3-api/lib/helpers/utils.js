@@ -108,9 +108,10 @@ const getWebAppUrlByUser = (user = {}) => {
    * @NOTE
    * Assumed to be a valid URL.
    */
-  const url =
-    invoke(global, 'getWebApp') || process.env.WEB_APP;
   const { tenant } = user;
+  const url =
+    invoke(global, 'getWebApp', tenant) ||
+    process.env.WEB_APP;
 
   if (tenant) {
     const [protocol, host] = url.split('//');
