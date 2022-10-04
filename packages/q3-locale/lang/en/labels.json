@@ -442,5 +442,14 @@
   "no": "No",
   "usersDetail": "User",
   "uploadFiles": "Upload files",
-  "expand": "Expand"
+  "expand": "Expand",
+  "invalidEmail": "Enter valid email",
+  "invalidUrl": "Enter valid URL",
+  "invalidTel": "Enter valid phone number",
+  "invalidPostalCode": "Enter valid postal code",
+  "invalidNumber": "Enter valid number",
+  "invalidDateString": "Enter valid date",
+  "isRequiredInput": "This is a required field",
+  "this is a required field": "This is a required field",
+  "invalidSelection": "Choose an option"
 }
