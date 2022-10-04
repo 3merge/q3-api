@@ -30,5 +30,14 @@
   "filterByOperation": "The operation describes the type of change that occurred",
   "auditTargets": "Select fields to query for changes. Not all fields will have human-friendly translations; however, those in raw form should still be distinguishable. This field will auto-populate if a template has been applied.",
   "auditUser": "Although this field displays only user who've modified this resource, not all users have modified all fields. Therefore, this might commonly lead to no results.",
-  "invertLogo": "If the logo doesn't display well in dark mode, turn this setting on to automatically invert its colours and render grayscale."
+  "invertLogo": "If the logo doesn't display well in dark mode, turn this setting on to automatically invert its colours and render grayscale.",
+  "invalidEmail": "Enter valid email",
+  "invalidUrl": "Enter valid URL",
+  "invalidTel": "Enter valid phone number",
+  "invalidPostalCode": "Enter valid postal code",
+  "invalidNumber": "Enter valid number",
+  "invalidDateString": "Enter valid date",
+  "isRequiredInput": "This is a required field",
+  "this is a required field": "This is a required field",
+  "invalidSelection": "Choose an option"
 }
