@@ -32,6 +32,10 @@ const DomainSchema = new mongoose.Schema(
       default: false,
       type: Boolean,
     },
+    padLogo: {
+      default: false,
+      type: Boolean,
+    },
   },
   {
     restify: '*',
