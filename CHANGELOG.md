@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.1](https://github.com/3merge/q3-api/compare/v3.7.0...v3.7.1) (2022-10-12)
+
+
+### Bug Fixes
+
+* typo in user session ([f287f88](https://github.com/3merge/q3-api/commit/f287f88c25d3b7748a93478dac8ea5d451f5e625))
+
+
+
+
+
 # [3.7.0](https://github.com/3merge/q3-api/compare/v3.6.10...v3.7.0) (2022-10-12)
 
 
