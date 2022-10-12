@@ -29,7 +29,7 @@ module.exports =
     fnMap = {},
   ) =>
   async ({ query, session: { USER: user } }) => {
-    session.set('USER', 'user');
+    session.set('USER', user);
     session.set('TENANT', get(user, 'tenant', null));
 
     const data = await Redact(
