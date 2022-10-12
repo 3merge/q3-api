@@ -1,0 +1,26 @@
+{
+  "name": "q3-api-exports",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "dependencies": {
+    "flat": "^5.0.2",
+    "lodash": "^4.17.20",
+    "moment": "^2.29.3",
+    "moment-timezone": "^0.5.37",
+    "mongoose": "^6.2.1",
+    "q3-api": "^3.6.10",
+    "q3-core-access": "^3.6.10",
+    "q3-core-session": "^3.6.10"
+  },
+  "devDependencies": {
+    "q3-test-utils": "^3.4.12"
+  },
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node",
+    "preset": "q3-test-utils",
+    "setupFilesAfterEnv": [
+      "q3-test-utils/jest-setup.js"
+    ]
+  }
+}
