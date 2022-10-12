@@ -9,8 +9,8 @@
     "moment-timezone": "^0.5.37",
     "mongoose": "^6.2.1",
     "q3-api": "^3.6.10",
-    "q3-core-access": "^3.6.10",
-    "q3-core-session": "^3.6.10"
+    "q3-core-access": "^3.5.3",
+    "q3-core-session": "^3.4.10"
   },
   "devDependencies": {
     "q3-test-utils": "^3.4.12"
