@@ -1,6 +1,6 @@
 {
   "name": "q3-api-exports",
-  "version": "1.0.0",
+  "version": "3.7.0",
   "main": "lib/index.js",
   "dependencies": {
     "flat": "^5.0.2",
