@@ -443,5 +443,8 @@
   "usersDetail": "User",
   "uploadFiles": "Upload files",
   "expand": "Expand",
-  "padLogo": "Pad logo"
+  "padLogo": "Pad logo",
+  "publicNotice": "Message",
+  "clearTags": "Clear",
+  "selectAllTags": "Select all"
 }

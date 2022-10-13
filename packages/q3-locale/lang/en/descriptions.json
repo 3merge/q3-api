@@ -93,6 +93,7 @@
   "domainI18n": "Manage the in-app text for your current preferred language",
   "domainEmails": "Modify your automated outbound email templates",
   "domainQueues": "Monitor the system's ongoing background tasks",
+  "domainPublicNotice": "Display an alert on public pages like login and password reset.",
   "accountContactInformation": "Change your user identify and contact details",
   "accountNotificationSettings": "Modify which system notifications you receive",
   "accountLocale": "Change your preferred language and timezone",

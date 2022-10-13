@@ -36,6 +36,7 @@ const DomainSchema = new mongoose.Schema(
       default: false,
       type: Boolean,
     },
+    publicNotice: String,
   },
   {
     restify: '*',

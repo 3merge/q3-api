@@ -106,6 +106,7 @@
   "domainI18n": "Locale",
   "domainEmails": "Email templates",
   "domainQueues": "Queues",
+  "domainPublicNotice": "Public notice",
   "password": "Password",
   "notifications": "Notifications",
   "accountThemeSettings": "Theme settings",
