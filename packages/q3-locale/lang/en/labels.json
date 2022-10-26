@@ -448,5 +448,10 @@
   "clearTags": "Clear",
   "selectAllTags": "Select all",
   "seeAllNotifications": "See all",
-  "markAllAsSeen": "Clear all"
+  "markAllAsSeen": "Clear all",
+  "titles": "Titles",
+  "labels": "Labels",
+  "descriptions": "Descriptions",
+  "helpers": "Helpers",
+  "textFinder": "Locale finder"
 }

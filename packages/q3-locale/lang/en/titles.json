@@ -119,5 +119,6 @@
   "appSettings": "Settings",
   "details": "Details",
   "summary": "Summary",
-  "fileManagerEmptyDirectory": "Empty"
+  "fileManagerEmptyDirectory": "Empty",
+  "searchLocale": "Search to begin"
 }

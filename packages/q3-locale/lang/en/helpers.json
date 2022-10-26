@@ -40,5 +40,6 @@
   "isRequiredInput": "This is a required field",
   "this is a required field": "This is a required field",
   "invalidSelection": "Choose an option",
-  "padLogo": "Add spacing around the logo to reduce its width"
+  "padLogo": "Add spacing around the logo to reduce its width",
+  "searchInAppText": "Search by in-app text or field name"
 }

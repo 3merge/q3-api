@@ -99,7 +99,7 @@
   "accountLocale": "Change your preferred language and timezone",
   "accountPassword": "Change your password",
   "logout": "End your session and return to login",
-  "localeEditorChangeEffect": "After saving, refresh the page for your changes to take effect.",
+  "localeEditorChangeEffect": "Refresh the page for your changes to take effect.",
   "domainUpdated": "Domain settings have been updated",
   "importFailed": "Import process failed to start",
   "importStarted": "Import process queued",
@@ -115,5 +115,10 @@
   "segmentRequiresFilterValue": "Cannot proceed without a filter applied.",
   "notificationsLoading": "Loading latest notifications",
   "notificationsError": "Failed to fetch notifications. Please try again as something unexpected occurred.",
-  "notificationsEmpty": "Currently, there's no notifications to show. To subscribe for more notifications, please visit your user profile."
+  "notificationsEmpty": "Currently, there's no notifications to show. To subscribe for more notifications, please visit your user profile.",
+  "titles": "Controls page, modal and drawer titles",
+  "labels": "Controls field names, menu items and options, button labels and tooltips",
+  "descriptions": "Controls text blocks used for supporting information inside the app",
+  "helpers": "Controls field definitions, such as the ones under each field below denoting its technical key name",
+  "searchLocale": "Please note that search results only match against your active language (i.e. from your profile)"
 }
