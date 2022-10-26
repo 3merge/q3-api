@@ -33,6 +33,11 @@ const joinJsFileWithAppRoot = (...params) =>
 const toUndefined = (v) =>
   v === '' || v === null ? undefined : v;
 
+const cleanStringFuncFromParam = (str) => {
+  const match = String(str).match(/\(?string\((.*?)\)/);
+  return Array.isArray(match) ? match[1] : str;
+};
+
 const toQuery = (req = {}) => {
   const { query } = parse(req);
 
@@ -74,7 +79,7 @@ const setExecutableTemplatePathInRequest = (directory) =>
     .custom((value, { req }) => {
       const executableTemplatePath = joinJsFileWithAppRoot(
         directory,
-        value,
+        cleanStringFuncFromParam(value),
       );
 
       const exists = fs.existsSync(executableTemplatePath);
