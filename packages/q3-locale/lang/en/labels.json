@@ -416,7 +416,7 @@
   "addNew": "Add new",
   "supportedLngs": "Languages",
   "newDownloadAvailable": "New download available",
-  "showUnseenOnly": "Toggle",
+  "showUnseenOnly": "Only show unseen",
   "uis": "UIs",
   "calendar": "Calendar",
   "table": "Table",
@@ -446,5 +446,7 @@
   "padLogo": "Pad logo",
   "publicNotice": "Message",
   "clearTags": "Clear",
-  "selectAllTags": "Select all"
+  "selectAllTags": "Select all",
+  "seeAllNotifications": "See all",
+  "markAllAsSeen": "Clear all"
 }

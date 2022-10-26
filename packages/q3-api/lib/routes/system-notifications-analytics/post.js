@@ -12,28 +12,27 @@ const SystemNotificationsAnalytics = async (
   { body: { documentId, subDocumentId }, user },
   res,
 ) => {
-  await mongoose.models.notifications.updateMany(
-    {
-      documentId: ObjectId(documentId),
-      userId: ObjectId(user._id),
-      localUrl: {
-        $exists: true,
-      },
-      subDocumentId: isString(subDocumentId)
-        ? {
-            $in: subDocumentId
-              .split(',')
-              .map((id) => ObjectId(id.trim())),
-          }
-        : null,
+  const query = {
+    documentId: ObjectId(documentId),
+    userId: ObjectId(user._id),
+    localUrl: {
+      $exists: true,
     },
-    {
-      $set: {
-        hasSeen: true,
-        hasDownloaded: true,
-      },
+  };
+
+  if (isString(subDocumentId))
+    query.subDocumentId = {
+      $in: subDocumentId
+        .split(',')
+        .map((id) => ObjectId(id.trim())),
+    };
+
+  await mongoose.models.notifications.updateMany(query, {
+    $set: {
+      hasSeen: true,
+      hasDownloaded: true,
     },
-  );
+  });
 
   res.acknowledge();
 };
