@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.8.3](https://github.com/3merge/q3-api/compare/v3.8.2...v3.8.3) (2022-10-28)
+
+
+### Bug Fixes
+
+* exit analytics script early ([09d9ed0](https://github.com/3merge/q3-api/commit/09d9ed0daa75fc918afe86329153a7e008aec929))
+
+
+
+
+
 ## [3.8.2](https://github.com/3merge/q3-api/compare/v3.8.1...v3.8.2) (2022-10-26)
 
 **Note:** Version bump only for package q3-api
