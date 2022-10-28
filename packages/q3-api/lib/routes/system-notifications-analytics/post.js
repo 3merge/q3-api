@@ -25,7 +25,7 @@ const SystemNotificationsAnalytics = async (
      * If we don't exit here,
      * then the script indirectly marks all notifications as seen.
      */
-    if (size(subDocumentId)) {
+    if (!size(subDocumentId)) {
       res.acknowledge();
       return;
     }
