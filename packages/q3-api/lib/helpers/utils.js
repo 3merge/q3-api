@@ -6,6 +6,8 @@ const {
   size,
   isFunction,
   set,
+  find,
+  isObject,
 } = require('lodash');
 const mongoose = require('mongoose');
 const {
@@ -13,6 +15,10 @@ const {
 } = require('q3-core-mailer/lib/utils');
 const parse = require('q3-core-rest/lib/queryParser');
 const { check } = require('q3-core-composer');
+const {
+  findFileTraversingUpwards,
+} = require('q3-schema-utils');
+const { exception } = require('q3-core-responder');
 const app = require('../config/express');
 
 const asJsFile = (v) => String(v).concat('.js');
@@ -121,6 +127,33 @@ const objectIdEquals = (a, b) => {
   }
 };
 
+const checkAccessByFileNameAndRoleType = (
+  req,
+  filename,
+) => {
+  const accessControlSettings = find(
+    findFileTraversingUpwards(
+      get(req, 'app.locals.location'),
+      filename,
+    ),
+    (item) =>
+      get(item, 'name') === get(req, 'query.template'),
+  );
+
+  if (
+    isObject(accessControlSettings) &&
+    Array.isArray(accessControlSettings.role) &&
+    !accessControlSettings.role.includes(
+      get(req, 'user.role', 'Public'),
+    )
+  )
+    exception('Authorization')
+      .msg('cannotAccessResource')
+      .throw();
+
+  return accessControlSettings;
+};
+
 module.exports = {
   toQuery,
   toUndefined,
@@ -132,4 +165,5 @@ module.exports = {
   replaceSpaces,
   getWebAppUrlByUser,
   objectIdEquals,
+  checkAccessByFileNameAndRoleType,
 };
