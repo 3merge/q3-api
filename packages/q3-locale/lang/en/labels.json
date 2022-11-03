@@ -453,5 +453,9 @@
   "labels": "Labels",
   "descriptions": "Descriptions",
   "helpers": "Helpers",
-  "textFinder": "Locale finder"
+  "textFinder": "Locale finder",
+  "colorDarkMode": "Inverted colour",
+  "lightMode": "Light mode",
+  "darkMode": "Dark mode",
+  "enterSearch": "Search"
 }

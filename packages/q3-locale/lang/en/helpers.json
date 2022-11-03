@@ -41,5 +41,6 @@
   "this is a required field": "This is a required field",
   "invalidSelection": "Choose an option",
   "padLogo": "Add spacing around the logo to reduce its width",
-  "searchInAppText": "Search by in-app text or field name"
+  "searchInAppText": "Search by in-app text or field name",
+  "colorDarkMode": "This colour comes into effect in dark mode"
 }
