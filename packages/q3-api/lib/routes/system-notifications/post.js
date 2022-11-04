@@ -15,6 +15,11 @@ const NotificationsPostController = compose(
         {
           _id: { $in: ids },
           userId: get(req, 'user._id'),
+          // stops it from updating unnecessarily
+          $or: [
+            { hasDownloaded: false },
+            { hasSeen: false },
+          ],
         },
         {
           $set: {
