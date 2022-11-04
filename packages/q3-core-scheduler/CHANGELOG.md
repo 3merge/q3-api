@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.8.7](https://github.com/3merge/q3-api/compare/v3.8.6...v3.8.7) (2022-11-04)
+
+**Note:** Version bump only for package q3-core-scheduler
+
+
+
+
+
 ## [3.8.6](https://github.com/3merge/q3-api/compare/v3.8.5...v3.8.6) (2022-11-03)
 
 **Note:** Version bump only for package q3-core-scheduler

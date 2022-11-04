@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.8.7](https://github.com/3merge/q3-api/compare/v3.8.6...v3.8.7) (2022-11-04)
+
+
+### Bug Fixes
+
+* notification update ([3aa61e4](https://github.com/3merge/q3-api/commit/3aa61e489e46e3dc2a070a7708db24c1f8465b3d))
+
+
+
+
+
 ## [3.8.6](https://github.com/3merge/q3-api/compare/v3.8.5...v3.8.6) (2022-11-03)
 
 **Note:** Version bump only for package Q3-Api
