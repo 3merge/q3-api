@@ -25,7 +25,8 @@
     "bin:build-access": "yarn build-access",
     "bin:build-locale": "yarn build-locale",
     "bin:seed-emails": "yarn seed-emails",
-    "bin:seed-login": "yarn seed-login"
+    "bin:seed-login": "yarn seed-login",
+    "version-workspace": "lerna version"
   },
   "workspaces": [
     "demo",
