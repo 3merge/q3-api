@@ -1,6 +1,41 @@
-const { get } = require('lodash');
+const { get, reduce } = require('lodash');
 const queryParser = require('../../queryParser');
 const { assignIdsOnSubDocuments } = require('../../utils');
+
+/**
+ * @NOTE
+ * Allows us to share with PatchMany with increasing test coverage.
+ */
+const runDocumentUpdateWorkflowById = async (
+  Model,
+  id,
+  req = {},
+  options = {},
+) => {
+  const { body: originalBody, files, marshal } = req;
+  const { processFiles = true } = options;
+
+  const doc = await Model.findStrictly(id, {
+    redact: false,
+    select: '+uploads',
+  });
+
+  const body = doc.authorizeUpdateArguments(originalBody);
+  // ensures we don't replace sub-docs accidentally
+  assignIdsOnSubDocuments(body);
+
+  if (processFiles)
+    await doc.handleReq({
+      body,
+      files,
+    });
+
+  await doc.set(body).save({
+    redact: true,
+  });
+
+  return marshal(doc);
+};
 
 module.exports = {
   async Get(
@@ -58,40 +93,56 @@ module.exports = {
   },
 
   async Patch(req, res) {
-    const {
-      body: originalBody,
-      collectionSingularName,
-      datasource,
-      marshal,
-      params,
-      files,
-    } = req;
-
-    // @NOTE - otherwise it picks up on READ permissions
-    const doc = await datasource.findStrictly(
-      params.resourceID,
-      {
-        redact: false,
-        select: '+uploads',
-      },
-    );
-
-    const body = doc.authorizeUpdateArguments(originalBody);
-    // ensures we don't replace sub-docs accidentally
-    assignIdsOnSubDocuments(body);
-
-    await doc.handleReq({
-      body,
-      files,
-    });
-
-    await doc.set(body).save({
-      redact: true,
-    });
+    const { collectionSingularName, datasource, params } =
+      req;
 
     res.update({
       message: res.say('resourceUpdated'),
-      [collectionSingularName]: marshal(doc),
+      [collectionSingularName]:
+        await runDocumentUpdateWorkflowById(
+          datasource,
+          params.resourceID,
+          req,
+        ),
+    });
+  },
+
+  async PatchMany(req, res) {
+    const {
+      collectionPluralName,
+      datasource,
+      query: { ids },
+    } = req;
+
+    res.update({
+      message: res.say('resourcesUpdated'),
+      [collectionPluralName]: await Promise.allSettled(
+        [ids]
+          .flat()
+          .filter(Boolean)
+          .map((id) =>
+            runDocumentUpdateWorkflowById(
+              datasource,
+              id,
+              req,
+              {
+                processFiles: false,
+              },
+            ),
+          ),
+      ).then((values) =>
+        reduce(
+          values,
+          (acc, curr) => {
+            // ignore errors
+            if (curr.status === 'fulfilled')
+              acc.push(curr.value);
+
+            return acc;
+          },
+          [],
+        ),
+      ),
     });
   },
 

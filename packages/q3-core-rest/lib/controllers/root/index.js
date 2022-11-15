@@ -10,6 +10,7 @@ const {
   Post,
   Remove,
   RemoveMany,
+  PatchMany,
   Patch,
   Upload,
 } = require('./handlers');
@@ -24,6 +25,7 @@ module.exports = class DocumentControllerCommander extends (
     this.getListController(rootPath);
     this.getPostController(rootPath);
     this.getDeleteManyController(rootPath);
+    this.getPatchManyController(rootPath);
 
     this.getGetController(resourcePath);
     this.getPatchController(resourcePath);
@@ -96,6 +98,15 @@ module.exports = class DocumentControllerCommander extends (
 
     Patch.validation = this.getValidationSchema(false);
     return this.makePatch(path, Patch);
+  }
+
+  getPatchManyController(path) {
+    PatchMany.validation = [query('ids').isArray()];
+    PatchMany.authorization = [
+      redact(this.collectionName).done(),
+    ];
+
+    return this.makePatch(path, PatchMany);
   }
 
   getDeleteController(path) {

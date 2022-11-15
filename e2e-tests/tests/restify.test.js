@@ -62,6 +62,38 @@ describe('q3-core-rest', () => {
     expect(sample).not.toHaveProperty('updatedAt');
   });
 
+  it('should return full documents in set', async () => {
+    const {
+      body: {
+        student: { id },
+      },
+    } = await agent
+      .post('/students')
+      .set({ Authorization })
+      .send({ grade: 10 })
+      .expect(201);
+
+    const {
+      body: {
+        student: { id: id2 },
+      },
+    } = await agent
+      .post('/students')
+      .set({ Authorization })
+      .send({ age: 18, grade: 12 })
+      .expect(201);
+
+    const { body } = await agent
+      .patch('/students')
+      .query({ ids: [id, id2] })
+      .send({ grade: 13 })
+      .set({ Authorization })
+      .expect(200);
+
+    // should ignore student not aged 18
+    expect(body.students).toHaveLength(1);
+  });
+
   it('should return full document', async () => {
     const {
       body: {
