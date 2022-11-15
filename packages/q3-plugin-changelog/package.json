@@ -1,6 +1,6 @@
 {
   "name": "q3-plugin-changelog",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "main": "lib/index.js",
   "dependencies": {
     "alphabetize-object-keys": "^3.0.0",
@@ -10,10 +10,10 @@
     "jsondiffpatch": "^0.4.1",
     "lodash": "^4.17.20",
     "mongoose": "^6.2.1",
-    "q3-core-access": "^4.0.1",
-    "q3-core-session": "^4.0.1",
-    "q3-plugin-extref": "^4.0.1",
-    "q3-schema-utils": "^4.0.1"
+    "q3-core-access": "^4.0.2",
+    "q3-core-session": "^4.0.2",
+    "q3-plugin-extref": "^4.0.2",
+    "q3-schema-utils": "^4.0.2"
   },
   "jest": {
     "verbose": true,

@@ -1,6 +1,6 @@
 {
   "name": "q3-api-exports",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "main": "lib/index.js",
   "dependencies": {
     "flat": "^5.0.2",
@@ -8,12 +8,12 @@
     "moment": "^2.29.3",
     "moment-timezone": "^0.5.37",
     "mongoose": "^6.2.1",
-    "q3-api": "^4.0.1",
-    "q3-core-access": "^4.0.1",
-    "q3-core-session": "^4.0.1"
+    "q3-api": "^4.0.2",
+    "q3-core-access": "^4.0.2",
+    "q3-core-session": "^4.0.2"
   },
   "devDependencies": {
-    "q3-test-utils": "^4.0.1"
+    "q3-test-utils": "^4.0.2"
   },
   "jest": {
     "verbose": true,
