@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/3merge/q3-api/compare/v3.8.7...v4.0.0) (2022-11-15)
+
+**Note:** Version bump only for package q3-schema-rebates
+
+
+
+
+
+
 ## [3.4.12](https://github.com/3merge/q3-api/compare/v3.4.11...v3.4.12) (2022-04-20)
 
 **Note:** Version bump only for package q3-schema-rebates
