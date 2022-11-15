@@ -21,20 +21,6 @@ function mapHeaders(docs, legend) {
 }
 
 class NotificationDecorator {
-  static async acknowledge(id) {
-    const d = await this.findById(id).exec();
-
-    if (d) {
-      if (d.path) {
-        d.hasDownloaded = true;
-      } else {
-        d.hasSeen = true;
-      }
-
-      await d.save();
-    }
-  }
-
   async __$appendSignedUrl() {
     const j = 'toJSON' in this ? this.toJSON() : this;
 
@@ -102,7 +88,9 @@ class NotificationDecorator {
 
   static async saveToSessionNotifications(label, excerpt) {
     return this.create({
-      hasSeen: false,
+      active: true,
+      archived: false,
+      read: false,
       userId: session.get('USER', '_id'),
       label,
       excerpt,

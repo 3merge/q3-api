@@ -2,13 +2,13 @@ const { Schema } = require('mongoose');
 
 module.exports = new Schema(
   {
-    hasSeen: Boolean,
-    hasDownloaded: Boolean,
+    active: Boolean,
+    read: Boolean,
+    archived: Boolean,
     messageType: String,
     documentId: Schema.Types.ObjectId,
     subDocumentId: Schema.Types.ObjectId,
     userId: Schema.Types.ObjectId,
-    dismissedOn: Date,
     label: String,
     path: String,
     excerpt: String,
@@ -16,5 +16,10 @@ module.exports = new Schema(
   },
   {
     timestamps: true,
+    restify: '*',
+    disableChangelog: true,
+    collectionSingularName: 'notification',
+    collectionPluralName: 'notifications',
+    strict: false,
   },
 );

@@ -174,7 +174,9 @@ module.exports = function NotifyDependencyLayer(
 
         return Models.Notifications.create({
           ...this.$meta,
-          hasSeen: false,
+          read: false,
+          archived: false,
+          active: true,
           label: t('messages'),
           excerpt: t('descriptions'),
           localUrl: this.getInAppLink(),

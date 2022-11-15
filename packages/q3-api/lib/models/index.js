@@ -6,6 +6,7 @@ const Emails = require('./emails');
 const NotifiationSchema = require('./notifications');
 const Segments = require('./segments');
 const Users = require('./users');
+const Counters = require('./counters');
 
 const Notifications = mongoose.model(
   MODEL_NAMES.NOTIFICATIONS,
@@ -13,6 +14,7 @@ const Notifications = mongoose.model(
 );
 
 module.exports = {
+  Counters,
   Domains,
   DomainResources,
   Emails,
