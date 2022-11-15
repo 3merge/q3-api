@@ -1,6 +1,6 @@
 {
   "name": "q3-schema-types",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
@@ -8,7 +8,7 @@
     "mongoose": "^6.2.1"
   },
   "devDependencies": {
-    "q3-test-utils": "^4.0.0"
+    "q3-test-utils": "^4.0.1"
   },
   "jest": {
     "verbose": true,
