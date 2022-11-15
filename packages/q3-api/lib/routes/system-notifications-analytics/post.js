@@ -39,8 +39,7 @@ const SystemNotificationsAnalytics = async (
 
   await mongoose.models.notifications.updateMany(query, {
     $set: {
-      hasSeen: true,
-      hasDownloaded: true,
+      read: true,
     },
   });
 
