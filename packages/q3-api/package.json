@@ -69,6 +69,7 @@
   "bin": {
     "build-access": "./bin/buildAccessControl.js",
     "build-locale": "./bin/buildLocale.js",
+    "convert-notifications": "./bin/convertNotifications.js",
     "seed-emails": "./bin/seedEmailDatabase.js",
     "seed-login": "./bin/seedUserAndDomain.js"
   }

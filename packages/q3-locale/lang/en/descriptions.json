@@ -115,11 +115,11 @@
   "segmentRequiresFilterValue": "Cannot proceed without a filter applied.",
   "notificationsLoading": "Loading latest notifications",
   "notificationsError": "Failed to fetch notifications. Please try again as something unexpected occurred.",
-  "notificationsEmpty": "Currently, there's no notifications to show. To subscribe for more notifications, please visit your user profile.",
   "titles": "Controls page, modal and drawer titles",
   "labels": "Controls field names, menu items and options, button labels and tooltips",
   "descriptions": "Controls text blocks used for supporting information inside the app",
   "helpers": "Controls field definitions, such as the ones under each field below denoting its technical key name",
   "searchLocale": "Please note that search results only match against your active language (i.e. from your profile)",
-  "notificationsConnectivityError": "An unexpected error occurred that has caused notifications to lose connection. If this error does not go away or you cannot interact with your existing messages, try refreshing the page."
+  "notificationsEmpty": "Currently, there's nothing to display. Check your read and archived notifications for older messages.",
+  "notificationsConnectivityError": "We're having trouble connecting to the server. If this message doesn't go away on its own, try refresh the page."
 }

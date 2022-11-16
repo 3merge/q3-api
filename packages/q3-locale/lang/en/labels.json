@@ -457,5 +457,16 @@
   "colorDarkMode": "Inverted colour",
   "lightMode": "Light mode",
   "darkMode": "Dark mode",
-  "enterSearch": "Search"
+  "enterSearch": "Search",
+  "unread": "Unread",
+  "read": "Read",
+  "archived": "Archived",
+  "manageAllNotifications": "Manage all notifications",
+  "hasSelected": "Selected {{count}}",
+  "markAsRead": "Mark as read",
+  "markasUnread": "Mark as unread",
+  "archive": "Archive",
+  "restore": "Restore",
+  "unarchive": "Restore",
+  "unselectAll": "Deselect all"
 }

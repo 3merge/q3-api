@@ -120,5 +120,6 @@
   "details": "Details",
   "summary": "Summary",
   "fileManagerEmptyDirectory": "Empty",
-  "searchLocale": "Search to begin"
+  "searchLocale": "Search to begin",
+  "notificationsEmpty": "Empty"
 }
