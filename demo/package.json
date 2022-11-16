@@ -1,6 +1,6 @@
 {
   "name": "demo",
-  "version": "4.0.3",
+  "version": "4.0.4",
   "main": "index.js",
   "license": "MIT",
   "private": true,
@@ -10,7 +10,7 @@
     "i18next": "^21.5.6",
     "moment": "^2.29.3",
     "mongoose": "^6.2.1",
-    "q3-api": "^4.0.3",
+    "q3-api": "^4.0.4",
     "q3-core-access": "^4.0.2",
     "q3-core-composer": "^4.0.2",
     "q3-core-mailer": "^4.0.2",

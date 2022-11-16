@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.4](https://github.com/3merge/q3-api/compare/v4.0.3...v4.0.4) (2022-11-16)
+
+
+### Bug Fixes
+
+* system counters ([3bb64fe](https://github.com/3merge/q3-api/commit/3bb64fe697ccb7e11d064f058994dfdaa1fd394d))
+
+
+
+
+
 ## [4.0.3](https://github.com/3merge/q3-api/compare/v4.0.2...v4.0.3) (2022-11-16)
 
 
