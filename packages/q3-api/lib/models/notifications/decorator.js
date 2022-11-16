@@ -2,32 +2,14 @@
 const moment = require('moment');
 const session = require('q3-core-session');
 const Exporter = require('q3-exports');
-const { pick } = require('lodash');
 const Schema = require('./schema');
 const aws = require('../../config/aws');
 const { getId, getUserPath } = require('../utils');
-
-function mapHeaders(docs, legend) {
-  return docs.map((doc) => {
-    const picked = pick(doc, Object.keys(legend));
-    return Object.entries(legend).reduce(
-      (acc, [key, value]) => {
-        acc[value] = picked[key];
-        return acc;
-      },
-      {},
-    );
-  });
-}
+const { getFileDownload, mapHeaders } = require('./utils');
 
 class NotificationDecorator {
   async __$appendSignedUrl() {
-    const j = 'toJSON' in this ? this.toJSON() : this;
-
-    return {
-      url: j.path ? await aws().getPrivate(j.path) : null,
-      ...j,
-    };
+    return getFileDownload(this);
   }
 
   static async upload(
