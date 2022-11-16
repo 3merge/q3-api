@@ -1,6 +1,6 @@
 const { Schema } = require('mongoose');
 
-module.exports = new Schema(
+const NotificationSchema = new Schema(
   {
     active: Boolean,
     read: Boolean,
@@ -23,3 +23,6 @@ module.exports = new Schema(
     strict: false,
   },
 );
+
+NotificationSchema.virtual('url');
+module.exports = NotificationSchema;
