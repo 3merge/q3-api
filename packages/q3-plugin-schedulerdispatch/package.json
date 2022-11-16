@@ -1,6 +1,6 @@
 {
   "name": "q3-plugin-schedulerdispatch",
-  "version": "4.0.2",
+  "version": "4.0.5",
   "description": "Mongoose plugin to go with q3-core-scheduler",
   "main": "lib/index.js",
   "license": "MIT",
@@ -8,8 +8,8 @@
     "comparisons": "3.0.1",
     "lodash": "^4.17.20",
     "q3-core-access": "^4.0.2",
-    "q3-core-mailer": "^4.0.2",
-    "q3-core-scheduler": "^4.0.2",
+    "q3-core-mailer": "^4.0.5",
+    "q3-core-scheduler": "^4.0.5",
     "q3-core-session": "^4.0.2"
   },
   "peerDependencies": {
