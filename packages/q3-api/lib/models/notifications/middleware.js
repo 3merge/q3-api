@@ -1,4 +1,4 @@
-const { get, isFunction } = require('lodash');
+const { get, isFunction, first } = require('lodash');
 const Schema = require('./schema');
 const Counters = require('../counters');
 const {
@@ -30,44 +30,39 @@ async function appendUrlToDownload(doc) {
   );
 }
 
-function identifyNewNotifications() {
-  if (this.$locals)
-    this.$locals.shouldIncrement =
-      // either new or recently marked as unread
-      this.isNew || (this.isModified('read') && !this.read);
-}
-
 async function incrementInternalCounter(doc) {
-  const seeIncrementLocal = (d, value) => {
-    // eslint-disable-next-line
-    if (d.$locals) d.$locals.didIncrement = value;
-  };
+  await Promise.allSettled(
+    convertMiddlewareParameterIntoArray(doc).map(
+      async ({ userId }) => {
+        const notifications = get(
+          first(
+            await doc.constructor.aggregate([
+              {
+                $match: {
+                  active: true,
+                  archived: { $ne: true },
+                  read: { $ne: true },
+                  userId,
+                },
+              },
+              {
+                $count: 'current',
+              },
+            ]),
+          ),
+          'current',
+          0,
+        );
 
-  const incrementUserCounter = async (d) => {
-    try {
-      const { userId } = d;
-      await Counters.findOneAndUpdate(
-        { userId },
-        { $inc: { notifications: 1 } },
-        { upsert: true },
-      );
-
-      seeIncrementLocal(d, true);
-    } catch (e) {
-      // noop
-    }
-  };
-
-  await Promise.all(
-    convertMiddlewareParameterIntoArray(doc).map((d) =>
-      get(d, '$locals.shouldIncrement')
-        ? incrementUserCounter(d)
-        : seeIncrementLocal(d, false),
+        await Counters.findOneAndUpdate(
+          { userId },
+          { $set: { notifications } },
+          { upsert: true },
+        );
+      },
     ),
   );
 }
-
-Schema.pre('save', identifyNewNotifications);
 
 Schema.post('find', appendUrlToDownload);
 Schema.post('findOne', appendUrlToDownload);
@@ -75,6 +70,5 @@ Schema.post('save', incrementInternalCounter);
 
 module.exports = {
   appendUrlToDownload,
-  identifyNewNotifications,
   incrementInternalCounter,
 };

@@ -1,7 +1,21 @@
 const mongoose = require('mongoose');
 const Schema = require('..');
+const Counters = require('../../counters');
 
 let NotificationTests;
+const userId = mongoose.Types.ObjectId();
+
+const expectNumberOfNotificationsToBe = async (
+  expectedValue,
+) => {
+  const c = await Counters.find();
+
+  expect(c).toHaveLength(1);
+  expect(c[0]).toHaveProperty(
+    'notifications',
+    expectedValue,
+  );
+};
 
 jest.mock('../../../config/aws', () =>
   jest.fn().mockReturnValue({
@@ -18,6 +32,11 @@ beforeAll(async () => {
   );
 
   await mongoose.connect(process.env.CONNECTION);
+});
+
+afterEach(async () => {
+  await Counters.deleteMany({});
+  await NotificationTests.deleteMany({});
 });
 
 afterAll(() => {
@@ -42,34 +61,37 @@ describe('Notifications middleware', () => {
 
   it('should mark for incrementing', async () => {
     const r = new NotificationTests({
+      userId,
       path: 'testing_new',
     });
 
     await r.save();
-    expect(r.$locals.shouldIncrement).toBeTruthy();
-    expect(r.$locals.didIncrement).toBeTruthy();
+    await expectNumberOfNotificationsToBe(1);
   });
 
   it('should not marking for incrementing', async () => {
     const r = new NotificationTests({
       path: 'testing_new',
+      userId,
     });
 
     await r.save();
-    await r.set({
-      read: true,
+    await expectNumberOfNotificationsToBe(1);
+
+    const r2 = new NotificationTests({
+      path: 'testing_new_2',
+      userId,
     });
 
-    await r.save();
-    expect(r.$locals.shouldIncrement).toBeFalsy();
-    expect(r.$locals.didIncrement).toBeFalsy();
+    await r2.save();
+    await expectNumberOfNotificationsToBe(2);
 
-    await r.set({
-      read: false,
-    });
-
+    await r.set({ read: true });
     await r.save();
-    expect(r.$locals.shouldIncrement).toBeTruthy();
-    expect(r.$locals.didIncrement).toBeTruthy();
+    await expectNumberOfNotificationsToBe(1);
+
+    await r2.set({ archived: true });
+    await r2.save();
+    await expectNumberOfNotificationsToBe(0);
   });
 });

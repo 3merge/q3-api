@@ -2,9 +2,18 @@ const { Schema } = require('mongoose');
 
 const NotificationSchema = new Schema(
   {
-    active: Boolean,
-    read: Boolean,
-    archived: Boolean,
+    active: {
+      type: Boolean,
+      default: true,
+    },
+    read: {
+      type: Boolean,
+      default: false,
+    },
+    archived: {
+      type: Boolean,
+      default: false,
+    },
     messageType: String,
     documentId: Schema.Types.ObjectId,
     subDocumentId: Schema.Types.ObjectId,
@@ -13,6 +22,7 @@ const NotificationSchema = new Schema(
     path: String,
     excerpt: String,
     localUrl: String,
+    url: String,
   },
   {
     timestamps: true,
@@ -24,5 +34,4 @@ const NotificationSchema = new Schema(
   },
 );
 
-NotificationSchema.virtual('url');
 module.exports = NotificationSchema;
