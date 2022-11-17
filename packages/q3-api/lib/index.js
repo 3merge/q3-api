@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { capitalize, get } = require('lodash');
+const { capitalize, get, merge } = require('lodash');
 const walker = require('q3-core-walker');
 const {
   exception,
@@ -18,6 +18,7 @@ const models = require('./models');
 const { DatabaseStream, ...utils } = require('./helpers');
 const cluster = require('./config/cluster');
 const registerGlobals = require('./registerGlobals');
+const appDefaults = require('./appDefaults.json');
 
 const connectToDB = (res, rej) => (err) => {
   if (err) return rej(err);
@@ -49,7 +50,12 @@ const Q3 = {
     if (!location && !args.location)
       throw new Error('App requires a location');
 
-    Object.assign(app.locals, { location }, args);
+    Object.assign(
+      app.locals,
+      { location },
+      merge(appDefaults, args),
+    );
+
     registerGlobals(app.locals.location);
     core(app.locals.location);
 

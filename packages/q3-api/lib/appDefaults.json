@@ -1,0 +1,9 @@
+{
+  "messages": {
+    "notifications": {
+      "patch": "--",
+      "post": "--",
+      "delete": "--"
+    }
+  }
+}
