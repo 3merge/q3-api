@@ -2,6 +2,7 @@ const {
   findFileTraversingUpwards,
 } = require('q3-schema-utils');
 const { filterByRoleType } = require('../helpers');
+const withDefaults = require('../withDefaults');
 
 const AccessControl = {
   init(src = []) {
@@ -14,7 +15,7 @@ const AccessControl = {
       );
     else if (Array.isArray(src)) grants = src;
 
-    AccessControl.grants = grants
+    AccessControl.grants = withDefaults(grants)
       .filter(
         (seed) => seed && seed.coll && seed.role && seed.op,
       )
