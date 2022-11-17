@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = require('..');
 const Counters = require('../../counters');
+const { MODEL_NAMES } = require('../../../constants');
 
 let NotificationTests;
 const userId = mongoose.Types.ObjectId();
@@ -27,7 +28,7 @@ jest.mock('../../../config/aws', () =>
 
 beforeAll(async () => {
   NotificationTests = mongoose.model(
-    'notification-tests',
+    MODEL_NAMES.NOTIFICATIONS,
     Schema,
   );
 
