@@ -1,4 +1,5 @@
 {
+  "--": "",
   "onPasswordReset": "Password reset request",
   "validationError": "Failed request validation. Please check your inputs.",
   "reverify": "reverify",
@@ -57,5 +58,6 @@
   "grantRequiredToRead": "Access denied",
   "emptyOperationDetected": "Request failed because user cannot modify any of the sent data",
   "cannotAccessField": "Access denied",
-  "missingOrIncompleteGrant": "Access denied"
+  "missingOrIncompleteGrant": "Access denied",
+  "resourcesUpdated": "Successfully updated in the database"
 }

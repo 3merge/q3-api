@@ -10,5 +10,8 @@ module.exports = new Schema(
       type: Schema.Types.ObjectId,
     },
   },
-  {},
+  {
+    strict: false,
+    strictQuery: false,
+  },
 );

@@ -31,6 +31,7 @@ const NotificationSchema = new Schema(
     collectionSingularName: 'notification',
     collectionPluralName: 'notifications',
     strict: false,
+    strictQuery: false,
   },
 );
 

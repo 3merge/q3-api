@@ -1,4 +1,4 @@
-const { get, isFunction, first } = require('lodash');
+const { get, isFunction } = require('lodash');
 const Schema = require('./schema');
 const Counters = require('../counters');
 const {
@@ -33,33 +33,8 @@ async function appendUrlToDownload(doc) {
 async function incrementInternalCounter(doc) {
   await Promise.allSettled(
     convertMiddlewareParameterIntoArray(doc).map(
-      async ({ tenant = null, userId }) => {
-        const notifications = get(
-          first(
-            await doc.constructor.aggregate([
-              {
-                $match: {
-                  active: true,
-                  archived: { $ne: true },
-                  read: { $ne: true },
-                  tenant,
-                  userId,
-                },
-              },
-              {
-                $count: 'current',
-              },
-            ]),
-          ),
-          'current',
-          0,
-        );
-
-        await Counters.findOneAndUpdate(
-          { tenant, userId },
-          { $set: { notifications } },
-          { upsert: true },
-        );
+      async (noti) => {
+        await Counters.calculateByNotificationObject(noti);
       },
     ),
   );

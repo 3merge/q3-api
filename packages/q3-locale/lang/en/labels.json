@@ -468,5 +468,6 @@
   "archive": "Archive",
   "restore": "Restore",
   "unarchive": "Restore",
-  "unselectAll": "Deselect all"
+  "unselectAll": "Deselect all",
+  "readMore": "Read more"
 }

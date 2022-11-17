@@ -5,6 +5,7 @@ const {
 } = require('q3-core-composer');
 const mongoose = require('mongoose');
 const { isString, size } = require('lodash');
+const { Counters } = require('../../models');
 
 const { ObjectId } = mongoose.Types;
 
@@ -41,6 +42,11 @@ const SystemNotificationsAnalytics = async (
     $set: {
       read: true,
     },
+  });
+
+  await Counters.calculateByNotificationObject({
+    userId: ObjectId(user._id),
+    tenant: user.tenant,
   });
 
   res.acknowledge();
