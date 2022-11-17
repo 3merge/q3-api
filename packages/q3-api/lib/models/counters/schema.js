@@ -8,7 +8,6 @@ module.exports = new Schema(
     },
     userId: {
       type: Schema.Types.ObjectId,
-      unique: true,
     },
   },
   {},

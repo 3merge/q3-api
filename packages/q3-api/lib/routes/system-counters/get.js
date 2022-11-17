@@ -4,6 +4,7 @@ const { Counters } = require('../../models');
 
 const SystemCountersController = async (req, res) => {
   const counters = await Counters.findOne({
+    tenant: get(req, 'user.tenant', null),
     userId: get(req, 'user._id'),
   });
 

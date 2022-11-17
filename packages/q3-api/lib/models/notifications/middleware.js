@@ -33,7 +33,7 @@ async function appendUrlToDownload(doc) {
 async function incrementInternalCounter(doc) {
   await Promise.allSettled(
     convertMiddlewareParameterIntoArray(doc).map(
-      async ({ userId }) => {
+      async ({ tenant = null, userId }) => {
         const notifications = get(
           first(
             await doc.constructor.aggregate([
@@ -42,6 +42,7 @@ async function incrementInternalCounter(doc) {
                   active: true,
                   archived: { $ne: true },
                   read: { $ne: true },
+                  tenant,
                   userId,
                 },
               },
@@ -55,7 +56,7 @@ async function incrementInternalCounter(doc) {
         );
 
         await Counters.findOneAndUpdate(
-          { userId },
+          { tenant, userId },
           { $set: { notifications } },
           { upsert: true },
         );

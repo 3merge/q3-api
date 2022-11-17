@@ -24,7 +24,7 @@ const files = require('./helpers/files');
   );
 
   const getOption = (arg) =>
-    Boolean(cli.findArgument(arg, false));
+    cli.findArgument(arg, false) === 'true';
 
   const getPathFor = (name) =>
     path.resolve(folder, `./${name}.json`);

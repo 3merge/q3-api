@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
+const { groupBy } = require('lodash');
 const db = require('./helpers/db');
 const {
   Counters,
@@ -37,7 +38,10 @@ const {
       },
       {
         '$group': {
-          '_id': '$userId',
+          '_id': {
+            userId: '$userId',
+            tenant: '$tenant',
+          },
           'docs': {
             '$addToSet': '$_id',
           },
@@ -46,7 +50,8 @@ const {
       {
         '$project': {
           '_id': 0,
-          'userId': '$_id',
+          'userId': '$_id.userId',
+          'tenant': '$_id.tenant',
           'count': {
             '$size': '$docs',
           },
@@ -58,15 +63,32 @@ const {
   const bulk =
     Counters.collection.initializeOrderedBulkOp();
 
-  seed.forEach((item) =>
-    bulk
-      .find({ userId: item.userId })
-      .upsert()
-      .update({
-        $set: {
-          notifications: item.count,
-        },
-      }),
+  const enforceNull = (xs) =>
+    !xs || xs === 'undefined' || xs === 'null' ? null : xs;
+
+  console.log('Grouping into tenants...');
+  Object.entries(
+    groupBy(
+      seed.map((item) => ({
+        ...item,
+        tenant: enforceNull(item.tenant),
+      })),
+      'tenant',
+    ),
+  ).forEach(([t, items]) =>
+    items.forEach((item) => {
+      const tenant = enforceNull(t);
+
+      bulk
+        .find({ userId: item.userId, tenant })
+        .upsert()
+        .update({
+          $set: {
+            notifications: item.count,
+            tenant,
+          },
+        });
+    }),
   );
 
   await bulk.execute();
