@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.1](https://github.com/3merge/q3-api/compare/v4.1.0...v4.1.1) (2022-11-18)
+
+
+### Bug Fixes
+
+* bulk delete auth ([ee54ed1](https://github.com/3merge/q3-api/commit/ee54ed167200ad2e794a1bc3d0c23fab7c2d642a))
+
+
+
+
+
 # [4.1.0](https://github.com/3merge/q3-api/compare/v4.0.6...v4.1.0) (2022-11-17)
 
 

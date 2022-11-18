@@ -1,6 +1,6 @@
 {
   "name": "q3-core-rest",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "Mongoose schema REST exports",
   "main": "lib/index.js",
   "license": "MIT",
@@ -13,10 +13,10 @@
     "m2e-validator": "^1.3.9",
     "mongoose-paginate-v2": "^1.4.2",
     "mongoose-partial-search": "^1.0.6",
-    "q3-core-composer": "^4.1.0",
+    "q3-core-composer": "^4.1.1",
     "q3-core-responder": "^4.0.2",
     "q3-plugin-ngrams": "^4.0.2",
-    "q3-schema-utils": "^4.0.2",
+    "q3-schema-utils": "^4.1.1",
     "q3-utils": "^4.0.2",
     "sift": "^15.1.0"
   },
