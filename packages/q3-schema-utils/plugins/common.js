@@ -1,6 +1,11 @@
 /* eslint-disable func-names, no-param-reassign */
 const { exception } = require('q3-core-responder');
 
+const acOptionsForDeleteQueries = {
+  redact: true,
+  op: 'Delete',
+};
+
 const getPathsRecursively = ([key, v]) => {
   if (v.schema)
     return Object.entries(v.schema.paths)
@@ -22,25 +27,26 @@ const primeForDeletion = async (doc, args = {}) => {
 };
 
 async function archive(id) {
-  const acOptions = { redact: true, op: 'Delete' };
   const doc = await this.findById(id)
-    .setOptions(acOptions)
+    .setOptions(acOptionsForDeleteQueries)
     .exec();
 
-  return doc ? primeForDeletion(doc, acOptions) : null;
+  return doc
+    ? primeForDeletion(doc, acOptionsForDeleteQueries)
+    : null;
 }
 
 async function archiveMany(ids) {
   const docs = await this.find({
     _id: { $in: ids },
-  }).exec();
+  })
+    .setOptions(acOptionsForDeleteQueries)
+    .exec();
+
   if (!docs || !docs.length) return [];
   return Promise.all(
     docs.map((d) =>
-      primeForDeletion(d, {
-        redact: true,
-        op: 'Delete',
-      }),
+      primeForDeletion(d, acOptionsForDeleteQueries),
     ),
   );
 }

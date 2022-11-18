@@ -11,6 +11,7 @@ const {
   isEqual,
   isString,
   isNil,
+  includes,
 } = require('lodash');
 const micromatch = require('micromatch');
 const sift = require('sift');
@@ -142,19 +143,23 @@ class AccessControlSessionBridge {
         options,
       );
 
-    if (
-      (!isObject(grant) || !this.checkOwnership(grant)) &&
-      !get(extendedOptions, 'noThrow', false)
-    )
-      exception('Authorization')
-        .msg('missingOrIncompleteGrant')
-        .throw();
-
     const getGrantPatterns = () =>
       Redact.flattenAndReduceByFields(fullDocument, grant, {
         returnWithPatternsEarly: true,
         ...options,
       });
+
+    if (
+      (!isObject(grant) ||
+        !this.checkOwnership(grant) ||
+        // mainly applies to DELETE ops
+        (includes(getGrantPatterns(), '!_id') &&
+          extendedOptions.ensureIdIsAvailable)) &&
+      !get(extendedOptions, 'noThrow', false)
+    )
+      exception('Authorization')
+        .msg('missingOrIncompleteGrant')
+        .throw();
 
     return {
       grant,

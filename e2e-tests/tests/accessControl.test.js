@@ -20,8 +20,8 @@ const coll = 'students';
 
 const Students = Q3.model(coll);
 
-const genStudentId = async () =>
-  get(await Students.create({}), 'id');
+const genStudentId = async (args = {}) =>
+  get(await Students.create(args), 'id');
 
 const makeApiPath = (...xs) =>
   `/${compact([coll].concat(xs.flat())).join('/')}`;
@@ -59,6 +59,19 @@ describe('Access control via REST endpoints (user ownership)', () => {
     {
       expected: 403,
       grant: {
+        fields: [
+          '*',
+          {
+            glob: '_id',
+            negate: true,
+            test: ['age<13'],
+          },
+        ],
+      },
+    },
+    {
+      expected: 403,
+      grant: {
         fields: null,
       },
     },
@@ -76,8 +89,12 @@ describe('Access control via REST endpoints (user ownership)', () => {
         op: 'Delete',
       });
 
+      const id = await genStudentId({
+        age: 12,
+      });
+
       await agent
-        .delete(makeApiPath(await genStudentId()))
+        .delete(makeApiPath(id))
         .set({ Authorization })
         .expect(expected);
     },
