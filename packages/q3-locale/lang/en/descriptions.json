@@ -54,7 +54,6 @@
   "profile": "Edit your user's contact details",
   "folderNameExists": "This folder already exists",
   "clickOrDrop": "Click here or drop a file(s) to upload",
-  "confirm": "To continue with this action, please type the phrase below. It must match exactly as displayed, including any use of capitalization.",
   "trackChanges": "To begin tracking changes, the system needs at least two versions of this document. Check back once more activity has been collected.",
   "mediaUploadFailed": "Media failed to upload to the server. Please ensure that the file size is under 5mb and that it's a picture and not a document.",
   "loadingCommentsFailed": "Comments for this module failed to load.",
@@ -121,5 +120,8 @@
   "helpers": "Controls field definitions, such as the ones under each field below denoting its technical key name",
   "searchLocale": "Please note that search results only match against your active language (i.e. from your profile)",
   "notificationsEmpty": "Currently, there's nothing to display. Check your read and archived notifications for older messages.",
-  "notificationsConnectivityError": "We're having trouble connecting to the server. If this message doesn't go away on its own, try refresh the page."
+  "notificationsConnectivityError": "We're having trouble connecting to the server. If this message doesn't go away on its own, try refresh the page.",
+  "confirm": "Are you sure you'd like to continue with this action?",
+  "confirmDelete": "Are you sure you'd like to continue with this action?",
+  "confirmDeleteMany": "Are you sure you'd like to continue with this action?"
 }

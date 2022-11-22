@@ -73,7 +73,6 @@
   "createFolder": "Create folder",
   "featuredPhoto": "Featured photo",
   "missingConfiguration": "This component requires configuration",
-  "confirm": "Confirm",
   "editor": "Edit",
   "trackChanges": "Waiting for changes",
   "comment": "Comment",
@@ -121,5 +120,8 @@
   "summary": "Summary",
   "fileManagerEmptyDirectory": "Empty",
   "searchLocale": "Search to begin",
-  "notificationsEmpty": "Empty"
+  "notificationsEmpty": "Empty",
+  "confirm": "Confirm",
+  "confirmDelete": "Confirm delete",
+  "confirmDeleteMany": "Confirm bulk delete"
 }
