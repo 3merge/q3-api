@@ -1,6 +1,6 @@
 {
   "name": "q3-plugin-wordcount",
-  "version": "4.0.2",
+  "version": "4.2.0",
   "description": "Content stats plugin",
   "main": "lib/index.js",
   "license": "MIT",
