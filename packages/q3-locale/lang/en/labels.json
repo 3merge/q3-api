@@ -464,7 +464,7 @@
   "manageAllNotifications": "Manage all notifications",
   "hasSelected": "Selected {{count}}",
   "markAsRead": "Mark as read",
-  "markasUnread": "Mark as unread",
+  "markAsUnread": "Mark as unread",
   "archive": "Archive",
   "restore": "Restore",
   "unarchive": "Restore",
