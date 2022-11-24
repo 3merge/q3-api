@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2](https://github.com/3merge/q3-api/compare/v4.2.1...v4.2.2) (2022-11-24)
+
+
+### Bug Fixes
+
+* objectid handling in casters ([cce3a47](https://github.com/3merge/q3-api/commit/cce3a4734cf901e5f04a7d4c0c6513f5d99faa9c))
+
+
+
+
+
 ## [4.1.1](https://github.com/3merge/q3-api/compare/v4.1.0...v4.1.1) (2022-11-18)
 
 **Note:** Version bump only for package q3-core-rest
