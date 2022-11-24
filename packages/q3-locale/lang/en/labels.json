@@ -469,5 +469,7 @@
   "restore": "Restore",
   "unarchive": "Restore",
   "unselectAll": "Deselect all",
-  "readMore": "Read more"
+  "readMore": "Read more",
+  "proceed": "Proceed",
+  "cancel": "Cancel"
 }

@@ -123,5 +123,6 @@
   "notificationsConnectivityError": "We're having trouble connecting to the server. If this message doesn't go away on its own, try refresh the page.",
   "confirm": "Are you sure you'd like to continue with this action?",
   "confirmDelete": "Are you sure you'd like to continue with this action?",
-  "confirmDeleteMany": "Are you sure you'd like to continue with this action?"
+  "confirmDeleteMany": "Are you sure you'd like to continue with this action?",
+  "couldNotLoadData": "Nothing to display"
 }

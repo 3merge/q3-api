@@ -137,7 +137,8 @@ const checkAccessByFileNameAndRoleType = (
       filename,
     ),
     (item) =>
-      get(item, 'name') === get(req, 'query.template'),
+      get(item, 'name') ===
+      cleanStringFuncFromParam(get(req, 'query.template')),
   );
 
   if (
