@@ -72,6 +72,15 @@ describe('Utility functions', () => {
       ).toMatchObject({
         foo: expect.any(Object),
       }));
+
+    it('should return modified', () =>
+      expect(
+        Controller.castObjectIds({
+          foo: `${mongoose.Types.ObjectId().toString()}`,
+        }),
+      ).toMatchObject({
+        foo: expect.any(Object),
+      }));
   });
 
   test.each([

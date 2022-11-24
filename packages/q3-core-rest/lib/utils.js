@@ -2,6 +2,17 @@ const mongoose = require('mongoose');
 const { isObject } = require('lodash');
 const flatten = require('flat');
 
+const isObjectId = (xs) => {
+  try {
+    return (
+      mongoose.isValidObjectId(xs) &&
+      mongoose.Types.ObjectId(xs).toString() === String(xs)
+    );
+  } catch (e) {
+    return false;
+  }
+};
+
 exports.getColumnsHeadersFromPayload = (o) =>
   o.reduce((a, c) => {
     const keys = Object.keys(flatten(c));
@@ -54,7 +65,7 @@ exports.isSimpleSubDocument = (parent, fieldName) => {
 
 exports.castObjectIds = (v) =>
   Object.entries(v).reduce((acc, [key, val]) => {
-    if (val && /ObjectId/.test(val)) {
+    if (val && (/ObjectId/.test(val) || isObjectId(val))) {
       acc[key] = mongoose.Types.ObjectId(
         val.replace(new RegExp(/^ObjectId\(|\)/, 'gi'), ''),
       );
