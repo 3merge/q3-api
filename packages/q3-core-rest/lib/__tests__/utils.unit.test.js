@@ -76,10 +76,14 @@ describe('Utility functions', () => {
     it('should return modified', () =>
       expect(
         Controller.castObjectIds({
-          $not: mongoose.Types.ObjectId(),
+          createdBy: {
+            $not: mongoose.Types.ObjectId(),
+          },
         }),
       ).toMatchObject({
-        $ne: expect.any(Object),
+        createdBy: {
+          $ne: expect.any(Object),
+        },
       }));
   });
 

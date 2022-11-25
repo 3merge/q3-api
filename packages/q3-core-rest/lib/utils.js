@@ -55,10 +55,13 @@ exports.isSimpleSubDocument = (parent, fieldName) => {
 exports.castObjectIds = (v) =>
   Object.entries(v).reduce((acc, [key, val]) => {
     if (
-      key === '$not' &&
-      val instanceof mongoose.Types.ObjectId
+      val &&
+      isObject(val) &&
+      val.$not instanceof mongoose.Types.ObjectId
     ) {
-      acc.$ne = val;
+      acc[key] = {
+        $ne: val.$not,
+      };
     } else if (val && /ObjectId/.test(val)) {
       acc[key] = mongoose.Types.ObjectId(
         val.replace(new RegExp(/^ObjectId\(|\)/, 'gi'), ''),
