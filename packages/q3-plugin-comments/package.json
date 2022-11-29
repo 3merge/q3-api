@@ -1,0 +1,19 @@
+{
+  "name": "q3-plugin-comments",
+  "version": "4.0.2",
+  "main": "lib/index.js",
+  "dependencies": {
+    "lodash": "^4.17.20",
+    "mongoose": "^6.2.1",
+    "mongoose-lean-getters": "^0.3.5",
+    "q3-api": "^4.2.4"
+  },
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node",
+    "preset": "q3-test-utils",
+    "setupFilesAfterEnv": [
+      "q3-test-utils/jest-setup.js"
+    ]
+  }
+}
