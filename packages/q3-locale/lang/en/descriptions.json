@@ -124,5 +124,7 @@
   "confirm": "Are you sure you'd like to continue with this action?",
   "confirmDelete": "Are you sure you'd like to continue with this action?",
   "confirmDeleteMany": "Are you sure you'd like to continue with this action?",
-  "couldNotLoadData": "Nothing to display"
+  "couldNotLoadData": "Nothing to display",
+  "missingFirstCommentInThread": "The initial post in this thread is no longer available.",
+  "commentRemoved": "This comment has been removed from the conversation."
 }
