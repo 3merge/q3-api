@@ -1,9 +1,10 @@
 const { compose } = require('q3-core-composer');
 const { queue } = require('q3-core-scheduler');
+const { get } = require('lodash');
 const { Users } = require('../../models');
 const { checkEmail } = require('../../utils');
 
-const resetPassword = async ({ body, t }, res) => {
+const resetPassword = async ({ body, query, t }, res) => {
   try {
     const doc = await Users.findVerifiedByEmail(body.email);
     await doc.setPasswordResetToken();
@@ -12,9 +13,11 @@ const resetPassword = async ({ body, t }, res) => {
   } catch (err) {
     // noop
   } finally {
-    res.ok({
-      message: t('messages:ifEmailExists'),
-    });
+    if (get(query, 'acknowledge', false)) res.acknowledge();
+    else
+      res.ok({
+        message: t('messages:ifEmailExists'),
+      });
   }
 };
 
