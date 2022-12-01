@@ -126,5 +126,8 @@
   "confirmDeleteMany": "Are you sure you'd like to continue with this action?",
   "couldNotLoadData": "Nothing to display",
   "missingFirstCommentInThread": "The initial post in this thread is no longer available.",
-  "commentRemoved": "This comment has been removed from the conversation."
+  "commentRemoved": "This comment has been removed from the conversation.",
+  "passwordGenerated": "Copy the password below and use it to log into this account. This message will only show once. You might need to refresh the page for changes to take effect.",
+  "reverificationEmailSent": "Email sent",
+  "passwordResetEmailSent": "Email sent"
 }

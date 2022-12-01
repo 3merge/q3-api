@@ -59,5 +59,6 @@
   "emptyOperationDetected": "Request failed because user cannot modify any of the sent data",
   "cannotAccessField": "Access denied",
   "missingOrIncompleteGrant": "Access denied",
-  "resourcesUpdated": "Successfully updated in the database"
+  "resourcesUpdated": "Successfully updated in the database",
+  "cannotGeneratePassword": "Cannot perform this action"
 }

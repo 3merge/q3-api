@@ -471,5 +471,9 @@
   "unselectAll": "Deselect all",
   "readMore": "Read more",
   "proceed": "Proceed",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "sendPasswordResetEmail": "Send reset password email",
+  "generateNewPassword": "Generate a new password",
+  "verifyAndGeneratePassword": "Verify and generate password",
+  "resendVerificationEmail": "Send verification email"
 }
