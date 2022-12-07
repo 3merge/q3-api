@@ -1,4 +1,5 @@
 const DomainResourcesSchema = require('../schema');
+const getMasterTenant = require('../../../helpers/getMasterTenant');
 
 DomainResourcesSchema.pre(
   'save',
@@ -6,6 +7,7 @@ DomainResourcesSchema.pre(
     if (this.isNew && !this.resources) {
       const lng = process.env.DEFAULT_LNG || 'en';
       const match = await this.constructor.findOne({
+        tenant: getMasterTenant(),
         lng,
       });
 
