@@ -19,6 +19,9 @@ const SystemNotificationsAnalytics = async (
     localUrl: {
       $exists: true,
     },
+
+    // will overwrite below
+    subDocumentId: null,
   };
 
   if (isString(subDocumentId)) {
