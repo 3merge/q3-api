@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1](https://github.com/3merge/q3-api/compare/v4.4.0...v4.4.1) (2022-12-07)
+
+
+### Bug Fixes
+
+* reference master tenant on domain resource creation ([7e55a71](https://github.com/3merge/q3-api/commit/7e55a71a266cc51afd30e931340083c9c29e0cf4))
+
+
+
+
+
 # [4.4.0](https://github.com/3merge/q3-api/compare/v4.3.1...v4.4.0) (2022-12-01)
 
 
