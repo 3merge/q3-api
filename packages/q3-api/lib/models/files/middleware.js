@@ -32,7 +32,7 @@ const makeNameWithFileExtension = ({ bucketId, name }) => {
 };
 
 function ensureFolderStructure() {
-  if (!Array.isArray(this.uploads)) this.uploads = [];
+  if (!Array.isArray(this.uploads)) return;
 
   const findById = (id) =>
     find(compact(this.uploads), checkId(id));
