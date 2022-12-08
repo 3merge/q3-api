@@ -1,3 +1,4 @@
+require('../helpers/loadDefaultSchemaExtensionsFromRoot');
 const mongoose = require('../config/mongoose');
 const { MODEL_NAMES } = require('../constants');
 const Domains = require('./domains');

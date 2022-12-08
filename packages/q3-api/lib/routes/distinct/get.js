@@ -7,6 +7,7 @@ const { exception } = require('q3-core-responder');
 const { Grant } = require('q3-core-access');
 const micromatch = require('micromatch');
 const { filter, isString } = require('lodash');
+const session = require('q3-core-session');
 const mongoose = require('../../config/mongoose');
 
 const includes = (a, b) =>
@@ -41,7 +42,10 @@ const SearchParams = async (
       values: filterByWord(
         await mongoose
           .model(collectionName)
-          .distinct(field)
+          .distinct(field, {
+            active: true,
+            tenant: session.get('TENANT') || null,
+          })
           .exec(),
         search,
       ),
