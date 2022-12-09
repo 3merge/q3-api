@@ -9,6 +9,11 @@ module.exports = (req, res, next) => {
       : get(req, 'headers.x-session-tenant'),
   );
 
+  const shouldThrowTenantError = () =>
+    req.originalUrl !== '/stream' &&
+    String(process.env.ARCHITECTURE).toUpperCase() ===
+      'MULTITENANT';
+
   // MUST BE HERE FOR Q3-CORE-SESSION
   // TO RELAY THE VALUE
   req.tenant = tenant;
@@ -29,7 +34,7 @@ module.exports = (req, res, next) => {
     .select('_id')
     .exec()
     .then((resp) => {
-      if (!resp) {
+      if (!resp && shouldThrowTenantError()) {
         const err = new Error('Failed tenant screening');
         err.statusCode = 400;
         next(err);
