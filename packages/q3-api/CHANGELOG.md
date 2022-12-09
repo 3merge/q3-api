@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.5](https://github.com/3merge/q3-api/compare/v4.4.4...v4.4.5) (2022-12-09)
+
+
+### Bug Fixes
+
+* skip tenant checking when not applicable ([49fb35f](https://github.com/3merge/q3-api/commit/49fb35f008e36dae114a28d18b4fee2094cfffa9))
+
+
+
+
+
 ## [4.4.4](https://github.com/3merge/q3-api/compare/v4.4.3...v4.4.4) (2022-12-08)
 
 **Note:** Version bump only for package q3-api
