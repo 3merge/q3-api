@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.6](https://github.com/3merge/q3-api/compare/v4.4.5...v4.4.6) (2022-12-16)
+
+
+### Bug Fixes
+
+* include required email variables in default chores ([fab6565](https://github.com/3merge/q3-api/commit/fab6565a50a07eba1c06f9f189cb5b5f8bea36ef))
+
+
+
+
+
 ## [4.4.5](https://github.com/3merge/q3-api/compare/v4.4.4...v4.4.5) (2022-12-09)
 
 

@@ -1,12 +1,12 @@
 {
   "name": "q3-plugin-comments",
-  "version": "4.4.5",
+  "version": "4.4.6",
   "main": "lib/index.js",
   "dependencies": {
     "lodash": "^4.17.20",
     "mongoose": "^6.2.1",
     "mongoose-lean-getters": "^0.3.5",
-    "q3-api": "^4.4.5"
+    "q3-api": "^4.4.6"
   },
   "jest": {
     "verbose": true,
