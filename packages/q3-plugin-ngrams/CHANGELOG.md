@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.7](https://github.com/3merge/q3-api/compare/v4.4.6...v4.4.7) (2023-01-04)
+
+
+### Bug Fixes
+
+* remove html from ngrams ([c8ef170](https://github.com/3merge/q3-api/commit/c8ef1701f2ea0882f48fe52756fff0c2c73c1975))
+
+
+
+
+
 ## [4.0.2](https://github.com/3merge/q3-api/compare/v4.0.1...v4.0.2) (2022-11-15)
 
 **Note:** Version bump only for package q3-plugin-ngrams
