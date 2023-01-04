@@ -1,29 +1,38 @@
-const { size } = require('lodash');
+const { isString, size } = require('lodash');
 const getFields = require('./getFields');
 const {
   clean,
   chunk,
-  castToDoubleQuotes,
   hasLengthGreaterThan,
   reduceIndex,
   reduceSearchableFields,
 } = require('./helpers');
+const { MAX_GRAM_SIZE } = require('./constants');
 
 module.exports = {
   getSearch: (term) => {
     if (!term) return {};
 
-    const $search = String(term)
+    const $all = String(term)
       .split(' ')
       .map(clean)
-      .map(chunk)
-      .flat(2)
-      .map(castToDoubleQuotes)
-      .join(' ');
+      .map((item) => {
+        const out = chunk(item);
+
+        if (isString(item)) {
+          const longform = item
+            .slice(0, MAX_GRAM_SIZE)
+            .trim();
+
+          if (!out.includes(longform)) out.push(longform);
+        }
+        return out;
+      })
+      .flat(2);
 
     return {
-      $text: {
-        $search,
+      ngrams: {
+        $all,
       },
     };
   },
