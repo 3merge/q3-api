@@ -63,6 +63,17 @@ describe('clean', () => {
       'thisisatest',
     );
   });
+
+  it('should remove all html', () => {
+    expect(
+      clean(
+        `<div><p style="color:red">Nope! This is clean! </p>
+        <br>
+        <img alt="testing" />
+        <p>Jan 2023</p></div>`,
+      ),
+    ).toEqual('nopethisiscleanjan2023');
+  });
 });
 
 describe.each([

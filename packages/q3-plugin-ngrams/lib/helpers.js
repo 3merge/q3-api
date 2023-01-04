@@ -57,9 +57,24 @@ const chunk = (v) => {
 
 const castToDoubleQuotes = (v) => `"${v}"`;
 
+/**
+ * @NOTE
+ * @TODO
+ * Taken from q3-plugin-wordcount.
+ * Should become a util
+ */
+const stripHtml = (xs) =>
+  String(xs)
+    // remove all tags
+    .replace(/<[^>]+>/g, '')
+    // replace multiple spaces, tabs and new lines
+    .replace(/\s\s+/g, ' ')
+    .trim();
+
 const clean = compose(
   (v) => v.replace(/[^a-zA-Z0-9]/g, ''),
   lowerCase,
+  stripHtml,
   trim,
 );
 
