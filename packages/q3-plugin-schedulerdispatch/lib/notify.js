@@ -1,5 +1,11 @@
 const Mailer = require('q3-core-mailer');
-const { get, map, pick, isObject } = require('lodash');
+const {
+  get,
+  map,
+  pick,
+  isObject,
+  isString,
+} = require('lodash');
 const i18next = require('i18next');
 const Pipeline = require('./pipeline');
 const { castId, getId } = require('./utils');
@@ -44,6 +50,12 @@ module.exports = function NotifyDependencyLayer(
         'withOwnership',
         false,
       );
+
+      this.$webAppPathMaker = get(
+        options,
+        'webAppPathMaker',
+        process.env.WEB_APP_PATH_MAKER,
+      );
     }
 
     exemptUserId() {
@@ -52,17 +64,23 @@ module.exports = function NotifyDependencyLayer(
     }
 
     getInAppLink() {
-      const s =
-        process.env.WEB_APP_PATH_MAKER ||
+      const variables = [
+        'messageType',
+        'documentId',
+        'subDocumentId',
+      ];
+
+      let str =
+        this.$webAppPathMaker ||
         '/app/:messageType/:documentId';
 
-      if (
-        get(this.$meta, 'messageType') &&
-        get(this.$meta, 'documentId')
-      )
-        return String(s)
-          .replace(':messageType', this.$meta.messageType)
-          .replace(':documentId', this.$meta.documentId);
+      if (isString(str) && isObject(this.$meta)) {
+        variables.forEach((v) => {
+          str = str.replace(`:${v}`, get(this.$meta, v));
+        });
+
+        return str;
+      }
 
       return null;
     }

@@ -13,27 +13,28 @@ describe('notify', () => {
   });
 
   describe('getInAppLink', () => {
-    it('should return null', () => {
-      const fn = notify({
-        Domains: null,
-        Notifications: null,
-      });
-
-      expect(
-        fn({ documentId: 1 }).getInAppLink(),
-      ).toBeNull();
-    });
-
-    it('should populate path', () => {
+    it('should populate path by variable', () => {
       process.env.WEB_APP_PATH_MAKER =
-        '/app/:messageType/:documentId';
+        '/app/:messageType/:documentId#test=:subDocumentId';
 
       expect(
         instance({
           documentId: 1,
           messageType: 'test',
+          subDocumentId: 2,
         }).getInAppLink(),
-      ).toMatch('/app/test/1');
+      ).toMatch('/app/test/1#test=2');
+    });
+
+    it('should populate path by constructor option', () => {
+      const ctx = instance({
+        documentId: 1,
+        messageType: 'test',
+        subDocumentId: 2,
+      });
+
+      ctx.$webAppPathMaker = '/foo/:documentId';
+      expect(ctx.getInAppLink()).toMatch('/foo/1');
     });
   });
 
