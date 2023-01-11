@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.10](https://github.com/3merge/q3-api/compare/v4.4.9...v4.4.10) (2023-01-11)
+
+
+### Bug Fixes
+
+* aws string match and added default chore ([#202](https://github.com/3merge/q3-api/issues/202)) ([90cc3f8](https://github.com/3merge/q3-api/commit/90cc3f85643244738bee6904f3bf6158e6ee1a35))
+
+
+
+
+
 ## [4.4.9](https://github.com/3merge/q3-api/compare/v4.4.8...v4.4.9) (2023-01-10)
 
 **Note:** Version bump only for package Q3-Api
