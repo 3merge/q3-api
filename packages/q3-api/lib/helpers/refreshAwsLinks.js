@@ -14,6 +14,8 @@ module.exports = (item) => {
 
       forEach(replacements, (link) => {
         try {
+          if (!link.includes('amazonaws')) return;
+
           const [bucket] = link.match(
             new RegExp(/.[a-z]+\/(.+)\?/, 'gm'),
           );
