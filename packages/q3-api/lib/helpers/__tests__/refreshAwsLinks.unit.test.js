@@ -75,4 +75,15 @@ describe('refreshAwsLinks', () => {
       </p>`,
     );
   });
+
+  it('should leave real links', () => {
+    const input = `
+    <a href="https://www.katespade.com/products/storyteller-secret-garden-iphone-13-pro-max-case/K9232.html?frp=K9232%20L38">
+    I am an outbound link
+    </a>
+    `;
+
+    const out = refreshAwsLinks(input);
+    expect(out).toMatch(input);
+  });
 });
