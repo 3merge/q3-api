@@ -79,7 +79,8 @@ module.exports = function NotifyDependencyLayer(
           str = str.replace(`:${v}`, get(this.$meta, v));
         });
 
-        return str;
+        // indicates the link will be broken
+        return str.includes('undefined') ? null : str;
       }
 
       return null;

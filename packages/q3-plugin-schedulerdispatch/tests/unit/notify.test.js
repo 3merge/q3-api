@@ -36,6 +36,12 @@ describe('notify', () => {
       ctx.$webAppPathMaker = '/foo/:documentId';
       expect(ctx.getInAppLink()).toMatch('/foo/1');
     });
+
+    it('should return null when undefined variables', () => {
+      const ctx = instance({});
+      ctx.$webAppPathMaker = '/foo/:documentId';
+      expect(ctx.getInAppLink()).toBeNull();
+    });
   });
 
   describe('negateId', () => {
