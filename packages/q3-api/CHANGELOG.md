@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.11](https://github.com/3merge/q3-api/compare/v4.4.10...v4.4.11) (2023-01-19)
+
+
+### Bug Fixes
+
+* include active field in email authentication query ([404fb2f](https://github.com/3merge/q3-api/commit/404fb2fdad3766b9143ade7db4a540130f49664a))
+
+
+
+
+
 ## [4.4.10](https://github.com/3merge/q3-api/compare/v4.4.9...v4.4.10) (2023-01-11)
 
 
