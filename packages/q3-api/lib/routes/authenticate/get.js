@@ -6,6 +6,7 @@ const LookupAccount = async ({ query: { email } }, res) => {
   res.ok({
     exists: !isNil(
       await Users.findOne({
+        active: true,
         email,
       })
         .lean()
