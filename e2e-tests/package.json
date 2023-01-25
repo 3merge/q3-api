@@ -1,6 +1,6 @@
 {
   "name": "e2e-tests",
-  "version": "4.4.12",
+  "version": "4.4.13",
   "main": "index.js",
   "private": true,
   "dependencies": {
@@ -10,7 +10,7 @@
     "lodash": "^4.17.20",
     "moment": "^2.29.3",
     "mongoose": "^6.2.1",
-    "q3-api": "^4.4.12",
+    "q3-api": "^4.4.13",
     "q3-core-access": "^4.1.1",
     "q3-core-composer": "^4.1.1",
     "q3-core-mailer": "^4.4.8",
