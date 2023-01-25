@@ -1,5 +1,5 @@
 const EventEmitter = require('events');
-const { get } = require('lodash');
+const { get, isObject, omit, size } = require('lodash');
 const mongoose = require('mongoose');
 
 const REFRESH = 'REFRESH';
@@ -11,6 +11,28 @@ const getTimeStamp = (args) =>
 
 const getModelCollectionName = (model) =>
   get(model, 'collection.collectionName', '');
+
+const isNoop = (args = {}) => {
+  const { operationType, updateDescription } = args;
+  if (
+    operationType !== 'update' ||
+    !isObject(updateDescription)
+  )
+    return false;
+
+  const { removedFields, truncatedArrays, updatedFields } =
+    updateDescription;
+
+  const updatedFieldsKeys = isObject(updatedFields)
+    ? Object.keys(omit(updatedFields, ['updatedAt']))
+    : [];
+
+  return ![
+    removedFields,
+    truncatedArrays,
+    updatedFieldsKeys,
+  ].some(size);
+};
 
 class CollectionWatch extends EventEmitter {
   constructor() {
@@ -28,11 +50,12 @@ class CollectionWatch extends EventEmitter {
 
       Model.watch()
         .on('change', (args) => {
-          this.emit(REFRESH, {
-            updatedAt: getTimeStamp(args),
-            id: getDocumentKey(args),
-            collection,
-          });
+          if (!isNoop(args))
+            this.emit(REFRESH, {
+              updatedAt: getTimeStamp(args),
+              id: getDocumentKey(args),
+              collection,
+            });
         })
         .on('error', () => {
           // noop
@@ -55,6 +78,10 @@ class CollectionWatch extends EventEmitter {
 
 CollectionWatch.CONSTANTS = {
   REFRESH,
+};
+
+CollectionWatch.utils = {
+  isNoop,
 };
 
 module.exports = CollectionWatch;
