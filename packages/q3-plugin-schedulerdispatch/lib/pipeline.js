@@ -55,7 +55,10 @@ module.exports = async (
           {
             '$match': {
               ...additionalUserQuery,
-              'listens': notificationName,
+              'listens': new RegExp(
+                `^${notificationName}`,
+                'g',
+              ),
               'active': true,
               'verified': true,
               'tenant': tnt,
@@ -84,6 +87,7 @@ module.exports = async (
         'timezone': '$users.timezone',
         'role': '$users.role',
         'tenant': '$users.tenant',
+        'listens': '$users.listens',
       },
     },
   ]);

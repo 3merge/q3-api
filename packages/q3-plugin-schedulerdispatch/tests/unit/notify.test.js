@@ -237,4 +237,67 @@ describe('notify', () => {
       expect(t).toHaveBeenCalledWith('messages:notify', {});
     });
   });
+
+  describe('wantsBy', () => {
+    it('should return false without any listens', () => {
+      expect(
+        instance({}).wantsBy.call(
+          {
+            $listener: 'test',
+          },
+          {
+            listens: [],
+          },
+        ),
+      ).toBeFalsy();
+    });
+
+    it('should return false without variant match', () => {
+      expect(
+        instance({}).wantsBy.call(
+          {
+            $listener: 'test',
+          },
+          {
+            listens: ['test__text', 'test__email'],
+          },
+          'app',
+        ),
+      ).toBeFalsy();
+    });
+
+    it('should return true with variant match', () => {
+      expect(
+        instance({}).wantsBy.call(
+          {
+            $listener: 'test',
+          },
+          {
+            listens: ['test__text', 'test__email'],
+          },
+          'text',
+        ),
+      ).toBeTruthy();
+    });
+
+    it('should return true with listener match and no variants', () => {
+      expect(
+        instance({}).wantsBy.call(
+          { $listener: 'test' },
+          { listens: ['test', 'test1'] },
+          'text',
+        ),
+      ).toBeTruthy();
+    });
+
+    it('should return false with no matches', () => {
+      expect(
+        instance({}).wantsBy.call(
+          { $listener: 'foo' },
+          { listens: ['test', 'test1'] },
+          'text',
+        ),
+      ).toBeFalsy();
+    });
+  });
 });
