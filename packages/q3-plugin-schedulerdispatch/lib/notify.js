@@ -5,6 +5,7 @@ const {
   pick,
   isObject,
   isString,
+  isNil,
 } = require('lodash');
 const i18next = require('i18next');
 const Pipeline = require('./pipeline');
@@ -20,6 +21,15 @@ module.exports = function NotifyDependencyLayer(
     throw new Error(
       'Configuration object requires the Q3 Domain and Notification models',
     );
+
+  const hasArrayLength = (xs) =>
+    Array.isArray(xs) && xs.length > 0;
+
+  const hasIn = (xs, comparisonValue) =>
+    !isNil(xs.find((item) => item === comparisonValue));
+
+  const someIncludes = (xs, char) =>
+    xs.some((item) => String(item).includes(char));
 
   class NotifyCommander {
     constructor(notificationObject = {}, options = {}) {
@@ -168,9 +178,16 @@ module.exports = function NotifyDependencyLayer(
       return this;
     }
 
-    async forEachUserAsync(cb) {
+    async forEachUserAsync(cb, subscriptionMethod = null) {
       return Promise.all(
         map(this.$users, (user) => {
+          if (
+            subscriptionMethod &&
+            // exclude them for this delivery method
+            !this.wantsBy(user, subscriptionMethod)
+          )
+            return null;
+
           if (this.$withOwnership) {
             const fn = this.isUserEqualTo(user);
 
@@ -184,6 +201,26 @@ module.exports = function NotifyDependencyLayer(
 
           return cb(user);
         }),
+      );
+    }
+
+    wantsBy(xs, method) {
+      const l = get(xs, 'listens', []);
+      const char = '__';
+      const variantStr = [
+        this.$listener,
+        char,
+        method,
+      ].join('');
+
+      return (
+        // if no length then noop
+        hasArrayLength(l) &&
+        // if no char, then does the listener exist?
+        // if char, then does the listener variant exist?
+        ((!someIncludes(l, char) &&
+          hasIn(l, this.$listener)) ||
+          hasIn(l, variantStr))
       );
     }
 
@@ -201,7 +238,7 @@ module.exports = function NotifyDependencyLayer(
           localUrl: this.getInAppLink(),
           userId: user._id,
         });
-      });
+      }, 'native');
     }
 
     async send() {
@@ -210,11 +247,13 @@ module.exports = function NotifyDependencyLayer(
         context: this.$context,
       };
 
-      return this.forEachUserAsync(async (user) =>
-        // look at the constructor and this.$listener
-        // just implements what Facade would normally automatically
-        // but it extends the name to other external methods in this class
-        Mailer.Facade(user, body, this.$listener),
+      return this.forEachUserAsync(
+        async (user) =>
+          // look at the constructor and this.$listener
+          // just implements what Facade would normally automatically
+          // but it extends the name to other external methods in this class
+          Mailer.Facade(user, body, this.$listener),
+        'email',
       );
     }
   }

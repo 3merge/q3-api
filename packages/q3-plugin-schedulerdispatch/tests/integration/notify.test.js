@@ -69,7 +69,7 @@ beforeAll(async () => {
       firstName: 'J',
       lastName: 'S',
       email: 'js@test.ca',
-      listens: ['onTest'],
+      listens: ['onTest__native', 'onTest__email'],
       role: 'Developer',
     },
     {
@@ -78,7 +78,7 @@ beforeAll(async () => {
       firstName: 'J2',
       lastName: 'S2',
       email: 'js2@test.ca',
-      listens: ['onTest'],
+      listens: ['onTest__native', 'onTest__email'],
       role: 'Developer',
     },
   ]);
@@ -92,7 +92,7 @@ afterAll(async () => {
 });
 
 describe('notify', () => {
-  it('should', async () => {
+  it('should send to each channel', async () => {
     process.env.WEB_APP_PATH_MAKER =
       '/app/:messageType/:documentId';
 
