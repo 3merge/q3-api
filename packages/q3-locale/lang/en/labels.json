@@ -475,5 +475,9 @@
   "sendPasswordResetEmail": "Send reset password email",
   "generateNewPassword": "Generate a new password",
   "verifyAndGeneratePassword": "Verify and generate password",
-  "resendVerificationEmail": "Send verification email"
+  "resendVerificationEmail": "Send verification email",
+  "nativeNotifications": "In-app",
+  "emailNotifications": "Email",
+  "textNotifications": "Text",
+  "update": "Update"
 }

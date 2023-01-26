@@ -48,10 +48,24 @@ class CollectionWatch extends EventEmitter {
       // this collection changes WAY to frequently.
       if (collection === 'queues') return;
 
-      Model.watch()
+      Model.watch(
+        [
+          {
+            $project: {
+              documentKey: 1,
+              operationType: 1,
+              updateDescription: 1,
+              userId: '$fullDocument.userId',
+            },
+          },
+        ],
+        { fullDocument: 'updateLookup' },
+      )
+
         .on('change', (args) => {
           if (!isNoop(args))
             this.emit(REFRESH, {
+              userId: args.userId,
               updatedAt: getTimeStamp(args),
               id: getDocumentKey(args),
               collection,

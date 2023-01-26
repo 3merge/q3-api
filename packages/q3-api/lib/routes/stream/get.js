@@ -1,6 +1,12 @@
 const { compose } = require('q3-core-composer');
+const { Grant } = require('q3-core-access');
+const { isNil } = require('lodash');
+const { Users } = require('../../models');
 
-const Stream = (req, res) => {
+const Stream = async (req, res) => {
+  const { userId } = req.query;
+  const user = await Users.findById(userId);
+
   req.socket.setKeepAlive(true);
   req.socket.setTimeout(0);
 
@@ -15,9 +21,30 @@ const Stream = (req, res) => {
 
   const str = req.app.get('changestream');
 
+  const canSee = (args = {}) => {
+    const { collection, userId: id } = args;
+    const open = [
+      'notifications',
+      'system-counters',
+    ].includes(collection);
+
+    return open
+      ? String(id) === userId
+      : !isNil(
+          new Grant(user)
+            .can('Read')
+            .on(collection)
+            .first(),
+        );
+  };
+
   const broadcast = (type, data = {}) => {
     res.write(`type: ${type}\n`);
-    res.write(`data: ${JSON.stringify(data)}\n\n`);
+
+    if (canSee(data)) {
+      res.write(`data: ${JSON.stringify(data)}\n\n`);
+    }
+
     res.flush();
   };
 
