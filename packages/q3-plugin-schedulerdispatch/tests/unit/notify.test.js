@@ -144,31 +144,26 @@ describe('notify', () => {
 
   describe('concatOwnershipTextForUser', () => {
     it('should just return listener', () => {
+      const inst = instance({});
+      inst.$listener = 'test';
       expect(
-        instance({}).concatOwnershipTextForUser.call(
-          {
-            $listener: 'test',
-          },
-          {
-            isDocumentMine: true,
-            isSubDocumentMine: true,
-          },
-        ),
+        inst.concatOwnershipTextForUser({
+          isDocumentMine: true,
+          isSubDocumentMine: true,
+        }),
       ).toEqual('test');
     });
 
     it('should just add doc and subdoc text', () => {
+      const inst = instance({});
+      inst.$listener = 'test';
+      inst.$withOwnership = true;
+
       expect(
-        instance({}).concatOwnershipTextForUser.call(
-          {
-            $listener: 'test',
-            $withOwnership: true,
-          },
-          {
-            isDocumentMine: true,
-            isSubDocumentMine: true,
-          },
-        ),
+        inst.concatOwnershipTextForUser({
+          isDocumentMine: true,
+          isSubDocumentMine: true,
+        }),
       ).toEqual('testMyDocMySubDoc');
     });
   });
@@ -222,19 +217,44 @@ describe('notify', () => {
     });
   });
 
-  describe('translateForUser', () => {
-    it('should', () => {
+  describe.only('translateForUser', () => {
+    it('should use $listener', () => {
       const t = jest.fn();
       const spy = jest
         .spyOn(i18next, 'getFixedT')
         .mockReturnValue(t);
 
-      instance({}).translateForUser({
+      instance(
+        {},
+        {
+          filename: 'foo',
+        },
+      ).translateForUser({
         lang: 'es',
       })('messages');
 
       expect(spy).toHaveBeenCalledWith('es');
-      expect(t).toHaveBeenCalledWith('messages:notify', {});
+      expect(t).toHaveBeenCalledWith('messages:foo', {});
+    });
+
+    it('should use $template', () => {
+      const t = jest.fn();
+      const spy = jest
+        .spyOn(i18next, 'getFixedT')
+        .mockReturnValue(t);
+
+      instance(
+        {},
+        {
+          filename: 'foo',
+          template: 'bar',
+        },
+      ).translateForUser({
+        lang: 'es',
+      })('messages');
+
+      expect(spy).toHaveBeenCalledWith('es');
+      expect(t).toHaveBeenCalledWith('messages:bar', {});
     });
   });
 
