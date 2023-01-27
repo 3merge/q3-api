@@ -50,9 +50,16 @@ module.exports = function NotifyDependencyLayer(
       );
 
       this.$exemptUserId = false;
+
+      // used to match notificaiton preferences
+      // and structure default in-app msgs, email template, etc.
       this.$listener = Mailer.Facade.interpretTemplateName(
         get(options, 'filename'),
       );
+
+      // if the listener and the underlying content template names
+      // do not match
+      this.$template = get(options, 'template');
 
       this.$users = [];
       this.$withOwnership = get(
@@ -66,6 +73,10 @@ module.exports = function NotifyDependencyLayer(
         'webAppPathMaker',
         process.env.WEB_APP_PATH_MAKER,
       );
+    }
+
+    get content() {
+      return this.$template || this.$listener;
     }
 
     exemptUserId() {
@@ -125,7 +136,7 @@ module.exports = function NotifyDependencyLayer(
     }
 
     concatOwnershipTextForUser(user = {}) {
-      let l = this.$listener;
+      let l = this.content;
 
       const joinWithL = (str) => {
         l = [l].concat(str).join('');
@@ -157,12 +168,10 @@ module.exports = function NotifyDependencyLayer(
         const t = i18next.getFixedT(user.lang || 'en');
         const k = this.concatOwnershipTextForUser(user);
         const out = t(`${ns}:${k}`, this.$context);
+        const text = this.content;
 
-        if (out === k && k !== this.$listener)
-          return t(
-            `${ns}:${this.$listener}`,
-            this.$context,
-          );
+        if (out === k && k !== text)
+          return t(`${ns}:${text}`, this.$context);
 
         return out;
       };
@@ -249,10 +258,10 @@ module.exports = function NotifyDependencyLayer(
 
       return this.forEachUserAsync(
         async (user) =>
-          // look at the constructor and this.$listener
+          // look at the constructor and this.content
           // just implements what Facade would normally automatically
           // but it extends the name to other external methods in this class
-          Mailer.Facade(user, body, this.$listener),
+          Mailer.Facade(user, body, this.content),
         'email',
       );
     }
