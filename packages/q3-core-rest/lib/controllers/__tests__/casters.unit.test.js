@@ -63,7 +63,27 @@ describe('Casters', () => {
         ],
       },
     ],
-    ['6 e8b6ba3b991818b7f', '6 e8b6ba3b991818b7f'],
+    [
+      '623e080e8b6ba3b991818b7f,623e080e8b6ba3b991818b71',
+      {
+        $in: [
+          mongoose.Types.ObjectId(
+            '623e080e8b6ba3b991818b7f',
+          ),
+          '623e080e8b6ba3b991818b7f',
+          mongoose.Types.ObjectId(
+            '623e080e8b6ba3b991818b71',
+          ),
+          '623e080e8b6ba3b991818b71',
+        ],
+      },
+    ],
+    [
+      '6 e8b6ba3b991818b7f',
+      {
+        $in: ['6 e8b6ba3b991818b7f'],
+      },
+    ],
   ])('.id(%s)', (a, b) => {
     expect(casters.id(a)).toEqual(b);
   });

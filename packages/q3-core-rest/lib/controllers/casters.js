@@ -45,10 +45,18 @@ module.exports = {
       .match(/(".*?"|[^",]+)/g)
       .map(toString),
   string: toString,
-  id: (xs) =>
-    mongoose.isValidObjectId(xs)
-      ? {
-          $in: [mongoose.Types.ObjectId(xs), xs],
-        }
-      : xs,
+
+  id: (xs) => {
+    const str = String(xs);
+    const convert = (id) =>
+      mongoose.isValidObjectId(id)
+        ? [mongoose.Types.ObjectId(id), id]
+        : [id];
+
+    return {
+      $in: str.includes(',')
+        ? str.split(',').map(convert).flat()
+        : convert(str),
+    };
+  },
 };
