@@ -1,6 +1,6 @@
 {
   "name": "q3-core-rest",
-  "version": "4.4.16",
+  "version": "4.4.17",
   "description": "Mongoose schema REST exports",
   "main": "lib/index.js",
   "license": "MIT",
@@ -13,11 +13,11 @@
     "m2e-validator": "^1.3.9",
     "mongoose-paginate-v2": "^1.4.2",
     "mongoose-partial-search": "^1.0.6",
-    "q3-core-composer": "^4.1.1",
-    "q3-core-responder": "^4.0.2",
-    "q3-plugin-ngrams": "^4.4.8",
-    "q3-schema-utils": "^4.1.1",
-    "q3-utils": "^4.0.2",
+    "q3-core-composer": "^4.4.17",
+    "q3-core-responder": "^4.4.17",
+    "q3-plugin-ngrams": "^4.4.17",
+    "q3-schema-utils": "^4.4.17",
+    "q3-utils": "^4.4.17",
     "sift": "^15.1.0"
   },
   "peerDependencies": {
@@ -26,7 +26,7 @@
     "mongoose": "^5.7.1"
   },
   "devDependencies": {
-    "q3-test-utils": "^4.0.2",
+    "q3-test-utils": "^4.4.17",
     "supertest": "^6.1.6"
   },
   "jest": {
@@ -37,5 +37,5 @@
       "q3-test-utils/jest-setup.js"
     ]
   },
-  "gitHead": "a586228e529bf3829bdc7c34e4fdc9c600037e9e"
+  "gitHead": "9417f5d21d107258e8f468211e3128923e23e209"
 }

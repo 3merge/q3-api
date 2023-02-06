@@ -1,17 +1,17 @@
 {
   "name": "q3-schema-users",
-  "version": "4.4.16",
+  "version": "4.4.17",
   "main": "lib/index.js",
   "dependencies": {
     "bcrypt": "^5.0.0",
     "generate-password": "^1.7.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.3",
-    "q3-core-mailer": "^4.4.16",
-    "q3-core-responder": "^4.0.2"
+    "q3-core-mailer": "^4.4.17",
+    "q3-core-responder": "^4.4.17"
   },
   "devDependencies": {
-    "q3-test-utils": "^4.0.2"
+    "q3-test-utils": "^4.4.17"
   },
   "peerDependencies": {
     "mongoose": "^5.7.1"
@@ -23,5 +23,6 @@
     "setupFilesAfterEnv": [
       "q3-test-utils/jest-setup.js"
     ]
-  }
+  },
+  "gitHead": "9417f5d21d107258e8f468211e3128923e23e209"
 }

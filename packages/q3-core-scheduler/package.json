@@ -1,16 +1,16 @@
 {
   "name": "q3-core-scheduler",
   "main": "lib/index.js",
-  "version": "4.4.16",
+  "version": "4.4.17",
   "dependencies": {
     "lodash": "^4.17.20",
     "moment": "^2.29.3",
     "mongoose": "^6.2.1",
     "node-cron": "^3.0.0",
-    "q3-api": "^4.4.16",
-    "q3-core-rest": "^4.4.16",
-    "q3-core-session": "^4.0.2",
-    "q3-schema-utils": "^4.1.1"
+    "q3-api": "^4.4.17",
+    "q3-core-rest": "^4.4.17",
+    "q3-core-session": "^4.4.17",
+    "q3-schema-utils": "^4.4.17"
   },
   "jest": {
     "verbose": true,
@@ -19,5 +19,6 @@
     "setupFilesAfterEnv": [
       "q3-test-utils/jest-setup.js"
     ]
-  }
+  },
+  "gitHead": "9417f5d21d107258e8f468211e3128923e23e209"
 }

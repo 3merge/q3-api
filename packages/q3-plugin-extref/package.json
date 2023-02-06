@@ -1,6 +1,6 @@
 {
   "name": "q3-plugin-extref",
-  "version": "4.4.16",
+  "version": "4.4.17",
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
@@ -11,7 +11,7 @@
     "flat": "^5.0.2",
     "lodash": "^4.17.20",
     "mongoose": "^6.2.1",
-    "q3-core-scheduler": "^4.4.16"
+    "q3-core-scheduler": "^4.4.17"
   },
   "jest": {
     "verbose": true,
@@ -20,5 +20,6 @@
     "setupFilesAfterEnv": [
       "q3-test-utils/jest-setup.js"
     ]
-  }
+  },
+  "gitHead": "9417f5d21d107258e8f468211e3128923e23e209"
 }
