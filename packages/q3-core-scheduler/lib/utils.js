@@ -89,6 +89,14 @@ const makePayload = (data) => {
       'uploads',
       'password',
       'lastLoggedIn',
+      'frozen',
+      'lastModifiedBy',
+      'listens',
+      'source',
+      'tours',
+      'ngrams',
+      'filters',
+      'sorting',
     ].forEach((key) => {
       if (obj[key]) {
         // eslint-disable-next-line
@@ -99,6 +107,9 @@ const makePayload = (data) => {
 
   if (isObject(formatted)) {
     checkBlacklist(formatted);
+
+    if (isObject(formatted.user))
+      checkBlacklist(formatted.user);
 
     if (isObject(formatted.session)) {
       checkBlacklist(formatted.session);
@@ -117,7 +128,11 @@ const forwardPayload = (fn) => (choreData) =>
     data: parse(get(choreData, 'payload')),
   });
 
+const getQueueCollectionName = () =>
+  process.env.QUEUING_COLLECTION || 'queues';
+
 module.exports = {
+  getQueueCollectionName,
   composeAsync,
   isJob,
   isRecurringJob,

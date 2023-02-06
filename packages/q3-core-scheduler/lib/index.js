@@ -7,12 +7,15 @@ const { executeOnAsync } = require('q3-schema-utils');
 const { invoke } = require('lodash');
 const SchedulerSchema = require('./schema');
 const runner = require('./runner');
-const { makePayload } = require('./utils');
+const {
+  makePayload,
+  getQueueCollectionName,
+} = require('./utils');
 
 const Emitter = new EventEmitter();
 
 const Scheduler = mongoose.model(
-  process.env.QUEUING_COLLECTION || 'queues',
+  getQueueCollectionName(),
   SchedulerSchema,
 );
 
