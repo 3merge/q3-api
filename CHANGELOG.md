@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.5.0](https://github.com/3merge/q3-api/compare/v4.4.20...v4.5.0) (2023-02-07)
+
+
+### Features
+
+* unread notifications plugin ([#212](https://github.com/3merge/q3-api/issues/212)) ([adccdfd](https://github.com/3merge/q3-api/commit/adccdfdb93d01cc4c8d80e96e1477514480704a2))
+
+
+
+
+
 ## [4.4.20](https://github.com/3merge/q3-api/compare/v4.4.19...v4.4.20) (2023-02-07)
 
 **Note:** Version bump only for package Q3-Api
