@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.1](https://github.com/3merge/q3-api/compare/v4.5.0...v4.5.1) (2023-02-07)
+
+
+### Bug Fixes
+
+* circular dep ([a78abee](https://github.com/3merge/q3-api/commit/a78abee8ac236fe72b043b06fc72b06c41e1937c))
+
+
+
+
+
 # [4.5.0](https://github.com/3merge/q3-api/compare/v4.4.20...v4.5.0) (2023-02-07)
 
 
