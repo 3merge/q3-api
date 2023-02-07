@@ -6,6 +6,7 @@ const handleImport = require('./handleImport');
 const refreshAwsLinks = require('./refreshAwsLinks');
 const makeVirtualFilePathPlugin = require('./makeVirtualFilePathPlugin');
 const multitenantPlugin = require('./multitenantPlugin');
+const unreadDocumentPlugin = require('./unreadDocumentPlugin');
 const translate = require('./translate');
 const utils = require('./utils');
 
@@ -18,6 +19,7 @@ module.exports = {
   refreshAwsLinks,
   makeVirtualFilePathPlugin,
   multitenantPlugin,
+  unreadDocumentPlugin,
   translate,
   ...utils,
 };
