@@ -1,5 +1,4 @@
 const { get, map, size, set, isObject } = require('lodash');
-const { Notifications } = require('../models');
 
 const plugin = (Schema, messageType = null) => {
   // virtuals not working
@@ -10,6 +9,9 @@ const plugin = (Schema, messageType = null) => {
     let ids = get(this, '$locals.notificationIds');
 
     if (!Array.isArray(ids)) {
+      // eslint-disable-next-line
+      const { Notifications } = require('../models');
+
       ids = map(
         await Notifications.getUnreadIds(messageType),
         String,
