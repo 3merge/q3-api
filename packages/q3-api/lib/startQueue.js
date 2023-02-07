@@ -35,10 +35,7 @@ module.exports = async (location) => {
 
     await Scheduler.seed(location);
     await Scheduler.seed(
-      path.join(
-        process.cwd(),
-        'node_modules/q3-api/lib/chores',
-      ),
+      path.join(process.cwd(), 'node_modules/q3-api/lib'),
     );
 
     forkForEachScheduledPriorityLevel();

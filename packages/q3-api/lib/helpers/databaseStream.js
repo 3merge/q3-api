@@ -1,5 +1,11 @@
 const EventEmitter = require('events');
-const { get, isObject, omit, size } = require('lodash');
+const {
+  invoke,
+  get,
+  isObject,
+  omit,
+  size,
+} = require('lodash');
 const mongoose = require('mongoose');
 
 const REFRESH = 'REFRESH';
@@ -62,14 +68,24 @@ class CollectionWatch extends EventEmitter {
         { fullDocument: 'updateLookup' },
       )
 
-        .on('change', (args) => {
-          if (!isNoop(args))
-            this.emit(REFRESH, {
+        .on('change', async (args) => {
+          if (!isNoop(args)) {
+            const payload = {
               userId: args.userId,
               updatedAt: getTimeStamp(args),
               id: getDocumentKey(args),
               collection,
-            });
+            };
+
+            this.emit(REFRESH, payload);
+
+            // used primarily to update user counters
+            await invoke(
+              global,
+              'handleChangeStream',
+              payload,
+            );
+          }
         })
         .on('error', () => {
           // noop

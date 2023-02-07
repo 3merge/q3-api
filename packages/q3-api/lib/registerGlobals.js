@@ -7,6 +7,7 @@ const registerGlobals = (location) => {
     'getMailerVars',
     'getWebApp',
     'getUrl',
+    'handleChangeStream',
   ];
 
   if (!fs.existsSync(globals)) return;
