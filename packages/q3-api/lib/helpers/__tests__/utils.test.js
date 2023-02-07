@@ -4,6 +4,8 @@ jest.mock('../../config/express', () => ({
   },
 }));
 
+const mongoose = require('mongoose');
+
 jest.mock('q3-schema-utils', () => ({
   findFileTraversingUpwards: jest.fn(),
 }));
@@ -18,6 +20,8 @@ const {
   toQuery,
   getWebAppUrlByUser,
   checkAccessByFileNameAndRoleType,
+  toObjectId,
+  isEqualToObjectId,
 } = require('../utils');
 
 describe('Setters', () => {
@@ -150,5 +154,40 @@ describe('checkAccessByFileNameAndRoleType', () => {
       'foo',
       'sample.json',
     );
+  });
+
+  describe('toObjectId', () => {
+    it('should return null', () => {
+      expect(toObjectId(234)).toBeNull();
+    });
+
+    it('should return ID', () => {
+      expect(
+        toObjectId('63e27d0c35276d62ac41ad7c') instanceof
+          mongoose.Types.ObjectId,
+      ).toBeTruthy();
+    });
+  });
+
+  describe('isEqualToObjectId', () => {
+    it('should return false', () => {
+      expect(isEqualToObjectId(234, 24654)).toBeFalsy();
+
+      expect(
+        isEqualToObjectId(
+          '63e27d0c35276d62ac41ad7c',
+          '63e27d0c35276d62ac41ad7d',
+        ),
+      ).toBeFalsy();
+    });
+
+    it('should return true', () => {
+      expect(
+        isEqualToObjectId(
+          '63e27d0c35276d62ac41ad7c',
+          '63e27d0c35276d62ac41ad7c',
+        ),
+      ).toBeTruthy();
+    });
   });
 });
