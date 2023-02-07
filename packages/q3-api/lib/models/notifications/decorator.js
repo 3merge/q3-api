@@ -2,8 +2,10 @@
 const moment = require('moment');
 const session = require('q3-core-session');
 const Exporter = require('q3-exports');
+const { get, first } = require('lodash');
 const Schema = require('./schema');
 const aws = require('../../config/aws');
+const { toObjectId } = require('../../helpers/utils');
 const { getId, getUserPath } = require('../utils');
 const { getFileDownload, mapHeaders } = require('./utils');
 
@@ -91,6 +93,43 @@ class NotificationDecorator {
         name,
       },
       columnMapDef,
+    );
+  }
+
+  static async getUnreadIds(messageType) {
+    return get(
+      first(
+        await this.aggregate([
+          {
+            '$match': {
+              'active': true,
+              'archived': false,
+              'subDocumentId': null,
+              'read': false,
+              'messageType': messageType,
+              'userId': toObjectId(
+                session.get('USER', '_id'),
+              ),
+            },
+          },
+          {
+            '$group': {
+              '_id': 0,
+              'ids': {
+                '$addToSet': '$documentId',
+              },
+            },
+          },
+          {
+            '$project': {
+              '_id': 0,
+              'ids': 1,
+            },
+          },
+        ]),
+      ),
+      'ids',
+      [],
     );
   }
 }
