@@ -10,7 +10,10 @@ const { Counters } = require('../../models');
 const { ObjectId } = mongoose.Types;
 
 const SystemNotificationsAnalytics = async (
-  { body: { documentId, subDocumentId }, user },
+  {
+    body: { documentId, subDocumentId, read = true },
+    user,
+  },
   res,
 ) => {
   const query = {
@@ -42,9 +45,7 @@ const SystemNotificationsAnalytics = async (
   }
 
   await mongoose.models.notifications.updateMany(query, {
-    $set: {
-      read: true,
-    },
+    $set: { read },
   });
 
   await Counters.calculateByNotificationObject({
@@ -60,6 +61,7 @@ SystemNotificationsAnalytics.authorization = [verify];
 SystemNotificationsAnalytics.validation = [
   check('documentId').isString(),
   check('subDocumentId').isString().optional(),
+  check('read').isBoolean().optional(),
 ];
 
 module.exports = compose(SystemNotificationsAnalytics);

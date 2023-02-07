@@ -155,6 +155,23 @@ const checkAccessByFileNameAndRoleType = (
   return accessControlSettings;
 };
 
+const toObjectId = (xs) => {
+  if (xs && mongoose.Types.ObjectId.isValid(xs)) {
+    const r = mongoose.Types.ObjectId(xs);
+    return r.toString() === String(xs) ? r : null;
+  }
+
+  return null;
+};
+
+const isEqualToObjectId = (a, b) => {
+  try {
+    return toObjectId(a).equals(toObjectId(b));
+  } catch (e) {
+    return false;
+  }
+};
+
 module.exports = {
   toQuery,
   toUndefined,
@@ -167,4 +184,6 @@ module.exports = {
   getWebAppUrlByUser,
   objectIdEquals,
   checkAccessByFileNameAndRoleType,
+  toObjectId,
+  isEqualToObjectId,
 };
