@@ -45,7 +45,13 @@ const SystemNotificationsAnalytics = async (
   }
 
   await mongoose.models.notifications.updateMany(query, {
-    $set: { read },
+    $set: read
+      ? { read }
+      : {
+          active: true,
+          archived: false,
+          read,
+        },
   });
 
   await Counters.calculateByNotificationObject({
