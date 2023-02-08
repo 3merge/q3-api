@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.2](https://github.com/3merge/q3-api/compare/v4.5.1...v4.5.2) (2023-02-08)
+
+
+### Bug Fixes
+
+* hydrate postware ([2e20a58](https://github.com/3merge/q3-api/commit/2e20a581f3efcf390d8ba13e8f77498aad5686cc))
+
+
+
+
+
 ## [4.5.1](https://github.com/3merge/q3-api/compare/v4.5.0...v4.5.1) (2023-02-07)
 
 
