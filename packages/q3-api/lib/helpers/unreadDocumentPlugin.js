@@ -1,4 +1,5 @@
 const { get, map, size, set, isObject } = require('lodash');
+const session = require('q3-core-session');
 
 const plugin = (Schema, messageType = null) => {
   // virtuals not working
@@ -25,15 +26,17 @@ const plugin = (Schema, messageType = null) => {
 
   // eslint-disable-next-line
   async function assignReadValue(resp) {
-    const ids = await assignLocal.call(this);
+    return session.hydrate(this, async () => {
+      const ids = await assignLocal.call(this);
 
-    [resp]
-      .flat()
-      .filter(isObject)
-      .forEach((item) => {
-        // eslint-disable-next-line
-        item.read = !ids.includes(String(item._id));
-      });
+      return [resp]
+        .flat()
+        .filter(isObject)
+        .forEach((item) => {
+          // eslint-disable-next-line
+          item.read = !ids.includes(String(item._id));
+        });
+    });
   }
 
   async function assignFuncParam() {
