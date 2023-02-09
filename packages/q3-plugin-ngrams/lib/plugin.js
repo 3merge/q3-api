@@ -10,8 +10,23 @@ const {
 const { MAX_GRAM_SIZE } = require('./constants');
 
 module.exports = {
-  getSearch: (term) => {
+  getSearch(term) {
     if (!term) return {};
+
+    if (
+      !this ||
+      !this.schema ||
+      !size(getFields(this.schema))
+    )
+      return {
+        $text: {
+          $caseSensitive: false,
+          $search: String(term)
+            .split(' ')
+            .map((item) => `"${item}"`)
+            .join(' '),
+        },
+      };
 
     const $all = String(term)
       .split(' ')
