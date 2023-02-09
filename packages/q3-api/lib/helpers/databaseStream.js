@@ -62,6 +62,7 @@ class CollectionWatch extends EventEmitter {
               operationType: 1,
               updateDescription: 1,
               userId: '$fullDocument.userId',
+              tenant: '$fullDocument.tenant',
             },
           },
         ],
@@ -71,6 +72,7 @@ class CollectionWatch extends EventEmitter {
         .on('change', async (args) => {
           if (!isNoop(args)) {
             const payload = {
+              tenant: args.tenant,
               userId: args.userId,
               updatedAt: getTimeStamp(args),
               id: getDocumentKey(args),
