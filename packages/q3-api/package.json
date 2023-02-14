@@ -70,6 +70,7 @@
     "build-access": "./bin/buildAccessControl.js",
     "build-locale": "./bin/buildLocale.js",
     "convert-notifications": "./bin/convertNotifications.js",
+    "run-chore": "./bin/runChore.js",
     "seed-emails": "./bin/seedEmailDatabase.js",
     "seed-login": "./bin/seedUserAndDomain.js",
     "seed-listen-options": "./bin/seedListenOptions.js"
