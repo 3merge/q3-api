@@ -10,6 +10,7 @@ const {
   isObject,
 } = require('lodash');
 const mongoose = require('mongoose');
+const session = require('q3-core-session');
 const {
   getWebAppUrlAsTenantUser,
 } = require('q3-core-mailer/lib/utils');
@@ -172,6 +173,19 @@ const isEqualToObjectId = (a, b) => {
   }
 };
 
+const iterateTenantSessions = async (callback) => {
+  // eslint-disable-next-line
+  for await (const domain of await Q3.model('domains')
+    .find({
+      active: true,
+    })
+    .lean()
+    .exec()) {
+    session.set('TENANT', domain.tenant);
+    await callback(domain);
+  }
+};
+
 module.exports = {
   toQuery,
   toUndefined,
@@ -186,4 +200,5 @@ module.exports = {
   checkAccessByFileNameAndRoleType,
   toObjectId,
   isEqualToObjectId,
+  iterateTenantSessions,
 };
