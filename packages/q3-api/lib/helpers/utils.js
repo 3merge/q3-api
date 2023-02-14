@@ -175,10 +175,8 @@ const isEqualToObjectId = (a, b) => {
 
 const iterateTenantSessions = async (callback) => {
   // eslint-disable-next-line
-  for await (const domain of await Q3.model('domains')
-    .find({
-      active: true,
-    })
+  for await (const domain of await mongoose.models.domains
+    .find({ active: true })
     .lean()
     .exec()) {
     session.set('TENANT', domain.tenant);
