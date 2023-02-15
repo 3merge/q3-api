@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const cluster = require('cluster');
-const { get } = require('lodash');
+const { get, invoke } = require('lodash');
 const { insertIntoChangelog } = require('./utils');
 
 const isReadyToConnect = () => {
@@ -14,28 +14,30 @@ const isReadyToConnect = () => {
   }
 };
 
-const shouldRunChangelog = (Model) => {
-  try {
-    return !(
-      Model.baseModelName ||
-      [
-        'queues',
-        'q3-api-notifications',
-        'notifications',
-      ].includes(Model.modelName) ||
-      // allows you to turn it off for specific collections
-      Model.schema.get('disableChangelog')
-    );
-  } catch (e) {
-    return false;
-  }
-};
-
 module.exports = () => {
+  const blacklist = [
+    'notifications',
+    'q3-api-notifications',
+    'queues',
+    'segments',
+    'system-counters',
+  ];
+
+  const checkBlacklist = (Model) => {
+    try {
+      return (
+        // don't run on discriminators
+        Model.baseModelName ||
+        Model.schema.get('disableChangelog') ||
+        blacklist.includes(Model.modelName)
+      );
+    } catch (e) {
+      return false;
+    }
+  };
+
   if (isReadyToConnect())
     Object.values(mongoose.models).forEach((Model) => {
-      if (!shouldRunChangelog(Model)) return;
-
       Model.watch(
         [
           {
@@ -57,13 +59,24 @@ module.exports = () => {
           fullDocument: 'updateLookup',
         },
       )
-        .on('change', async (args) =>
-          insertIntoChangelog(
-            get(Model, 'collection.collectionName'),
-            get(args, 'documentKey._id'),
-            get(args, 'fullDocument'),
-          ),
-        )
+        .on('change', async (args) => {
+          const collection = get(
+            Model,
+            'collection.collectionName',
+          );
+
+          if (!checkBlacklist(Model))
+            await insertIntoChangelog(
+              collection,
+              get(args, 'documentKey._id'),
+              get(args, 'fullDocument'),
+            );
+
+          await invoke(global, 'handleChangeStreamWorker', {
+            ...args,
+            collection,
+          });
+        })
         .on('error', () => {
           // noop
         });
