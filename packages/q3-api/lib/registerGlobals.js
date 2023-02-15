@@ -8,6 +8,7 @@ const registerGlobals = (location) => {
     'getWebApp',
     'getUrl',
     'handleChangeStream',
+    'handleChangeStreamWorker',
   ];
 
   if (!fs.existsSync(globals)) return;
