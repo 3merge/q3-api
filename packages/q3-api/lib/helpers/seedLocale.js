@@ -2,6 +2,15 @@ const mongoose = require('mongoose');
 const cluster = require('cluster');
 const { map, merge, get } = require('lodash');
 
+const requireConditionally = (path) => {
+  try {
+    // eslint-disable-next-line
+    return require(path);
+  } catch (e) {
+    return {};
+  }
+};
+
 module.exports = async (
   lng,
   {
@@ -15,14 +24,21 @@ module.exports = async (
   // typically only run once manually from scripts folder
   if (!cluster.isMaster) return;
 
-  // eslint-disable-next-line
-  const defaultLabels = require(`q3-locale/lang/${lng}/labels.json`);
-  // eslint-disable-next-line
-  const defaultHelpers = require(`q3-locale/lang/${lng}/helpers.json`);
-  // eslint-disable-next-line
-  const defaultDescriptions = require(`q3-locale/lang/${lng}/descriptions.json`);
-  // eslint-disable-next-line
-  const defaultTitles = require(`q3-locale/lang/${lng}/titles.json`);
+  const defaultLabels = requireConditionally(
+    `q3-locale/lang/${lng}/labels.json`,
+  );
+
+  const defaultHelpers = requireConditionally(
+    `q3-locale/lang/${lng}/helpers.json`,
+  );
+
+  const defaultDescriptions = requireConditionally(
+    `q3-locale/lang/${lng}/descriptions.json`,
+  );
+
+  const defaultTitles = requireConditionally(
+    `q3-locale/lang/${lng}/titles.json`,
+  );
 
   try {
     const { applyToAll = false, overwrite = false } =
