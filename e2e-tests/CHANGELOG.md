@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.11](https://github.com/3merge/q3-api/compare/v4.5.10...v4.5.11) (2023-03-03)
+
+**Note:** Version bump only for package e2e-tests
+
+
+
+
+
 ## [4.5.10](https://github.com/3merge/q3-api/compare/v4.5.9...v4.5.10) (2023-03-02)
 
 **Note:** Version bump only for package e2e-tests
