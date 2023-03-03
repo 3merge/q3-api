@@ -8,6 +8,8 @@ const {
   set,
   find,
   isObject,
+  isString,
+  first,
 } = require('lodash');
 const mongoose = require('mongoose');
 const session = require('q3-core-session');
@@ -184,6 +186,11 @@ const iterateTenantSessions = async (callback) => {
   }
 };
 
+const normalizeLangCode = (xs) => {
+  if (!isString(xs)) return 'en';
+  return first(xs.split('-'));
+};
+
 module.exports = {
   toQuery,
   toUndefined,
@@ -199,4 +206,5 @@ module.exports = {
   toObjectId,
   isEqualToObjectId,
   iterateTenantSessions,
+  normalizeLangCode,
 };

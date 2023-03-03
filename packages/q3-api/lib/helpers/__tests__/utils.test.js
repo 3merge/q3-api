@@ -22,6 +22,7 @@ const {
   checkAccessByFileNameAndRoleType,
   toObjectId,
   isEqualToObjectId,
+  normalizeLangCode,
 } = require('../utils');
 
 describe('Setters', () => {
@@ -188,6 +189,22 @@ describe('checkAccessByFileNameAndRoleType', () => {
           '63e27d0c35276d62ac41ad7c',
         ),
       ).toBeTruthy();
+    });
+  });
+
+  describe('normalizeLangCode', () => {
+    it('should remove country and set default', () => {
+      expect(
+        [
+          normalizeLangCode('en'),
+          normalizeLangCode('en-CA'),
+          normalizeLangCode(),
+        ].every((item) => item === 'en'),
+      ).toBeTruthy();
+    });
+
+    it('should match', () => {
+      expect(normalizeLangCode('fr')).toEqual('fr');
     });
   });
 });
