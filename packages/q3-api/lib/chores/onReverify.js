@@ -3,6 +3,7 @@ const onReverify =
     'verify',
     (user) => ({
       code: user.secret,
+      role: user.role,
     }),
   );
 

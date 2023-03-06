@@ -4,6 +4,7 @@ const onPasswordReset =
     (user) => ({
       email: user.email,
       passwordResetToken: user.passwordResetToken,
+      role: user.role,
     }),
   );
 

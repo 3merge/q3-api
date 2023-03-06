@@ -45,7 +45,8 @@ function renderUrl(urlString = '', options) {
     toString(
       compact([
         !isString(urlString) || !size(urlString)
-          ? invoke(global, 'getUrl') || process.env.URL
+          ? invoke(global, 'getUrl', this) ||
+            process.env.URL
           : urlString,
         invokeFnWithCurrentContext(options || urlString),
       ]).join('/'),

@@ -5,6 +5,7 @@ const onNewUser =
       id: user.id,
       code: user.secret,
       email: user.email,
+      role: user.role,
     }),
   );
 
