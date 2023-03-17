@@ -48,8 +48,18 @@ module.exports = {
 
   get: (keyName, propertyPath, defaultValue) => {
     const v = ns.get(keyName);
-    if (!v) return defaultValue;
-    return getIn(v, propertyPath);
+    let output = getIn(v, propertyPath);
+
+    // sometimes, mongoose properties need to be called specifically with .get
+    // occassionally, mognoose throws a casting error though
+    if (isObject(v) && typeof v.get === 'function')
+      try {
+        output = v.get(propertyPath);
+      } catch (e) {
+        // noop
+      }
+
+    return output || defaultValue;
   },
 
   middleware: (req, res, next) =>

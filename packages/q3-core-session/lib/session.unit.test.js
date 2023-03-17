@@ -29,6 +29,42 @@ describe('Session', () => {
             'foo',
           );
 
+          expect(
+            session.get(SESSION_KEY, 'unknown', true),
+          ).toBe(true);
+
+          done();
+        },
+      );
+    });
+
+    it('it should invoke getter', (done) => {
+      const get = jest.fn().mockReturnValue(1);
+
+      session.middleware(
+        { user: { id: 1, get } },
+        null,
+        () => {
+          expect(session.get(SESSION_KEY, 'test')).toBe(1);
+          expect(get).toHaveBeenCalledWith('test');
+
+          done();
+        },
+      );
+    });
+
+    it('it should provide default value', (done) => {
+      const get = jest.fn().mockReturnValue(undefined);
+
+      session.middleware(
+        { user: { id: 1, get } },
+        null,
+        () => {
+          expect(
+            session.get(SESSION_KEY, 'test', 'foo'),
+          ).toBe('foo');
+          expect(get).toHaveBeenCalledWith('test');
+
           done();
         },
       );
