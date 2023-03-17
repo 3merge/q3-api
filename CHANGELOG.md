@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.13](https://github.com/3merge/q3-api/compare/v4.5.12...v4.5.13) (2023-03-17)
+
+**Note:** Version bump only for package Q3-Api
+
+
+
+
+
 ## [4.5.12](https://github.com/3merge/q3-api/compare/v4.5.11...v4.5.12) (2023-03-06)
 
 **Note:** Version bump only for package Q3-Api

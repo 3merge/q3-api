@@ -1,6 +1,6 @@
 {
   "name": "q3-core-session",
-  "version": "4.4.17",
+  "version": "4.5.13",
   "main": "lib/index.js",
   "dependencies": {
     "cls-hooked": "^4.2.2"
