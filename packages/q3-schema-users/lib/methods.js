@@ -194,7 +194,7 @@ module.exports = class UserAuthDecorator {
 
   async setPassword(s) {
     const re =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[-._+=!@#$%^&()*])(?=.{8,})/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[-._+=!@#$%^&()*?])(?=.{8,})/;
     if (s && !re.test(s)) {
       exception('Validation').field('password').throw();
     }
