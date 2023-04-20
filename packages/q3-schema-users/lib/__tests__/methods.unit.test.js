@@ -159,6 +159,7 @@ test.each([
   ['4MyTestin!~202', true],
   ['myfirstEmail@3kg', true],
   ['myfirstEmail_3kg', true],
+  ['Bmw328328?', true],
   ['(Secrets)1234', true],
   ['Testa20Me-', true],
   ['TestingMe_', false],
