@@ -24,7 +24,10 @@ server.use(useragent.express());
 
 server.use(
   fileUpload({
-    limits: { fileSize: 50 * 1024 * 1024 },
+    limits: {
+      fileSize:
+        process.env.Q3_MAX_FILE_SIZE || 50 * 1024 * 1024,
+    },
   }),
 );
 
