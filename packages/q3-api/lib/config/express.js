@@ -8,6 +8,7 @@ const fileUpload = require('express-fileupload');
 const useragent = require('express-useragent');
 const session = require('q3-core-session');
 const corsConfig = require('./express-cors');
+const getMaxFileSize = require('../helpers/getMaxFileSize');
 
 const server = express();
 
@@ -25,8 +26,7 @@ server.use(useragent.express());
 server.use(
   fileUpload({
     limits: {
-      fileSize:
-        process.env.Q3_MAX_FILE_SIZE || 50 * 1024 * 1024,
+      fileSize: getMaxFileSize(),
     },
   }),
 );
