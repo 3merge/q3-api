@@ -1,6 +1,6 @@
 {
   "name": "q3-api",
-  "version": "4.5.14",
+  "version": "4.5.15",
   "description": "REST api configurations",
   "main": "lib/index.js",
   "license": "MIT",
@@ -36,7 +36,7 @@
     "q3-core-mailer": "^4.5.14",
     "q3-core-responder": "^4.4.17",
     "q3-core-rest": "^4.5.13",
-    "q3-core-scheduler": "^4.5.14",
+    "q3-core-scheduler": "^4.5.15",
     "q3-core-session": "^4.5.13",
     "q3-core-walker": "^4.4.17",
     "q3-exports": "^4.4.17",
