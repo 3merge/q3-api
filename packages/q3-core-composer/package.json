@@ -11,7 +11,7 @@
     "lodash": "^4.17.20",
     "m2e-validator": "^1.3.9",
     "micromatch": "^4.0.2",
-    "mongoose": "^6.2.1",
+    "mongoose": "^6.13.8",
     "q3-core-access": "^4.5.13",
     "q3-core-responder": "^4.4.17",
     "q3-core-session": "^4.5.13"
@@ -29,7 +29,7 @@
     ]
   },
   "peerDependencies": {
-    "mongoose": "^5.7.13"
+    "mongoose": "^6.13.8"
   },
   "gitHead": "a586228e529bf3829bdc7c34e4fdc9c600037e9e"
 }

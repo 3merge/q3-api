@@ -12,7 +12,7 @@
     "q3-schema-types": "^4.4.17"
   },
   "peerDependencies": {
-    "mongoose": "^5.7.7",
+    "mongoose": "^6.13.8",
     "q3-api": "^1.0.30",
     "q3-core-responder": "^1.0.21"
   },

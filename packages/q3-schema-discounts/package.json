@@ -8,7 +8,7 @@
     "lodash": "^4.17.20",
     "micromatch": "^4.0.2",
     "moment": "^2.29.3",
-    "mongoose": "^6.2.1",
+    "mongoose": "^6.13.8",
     "q3-core-responder": "^4.4.17",
     "q3-schema-types": "^4.4.17",
     "q3-schema-utils": "^4.4.17"

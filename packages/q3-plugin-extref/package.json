@@ -10,7 +10,7 @@
   "dependencies": {
     "flat": "^5.0.2",
     "lodash": "^4.17.20",
-    "mongoose": "^6.2.1",
+    "mongoose": "^6.13.8",
     "q3-core-scheduler": "^4.5.14"
   },
   "jest": {

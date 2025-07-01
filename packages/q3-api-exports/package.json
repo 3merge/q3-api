@@ -7,7 +7,7 @@
     "lodash": "^4.17.20",
     "moment": "^2.29.3",
     "moment-timezone": "^0.5.37",
-    "mongoose": "^6.2.1",
+    "mongoose": "^6.13.8",
     "q3-api": "^4.5.16",
     "q3-core-access": "^4.5.13",
     "q3-core-session": "^4.5.13"

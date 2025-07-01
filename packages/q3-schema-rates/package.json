@@ -3,7 +3,7 @@
   "version": "4.4.17",
   "main": "lib/index.js",
   "peerDependencies": {
-    "mongoose": "^5.7.12"
+    "mongoose": "^6.13.8"
   },
   "dependencies": {
     "lodash": "^4.17.20",
