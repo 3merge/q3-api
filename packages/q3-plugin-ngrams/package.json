@@ -1,6 +1,6 @@
 {
   "name": "q3-plugin-ngrams",
-  "version": "4.5.17",
+  "version": "4.5.18",
   "main": "lib/index.js",
   "dependencies": {
     "flat": "^5.0.2",

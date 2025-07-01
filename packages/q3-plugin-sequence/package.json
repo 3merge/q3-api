@@ -1,18 +1,18 @@
 {
   "name": "q3-plugin-sequence",
-  "version": "4.5.17",
+  "version": "4.5.18",
   "description": "Incrementer mongoose plugin",
   "main": "lib/index.js",
   "license": "MIT",
   "dependencies": {
     "lodash": "^4.17.20",
-    "q3-core-responder": "^4.5.17"
+    "q3-core-responder": "^4.5.18"
   },
   "peerDependencies": {
     "mongoose": "^6.13.8"
   },
   "devDependencies": {
-    "q3-test-utils": "^4.5.17"
+    "q3-test-utils": "^4.5.18"
   },
   "jest": {
     "verbose": true,
