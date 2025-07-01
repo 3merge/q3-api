@@ -14,7 +14,7 @@
     "mjml": "^4.11.0",
     "moment": "^2.29.3",
     "moment-timezone": "^0.5.37",
-    "mongoose": "^6.2.1",
+    "mongoose": "^6.13.8",
     "node-cron": "^3.0.0",
     "q3-core-scheduler": "^4.5.14",
     "q3-schema-utils": "^4.4.17",

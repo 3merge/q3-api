@@ -23,7 +23,7 @@
   "peerDependencies": {
     "express": "^4.17.1",
     "i18next": "^19.0.1",
-    "mongoose": "^5.7.1"
+    "mongoose": "^6.13.8"
   },
   "devDependencies": {
     "q3-test-utils": "^4.4.17",

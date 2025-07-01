@@ -8,7 +8,7 @@
     "lodash": "^4.17.20"
   },
   "peerDependencies": {
-    "mongoose": "^5.7.1"
+    "mongoose": "^6.13.8"
   },
   "devDependencies": {
     "q3-test-utils": "^4.4.17"

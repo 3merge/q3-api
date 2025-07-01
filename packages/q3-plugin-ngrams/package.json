@@ -5,7 +5,7 @@
   "dependencies": {
     "flat": "^5.0.2",
     "lodash": "^4.17.20",
-    "mongoose": "^6.2.1",
+    "mongoose": "^6.13.8",
     "n-gram": "1.1.2",
     "sizeof": "^1.0.0"
   },

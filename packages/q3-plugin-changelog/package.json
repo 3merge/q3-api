@@ -9,7 +9,7 @@
     "flat": "^5.0.2",
     "jsondiffpatch": "^0.4.1",
     "lodash": "^4.17.20",
-    "mongoose": "^6.2.1",
+    "mongoose": "^6.13.8",
     "q3-core-access": "^4.5.13",
     "q3-core-session": "^4.5.13",
     "q3-plugin-extref": "^4.5.14",
