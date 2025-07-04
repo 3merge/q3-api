@@ -50,6 +50,15 @@ module.exports = () => {
       });
     },
 
+    getSignedUrl(Key, ContentType) {
+      return s3.getSignedUrl('putObject', {
+        Bucket: PrivateBucket,
+        ContentType,
+        Key,
+        Expires: 86400, // one day
+      });
+    },
+
     addToBucket(p) {
       const meta = p
         ? {
@@ -90,6 +99,17 @@ module.exports = () => {
           },
         ),
       );
+    },
+
+    async exists(Key) {
+      return s3
+        .headObject({
+          Bucket: process.env.PRIVATE_BUCKET,
+          Key,
+        })
+        .promise()
+        .then(() => true)
+        .catch(() => false);
     },
 
     /**

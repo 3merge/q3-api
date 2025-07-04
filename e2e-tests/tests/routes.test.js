@@ -2,6 +2,7 @@ jest.mock('q3-core-scheduler', () => ({
   queue: jest.fn(),
 }));
 
+const axios = require('axios');
 const Q3 = require('q3-api');
 const jwt = require('jsonwebtoken');
 const { queue } = require('q3-core-scheduler');
@@ -182,6 +183,46 @@ describe('q3-api', () => {
         .expect(200);
 
       expect(body.html).toMatch('Sample Document');
+    });
+  });
+
+  describe('s3-upload and s3-upload-transfer /POST', () => {
+    it('should return 201', async () => {
+      const testFile = Buffer.from('Test file content for S3 upload', 'utf8');
+      const testFileName = 'test.txt';
+      const { body: { students } } = await agent
+        .get('/students')
+        .set({ Authorization })
+        .expect(200);
+
+      const [{ id }] = students;
+      const { body } = await agent
+        .post('/s3-upload')
+        .send({
+          collection: 'students',
+          id,
+          name: testFileName,
+          mimetype: 'text/plain',
+        })
+        .set({ Authorization })
+        .expect(201);
+
+      expect(body.url).toBeDefined();
+
+      await axios.put(body.url, testFile); 
+
+      const { body: { uploads } } = await agent
+        .post('/s3-upload-transfer')
+        .send({
+          collection: 'students',
+          id,
+          name: testFileName,
+          size: testFile.length,
+        })
+        .set({ Authorization })
+        .expect(201);
+
+      expect(uploads).toHaveLength(1);
     });
   });
 });

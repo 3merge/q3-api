@@ -1,4 +1,5 @@
 const { get } = require('lodash');
+const { exception } = require('q3-core-responder');
 const AWSInterface = require('../../config/aws');
 
 const normalize = (xs) =>
@@ -65,6 +66,27 @@ module.exports = class FileUploadAdapter {
     );
 
     return this;
+  }
+
+  async handleIndirectFile(filename, size) {
+    const sdk = AWSInterface();
+    const { folderId, name } = explodeName(filename);
+
+    if (!(await sdk.exists(`${this.id}/${name}`))) {
+      exception('BadRequest')
+        .msg('uploadFileToPrivateBucket')
+        .throw();
+    }
+
+    this.uploads.push({
+      folderId,
+      name,
+      relativePath: name,
+      sensitive: true,
+      size,
+    });
+
+    await this.save();
   }
 
   async handleFeaturedUpload({ files }) {
