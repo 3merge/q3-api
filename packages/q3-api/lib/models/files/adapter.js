@@ -1,4 +1,5 @@
 const { get } = require('lodash');
+const { exception } = require('q3-core-responder');
 const AWSInterface = require('../../config/aws');
 
 const normalize = (xs) =>
@@ -76,7 +77,7 @@ module.exports = class FileUploadAdapter {
         .msg('uploadFileToPrivateBucket')
         .throw();
     }
-    
+
     this.uploads.push({
       folderId,
       name,

@@ -102,10 +102,11 @@ module.exports = () => {
     },
 
     async exists(Key) {
-      return s3.headObject({
-        Bucket: process.env.PRIVATE_BUCKET,
-        Key,
-      })
+      return s3
+        .headObject({
+          Bucket: process.env.PRIVATE_BUCKET,
+          Key,
+        })
         .promise()
         .then(() => true)
         .catch(() => false);
