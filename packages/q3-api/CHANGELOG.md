@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.6.0](https://github.com/3merge/q3-api/compare/v4.5.18...v4.6.0) (2025-07-04)
+
+
+### Features
+
+* direct s3 uploads ([#220](https://github.com/3merge/q3-api/issues/220)) ([32622e9](https://github.com/3merge/q3-api/commit/32622e9018e2e9a9224d214ac3d987a1bc240633))
+
+
+
+
+
 ## [4.5.18](https://github.com/3merge/q3-api/compare/v4.5.17...v4.5.18) (2025-07-01)
 
 **Note:** Version bump only for package q3-api
