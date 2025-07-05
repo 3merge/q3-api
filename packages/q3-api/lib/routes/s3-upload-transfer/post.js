@@ -25,7 +25,7 @@ const S3UploadTransferPost = async (req, res) => {
   await doc.handleIndirectFile(name, size);
 
   res.create({
-    message: 'newSubResourceAdded',
+    message: req.t('newSubResourceAdded'),
     uploads: doc.uploads,
   });
 };
