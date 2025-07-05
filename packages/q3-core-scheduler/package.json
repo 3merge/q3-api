@@ -1,13 +1,13 @@
 {
   "name": "q3-core-scheduler",
   "main": "lib/index.js",
-  "version": "4.6.0",
+  "version": "4.6.1",
   "dependencies": {
     "lodash": "^4.17.20",
     "moment": "^2.29.3",
     "mongoose": "^6.13.8",
     "node-cron": "^3.0.0",
-    "q3-api": "^4.6.0",
+    "q3-api": "^4.6.1",
     "q3-core-rest": "^4.5.18",
     "q3-core-session": "^4.5.18",
     "q3-schema-utils": "^4.5.18"
